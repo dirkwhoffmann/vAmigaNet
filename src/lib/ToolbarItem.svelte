@@ -1,6 +1,6 @@
 <script lang="ts">
 	export let disabled = false
-	export let color = 'var(--accent-text)'
+	export let bgcolor = "bg-gray-300"
 	export let style = ''
 	export let bg = 'var(--accent)'	
 	export let hasIcon = false
@@ -18,12 +18,12 @@
 
 <button
 	type="button"
-	class="flex-none mx-px w-8 rounded bg-gray-700 p-1.5 text-white shadow hover:shadow-lg hover:text-gray-200 hover:scale-110"
+	class="flex-none mx-px w-8 rounded {bgcolor} p-1.5 text-white hover:shadow-lg hover:text-gray-200 hover:scale-110"
 	class:hasIcon
 	{title}
 	{disabled}
 	on:click={click}
 	class:active>
-	<img class="invert" src="{iconName}.png" alt="Power Icon"/>
+	<img class="" src="{iconName}.png" alt="Power Icon"/>
 	<slot />
 </button>
