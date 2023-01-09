@@ -2,7 +2,13 @@
 module.exports = {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'arimo': ['Arimo', 'sans-serif'],
+        'josefin': ['Josefin Sans', 'sans-serif'],
+        'rubik': ['Rubik Bubbles', 'cursive'],
+      },
+    },
   },
   plugins: [],
 }
