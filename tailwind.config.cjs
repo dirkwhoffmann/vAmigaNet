@@ -4,9 +4,9 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'arimo': ['Arimo', 'sans-serif'],
         'josefin': ['Josefin Sans', 'sans-serif'],
-        'rubik': ['Rubik Bubbles', 'cursive'],
+        'sofia-semi': ['Sofia Sans Semi Condensed', 'sans-serif'],
+        'sofia-extra': ['Sofia Sans Extra Condensed', 'sans-serif'],
       },
     },
   },
