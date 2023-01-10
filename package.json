@@ -37,6 +37,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@splidejs/svelte-splide": "^0.2.9",
 		"siema": "^1.5.1"
 	}
 }
