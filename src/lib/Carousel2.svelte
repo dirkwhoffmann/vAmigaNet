@@ -3,29 +3,23 @@
 	import CarouselItem from './CarouselItem.svelte';
 
 	const options = {
-		type: 'slide',
-		perPage: 5,
+		type: 'fade',
+		perPage: 1,
 		perMove: 1,
 		pagination: false,
 		gap: '1rem',
 		}
 	const images = [
-        /*
-    {
-			url: 'small-defender.jpg',
+		{
+			url: 'bg_defender.jpg',
 			description: 'Defender of the Crown'
 		},
-        */
 		{
-			url: 'small-batman.jpg',
+			url: 'bg_batman.jpg',
 			description: 'Batman Rises'
 		},
 		{
-			url: 'small-eon.jpg',
-			description: 'Eon'
-		},
-		{
-			url: 'small-rinkadink.jpg',
+			url: 'bg_rinkadink.jpg',
 			description: 'Rink a Dink'
 		},
 	];

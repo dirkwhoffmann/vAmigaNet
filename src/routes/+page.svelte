@@ -1,9 +1,9 @@
 <script lang="ts">
 	import '../app.css';
 	import { onMount } from 'svelte';
-	import FaRegClock from 'svelte-icons/fa/FaRegClock.svelte';
-	import Toolbar from '$lib/Toolbar.svelte';
-	import Carousel from '$lib/Carousel.svelte';
+	import ButtonLink from '$lib/ButtonLink.svelte';
+	import MainPageLink from '$lib/HeroLink.svelte';
+	import GoDatabase from 'svelte-icons/go/GoDatabase.svelte';
 	import Carousel2 from '$lib/Carousel2.svelte';
 	import '@splidejs/svelte-splide/css';
 
@@ -13,31 +13,43 @@
 </script>
 
 <body class="h-screen bg-black text-white">
-	<!--<Toolbar  bgcolor={tbcolor1} />-->
-	<div class="">
-		<img class="w-full" src="defender.jpg" />
-		<div>
-			<div class="absolute top-10 left-10">
-				<div class="font-sofia-extra text-8xl">Defender of the Crown</div>
-				<div class="font-sofia-semi text-2xl pb-10">Cinemaware (1986)</div>
-				<div class="flex font-josefin text-lg w-1/3">
-					Defender of the Crown is a strategy computer game designed by Kellyn Beck. It was
-					Cinemaware's first game, and was originally released for the Commodore Amiga in 1986,
-					setting a new standard for graphic quality in home computer games.
+	<div class="bg-cover bg-transparent">
+		<title> Welcome to vAmiga</title>
+
+		<div class="flex flex-col h-screen">
+			<div
+				class="absolute flex flex-grow bg-splashscreen bg-cover h-screen w-screen brightness-[0.15]"
+			/>
+			<div
+				class="relative bg-transparent flex flex-grow items-center justify-center border-none align-middle border-4 border-blue-500"
+			>
+				<div class="">
+					<div class="flex justify-center text-5xl font-sofia-extra p-1 text-gray-100">vAmiga Online</div>
+					<div class="flex justify-center text-3xl font-sofia-semi text-gray-400">
+						Welcome to the world of friendly emulation
+					</div>
+					<div class="flex justify-center p-8">
+						<ButtonLink
+							href="/projects"
+							color="var(--accent-text)"
+							style="box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);"
+							title="Power On"
+							>Power On
+						</ButtonLink>
+					</div>
 				</div>
 			</div>
+			<div class="relative flex justify-center border-none align-middle bg-gray-500/50 border-4 border-red-500">
+				<MainPageLink href="#showcases">
+					<div slot="icon">
+						<GoDatabase />
+					</div>
+					<div slot="description">Showcases</div>
+				</MainPageLink>
+			</div>
 		</div>
-		<div class="pb-2" />
-
-		<div class="font-sofia-semi text-2xl p-2">
-			Demo Scene
+		<div id ="showcases">
+			<Carousel2 />
 		</div>
-		<Carousel2 />
-
-		<div class="font-sofia-semi text-2xl p-2">
-			Vannila Setups
-		</div>
-		<Carousel />
-
 	</div>
 </body>

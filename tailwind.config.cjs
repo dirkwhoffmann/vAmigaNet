@@ -8,6 +8,9 @@ module.exports = {
         'sofia-semi': ['Sofia Sans Semi Condensed', 'sans-serif'],
         'sofia-extra': ['Sofia Sans Extra Condensed', 'sans-serif'],
       },
+      backgroundImage: {
+        'splashscreen': "url('background.jpg')",
+      }    
     },
   },
   plugins: [],
