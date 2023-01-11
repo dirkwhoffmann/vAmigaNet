@@ -4,12 +4,13 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'josefin': ['Josefin Sans', 'sans-serif'],
-        'sofia-semi': ['Sofia Sans Semi Condensed', 'sans-serif'],
-        'sofia-extra': ['Sofia Sans Extra Condensed', 'sans-serif'],
+        'josefin': ['"Josefin Sans"', 'sans-serif'],
+        'sofia-semi': ['"Sofia Sans Semi Condensed"', 'sans-serif'],
+        'sofia-extra': ['"Sofia Sans Extra Condensed"', 'sans-serif'],
+        'source-sans-pro': ['"Source Sans Pro"'],
       },
       backgroundImage: {
-        'splashscreen': "url('background.jpg')",
+        'splashscreen': "url('matrix1.jpg')",
       }    
     },
   },
