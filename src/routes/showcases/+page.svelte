@@ -7,27 +7,37 @@
 		{
 			url: 'footage/batmanrises-small.jpg',
 			title: 'Batman Rises',
-			subtitle: 'Batman Group'
+			subtitle: 'Batman Group',
+			description:
+				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
 		},
 		{
 			url: 'footage/rinkadink-small.jpg',
 			title: 'Rink a Dink - Redux',
-			subtitle: 'Lemon'
+			subtitle: 'Lemon',
+			description:
+				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
 		},
 		{
 			url: 'footage/desertdreams-small.jpg',
 			title: 'Desert Dreams',
-			subtitle: 'Kefrens'
+			subtitle: 'Kefrens',
+			description:
+				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
 		},
 		{
 			url: 'footage/inebriation-small.jpg',
 			title: 'Absolute Inebriation',
-			subtitle: 'Virtual Dreams & Fairlight'
+			subtitle: 'Virtual Dreams & Fairlight',
+			description:
+				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
 		},
 		{
 			url: 'footage/eon-small.jpg',
 			title: 'Eon',
-			subtitle: 'The Black Lotus'
+			subtitle: 'The Black Lotus',
+			description:
+				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
 		}
 	];
 
@@ -35,17 +45,23 @@
 		{
 			url: 'footage/traprunner-small.jpg',
 			title: 'Trap Runner (Demo)',
-			subtitle: 'Retroguru'
+			subtitle: 'Retroguru',
+			description:
+				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
 		},
 		{
 			url: 'footage/celtic-small.jpg',
 			title: 'Celtic Heart',
-			subtitle: 'Night Owl Design'
+			subtitle: 'Night Owl Design',
+			description:
+				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
 		},
 		{
 			url: 'footage/defender-small.jpg',
 			title: 'Defender of the Crown',
-			subtitle: 'Cinemaware'
+			subtitle: 'Cinemaware',
+			description:
+				'Defender of the Crown is a strategy computer game designed by Kellyn Beck. It was Cinemaware\'s first game, and was originally released for the Commodore Amiga in 1986, setting a new standard for graphic quality in home computer games.',
 		}
 	];
 
@@ -53,41 +69,52 @@
 		{
 			url: 'footage/sysinfo-small.jpg',
 			title: 'Sysinfo 4.4',
-			subtitle: 'Nic Wilson, Tobias Geijersson'
+			subtitle: 'Nic Wilson, Tobias Geijersson',
+			description:
+				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
 		},
 		{
 			url: 'footage/testkit-small.jpg',
 			title: 'Amiga Test Kit',
-			subtitle: 'Keir Fraser'
+			subtitle: 'Keir Fraser',
+			description:
+				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
 		},
 		{
 			url: 'footage/diagrom-small.jpg',
 			title: 'Amiga DiagROM',
-			subtitle: 'John Hertell'
+			subtitle: 'John Hertell',
+			description:
+				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
 		}
 	];
 
+	var title ='';
+	var subtitle ='';
+	var description = '';
+
+	function handleMessage(event) {
+		console.log(event.detail.description);
+		title = event.detail.title;
+		subtitle = event.detail.subtitle;
+		description = event.detail.description;
+	}
 </script>
 
 <body class="h-screen bg-black text-white">
-	<!--<Toolbar  bgcolor={tbcolor1} />-->
 	<div class="">
 		<img class="w-full" src="defender.jpg" />
 		<div>
 			<div class="absolute top-10 left-10">
-				<div class="font-sofia-extra text-8xl">Defender of the Crown</div>
-				<div class="font-sofia-semi text-2xl pb-10">Cinemaware (1986)</div>
-				<div class="flex font-josefin text-lg w-1/3">
-					Defender of the Crown is a strategy computer game designed by Kellyn Beck. It was
-					Cinemaware's first game, and was originally released for the Commodore Amiga in 1986,
-					setting a new standard for graphic quality in home computer games.
-				</div>
+				<div class="font-sofia-extra text-8xl">{title}</div>
+				<div class="font-sofia-semi text-2xl pb-10">{subtitle}</div>
+				<div class="flex font-josefin text-lg w-1/3">{description}</div>
 			</div>
 		</div>
 		<div class="pb-2" />
 
-		<Carousel category="Demos" items={demos} />
-		<Carousel category="Games" items={games} />
-		<Carousel category="Tools" items={tools} />
+		<Carousel category="Demos" items={demos} on:message={handleMessage} />
+		<Carousel category="Games" items={games} on:message={handleMessage} />
+		<Carousel category="Tools" items={tools} on:message={handleMessage} />
 	</div>
 </body>
