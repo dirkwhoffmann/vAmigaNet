@@ -41,11 +41,11 @@
 						<div class="font-sofia-semi text-xl text-gray-300 pl-2 pb-10">Version 0.1</div>
 						<div class="flex space-x-5">
 							<button
-								class="bg-blue-300 hover:bg-blue-500 text-gray-800 font-sofia-semi text-xl py-1 px-8 rounded-md"
+								class="bg-blue-300 hover:bg-blue-500 text-gray-800 font-sofia-semi text-xl py-2 px-8 rounded-md"
 								>Power On</button
 							>
 							<button
-								class="bg-blue-300 hover:bg-blue-500 text-gray-800 font-sofia-semi text-xl py-1 px-2 rounded-md"
+								class="bg-blue-300 hover:bg-blue-500 text-gray-800 font-sofia-semi text-xl py-2 px-2 rounded-md"
 								><Icon><FaGithub /></Icon></button
 							>
 						</div>
@@ -59,14 +59,11 @@
 					<div slot="icon"><GoGear /></div>
 					<div slot="description">Configure</div>
 				</MainPageLink>
-				<MainPageLink href="#showcases">
+				<MainPageLink href="/showcases">
 					<div slot="icon"><DiGrails /></div>
 					<div slot="description">Showcase</div>
 				</MainPageLink>
 			</div>
-		</div>
-		<div id="configure">
-			<Carousel2 />
 		</div>
 	</div>
 </body>
