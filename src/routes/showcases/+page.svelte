@@ -5,35 +5,35 @@
 
 	const demos = [
 		{
-			url: 'footage/batmanrises-small.jpg',
+			url: 'batmanrises',
 			title: 'Batman Rises',
 			subtitle: 'Batman Group',
 			description:
 				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
 		},
 		{
-			url: 'footage/rinkadink-small.jpg',
+			url: 'rinkadink',
 			title: 'Rink a Dink - Redux',
 			subtitle: 'Lemon',
 			description:
 				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
 		},
 		{
-			url: 'footage/desertdreams-small.jpg',
+			url: 'desertdreams',
 			title: 'Desert Dreams',
 			subtitle: 'Kefrens',
 			description:
 				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
 		},
 		{
-			url: 'footage/inebriation-small.jpg',
+			url: 'inebriation',
 			title: 'Absolute Inebriation',
 			subtitle: 'Virtual Dreams & Fairlight',
 			description:
 				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
 		},
 		{
-			url: 'footage/eon-small.jpg',
+			url: 'eon',
 			title: 'Eon',
 			subtitle: 'The Black Lotus',
 			description:
@@ -43,21 +43,28 @@
 
 	const games = [
 		{
-			url: 'footage/traprunner-small.jpg',
+			url: 'traprunner',
 			title: 'Trap Runner (Demo)',
 			subtitle: 'Retroguru',
 			description:
 				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
 		},
 		{
-			url: 'footage/celtic-small.jpg',
+			url: 'celtic',
 			title: 'Celtic Heart',
 			subtitle: 'Night Owl Design',
 			description:
 				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
 		},
 		{
-			url: 'footage/defender-small.jpg',
+			url: 'paccer',
+			title: 'Paccer',
+			subtitle: 'Dirk W. Hoffmann',
+			description:
+				'My first computer game, written in C.',
+		},
+		{
+			url: 'defender',
 			title: 'Defender of the Crown',
 			subtitle: 'Cinemaware',
 			description:
@@ -67,21 +74,21 @@
 
 	const tools = [
 		{
-			url: 'footage/sysinfo-small.jpg',
+			url: 'sysinfo',
 			title: 'Sysinfo 4.4',
 			subtitle: 'Nic Wilson, Tobias Geijersson',
 			description:
 				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
 		},
 		{
-			url: 'footage/testkit-small.jpg',
+			url: 'testkit',
 			title: 'Amiga Test Kit',
 			subtitle: 'Keir Fraser',
 			description:
 				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
 		},
 		{
-			url: 'footage/diagrom-small.jpg',
+			url: 'diagrom',
 			title: 'Amiga DiagROM',
 			subtitle: 'John Hertell',
 			description:
@@ -89,12 +96,14 @@
 		}
 	];
 
+	var src ='';
 	var title ='';
 	var subtitle ='';
 	var description = '';
-
+	
 	function handleMessage(event) {
 		console.log(event.detail.description);
+		src = "footage/" + event.detail.url + "-large.jpg";
 		title = event.detail.title;
 		subtitle = event.detail.subtitle;
 		description = event.detail.description;
@@ -103,7 +112,7 @@
 
 <body class="h-screen bg-black text-white">
 	<div class="">
-		<img class="w-full" src="defender.jpg" />
+		<img class="w-full" {src} />
 		<div>
 			<div class="absolute top-10 left-10">
 				<div class="font-sofia-extra text-8xl">{title}</div>

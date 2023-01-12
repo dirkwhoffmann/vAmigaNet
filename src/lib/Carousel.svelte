@@ -27,7 +27,7 @@
 	>
 		{#each items as src}
 			<SplideSlide>
-				<CarouselItem src={src.url} title={src.title} subtitle={src.subtitle} />
+				<CarouselItem src='footage/{src.url}-small.jpg' title={src.title} subtitle={src.subtitle} />
 			</SplideSlide>
 		{/each}
 	</Splide>
