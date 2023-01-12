@@ -3,14 +3,14 @@
 	import CarouselItem from './CarouselItem.svelte';
 
 	export let category = '';
-	export let items = [{ url: '', description: '' }];
+	export let items = [{ url: '', title: '', subtitle: ''}];
 
 	const options = {
 		type: 'slide',
-		perPage: 4,
 		perMove: 1,
 		pagination: false,
 		gap: '1rem',
+		fixedWidth: '16rem'
 	};
 </script>
 
@@ -19,7 +19,7 @@
 	<Splide {options}>
 		{#each items as src}
 			<SplideSlide>
-				<CarouselItem src={src.url} title={src.description} />
+				<CarouselItem src={src.url} title={src.title} subtitle={src.subtitle} />
 			</SplideSlide>
 		{/each}
 	</Splide>

@@ -66,28 +66,30 @@
 			subtitle: 'John Hertell'
 		}
 	];
-
 </script>
 
 <body class="h-screen bg-black text-white">
-	<!--<Toolbar  bgcolor={tbcolor1} />-->
-	<div class="">
-		<img class="w-full" src="defender.jpg" />
-		<div>
-			<div class="absolute top-10 left-10">
-				<div class="font-sofia-extra text-8xl">Defender of the Crown</div>
-				<div class="font-sofia-semi text-2xl pb-10">Cinemaware (1986)</div>
-				<div class="flex font-josefin text-lg w-1/3">
-					Defender of the Crown is a strategy computer game designed by Kellyn Beck. It was
-					Cinemaware's first game, and was originally released for the Commodore Amiga in 1986,
-					setting a new standard for graphic quality in home computer games.
+	<div class="h-screen border-4 border-red-500 flex-col">
+		<div class="border-4">
+			<img class="h-full" src="defender.jpg" />
+			<div class="">
+				<div class="absolute top-10 left-10">
+					<div class="font-sofia-extra text-8xl">Defender of the Crown</div>
+					<div class="font-sofia-semi text-2xl pb-10">Cinemaware (1986)</div>
+					<div class="flex font-josefin text-lg w-1/3">
+						Defender of the Crown is a strategy computer game designed by Kellyn Beck. It was
+						Cinemaware's first game, and was originally released for the Commodore Amiga in 1986,
+						setting a new standard for graphic quality in home computer games.
+					</div>
 				</div>
 			</div>
 		</div>
-		<div class="pb-2" />
-
-		<Carousel category="Demos" items={demos} />
-		<Carousel category="Games" items={games} />
-		<Carousel category="Tools" items={tools} />
+		<div class="bg-yellow-500 h-full border-4 border-blue-500">
+			<div class="border-4">
+			<Carousel category="Demos" items={demos} />
+			<Carousel category="Games" items={games} />
+			<Carousel category="Tools" items={tools} />
+			</div>
+		</div>
 	</div>
 </body>

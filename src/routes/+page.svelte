@@ -4,12 +4,9 @@
 	import ButtonLink from '$lib/ButtonLink.svelte';
 	import Icon from '$lib/Icon.svelte';
 	import MainPageLink from '$lib/HeroLink.svelte';
-	import GoDatabase from 'svelte-icons/go/GoDatabase.svelte';
 	import FaGithub from 'svelte-icons/fa/FaGithub.svelte';
-	import DiAptana from 'svelte-icons/di/DiAptana.svelte';
 	import GoGear from 'svelte-icons/go/GoGear.svelte';
 	import DiGrails from 'svelte-icons/di/DiGrails.svelte';
-	import Carousel2 from '$lib/Carousel2.svelte';
 	import '@splidejs/svelte-splide/css';
 
 	onMount(() => {
