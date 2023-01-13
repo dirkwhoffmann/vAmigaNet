@@ -28,38 +28,38 @@
 			title: 'Desert Dreams',
 			subtitle: 'Kefrens',
 			description:
-				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
+				'This demo was released in April 1993. It ranked 1st in the Gathering 1993 Amiga Demo Competition.',
 		},
 		{
 			url: 'inebriation',
 			title: 'Absolute Inebriation',
 			subtitle: 'Virtual Dreams & Fairlight',
 			description:
-				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
+				'This demo was released in December of 1992. It was the first production of Virtual Dreams, a Finnish-based Amiga demo group. The group reached their breakthrough in their time spent as the demo section of Fairlight.',
 		},
 		{
 			url: 'eon',
 			title: 'Eon',
 			subtitle: 'The Black Lotus',
 			description:
-				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
+				'This demo is one of the best ever created for the Commodore Amiga. It shows impressively what the machine is capable of when its potential is exploited to the max.',
 		}
 	];
 
 	const games = [
 		{
 			url: 'traprunner',
-			title: 'Trap Runner (Demo)',
-			subtitle: 'Retroguru',
+			title: 'Trap Runner',
+			subtitle: 'Night Owl Design',
 			description:
-				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
+				'Trap Runner is a classic platform game with few twists. Mind traps, obstacles and monsters. Collect items to increase your score, gain extra lives or fulfil one of the special missions. Two of four levels a world have a mission to accomplish. The game runs on any OCS/ECS Amiga, with 1MB RAM from Kickstart 1.2 onwards.',
 		},
 		{
 			url: 'celtic',
 			title: 'Celtic Heart',
 			subtitle: 'Night Owl Design',
 			description:
-				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
+				'This game was written in the beginning of 2019, largely based on the Trap Runner engine. It has a medieval setting, where you are playing the celtic knight Eric on his task to save the kingdom from an evil force.',
 		},
 		{
 			url: 'paccer',
@@ -83,21 +83,21 @@
 			title: 'Sysinfo 4.4',
 			subtitle: 'Nic Wilson, Tobias Geijersson',
 			description:
-				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
+				'Sysinfo is a shareware program written completely in Assembler for the Motorola 68k equipped Amiga computers to benchmark system performance. Sysinfo shows which version of system software is present in ROM, which hardware is present, and which operating mode the hardware uses.',
 		},
 		{
 			url: 'testkit',
 			title: 'Amiga Test Kit',
 			subtitle: 'Keir Fraser',
 			description:
-				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
+				'The Amiga Test Kit is a software-based solution for testing various components of a Commodore Amiga.',
 		},
 		{
 			url: 'diagrom',
-			title: 'Amiga DiagROMM',
+			title: 'Amiga DiagROM',
 			subtitle: 'John Hertell',
 			description:
-				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
+				'The Amiga Diagnostic ROM is a hardware-based solution for testing Amiga hardware. On real machines, the Diagnostic ROM is used as a replacement for the Kickstart ROM on the motherboard. After powering on, the Amiga boots into a diagnostic menu. The ROM offers various test routines for checking different components.',
 		}
 	];
 

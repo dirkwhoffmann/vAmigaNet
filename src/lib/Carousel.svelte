@@ -10,14 +10,14 @@
 
 	const options = {
 		type: 'slide',
+		perPage: 5,
 		perMove: 1,
 		pagination: false,
 		gap: '1rem',
-		fixedWidth: '16rem',
 	};
 </script>
 
-<div class="font-sofia-semi text-4xl px-5 pt-5">{category}</div>
+<div class="font-sofia-semi text-4xl mx-2 px-5 bg-gradient-to-r from-gray-600 to-black">{category}</div>
 <div class="p-4">
 	<Splide {options}
 	on:click={ e => { 
@@ -31,4 +31,5 @@
 			</SplideSlide>
 		{/each}
 	</Splide>
+	<div class="py-2"></div>
 </div>
