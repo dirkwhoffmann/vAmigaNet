@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import Carousel from '$lib/Carousel.svelte';
+	import Icon from '$lib/Icon.svelte';
 	import * as animateScroll from 'svelte-scrollto';
 	import '@splidejs/svelte-splide/css';
 
@@ -12,7 +13,7 @@
 		{
 			url: 'batmanrises',
 			title: 'Batman Rises',
-			subtitle: 'Batman Group',
+			subtitle: 'The Batman Group',
 			description:
 				'Batman Rises is a demo released in December 2022 at Posadas Party Autumn Edition. It quickly caught public attention and is considered by many to be one of the best demos ever made for the Commodore Amiga.'
 		},
@@ -130,6 +131,11 @@
 <body class="h-screen flex flex-col bg-black text-white">
 	<div class="">
 		<img class="w-full" src="footage/blank-large.png" alt="Alt" />
+		<div class="absolute top-5 left-10 flex pb-5 z-10">
+			<a href="/" class="" title="Go to the main page">
+				<button class=""><img class="h-11" src="va-icon.png" alt="vAmiga Icon" /></button></a>
+			<div class="font-sofia-extra text-3xl px-3 pt-1 text-gray-700">vAmiga Online</div>
+		</div>
 		{#key show}
 			<div in:fade={{ duration: 1000 }}>
 				<div class="">
@@ -138,10 +144,10 @@
 						{src}
 						alt="Background"
 					/>
-					<img class="absolute top-0 left-0  w-full" src="footage/blank-large.png" alt="Alt" />			
+					<img class="absolute top-0 left-0  w-full" src="footage/blank-large.png" alt="Alt" />
 				</div>
 				<div class="">
-					<div class="absolute top-10 left-10 w-full">
+					<div class="absolute top-[5rem] left-10 w-full">
 						<div class="font-sofia-extra text-8xl">{title}</div>
 						<div class="font-sofia-semi text-2xl pb-10">{subtitle}</div>
 						<div class="flex font-josefin text-lg w-1/2">{description}</div>

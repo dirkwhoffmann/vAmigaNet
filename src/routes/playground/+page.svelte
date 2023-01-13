@@ -12,7 +12,7 @@
 		{
 			url: 'batmanrises',
 			title: 'Batman Rises',
-			subtitle: 'Batman Group',
+			subtitle: 'The Batman Group',
 			description:
 				'Batman Rises is a demo released in December 2022 at Posadas Party Autumn Edition. It quickly caught public attention and is considered by many to be one of the best demos ever made for the Commodore Amiga.'
 		},
