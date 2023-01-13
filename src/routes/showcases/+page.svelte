@@ -1,6 +1,8 @@
 <script lang="ts">
 	import '../../app.css';
+	import { onMount } from 'svelte';
 	import Carousel from '$lib/Carousel.svelte';
+	import * as animateScroll from "svelte-scrollto";
 	import '@splidejs/svelte-splide/css';
 
 	const demos = [
@@ -101,18 +103,33 @@
 	var subtitle ='';
 	var description = '';
 	
-	function handleMessage(event) {
-		console.log(event.detail.description);
-		src = "footage/" + event.detail.url + "-large.jpg";
-		title = event.detail.title;
-		subtitle = event.detail.subtitle;
-		description = event.detail.description;
+	onMount(() => {
+
+		console.log("onMount");
+		update(demos[0])
+	});
+
+	function update(detail) {
+
+		console.log(detail.description);
+		src = "footage/" + detail.url + "-large.jpg";
+		title = detail.title;
+		subtitle = detail.subtitle;
+		description = detail.description;
 	}
+
+	function handleMessage(event) {
+
+		console.log(event.detail.description);
+		update(event.detail);
+		animateScroll.scrollToTop();
+	}
+	
 </script>
 
 <body class="h-screen bg-black text-white">
 	<div class="">
-		<img class="w-full" {src} />
+		<img class="w-full" {src} alt ="Background"/>
 		<div>
 			<div class="absolute top-10 left-10">
 				<div class="font-sofia-extra text-8xl">{title}</div>

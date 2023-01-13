@@ -25,13 +25,13 @@
 			<div
 				class="relative bg-transparent flex flex-grow items-center justify-center border-none align-middle border-4 border-blue-500"
 			>
-				<div class="rounded flex justify-centerw-1/2">
+				<div class="rounded flex justify-center w-1/2">
 					<div class="border-none border-4 p-4">
 						<img class="h-24" src="va-icon.png" />
 					</div>
 					<div class="border-none border-4 p-4">
 						<div class="flex">
-							<div class="font-sofia-extra text-7xl  mr-2">vAmiga</div>
+							<div class="font-sofia-extra text-7xl mr-2">vAmiga</div>
 							<!-- <div class="font-sofia-extra text-6xl mr-2">::</div>-->
 							<div class="font-sofia-extra text-7xl  text-gray-300">Online</div>
 						</div>
