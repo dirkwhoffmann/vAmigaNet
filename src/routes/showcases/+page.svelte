@@ -94,7 +94,7 @@
 		},
 		{
 			url: 'diagrom',
-			title: 'Amiga DiagROM',
+			title: 'Amiga DiagROMM',
 			subtitle: 'John Hertell',
 			description:
 				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
@@ -127,10 +127,10 @@
 	}
 </script>
 
-<body class="h-screen bg-black text-white">
+<body class="h-screen flex flex-col bg-black text-white">
 	<div class="">
 		{#key show}
-			<div in:fade>
+			<div in:fade={{ duration: 1000 }}>
 				<img class="w-full brightness-90 blur-[2px]" {src} alt="Background" />
 				<div>
 					<div class="absolute top-10 left-10 w-full">
@@ -141,10 +141,13 @@
 				</div>
 			</div>
 		{/key}
-		<div class="pb-2" />
-
-		<Carousel category="Demos" items={demos} on:message={handleMessage} />
-		<Carousel category="Games" items={games} on:message={handleMessage} />
-		<Carousel category="Tools" items={tools} on:message={handleMessage} />
+		<div class=" pb-2" />
+	</div>
+	<div class="border-none border-red-500 flex-grow overflow-scroll">
+		<div class="">
+				<Carousel category="Demos" items={demos} on:message={handleMessage} />
+				<Carousel category="Games" items={games} on:message={handleMessage} />
+				<Carousel category="Tools" items={tools} on:message={handleMessage} />
+			</div>
 	</div>
 </body>
