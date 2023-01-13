@@ -129,11 +129,18 @@
 
 <body class="h-screen flex flex-col bg-black text-white">
 	<div class="">
-		<img class="w-full" src="footage/blank-large.jpg" alt="Alt" />
+		<img class="w-full" src="footage/blank-large.png" alt="Alt" />
 		{#key show}
 			<div in:fade={{ duration: 1000 }}>
-				<img class="absolute top-0 left-0 w-full brightness-90 blur-[2px]" {src} alt="Background" />
-				<div>
+				<div class="">
+					<img
+						class="absolute top-0 left-0 w-full brightness-90 blur-[2px]"
+						{src}
+						alt="Background"
+					/>
+					<img class="absolute top-0 left-0  w-full" src="footage/blank-large.png" alt="Alt" />			
+				</div>
+				<div class="">
 					<div class="absolute top-10 left-10 w-full">
 						<div class="font-sofia-extra text-8xl">{title}</div>
 						<div class="font-sofia-semi text-2xl pb-10">{subtitle}</div>
