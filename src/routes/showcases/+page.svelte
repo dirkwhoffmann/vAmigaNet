@@ -10,15 +10,14 @@
 			url: 'batmanrises',
 			title: 'Batman Rises',
 			subtitle: 'Batman Group',
-			description:
-				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
+			description: 'Batman Rises is a demo released in December 2022 at Posadas Party Autumn Edition. It quickly caught public attention and is considered by many to be one of the best demos ever made for the Commodore Amiga.',
 		},
 		{
 			url: 'rinkadink',
 			title: 'Rink a Dink - Redux',
 			subtitle: 'Lemon',
 			description:
-				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
+			'This demo has been released by Lemon at Revision 2013 and has become extremely popular over time. We have used it since the early days of vAmiga to extensively test the emulator.'
 		},
 		{
 			url: 'desertdreams',
@@ -63,7 +62,7 @@
 			title: 'Paccer',
 			subtitle: 'Dirk W. Hoffmann',
 			description:
-				'My first computer game, written in C.',
+				'This game is a Pac-Man clone that was originally released on Fish Disk 223. I implemented this game myself many years ago on my Amiga 500 with the Aztec C compiler and DPaint. Unfortunately, I lost the source code when my parents cleaned up their attic. Luckily, the game survived on the Internet.',
 		},
 		{
 			url: 'defender',
@@ -131,10 +130,10 @@
 	<div class="">
 		<img class="w-full" {src} alt ="Background"/>
 		<div>
-			<div class="absolute top-10 left-10">
+			<div class="absolute top-10 left-10 w-full">
 				<div class="font-sofia-extra text-8xl">{title}</div>
 				<div class="font-sofia-semi text-2xl pb-10">{subtitle}</div>
-				<div class="flex font-josefin text-lg w-1/3">{description}</div>
+				<div class="flex font-josefin text-lg w-1/2">{description}</div>
 			</div>
 		</div>
 		<div class="pb-2" />
