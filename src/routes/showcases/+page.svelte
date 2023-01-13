@@ -1,44 +1,48 @@
 <script lang="ts">
 	import '../../app.css';
 	import { onMount } from 'svelte';
+	import { fade } from 'svelte/transition';
 	import Carousel from '$lib/Carousel.svelte';
-	import * as animateScroll from "svelte-scrollto";
+	import * as animateScroll from 'svelte-scrollto';
 	import '@splidejs/svelte-splide/css';
+
+	let show = false;
 
 	const demos = [
 		{
 			url: 'batmanrises',
 			title: 'Batman Rises',
 			subtitle: 'Batman Group',
-			description: 'Batman Rises is a demo released in December 2022 at Posadas Party Autumn Edition. It quickly caught public attention and is considered by many to be one of the best demos ever made for the Commodore Amiga.',
+			description:
+				'Batman Rises is a demo released in December 2022 at Posadas Party Autumn Edition. It quickly caught public attention and is considered by many to be one of the best demos ever made for the Commodore Amiga.'
 		},
 		{
 			url: 'rinkadink',
 			title: 'Rink a Dink - Redux',
 			subtitle: 'Lemon',
 			description:
-			'This demo has been released by Lemon at Revision 2013 and has become extremely popular over time. We have used it since the early days of vAmiga to extensively test the emulator.'
+				'This demo has been released by Lemon at Revision 2013 and has become extremely popular over time. We have used it since the early days of vAmiga to extensively test the emulator.'
 		},
 		{
 			url: 'desertdreams',
 			title: 'Desert Dreams',
 			subtitle: 'Kefrens',
 			description:
-				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
+				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
 		},
 		{
 			url: 'inebriation',
 			title: 'Absolute Inebriation',
 			subtitle: 'Virtual Dreams & Fairlight',
 			description:
-				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
+				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
 		},
 		{
 			url: 'eon',
 			title: 'Eon',
 			subtitle: 'The Black Lotus',
 			description:
-				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
+				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
 		}
 	];
 
@@ -48,28 +52,28 @@
 			title: 'Trap Runner (Demo)',
 			subtitle: 'Retroguru',
 			description:
-				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
+				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
 		},
 		{
 			url: 'celtic',
 			title: 'Celtic Heart',
 			subtitle: 'Night Owl Design',
 			description:
-				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
+				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
 		},
 		{
 			url: 'paccer',
 			title: 'Paccer',
 			subtitle: 'Dirk W. Hoffmann',
 			description:
-				'This game is a Pac-Man clone that was originally released on Fish Disk 223. I implemented this game myself many years ago on my Amiga 500 with the Aztec C compiler and DPaint. Unfortunately, I lost the source code when my parents cleaned up their attic. Luckily, the game survived on the Internet.',
+				'This game is a Pac-Man clone that was originally released on Fish Disk 223. I implemented this game myself many years ago on my Amiga 500 with the Aztec C compiler and DPaint. Unfortunately, I lost the source code when my parents cleaned up their attic. Luckily, the game survived on the Internet.'
 		},
 		{
 			url: 'defender',
 			title: 'Defender of the Crown',
 			subtitle: 'Cinemaware',
 			description:
-				'Defender of the Crown is a strategy computer game designed by Kellyn Beck. It was Cinemaware\'s first game, and was originally released for the Commodore Amiga in 1986, setting a new standard for graphic quality in home computer games.',
+				"Defender of the Crown is a strategy computer game designed by Kellyn Beck. It was Cinemaware's first game, and was originally released for the Commodore Amiga in 1986, setting a new standard for graphic quality in home computer games."
 		}
 	];
 
@@ -79,63 +83,64 @@
 			title: 'Sysinfo 4.4',
 			subtitle: 'Nic Wilson, Tobias Geijersson',
 			description:
-				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
+				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
 		},
 		{
 			url: 'testkit',
 			title: 'Amiga Test Kit',
 			subtitle: 'Keir Fraser',
 			description:
-				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
+				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
 		},
 		{
 			url: 'diagrom',
 			title: 'Amiga DiagROM',
 			subtitle: 'John Hertell',
 			description:
-				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
+				'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
 		}
 	];
 
-	var src ='';
-	var title ='';
-	var subtitle ='';
+	var src = '';
+	var title = '';
+	var subtitle = '';
 	var description = '';
-	
-	onMount(() => {
 
-		console.log("onMount");
-		update(demos[0])
+	onMount(() => {
+		console.log('onMount');
+		update(demos[0]);
 	});
 
 	function update(detail) {
-
 		console.log(detail.description);
-		src = "footage/" + detail.url + "-large.jpg";
+		src = 'footage/' + detail.url + '-large.jpg';
 		title = detail.title;
 		subtitle = detail.subtitle;
 		description = detail.description;
 	}
 
 	function handleMessage(event) {
-
 		console.log(event.detail.description);
 		update(event.detail);
 		animateScroll.scrollToTop();
+		show += 1;
 	}
-	
 </script>
 
 <body class="h-screen bg-black text-white">
 	<div class="">
-		<img class="w-full" {src} alt ="Background"/>
-		<div>
-			<div class="absolute top-10 left-10 w-full">
-				<div class="font-sofia-extra text-8xl">{title}</div>
-				<div class="font-sofia-semi text-2xl pb-10">{subtitle}</div>
-				<div class="flex font-josefin text-lg w-1/2">{description}</div>
+		{#key show}
+			<div in:fade>
+				<img class="w-full brightness-90 blur-[2px]" {src} alt="Background" />
+				<div>
+					<div class="absolute top-10 left-10 w-full">
+						<div class="font-sofia-extra text-8xl">{title}</div>
+						<div class="font-sofia-semi text-2xl pb-10">{subtitle}</div>
+						<div class="flex font-josefin text-lg w-1/2">{description}</div>
+					</div>
+				</div>
 			</div>
-		</div>
+		{/key}
 		<div class="pb-2" />
 
 		<Carousel category="Demos" items={demos} on:message={handleMessage} />
