@@ -43,7 +43,7 @@
 			dispatch('message', items[e.detail.Slide.index]);
 		}}
 	>
-		{#each items as item, index (item.id)}
+		{#each items as item, index }
 			<SplideSlide>
 				<CarouselItem
 					bind:this={cmps[index]}
