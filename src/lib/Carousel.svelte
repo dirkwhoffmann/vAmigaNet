@@ -4,7 +4,7 @@
 	import CarouselItem from './CarouselItem.svelte';
 
 	export let category = '';
-	export let items = [{ id: 0, url: '', title: '', subtitle: '', description: '' }];
+	export let items = [{ url: '', title: '', subtitle: '', description: '' }];
 
 	const dispatch = createEventDispatcher();
 
