@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '../../app.css';
 	import { onMount } from 'svelte';
+	import { vAmiga } from "$lib/stores";
 
 	let showMenu = false
 	onMount(() => {
@@ -17,7 +18,7 @@
 	<div>
 		<div class="absolute z-30 fixed w-screen h-16 bg-white/30">
 			<a href="/">back</a>
-			<button on:click={()=>window['Module']._wasm_get_cpu_cycles()}>inc</button>
+			<button on:click={()=>$vAmiga._wasm_get_cpu_cycles()}>inc</button>
 		</div>
 	</div>	 
 
