@@ -29,6 +29,7 @@
 
 	<div>
 		<div class="absolute z-30 fixed w-screen h-16 bg-white/30 space-x-2">
+			<!-- <a href="/">back</a>-->
 			<Button on:click={goBack} label="Back" width="w-16"></Button>
 			<Button on:click={doInc} label="Inc" width="w-16"></Button>
 		</div>
