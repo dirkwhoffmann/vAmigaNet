@@ -9,7 +9,6 @@ set(CMAKE_CXX_EXTENSIONS False)
 
 add_executable(vAmiga main.cpp)
 
-
 target_compile_options(vAmiga PRIVATE -Wall -Werror)
 target_compile_options(vAmiga PRIVATE -Wno-unused-parameter)
 target_compile_options(vAmiga PRIVATE -O3 -mnontrapping-fptoint -fwasm-exceptions)
@@ -27,21 +26,17 @@ set(LF_OTHER  "-s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=1  -s LLD_REPORT
 set_target_properties(vAmiga PROPERTIES LINK_FLAGS "${LF_OPTI} ${LF_MEM} ${LF_EXPORTS} ${LF_OTHER}" )
 set(CMAKE_EXECUTABLE_SUFFIX ".js")
 
+set(PUBLISH_FOLDER "${CMAKE_SOURCE_DIR}/../static")
 
 # Run a local webserver
 add_custom_target(run
-    COMMAND ${CMAKE_COMMAND} -E copy vAmiga.js ..
-    COMMAND ${CMAKE_COMMAND} -E copy vAmiga.wasm ..
-    COMMAND ${CMAKE_COMMAND} -E chdir .. python3 -m http.server 8080
+	COMMAND ${CMAKE_COMMAND} -E copy vAmiga.* ${PUBLISH_FOLDER}
+	COMMAND ${CMAKE_COMMAND} -E chdir .. python3 -m http.server 8080
 	DEPENDS vAmiga
 )
 
-
 # Publish complete build to a gh-pages folder
-set(PUBLISH_FOLDER "${CMAKE_SOURCE_DIR}/../static")
-# set(PUBLISH_FOLDER "/Users/hoff/Retro/vAmigaOnline/")
-add_custom_target(publish
-    COMMAND ${CMAKE_COMMAND} -E copy vAmiga.js ${PUBLISH_FOLDER}
-	COMMAND ${CMAKE_COMMAND} -E copy vAmiga.wasm ${PUBLISH_FOLDER}
-	DEPENDS vAmiga
+add_custom_target(static
+	COMMAND ${CMAKE_COMMAND} -E copy vAmiga.* ${PUBLISH_FOLDER}
+    DEPENDS vAmiga
 )
