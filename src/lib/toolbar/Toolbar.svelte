@@ -1,7 +1,7 @@
 <script lang="ts">
-	import ToolbarItem from '$lib/ToolbarItem.svelte';
-	import ToolbarSeparator from '$lib/ToolbarSeparator.svelte';
-	import ToolbarSection from '$lib/ToolbarSection.svelte';
+	import ToolbarItem from '$lib/toolbar/ToolbarItem.svelte';
+	import ToolbarSeparator from '$lib/toolbar/ToolbarSeparator.svelte';
+	import ToolbarSection from '$lib/toolbar/ToolbarSection.svelte';
 	export let bgcolor = 'bg-red-600';
     let tbcolor1 = "bg-gray-300"
 	let tbcolor2 = "bg-gray-300"

@@ -2,9 +2,9 @@
 	import '../app.css';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import ButtonLink from '$lib/ButtonLink.svelte';
-	import Icon from '$lib/Icon.svelte';
-	import MainPageLink from '$lib/HeroLink.svelte';
+	import Button from '$lib/widgets/Button.svelte';
+	import Icon from '$lib/widgets/Icon.svelte';
+	import MainPageLink from '$lib/widgets/MainPageLink.svelte';
 	import FaGithub from 'svelte-icons/fa/FaGithub.svelte';
 	import GoGear from 'svelte-icons/go/GoGear.svelte';
 	import DiGrails from 'svelte-icons/di/DiGrails.svelte';
@@ -16,6 +16,17 @@
 		console.log('onMount()');
 		show = true;
 	});
+
+	function powerOn() {
+		console.log('powerOn()');
+		window.location="/emulator";
+	}
+
+	function gotoGitHub() {
+		console.log('gotoGitHub()');
+		window.location="https://dirkwhoffmann.github.io/vAmiga";
+	}
+
 </script>
 
 <body class="h-screen bg-black text-white">
@@ -34,7 +45,7 @@
 				>
 					<div class="rounded flex justify-center w-1/2">
 						<div class="border-none border-4 p-4">
-							<img class="h-24" src="va-icon.png" />
+							<img class="h-24" src="va-icon.png" alt="vAmiga Icon" />
 						</div>
 						<div class="border-none border-4 p-4">
 							<div class="flex">
@@ -43,14 +54,8 @@
 							</div>
 							<div class="font-sofia-semi text-xl text-gray-300 pl-2 pb-10">Version 0.1</div>
 							<div class="flex space-x-5">						
-									<button
-										class="bg-blue-300 hover:bg-blue-500 text-gray-800 font-sofia-semi text-xl py-2 px-8 rounded-md"
-										><a href="/emulator">Power On</a></button
-									>
-								<button
-									class="bg-blue-300 hover:bg-blue-500 text-gray-800 font-sofia-semi text-xl py-2 px-2 rounded-md"
-									><Icon><FaGithub /></Icon></button
-								>
+								<Button on:click={powerOn} label="Power On"></Button>
+								<Button on:click={gotoGitHub}><FaGithub /></Button>
 							</div>
 						</div>
 					</div>
