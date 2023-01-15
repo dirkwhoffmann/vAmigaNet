@@ -2,6 +2,7 @@
 	import '../../app.css';
 	import { onMount } from 'svelte';
 	import Button from '$lib/widgets/Button.svelte';
+	import { vAmiga } from "$lib/stores";
 
 	let showMenu = false
 
@@ -16,7 +17,7 @@
 
 	function doInc() {
 		console.log('doInc()');
-		window['Module']._wasm_get_cpu_cycles();
+		$vAmiga._wasm_get_cpu_cycles();
 	}
 
 </script>
