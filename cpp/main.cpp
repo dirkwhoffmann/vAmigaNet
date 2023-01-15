@@ -1,4 +1,5 @@
 #include <emscripten.h>
+#include <emscripten/wasm_worker.h>
 #include <cstdlib>
 #include <stdio.h>
 
@@ -14,8 +15,18 @@ void processMsg(const void *amiga, long id, int data1, int data2, int data3, int
     printf("MSG %s: %x %x %x %x\n", MsgTypeEnum::key(id), data1, data2, data3, data4);
 }
 
+
+void run_in_worker()
+{
+  printf(">>>> Hello from wasm worker thread!\n");
+}
+
 int main(int argc, char *argv[])
 {
+    emscripten_wasm_worker_t worker = emscripten_malloc_wasm_worker(/*stack size: */1024);
+    emscripten_wasm_worker_post_function_v(worker, run_in_worker);
+
+
     printf("Constructing Amiga instance...\n");
     amiga = new Amiga();
 

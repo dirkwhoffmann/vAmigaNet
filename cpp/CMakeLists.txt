@@ -9,6 +9,7 @@ set(CMAKE_CXX_EXTENSIONS False)
 
 add_executable(vAmiga main.cpp)
 
+target_compile_options(vAmiga PRIVATE -sWASM_WORKERS)
 target_compile_options(vAmiga PRIVATE -Wall -Werror)
 target_compile_options(vAmiga PRIVATE -Wno-unused-parameter)
 target_compile_options(vAmiga PRIVATE -O3 -mnontrapping-fptoint -fwasm-exceptions)
@@ -21,7 +22,7 @@ target_link_libraries(vAmiga vAmigaCore)
 set(LF_MEM   "-s INITIAL_MEMORY=320MB -s TOTAL_STACK=32MB -s ALLOW_MEMORY_GROWTH=1")
 set(LF_OPTI  "-O0 -mnontrapping-fptoint -fwasm-exceptions")
 set(LF_EXPORTS "-s EXPORTED_RUNTIME_METHODS=['cwrap','ccall'] -s EXPORTED_FUNCTIONS=\"['_free','_main']\"")
-set(LF_OTHER  "-s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=1  -s LLD_REPORT_UNDEFINED -s ASSERTIONS=0 -s GL_ASSERTIONS=0")
+set(LF_OTHER  "-sWASM_WORKERS -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=1  -s LLD_REPORT_UNDEFINED -s ASSERTIONS=0 -s GL_ASSERTIONS=0")
 
 set_target_properties(vAmiga PROPERTIES LINK_FLAGS "${LF_OPTI} ${LF_MEM} ${LF_EXPORTS} ${LF_OTHER}" )
 set(CMAKE_EXECUTABLE_SUFFIX ".js")
