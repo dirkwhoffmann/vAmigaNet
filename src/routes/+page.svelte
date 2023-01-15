@@ -9,6 +9,7 @@
 	import GoGear from 'svelte-icons/go/GoGear.svelte';
 	import DiGrails from 'svelte-icons/di/DiGrails.svelte';
 	import '@splidejs/svelte-splide/css';
+	import { goto } from '$app/navigation';
 
 	let show = false;
 
@@ -19,12 +20,12 @@
 
 	function powerOn() {
 		console.log('powerOn()');
-		window.location="/emulator";
+		goto("/emulator");
 	}
 
 	function gotoGitHub() {
 		console.log('gotoGitHub()');
-		window.location="https://dirkwhoffmann.github.io/vAmiga";
+		goto("https://dirkwhoffmann.github.io/vAmiga");
 	}
 
 </script>

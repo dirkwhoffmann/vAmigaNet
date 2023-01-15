@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import Button from '$lib/widgets/Button.svelte';
 	import { vAmiga } from "$lib/stores";
+	import { goto } from '$app/navigation';
 
 	let showMenu = false
 
@@ -12,7 +13,7 @@
 
 	function goBack() {
 		console.log('goBack()');
-		window.location = "/";
+		goto("/");
 	}
 
 	function doInc() {
