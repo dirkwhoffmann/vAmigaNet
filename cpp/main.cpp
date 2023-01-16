@@ -64,3 +64,28 @@ int main(int argc, char *argv[])
   printf("Exiting main()\n");
   return EXIT_SUCCESS;
 }
+
+void pressUp()
+{
+  printf("pressUp()\n");
+}
+
+void pressDown()
+{
+  printf("pressDown()\n");
+}
+
+void pressLeft()
+{
+  printf("pressLeft()\n");
+}
+
+void pressRight()
+{
+  printf("pressRight()\n");
+}
+
+void pressKey(char c)
+{
+  printf("pressChar(%d)\n", c);
+}

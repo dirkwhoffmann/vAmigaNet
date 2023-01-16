@@ -4,6 +4,7 @@
 	import Button from '$lib/widgets/Button.svelte';
 	import { vAmiga } from "$lib/stores";
 	import { goto } from '$app/navigation';
+	import RetroShell from '$lib/RetroShell.svelte';
 
 	let showMenu = false
 
@@ -36,11 +37,16 @@
 		</div>
 	</div>	 
 
-
+	<div class="flex justify-center absolute w-full h-full">
+		<div class="absolute z-20 w-2/3 h-2/3 bg-gray-600 text-black"> 
+			<RetroShell	/>
+		</div>
+	</div>
+<!--
 	<div class="flex justify-center absolute w-full h-full">
 		<div class="absolute z-20 w-2/3 h-2/3 bg-gray-600"> 
 				<canvas id="canvas" oncontextmenu="event.preventDefault()"></canvas>
 		</div>
 	</div>
-
+-->
 </body>

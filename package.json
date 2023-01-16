@@ -12,7 +12,7 @@
 		"test:unit": "vitest",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"format": "prettier --plugin-search-dir . --write .",
-		"wasm": "emcc cpp/main.cpp -o static/vAmiga.js -s EXPORTED_FUNCTIONS=_main,_wasm_get_cpu_cycles"
+		"wasm": "emcc cpp/main.cpp -o static/vAmiga.js -s EXPORTED_FUNCTIONS=_main,_pressUp,_pressDown,_pressLeft,_pressRight,_pressKey"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
