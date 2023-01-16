@@ -9,7 +9,7 @@
         console.log('layout+: onMount');
         $vAmiga.onRuntimeInitialized= ()=> {
             console.log("onRuntimeInitialized");
-            rs_pressLeft = $vAmiga.cwrap('pressLeft', 'undefined');            
+            $vAmiga.pressLeft = $vAmiga.cwrap('pressLeft', 'undefined');            
         };
         
         /**

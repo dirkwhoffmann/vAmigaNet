@@ -11,4 +11,5 @@ vite.config.ts.timestamp-*
 vAmiga.wasm
 vAmiga.js
 vAmiga.ww.js
+vAmiga.worker.js
 /cpp/b

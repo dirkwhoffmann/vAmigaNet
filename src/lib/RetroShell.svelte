@@ -14,7 +14,7 @@
             
             case 37: // Left
 				console.log('left');
-                rs_pressLeft();
+                $vAmiga.pressLeft();
 				break;
 			case 39: // Right
 				console.log('right');
