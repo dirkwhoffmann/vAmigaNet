@@ -65,27 +65,27 @@ int main(int argc, char *argv[])
   return EXIT_SUCCESS;
 }
 
-void pressUp()
+extern "C" void pressUp()
 {
   printf("pressUp()\n");
 }
 
-void pressDown()
+extern "C" void pressDown()
 {
   printf("pressDown()\n");
 }
 
-void pressLeft()
+extern "C" void pressLeft()
 {
   printf("pressLeft()\n");
 }
 
-void pressRight()
+extern "C" void pressRight()
 {
   printf("pressRight()\n");
 }
 
-void pressKey(char c)
+extern "C" void pressKey(char c)
 {
   printf("pressChar(%d)\n", c);
 }

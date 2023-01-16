@@ -1,14 +1,20 @@
 <script>
     import { vAmiga } from "$lib/stores";
-	export let text = '';
+	import { onMount } from "svelte";
+    export let text = '';
 
 	let value = '';
+
+    onMount(() => {
+        console.log('RetroShell: onMount');
+    });
 
 	function onKeyDown(e) {
 		switch (e.keyCode) {
             
             case 37: // Left
 				console.log('left');
+                rs_pressLeft();
 				break;
 			case 39: // Right
 				console.log('right');

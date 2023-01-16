@@ -3,11 +3,13 @@
 	import { onMount } from "svelte";
 
     let ready_to_load_wasm=false;
-
+    let rs_pressLeft;
+    
     onMount(() => {
         console.log('layout+: onMount');
         $vAmiga.onRuntimeInitialized= ()=> {
-            console.log("onRuntimeInitialized !") 
+            console.log("onRuntimeInitialized");
+            rs_pressLeft = $vAmiga.cwrap('pressLeft', 'undefined');            
         };
         
         /**
