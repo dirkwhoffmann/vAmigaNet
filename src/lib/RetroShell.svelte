@@ -27,6 +27,7 @@
 				break;
             
 			default:
+				$retroShell.pressKey(e.keyCode);
 				value += e.keyCode;
 		}
 	}

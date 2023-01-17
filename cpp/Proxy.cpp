@@ -3,7 +3,8 @@
 #include <stdio.h>
 #include <exception>
 
-void processMsg(const void *amiga, long id, int data1, int data2, int data3, int data4)
+void 
+processMsg(const void *amiga, long id, int data1, int data2, int data3, int data4)
 {
     printf("MSG %s: %x %x %x %x\n", MsgTypeEnum::key(id), data1, data2, data3, data4);
 }
@@ -36,12 +37,14 @@ AmigaProxy::AmigaProxy()
     amiga->configure(OPT_AGNUS_REVISION, AGNUS_OCS);
 }
 
-bool AmigaProxy::hasRom() const
+bool 
+AmigaProxy::hasRom() const
 {
     return amiga->mem.hasRom();
 }
 
-bool AmigaProxy::hasExt() const
+bool 
+AmigaProxy::hasExt() const
 {
     return amiga->mem.hasExt();
 }
@@ -63,32 +66,47 @@ RetroShellProxy::RetroShellProxy()
     printf("RetroShellProxy()\n");
 }
 
-void RetroShellProxy::pressUp()
+string
+RetroShellProxy::getText()
 {
-    printf("pressUp()\n");
+    return amiga->retroShell.text();
 }
 
-void RetroShellProxy::pressDown()
+void 
+RetroShellProxy::press(RetroShellKey key)
 {
-    printf("pressDown()\n");
+    amiga->retroShell.press(key);    
 }
 
-void RetroShellProxy::pressLeft()
+void 
+RetroShellProxy::pressKey(char c)
 {
-    printf("pressLeft()\n");
+    printf("pressKey(%c)\n", c);
+    amiga->retroShell.press(c);
 }
 
-void RetroShellProxy::pressRight()
+void 
+RetroShellProxy::pressShiftReturn()
 {
-    printf("pressRight()\n");
+    amiga->retroShell.press(RSKEY_RETURN, true);
 }
 
 EMSCRIPTEN_BINDINGS(vamiga)
 {
     class_<RetroShellProxy>("RetroShellProxy")
         .constructor<>()
+        .function("text", &RetroShellProxy::getText)
         .function("pressUp", &RetroShellProxy::pressUp)
         .function("pressDown", &RetroShellProxy::pressDown)
         .function("pressLeft", &RetroShellProxy::pressLeft)
-        .function("pressRight", &RetroShellProxy::pressRight);
+        .function("pressRight", &RetroShellProxy::pressRight)
+        .function("pressHome", &RetroShellProxy::pressHome)
+        .function("pressEnd", &RetroShellProxy::pressEnd)
+        .function("pressBackspace", &RetroShellProxy::pressBackspace)
+        .function("pressDelete", &RetroShellProxy::pressDelete)
+        .function("pressCut", &RetroShellProxy::pressCut)
+        .function("pressReturn", &RetroShellProxy::pressReturn)
+        .function("pressTab", &RetroShellProxy::pressTab)
+        .function("pressShiftReturn", &RetroShellProxy::pressShiftReturn)
+        .function("pressKey", &RetroShellProxy::pressKey);
 }

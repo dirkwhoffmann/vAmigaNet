@@ -15,17 +15,30 @@ void processMsg(const void *amiga, long id, int data1, int data2, int data3, int
 class AmigaProxy
 {
 public:
-  AmigaProxy();
-  bool hasRom() const;
-  bool hasExt() const;
+    AmigaProxy();
+
+    bool hasRom() const;
+    bool hasExt() const;
 };
 
 class RetroShellProxy
 {
 public:
-  RetroShellProxy();
-  void pressUp();
-  void pressDown();
-  void pressLeft();
-  void pressRight();
+    RetroShellProxy();
+
+    string getText();     
+    void press(RetroShellKey key);
+    void pressKey(char c);
+    void pressUp() { pressKey(RSKEY_UP); }
+    void pressDown() { pressKey(RSKEY_DOWN); }
+    void pressLeft() { pressKey(RSKEY_LEFT); }
+    void pressRight() { pressKey(RSKEY_RIGHT); }
+    void pressHome() { pressKey(RSKEY_HOME); }
+    void pressEnd() { pressKey(RSKEY_END); }
+    void pressBackspace() { pressKey(RSKEY_BACKSPACE); }
+    void pressDelete() { pressKey(RSKEY_DEL); }
+    void pressCut() { pressKey(RSKEY_CUT); }
+    void pressReturn() { pressKey(RSKEY_RETURN); }
+    void pressTab() { pressKey(RSKEY_TAB); }
+    void pressShiftReturn();
 };
