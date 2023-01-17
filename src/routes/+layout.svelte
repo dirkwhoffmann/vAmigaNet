@@ -13,6 +13,9 @@
             console.log('Creating proxies...');
             $amiga = new $vAmiga.AmigaProxy();
             $retroShell = new $vAmiga.RetroShellProxy();
+            $vAmiga.processMessage = function() {
+                console.log("Holla, die Waldfee");
+            }
         };
         
         /**

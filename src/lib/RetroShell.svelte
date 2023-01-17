@@ -13,22 +13,48 @@
 
 		switch (e.keyCode) {
             
-            case 37: // Left
-                $retroShell.pressLeft();
-				break;
-			case 39: // Right
-                $retroShell.pressRight();
-				break;
-			case 40: // Down
-                $retroShell.pressDown();
-				break;
-			case 38: // Up
+			case 38:
                 $retroShell.pressUp();
 				break;
+			case 40:
+                $retroShell.pressDown();
+				break;
+            case 37:
+                $retroShell.pressLeft();
+				break;
+			case 39:
+                $retroShell.pressRight();
+				break;
+			case 36:
+				$retroShell.pressHome();
+				break;
+			case 35:
+				$retroShell.pressEnd();
+				break;
+			case 8:
+				$retroShell.pressBackspace();
+				break;
+			case 46:
+				$retroShell.pressDelete();
+				break;
+			/*
+			case ???:
+                $retroShell.pressCut();
+				break;
+			*/
+			case 13:
+				$retroShell.pressReturn();
+				break;
+			case 9:
+				$retroShell.pressTab();
+				break;
+			/*
+			case ???:
+                $retroShell.pressShiftReturn();
+				break;
+			*/
             
 			default:
-				console.log("MSG_POWER_OFF: " + $vAmiga.MSG_POWER_OFF);
-				console.log("MSG_POWER_ERROR: " + $vAmiga.MSG_POWER_ERROR);
 				$retroShell.pressKey(e.keyCode);
 				value += e.keyCode;
 		}

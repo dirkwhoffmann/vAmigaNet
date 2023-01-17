@@ -3,10 +3,12 @@
 #include <stdio.h>
 #include <exception>
 
-void 
-processMsg(const void *amiga, long id, int data1, int data2, int data3, int data4)
+void processMsg(const void *amiga, long id, int d1, int d2, int d3, int d4)
 {
-    printf("MSG %s: %x %x %x %x\n", MsgTypeEnum::key(id), data1, data2, data3, data4);
+    printf("MSG %s: %x %x %x %x\n", MsgTypeEnum::key(id), d1, d2, d3, d4);
+
+    // EM_ASM({ processMessage($0, $1, $2, $3, $4); }, int(id), d1, d2, d3, d4);
+    EM_ASM({ processMessage(); } );
 }
 
 //
@@ -37,14 +39,12 @@ AmigaProxy::AmigaProxy()
     amiga->configure(OPT_AGNUS_REVISION, AGNUS_OCS);
 }
 
-bool 
-AmigaProxy::hasRom() const
+bool AmigaProxy::hasRom() const
 {
     return amiga->mem.hasRom();
 }
 
-bool 
-AmigaProxy::hasExt() const
+bool AmigaProxy::hasExt() const
 {
     return amiga->mem.hasExt();
 }
@@ -72,21 +72,18 @@ RetroShellProxy::getText()
     return amiga->retroShell.text();
 }
 
-void 
-RetroShellProxy::press(RetroShellKey key)
+void RetroShellProxy::press(RetroShellKey key)
 {
-    amiga->retroShell.press(key);    
+    amiga->retroShell.press(key);
 }
 
-void 
-RetroShellProxy::pressKey(char c)
+void RetroShellProxy::pressKey(char c)
 {
     printf("pressKey(%c)\n", c);
     amiga->retroShell.press(c);
 }
 
-void 
-RetroShellProxy::pressShiftReturn()
+void RetroShellProxy::pressShiftReturn()
 {
     amiga->retroShell.press(RSKEY_RETURN, true);
 }
@@ -111,11 +108,11 @@ EMSCRIPTEN_BINDINGS(RetroShellProxy)
         .function("pressKey", &RetroShellProxy::pressKey);
 }
 
-EMSCRIPTEN_BINDINGS(Enums) 
+EMSCRIPTEN_BINDINGS(Enums)
 {
     constant("MSG_NONE", (int)MSG_NONE);
     constant("MSG_REGISTER", (int)MSG_REGISTER);
-    constant("MSG_CONFIG",(int)MSG_CONFIG);
+    constant("MSG_CONFIG", (int)MSG_CONFIG);
     constant("MSG_POWER_ON", (int)MSG_POWER_ON);
     constant("MSG_POWER_OFF", (int)MSG_POWER_OFF);
 }
