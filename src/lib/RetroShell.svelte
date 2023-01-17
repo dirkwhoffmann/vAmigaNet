@@ -1,5 +1,5 @@
 <script>
-    import { proxy, retroShell } from "$lib/stores";
+    import { amiga, retroShell } from "$lib/stores";
 	import { onMount } from "svelte";
     export let text = '';
 
@@ -15,7 +15,6 @@
             
             case 37: // Left
                 $retroShell.pressLeft();
-				console.log("hasRom: " + $proxy.hasRom);
 				break;
 			case 39: // Right
                 $retroShell.pressRight();

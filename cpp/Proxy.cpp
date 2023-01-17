@@ -12,7 +12,7 @@ void processMsg(const void *amiga, long id, int data1, int data2, int data3, int
 // Amiga Proxy
 //
 
-Proxy::Proxy()
+AmigaProxy::AmigaProxy()
 {
     printf("AmigaProxy()\n");
 
@@ -36,22 +36,22 @@ Proxy::Proxy()
     amiga->configure(OPT_AGNUS_REVISION, AGNUS_OCS);
 }
 
-bool Proxy::hasRom() const
+bool AmigaProxy::hasRom() const
 {
     return amiga->mem.hasRom();
 }
 
-bool Proxy::hasExt() const
+bool AmigaProxy::hasExt() const
 {
     return amiga->mem.hasExt();
 }
 
 EMSCRIPTEN_BINDINGS(AmigaProxy)
 {
-    class_<Proxy>("Proxy")
+    class_<AmigaProxy>("AmigaProxy")
         .constructor<>()
-        .property("hasRom", &Proxy::hasRom)
-        .property("hasExt", &Proxy::hasExt);
+        .property("hasRom", &AmigaProxy::hasRom)
+        .property("hasExt", &AmigaProxy::hasExt);
 }
 
 //

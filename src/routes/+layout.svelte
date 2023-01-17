@@ -1,6 +1,6 @@
 <script lang="ts">
     import { vAmiga } from "$lib/stores";
-    import { proxy, retroShell } from "$lib/stores";
+    import { amiga, retroShell } from "$lib/stores";
 	import { onMount } from "svelte";
 
     let ready_to_load_wasm=false;
@@ -11,7 +11,7 @@
             console.log("layout+: onRuntimeInitialized");
 
             console.log('Creating proxies...');
-            $proxy = new $vAmiga.Proxy();
+            $amiga = new $vAmiga.AmigaProxy();
             $retroShell = new $vAmiga.RetroShellProxy();
         };
         

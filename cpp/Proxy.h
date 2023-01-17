@@ -12,10 +12,10 @@ Amiga *amiga = nullptr;
 
 void processMsg(const void *amiga, long id, int data1, int data2, int data3, int data4);
 
-class Proxy
+class AmigaProxy
 {
 public:
-  Proxy();
+  AmigaProxy();
   bool hasRom() const;
   bool hasExt() const;
 };
