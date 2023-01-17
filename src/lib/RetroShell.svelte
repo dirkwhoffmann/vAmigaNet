@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import { vAmiga, amiga, retroShell } from "$lib/stores";
 	import { onMount } from "svelte";
     export let text = '';
@@ -9,32 +9,32 @@
         console.log('RetroShell: onMount');
     });
 
-	function onKeyDown(e) {
+	function onKeyDown(e: KeyboardEvent) {
 
-		switch (e.keyCode) {
+		switch (e.key) {
             
-			case 38:
+			case 'ArrowUp':
                 $retroShell.pressUp();
 				break;
-			case 40:
+			case 'ArrowDown':
                 $retroShell.pressDown();
 				break;
-            case 37:
+            case 'ArrowLeft':
                 $retroShell.pressLeft();
 				break;
-			case 39:
+			case 'ArrowRight':
                 $retroShell.pressRight();
 				break;
-			case 36:
+			case 'Home':
 				$retroShell.pressHome();
 				break;
-			case 35:
+			case 'End':
 				$retroShell.pressEnd();
 				break;
-			case 8:
+			case 'Backspace':
 				$retroShell.pressBackspace();
 				break;
-			case 46:
+			case 'Delete':
 				$retroShell.pressDelete();
 				break;
 			/*
@@ -42,10 +42,10 @@
                 $retroShell.pressCut();
 				break;
 			*/
-			case 13:
-				$retroShell.pressReturn();
+			case 'Return':
+				e.shiftKey ? $retroShell.pressShiftReturn() : $retroShell.pressReturn();
 				break;
-			case 9:
+			case 'Tab':
 				$retroShell.pressTab();
 				break;
 			/*
@@ -55,8 +55,8 @@
 			*/
             
 			default:
-				$retroShell.pressKey(e.keyCode);
-				value += e.keyCode;
+				$retroShell.pressKey(e.key);
+				value += e.key;
 		}
 	}
 </script>
