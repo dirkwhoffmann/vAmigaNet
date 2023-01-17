@@ -19,11 +19,12 @@ add_subdirectory("emulator" "vAmigaCore")
 target_link_libraries(vAmiga vAmigaCore)
 
 # Emscripten linker settings
-set(LF_MEM   "-s INITIAL_MEMORY=320MB -s TOTAL_STACK=32MB -s ALLOW_MEMORY_GROWTH=1")
-set(LF_OPTI  "-O0 -mnontrapping-fptoint -fwasm-exceptions")
-set(LF_EXPORTS "-sEXPORTED_FUNCTIONS=_free,_main,_pressUp,_pressDown,_pressLeft,_pressRight,_pressKey -sEXPORTED_RUNTIME_METHODS=ccall,cwrap")
-set(LF_OTHER  "-sWASM_WORKERS -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=1  -s LLD_REPORT_UNDEFINED -s ASSERTIONS=0 -s GL_ASSERTIONS=0")
-set(LF_THREAD  "-pthread -s PTHREAD_POOL_SIZE=1")
+set(LF_MEM "-s INITIAL_MEMORY=320MB -s TOTAL_STACK=32MB -s ALLOW_MEMORY_GROWTH=1")
+set(LF_OPTI "-O0 -mnontrapping-fptoint -fwasm-exceptions")
+set(LF_EXPORTS  "")
+# set(LF_EXPORTS "-sEXPORTED_FUNCTIONS=_free,_main -sEXPORTED_RUNTIME_METHODS=ccall,cwrap")
+set(LF_THREAD "-pthread -s PTHREAD_POOL_SIZE=1")
+set(LF_OTHER "-lembind -sWASM_WORKERS -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=1  -s LLD_REPORT_UNDEFINED -s ASSERTIONS=0 -s GL_ASSERTIONS=0")
 
 set_target_properties(vAmiga PROPERTIES LINK_FLAGS "${LF_OPTI} ${LF_MEM} ${LF_EXPORTS} ${LF_OTHER} ${LF_THREAD}" )
 set(CMAKE_EXECUTABLE_SUFFIX ".js")

@@ -3,13 +3,16 @@
 	import { onMount } from "svelte";
 
     let ready_to_load_wasm=false;
-    let rs_pressLeft;
     
     onMount(() => {
         console.log('layout+: onMount');
         $vAmiga.onRuntimeInitialized= ()=> {
-            console.log("onRuntimeInitialized");
-            $vAmiga.pressLeft = $vAmiga.cwrap('pressLeft', 'undefined');            
+            console.log("layout+: onRuntimeInitialized");
+
+            console.log('Creating proxy...');
+            var instance = new $vAmiga.Proxy();
+
+            instance.pressLeft();
         };
         
         /**
