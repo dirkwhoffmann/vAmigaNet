@@ -91,7 +91,7 @@ RetroShellProxy::pressShiftReturn()
     amiga->retroShell.press(RSKEY_RETURN, true);
 }
 
-EMSCRIPTEN_BINDINGS(vamiga)
+EMSCRIPTEN_BINDINGS(RetroShellProxy)
 {
     class_<RetroShellProxy>("RetroShellProxy")
         .constructor<>()
@@ -109,4 +109,13 @@ EMSCRIPTEN_BINDINGS(vamiga)
         .function("pressTab", &RetroShellProxy::pressTab)
         .function("pressShiftReturn", &RetroShellProxy::pressShiftReturn)
         .function("pressKey", &RetroShellProxy::pressKey);
+}
+
+EMSCRIPTEN_BINDINGS(Enums) 
+{
+    constant("MSG_NONE", (int)MSG_NONE);
+    constant("MSG_REGISTER", (int)MSG_REGISTER);
+    constant("MSG_CONFIG",(int)MSG_CONFIG);
+    constant("MSG_POWER_ON", (int)MSG_POWER_ON);
+    constant("MSG_POWER_OFF", (int)MSG_POWER_OFF);
 }

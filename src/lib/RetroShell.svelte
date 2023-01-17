@@ -1,5 +1,5 @@
 <script>
-    import { amiga, retroShell } from "$lib/stores";
+    import { vAmiga, amiga, retroShell } from "$lib/stores";
 	import { onMount } from "svelte";
     export let text = '';
 
@@ -27,6 +27,8 @@
 				break;
             
 			default:
+				console.log("MSG_POWER_OFF: " + $vAmiga.MSG_POWER_OFF);
+				console.log("MSG_POWER_ERROR: " + $vAmiga.MSG_POWER_ERROR);
 				$retroShell.pressKey(e.keyCode);
 				value += e.keyCode;
 		}
