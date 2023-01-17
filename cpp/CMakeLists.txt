@@ -9,23 +9,24 @@ set(CMAKE_CXX_EXTENSIONS False)
 
 add_executable(vAmiga main.cpp)
 
+target_compile_options(vAmiga PRIVATE -O1)
 target_compile_options(vAmiga PRIVATE -sWASM_WORKERS)
-target_compile_options(vAmiga PRIVATE -Wall -Werror)
+target_compile_options(vAmiga PRIVATE -Wall -Werror -Wfatal-errors)
 target_compile_options(vAmiga PRIVATE -Wno-unused-parameter)
-target_compile_options(vAmiga PRIVATE -O3 -mnontrapping-fptoint -fwasm-exceptions)
-target_compile_options(vAmiga PRIVATE -Wfatal-errors)
+target_compile_options(vAmiga PRIVATE -mnontrapping-fptoint -fwasm-exceptions)
 
-add_subdirectory("emulator" "vAmigaCore")
+add_subdirectory("emulator")
 target_link_libraries(vAmiga vAmigaCore)
 
 # Emscripten linker settings
 set(LF_MEM "-sINITIAL_MEMORY=512MB -sTOTAL_STACK=32MB -sALLOW_MEMORY_GROWTH=0")
-set(LF_OPTI "-O0 -mnontrapping-fptoint -fwasm-exceptions")
-set(LF_EXPORTS "-lembind ")
-set(LF_THREAD "-pthread -sPTHREAD_POOL_SIZE=1")
-set(LF_OTHER "-sWASM_WORKERS -sDISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=1 -sLLD_REPORT_UNDEFINED -sASSERTIONS=0 -sGL_ASSERTIONS=0")
+set(LF_OPTI "-O1 -mnontrapping-fptoint -fwasm-exceptions")
+set(LF_EXPORTS "-lembind")
+set(LF_THREAD "-pthread -sPTHREAD_POOL_SIZE=1 -sWASM_WORKERS")
+set(LF_DEBUG "-sASSERTIONS=0 -sGL_ASSERTIONS=0")
+set(LF_OTHER "-sWASM_BIGINT -sDISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=1 -sLLD_REPORT_UNDEFINED")
 
-set_target_properties(vAmiga PROPERTIES LINK_FLAGS "${LF_OPTI} ${LF_MEM} ${LF_EXPORTS} ${LF_OTHER} ${LF_THREAD}" )
+set_target_properties(vAmiga PROPERTIES LINK_FLAGS "${LF_MEM} ${LF_OPTI} ${LF_EXPORTS} ${LF_THREAD} ${LF_DEBUG} ${LF_OTHER}" )
 set(CMAKE_EXECUTABLE_SUFFIX ".js")
 
 set(PUBLISH_FOLDER "${CMAKE_SOURCE_DIR}/../static")

@@ -9,3 +9,4 @@ import { writable } from 'svelte/store';
  */
 export const vAmiga:any = writable({});
 export const proxy:any = writable({});
+export const retroShell:any = writable({});

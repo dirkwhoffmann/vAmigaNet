@@ -23,7 +23,7 @@ class Proxy
 public:
   Proxy()
   {
-    printf("Entering Proxy()\n");
+    printf("Proxy()\n");
 
     printf("Constructing Amiga...\n");
     amiga = new Amiga();
@@ -43,8 +43,6 @@ public:
     amiga->configure(OPT_CHIP_RAM, 512);
     amiga->configure(OPT_SLOW_RAM, 512);
     amiga->configure(OPT_AGNUS_REVISION, AGNUS_OCS);
-
-    printf("Exiting Proxy()\n");
   }
 
   bool hasRom() const
@@ -55,6 +53,15 @@ public:
   bool hasExt() const
   {
     return amiga->mem.hasExt();
+  }
+};
+
+class RetroShellProxy
+{
+public:
+  RetroShellProxy()
+  {
+    printf("RetroShellProxy()\n");
   }
 
   void pressUp()
@@ -91,9 +98,12 @@ EMSCRIPTEN_BINDINGS(vamiga)
       .constructor<>()
       .property("hasRom", &Proxy::hasRom)
       .property("hasExt", &Proxy::hasExt)
-      .function("pressUp", &Proxy::pressUp)
-      .function("pressDown", &Proxy::pressDown)
-      .function("pressLeft", &Proxy::pressLeft)
-      .function("pressRight", &Proxy::pressRight)
+  ;
+  class_<RetroShellProxy>("RetroShellProxy")
+      .constructor<>()
+      .function("pressUp", &RetroShellProxy::pressUp)
+      .function("pressDown", &RetroShellProxy::pressDown)
+      .function("pressLeft", &RetroShellProxy::pressLeft)
+      .function("pressRight", &RetroShellProxy::pressRight)
   ;
 }

@@ -1,5 +1,5 @@
 <script>
-    import { proxy } from "$lib/stores";
+    import { proxy, retroShell } from "$lib/stores";
 	import { onMount } from "svelte";
     export let text = '';
 
@@ -14,16 +14,17 @@
 		switch (e.keyCode) {
             
             case 37: // Left
-                $proxy.pressLeft();
+                $retroShell.pressLeft();
+				console.log("hasRom: " + $proxy.hasRom);
 				break;
 			case 39: // Right
-                $proxy.pressRight();
+                $retroShell.pressRight();
 				break;
 			case 40: // Down
-                $proxy.pressDown();
+                $retroShell.pressDown();
 				break;
 			case 38: // Up
-                $proxy.pressUp();
+                $retroShell.pressUp();
 				break;
             
 			default:
