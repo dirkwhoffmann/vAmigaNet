@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_EXTENSIONS False)
 
-add_executable(vAmiga main.cpp)
+add_executable(vAmiga main.cpp Proxy.cpp)
 
 target_compile_options(vAmiga PRIVATE -O1)
 target_compile_options(vAmiga PRIVATE -sWASM_WORKERS)
