@@ -13,14 +13,6 @@ using namespace vamiga;
 
 Amiga *amiga = nullptr;
 
-float lerp(float a, float b, float t) {
-    return (1 - t) * a + t * b;
-}
-
-EMSCRIPTEN_BINDINGS(my_module) {
-    function("lerp", &lerp);
-}
-
 void processMsg(const void *amiga, long id, int data1, int data2, int data3, int data4)
 {
   printf("MSG %s: %x %x %x %x\n", MsgTypeEnum::key(id), data1, data2, data3, data4);
@@ -65,10 +57,26 @@ public:
     return amiga->mem.hasExt();
   }
 
+  void pressUp()
+  {
+    printf("pressUp()\n");
+  }
+
+  void pressDown()
+  {
+    printf("pressDown()\n");
+  }
+
   void pressLeft()
   {
     printf("pressLeft()\n");
   }
+
+  void pressRight()
+  {
+    printf("pressRight()\n");
+  }
+
 };
 
 int main(int argc, char *argv[])
@@ -83,6 +91,9 @@ EMSCRIPTEN_BINDINGS(vamiga)
       .constructor<>()
       .property("hasRom", &Proxy::hasRom)
       .property("hasExt", &Proxy::hasExt)
+      .function("pressUp", &Proxy::pressUp)
+      .function("pressDown", &Proxy::pressDown)
       .function("pressLeft", &Proxy::pressLeft)
+      .function("pressRight", &Proxy::pressRight)
   ;
 }

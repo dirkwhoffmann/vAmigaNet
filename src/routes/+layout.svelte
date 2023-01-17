@@ -1,5 +1,6 @@
 <script lang="ts">
     import { vAmiga } from "$lib/stores";
+    import { proxy } from "$lib/stores";
 	import { onMount } from "svelte";
 
     let ready_to_load_wasm=false;
@@ -10,9 +11,9 @@
             console.log("layout+: onRuntimeInitialized");
 
             console.log('Creating proxy...');
-            var instance = new $vAmiga.Proxy();
+            $proxy = new $vAmiga.Proxy();
 
-            instance.pressLeft();
+            $proxy.pressLeft();
         };
         
         /**

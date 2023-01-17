@@ -1,5 +1,5 @@
 <script>
-    import { vAmiga } from "$lib/stores";
+    import { proxy } from "$lib/stores";
 	import { onMount } from "svelte";
     export let text = '';
 
@@ -10,20 +10,20 @@
     });
 
 	function onKeyDown(e) {
+
 		switch (e.keyCode) {
             
             case 37: // Left
-				console.log('left');
-                $vAmiga.pressLeft();
+                $proxy.pressLeft();
 				break;
 			case 39: // Right
-				console.log('right');
+                $proxy.pressRight();
 				break;
 			case 40: // Down
-				console.log('down');
+                $proxy.pressDown();
 				break;
 			case 38: // Up
-				console.log('up');
+                $proxy.pressUp();
 				break;
             
 			default:
