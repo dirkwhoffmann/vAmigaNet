@@ -8,7 +8,7 @@ void processMsg(const void *amiga, long id, int d1, int d2, int d3, int d4)
     printf("MSG %s: %x %x %x %x\n", MsgTypeEnum::key(id), d1, d2, d3, d4);
 
     // EM_ASM({ processMessage($0, $1, $2, $3, $4); }, int(id), d1, d2, d3, d4);
-    EM_ASM({ processMessage(); } );
+    EM_ASM({ window.Module.processMessage($0, $1, $2, $3, $4); },MsgTypeEnum::key(id),d1,d2,d3,d4 );
 }
 
 //

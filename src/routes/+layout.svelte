@@ -3,6 +3,7 @@
     import { amiga, retroShell } from "$lib/stores";
 	import { onMount } from "svelte";
 
+
     let ready_to_load_wasm=false;
     
     onMount(() => {
@@ -13,11 +14,22 @@
             console.log('Creating proxies...');
             $amiga = new $vAmiga.AmigaProxy();
             $retroShell = new $vAmiga.RetroShellProxy();
-            $vAmiga.processMessage = function() {
-                console.log("Holla, die Waldfee");
-            }
         };
         
+        /**
+         * vAmiga state dictionary, we can bind ui components to it 
+         */
+        $vAmiga.state={};
+        /**
+         * incoming Messages
+         * @param msg
+         */
+        $vAmiga.processMessage = function(msg:any,d1:number,d2:number,d3:number,d4:number) {
+            let message = UTF8ToString(msg);
+            console.log(`the message is ${message}`);
+            $vAmiga.state.last_message=message;
+            $vAmiga.state[message]=[d1,d2,d3,d4];
+        }
         /**
          * emscriptens glue code which is located in vAmiga.js looks for the reference in window.Module
          * the emsdk doc says...
@@ -26,7 +38,7 @@
          * When an Emscripten application starts up it looks at the values on the Module object and applies them. Note that changing the values after startup will not work in general.
          */
         window.Module = $vAmiga; //so give it the reference to our sveltekit vAmiga store variable
-        
+
         ready_to_load_wasm=true; //now let it load the wasm program
     });
 
@@ -37,6 +49,10 @@
         calledRun=false;
     </script>
     {#if ready_to_load_wasm}
+        <script type='text/javascript'>
+        console.log(window.Module);
+        </script>
+
         <script src="vAmiga.js"></script>        
     {/if}
 </svelte:head>
