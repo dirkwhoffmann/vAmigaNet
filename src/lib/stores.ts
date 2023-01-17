@@ -10,3 +10,4 @@ import { writable } from 'svelte/store';
 export const vAmiga:any = writable({});
 export const amiga:any = writable({});
 export const retroShell:any = writable({});
+export const MSG_CONSOLE = writable(0);

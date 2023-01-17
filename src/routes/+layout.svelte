@@ -1,8 +1,6 @@
 <script lang="ts">
-    import { vAmiga } from "$lib/stores";
-    import { amiga, retroShell } from "$lib/stores";
+    import { vAmiga, amiga, retroShell, MSG_CONSOLE } from "$lib/stores";
 	import { onMount } from "svelte";
-
 
     let ready_to_load_wasm=false;
     
@@ -20,6 +18,9 @@
          * vAmiga state dictionary, we can bind ui components to it 
          */
         $vAmiga.state={};
+        $vAmiga.state.someMessage = 0;
+        $vAmiga.update=0;
+
         /**
          * incoming Messages
          * @param msg
@@ -27,8 +28,12 @@
         $vAmiga.processMessage = function(msg:any,d1:number,d2:number,d3:number,d4:number) {
             let message = UTF8ToString(msg);
             console.log(`the message is ${message}`);
+            /*
             $vAmiga.state.last_message=message;
             $vAmiga.state[message]=[d1,d2,d3,d4];
+            $vAmiga.state["SOME_MESSAGE"] += 1; 
+            */
+            $MSG_CONSOLE += 1;
         }
         /**
          * emscriptens glue code which is located in vAmiga.js looks for the reference in window.Module

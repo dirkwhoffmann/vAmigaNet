@@ -1,9 +1,13 @@
 <script lang="ts">
-    import { vAmiga, amiga, retroShell } from "$lib/stores";
+    import { vAmiga, amiga, retroShell, MSG_CONSOLE } from "$lib/stores";
 	import { onMount } from "svelte";
     export let text = '';
 
 	let value = '';
+
+	$: if ($MSG_CONSOLE) {
+		console.log("Console needs update");
+	}
 
     onMount(() => {
         console.log('RetroShell: onMount');
@@ -56,7 +60,7 @@
             
 			default:
 				$retroShell.pressKey(e.key);
-				value += e.key;
+				value += " " + $MSG_CONSOLE;
 		}
 	}
 </script>
