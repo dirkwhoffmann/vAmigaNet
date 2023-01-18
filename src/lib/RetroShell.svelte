@@ -1,33 +1,55 @@
 <script lang="ts">
-    import { vAmiga, amiga, retroShell, MSG_CONSOLE } from "$lib/stores";
-	import { onMount } from "svelte";
-    export let text = '';
+	import { vAmiga, amiga, retroShell } from '$lib/stores';
+	import { MsgCloseConsole, MsgUpdateConsole } from '$lib/stores';
+	import { MsgScriptDone, MsgScriptPause, MsgScriptAbort, MsgScriptWakeup } from '$lib/stores';
+	import { onMount } from 'svelte';
+	export let text = '';
 
 	let value = '';
 
-	$: if ($MSG_CONSOLE) {
-		console.log("Console needs update");
+	// Message handlers
+	$: {
+		$MsgCloseConsole;
+		console.log('MsgCloseConsole');
+	}
+	$: {
+		$MsgUpdateConsole;
+		console.log('MsgUpdateConsole');
+	}
+	$: {
+		$MsgScriptDone;
+		console.log('MsgScriptDone');
+	}
+	$: {
+		$MsgScriptPause;
+		console.log('MsgScriptPause');
+	}
+	$: {
+		$MsgScriptAbort;
+		console.log('MsgScriptAbort');
+	}
+	$: {
+		$MsgScriptWakeup;
+		console.log('MsgScriptWakeup');
 	}
 
-    onMount(() => {
-        console.log('RetroShell: onMount');
-    });
+	onMount(() => {
+		console.log('RetroShell: onMount');
+	});
 
 	function onKeyDown(e: KeyboardEvent) {
-
 		switch (e.key) {
-            
 			case 'ArrowUp':
-                $retroShell.pressUp();
+				$retroShell.pressUp();
 				break;
 			case 'ArrowDown':
-                $retroShell.pressDown();
+				$retroShell.pressDown();
 				break;
-            case 'ArrowLeft':
-                $retroShell.pressLeft();
+			case 'ArrowLeft':
+				$retroShell.pressLeft();
 				break;
 			case 'ArrowRight':
-                $retroShell.pressRight();
+				$retroShell.pressRight();
 				break;
 			case 'Home':
 				$retroShell.pressHome();
@@ -57,10 +79,10 @@
                 $retroShell.pressShiftReturn();
 				break;
 			*/
-            
+
 			default:
 				$retroShell.pressKey(e.key);
-				value += " " + $MSG_CONSOLE;
+				value += ' ' + $MsgUpdateConsole;
 		}
 	}
 </script>
