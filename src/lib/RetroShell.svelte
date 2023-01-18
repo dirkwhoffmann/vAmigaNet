@@ -7,7 +7,7 @@
 	// Console contents
 	let value = '';
 
-	let textarea:HTMLTextAreaElement; 
+	let textarea: HTMLTextAreaElement;
 
 	// Message handlers
 	$: {
@@ -44,7 +44,25 @@
 	});
 
 	function onKeyDown(e: KeyboardEvent) {
+		console.log('onKeyDown: ' + e.key);
 		e.preventDefault();
+
+		if (e.ctrlKey) {
+			switch (e.key) {
+				case 'k':
+					$retroShell.pressCut();
+					break;
+
+				case 'a':
+					$retroShell.pressHome();
+					break;
+
+				default:
+					break;
+			}
+			return;
+		}
+
 		switch (e.key) {
 			case 'ArrowUp':
 				$retroShell.pressUp();
@@ -76,7 +94,7 @@
 				break;
 			*/
 			case 'Enter':
-			console.log("Return "  +e.shiftKey);
+				console.log('Return ' + e.shiftKey);
 				e.shiftKey ? $retroShell.pressShiftReturn() : $retroShell.pressReturn();
 				break;
 			case 'Tab':
@@ -87,12 +105,18 @@
                 $retroShell.pressShiftReturn();
 				break;
 			*/
-
 			default:
-				console.log("Other key: " + e.key);
-				$retroShell.pressKey(e.key.charCodeAt(0));
+				if (e.key.length == 1) {
+					console.log('Other key: ' + e.key);
+					$retroShell.pressKey(e.key.charCodeAt(0));
+				}
 		}
 	}
 </script>
 
-<textarea bind:this={textarea} readonly class="w-full h-full opacity-50" on:keydown={onKeyDown} />
+<textarea
+	bind:this={textarea}
+	readonly
+	class="font-azeret text-xl font-normal text-white bg-black/75 w-full h-full"
+	on:keydown={onKeyDown}
+/>

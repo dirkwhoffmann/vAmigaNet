@@ -8,6 +8,7 @@ module.exports = {
         'sofia-semi': ['"Sofia Sans Semi Condensed"', 'sans-serif'],
         'sofia-extra': ['"Sofia Sans Extra Condensed"', 'sans-serif'],
         'source-sans-pro': ['"Source Sans Pro"'],
+        'azeret': ['"Azeret Mono"', 'monospace'],
       },
       backgroundImage: {
         'splashscreen': "url('matrix1.jpg')",
