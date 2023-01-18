@@ -37,7 +37,7 @@ public:
     string getText();     
     void press(RetroShellKey key);
     void sayHello();
-    void pressKey(char c);
+    void pressKey(int c);
     void pressUp() { pressKey(RSKEY_UP); }
     void pressDown() { pressKey(RSKEY_DOWN); }
     void pressLeft() { pressKey(RSKEY_LEFT); }

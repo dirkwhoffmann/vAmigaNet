@@ -3,8 +3,8 @@
 	import { MsgCloseConsole, MsgUpdateConsole } from '$lib/stores';
 	import { MsgScriptDone, MsgScriptPause, MsgScriptAbort, MsgScriptWakeup } from '$lib/stores';
 	import { onMount } from 'svelte';
-	export let text = '';
 
+	// Console contents
 	let value = '';
 
 	// Message handlers
@@ -12,9 +12,9 @@
 		$MsgCloseConsole;
 		console.log('MsgCloseConsole');
 	}
-	$: {
-		$MsgUpdateConsole;
+	$: if ($MsgUpdateConsole > 0) {
 		console.log('MsgUpdateConsole');
+		value = $retroShell.getText();
 	}
 	$: {
 		$MsgScriptDone;
@@ -58,6 +58,7 @@
 				$retroShell.pressEnd();
 				break;
 			case 'Backspace':
+				console.log("Backspace");
 				$retroShell.pressBackspace();
 				break;
 			case 'Delete':
@@ -81,8 +82,8 @@
 			*/
 
 			default:
-				$retroShell.pressKey(e.key);
-				value += ' ' + $MsgUpdateConsole;
+				console.log("Other key: " + e.key);
+				$retroShell.pressKey(e.key.charCodeAt(0));
 		}
 	}
 </script>

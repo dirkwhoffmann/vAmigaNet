@@ -91,10 +91,10 @@ void RetroShellProxy::press(RetroShellKey key)
     amiga->retroShell.press(key);
 }
 
-void RetroShellProxy::pressKey(char c)
+void RetroShellProxy::pressKey(int c)
 {
-    printf("pressKey(%c)\n", c);
-    amiga->retroShell.press(c);
+    printf("pressKey(%c, %d)\n", c, c);
+    amiga->retroShell.press((char)c);
 }
 
 void RetroShellProxy::pressShiftReturn()
@@ -106,7 +106,7 @@ EMSCRIPTEN_BINDINGS(RetroShellProxy)
 {
     class_<RetroShellProxy>("RetroShellProxy")
         .constructor<>()
-        .function("text", &RetroShellProxy::getText)
+        .function("getText", &RetroShellProxy::getText)
         .function("sayHello", &RetroShellProxy::sayHello)
         .function("pressUp", &RetroShellProxy::pressUp)
         .function("pressDown", &RetroShellProxy::pressDown)
