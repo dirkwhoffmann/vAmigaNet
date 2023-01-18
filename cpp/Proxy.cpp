@@ -76,11 +76,6 @@ RetroShellProxy::RetroShellProxy()
     printf("RetroShellProxy()\n");
 }
 
-void RetroShellProxy::sayHello()
-{
-    printf("Saying Hello\n");
-}
-
 string RetroShellProxy::getText()
 {
     return amiga->retroShell.text();
@@ -107,7 +102,7 @@ EMSCRIPTEN_BINDINGS(RetroShellProxy)
     class_<RetroShellProxy>("RetroShellProxy")
         .constructor<>()
         .function("getText", &RetroShellProxy::getText)
-        .function("sayHello", &RetroShellProxy::sayHello)
+        .function("getCursorRel", &RetroShellProxy::getCursorRel)
         .function("pressUp", &RetroShellProxy::pressUp)
         .function("pressDown", &RetroShellProxy::pressDown)
         .function("pressLeft", &RetroShellProxy::pressLeft)

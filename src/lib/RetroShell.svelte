@@ -7,14 +7,19 @@
 	// Console contents
 	let value = '';
 
+	let textarea; 
+
 	// Message handlers
 	$: {
 		$MsgCloseConsole;
 		console.log('MsgCloseConsole');
 	}
 	$: if ($MsgUpdateConsole > 0) {
-		console.log('MsgUpdateConsole');
-		value = $retroShell.getText();
+		let rel = $retroShell.getCursorRel();
+		console.log('MsgUpdateConsole rel = ' + rel);
+		textarea.value = $retroShell.getText();
+		textarea.focus();
+		textarea.setSelectionRange(textarea.value.length + rel - 1, textarea.value.length + rel);
 	}
 	$: {
 		$MsgScriptDone;
@@ -88,4 +93,4 @@
 	}
 </script>
 
-<textarea bind:value readonly rows="10" cols="80" on:keydown={onKeyDown} />
+<textarea bind:this={textarea} readonly rows="10" cols="80" on:keydown={onKeyDown} />

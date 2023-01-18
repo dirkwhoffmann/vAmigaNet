@@ -34,9 +34,9 @@ class RetroShellProxy
 public:
     RetroShellProxy();
 
-    string getText();     
+    string getText();
+    int getCursorRel() { return (int)amiga->retroShell.cursorRel(); }
     void press(RetroShellKey key);
-    void sayHello();
     void pressKey(char c);
     void pressUp() { amiga->retroShell.press(RSKEY_UP); }
     void pressDown() { amiga->retroShell.press(RSKEY_DOWN); }
