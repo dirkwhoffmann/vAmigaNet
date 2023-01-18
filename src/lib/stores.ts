@@ -8,6 +8,8 @@ import { writable } from 'svelte/store';
  * When an Emscripten application starts up it looks at the values on the Module object and applies them. Note that changing the values after startup will not work in general.
  */
 export const vAmiga:any = writable({});
+export const enums:any = writable({});
 export const amiga:any = writable({});
 export const retroShell:any = writable({});
+
 export const MSG_CONSOLE = writable(0);

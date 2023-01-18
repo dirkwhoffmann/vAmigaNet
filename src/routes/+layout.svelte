@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { vAmiga, amiga, retroShell, MSG_CONSOLE } from "$lib/stores";
+    import { vAmiga, enums, amiga, retroShell, MSG_CONSOLE } from "$lib/stores";
 	import { onMount } from "svelte";
 
     let ready_to_load_wasm=false;
@@ -10,6 +10,7 @@
             console.log("layout+: onRuntimeInitialized");
 
             console.log('Creating proxies...');
+            $enums = new $vAmiga.EnumProxy();
             $amiga = new $vAmiga.AmigaProxy();
             $retroShell = new $vAmiga.RetroShellProxy();
         };
@@ -25,9 +26,8 @@
          * incoming Messages
          * @param msg
          */
-        $vAmiga.processMessage = function(msg:any,d1:number,d2:number,d3:number,d4:number) {
-            let message = UTF8ToString(msg);
-            console.log(`the message is ${message}`);
+        $vAmiga.processMsg = function(id: number, d1: number, d2: number, d3: number, d4: number) {
+            console.log(`Message: ${$enums.MsgTypeKey(id)}(${d1}, ${d2}, ${d3}, ${d4})`);
             /*
             $vAmiga.state.last_message=message;
             $vAmiga.state[message]=[d1,d2,d3,d4];

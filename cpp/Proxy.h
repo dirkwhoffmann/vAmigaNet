@@ -12,6 +12,14 @@ Amiga *amiga = nullptr;
 
 void processMsg(const void *amiga, long id, int data1, int data2, int data3, int data4);
 
+struct EnumProxy
+{
+    EnumProxy() { };
+
+    string MsgTypeKey(int value) { return MsgTypeEnum::key(value); }
+    string RetroShellKey(int value) { return RetroShellKeyEnum::key(value); }
+};
+
 class AmigaProxy
 {
 public:
