@@ -58,7 +58,6 @@
 				$retroShell.pressEnd();
 				break;
 			case 'Backspace':
-				console.log("Backspace");
 				$retroShell.pressBackspace();
 				break;
 			case 'Delete':
@@ -69,7 +68,8 @@
                 $retroShell.pressCut();
 				break;
 			*/
-			case 'Return':
+			case 'Enter':
+			console.log("Return "  +e.shiftKey);
 				e.shiftKey ? $retroShell.pressShiftReturn() : $retroShell.pressReturn();
 				break;
 			case 'Tab':

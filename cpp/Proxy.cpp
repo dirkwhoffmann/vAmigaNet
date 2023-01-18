@@ -91,10 +91,10 @@ void RetroShellProxy::press(RetroShellKey key)
     amiga->retroShell.press(key);
 }
 
-void RetroShellProxy::pressKey(int c)
+void RetroShellProxy::pressKey(char c)
 {
     printf("pressKey(%c, %d)\n", c, c);
-    amiga->retroShell.press((char)c);
+    amiga->retroShell.press(c);
 }
 
 void RetroShellProxy::pressShiftReturn()

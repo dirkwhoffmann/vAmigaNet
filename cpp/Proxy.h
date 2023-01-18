@@ -37,17 +37,17 @@ public:
     string getText();     
     void press(RetroShellKey key);
     void sayHello();
-    void pressKey(int c);
-    void pressUp() { pressKey(RSKEY_UP); }
-    void pressDown() { pressKey(RSKEY_DOWN); }
-    void pressLeft() { pressKey(RSKEY_LEFT); }
-    void pressRight() { pressKey(RSKEY_RIGHT); }
-    void pressHome() { pressKey(RSKEY_HOME); }
-    void pressEnd() { pressKey(RSKEY_END); }
-    void pressBackspace() { pressKey(RSKEY_BACKSPACE); }
-    void pressDelete() { pressKey(RSKEY_DEL); }
-    void pressCut() { pressKey(RSKEY_CUT); }
-    void pressReturn() { pressKey(RSKEY_RETURN); }
-    void pressTab() { pressKey(RSKEY_TAB); }
+    void pressKey(char c);
+    void pressUp() { amiga->retroShell.press(RSKEY_UP); }
+    void pressDown() { amiga->retroShell.press(RSKEY_DOWN); }
+    void pressLeft() { amiga->retroShell.press(RSKEY_LEFT); }
+    void pressRight() { amiga->retroShell.press(RSKEY_RIGHT); }
+    void pressHome() { amiga->retroShell.press(RSKEY_HOME); }
+    void pressEnd() { amiga->retroShell.press(RSKEY_END); }
+    void pressBackspace() { amiga->retroShell.press(RSKEY_BACKSPACE); }
+    void pressDelete() { amiga->retroShell.press(RSKEY_DEL); }
+    void pressCut() { amiga->retroShell.press(RSKEY_CUT); }
+    void pressReturn() { amiga->retroShell.press(RSKEY_RETURN); }
+    void pressTab() { amiga->retroShell.press(RSKEY_TAB); }
     void pressShiftReturn();
 };

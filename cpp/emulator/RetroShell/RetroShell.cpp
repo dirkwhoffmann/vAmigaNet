@@ -341,7 +341,6 @@ RetroShell::press(RetroShellKey key, bool shift)
 void
 RetroShell::press(char c)
 {
-    printf("RetroSell:press(%c, %d)\n", c, c);
     switch (c) {
             
         case '\n':
