@@ -7,7 +7,7 @@
 	// Console contents
 	let value = '';
 
-	let textarea; 
+	let textarea:HTMLTextAreaElement; 
 
 	// Message handlers
 	$: {
@@ -20,6 +20,7 @@
 		textarea.value = $retroShell.getText();
 		textarea.focus();
 		textarea.setSelectionRange(textarea.value.length + rel - 1, textarea.value.length + rel);
+		textarea.scrollTop = textarea.scrollHeight;
 	}
 	$: {
 		$MsgScriptDone;
@@ -43,6 +44,7 @@
 	});
 
 	function onKeyDown(e: KeyboardEvent) {
+		e.preventDefault();
 		switch (e.key) {
 			case 'ArrowUp':
 				$retroShell.pressUp();
@@ -93,4 +95,4 @@
 	}
 </script>
 
-<textarea bind:this={textarea} readonly rows="10" cols="80" on:keydown={onKeyDown} />
+<textarea bind:this={textarea} readonly class="w-full h-full opacity-50" on:keydown={onKeyDown} />
