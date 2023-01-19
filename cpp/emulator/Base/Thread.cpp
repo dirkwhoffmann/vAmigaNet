@@ -321,7 +321,8 @@ void
 Thread::changeDebugTo(u8 value, bool blocking)
 {
     newDebugMode = value;
-    if (blocking) while (debugMode != newDebugMode) { };
+    // TODO: REMOVE COMMENT ASAP
+    // if (blocking) while (debugMode != newDebugMode) { };
 }
 
 void
