@@ -7,7 +7,7 @@
 	import * as animateScroll from 'svelte-scrollto';
 	import '@splidejs/svelte-splide/css';
 
-	let show = false;
+	let show = 0;
 
 	const demos = [
 		{

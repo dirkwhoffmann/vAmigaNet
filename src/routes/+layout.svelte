@@ -1,10 +1,17 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+
+declare global {
+	interface Window {
+		Module: any;
+	}
+}
+
+import { onMount } from 'svelte';
 	import { vAmiga, enums, amiga, retroShell } from '$lib/stores';
 	import {
 		MsgNone,
 		MsgRegister,
-        MsgConfig,
+		MsgConfig,
 		MsgPowerOn,
 		MsgPowerOff,
 		MsgRun,
@@ -125,7 +132,7 @@
 
 	function processMsg(id: number, d1: number, d2: number, d3: number, d4: number) {
 		console.log(`Message: ${$enums.MsgTypeKey(id)}(${d1}, ${d2}, ${d3}, ${d4})`);
-        
+
 		switch (id) {
 			case $vAmiga.MSG_NONE:
 				$MsgNone++;
@@ -135,7 +142,7 @@
 				$MsgRegister++;
 				break;
 
-            case $vAmiga.MSG_CONFIG:
+			case $vAmiga.MSG_CONFIG:
 				$MsgConfig++;
 				break;
 
@@ -303,7 +310,7 @@
 				$MsgDriveDisconnect++;
 				break;
 
-                case $vAmiga.MSG_DRIVE_SELECT:
+			case $vAmiga.MSG_DRIVE_SELECT:
 				$MsgDriveSelect++;
 				break;
 
