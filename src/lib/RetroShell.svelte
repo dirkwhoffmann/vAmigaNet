@@ -15,8 +15,8 @@
 		console.log('MsgCloseConsole');
 	}
 	$: if ($MsgUpdateConsole > 0) {
+		console.log('MsgUpdateConsole');
 		let rel = $retroShell.getCursorRel();
-		console.log('MsgUpdateConsole rel = ' + rel);
 		textarea.value = $retroShell.getText();
 		textarea.focus();
 		textarea.setSelectionRange(textarea.value.length + rel - 1, textarea.value.length + rel);
