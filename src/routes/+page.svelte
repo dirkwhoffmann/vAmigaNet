@@ -3,7 +3,6 @@
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import Button from '$lib/widgets/Button.svelte';
-	import Icon from '$lib/widgets/Icon.svelte';
 	import MainPageLink from '$lib/widgets/MainPageLink.svelte';
 	import FaGithub from 'svelte-icons/fa/FaGithub.svelte';
 	import GoGear from 'svelte-icons/go/GoGear.svelte';

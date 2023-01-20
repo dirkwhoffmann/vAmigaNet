@@ -1,7 +1,8 @@
 import { writable } from 'svelte/store';
 
-// vAmiga is the 'Module' of the emsdk. It is setup in +layout.svelte onmount()
+// The 'Module' of the emsdk. It is setup in +layout.svelte onmount()
 export const vAmiga:any = writable({});
+export const ems:any = writable({});
 
 // Proxies
 export const enums:any = writable({});

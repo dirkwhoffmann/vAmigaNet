@@ -91,6 +91,11 @@
 		$vAmiga.processMsg = processMsg;
 	});
 
+	export function onRuntimeInitialized() {
+		console.log('Emscripten: onRuntimeInitialized');
+		createProxies();
+	}
+
 	export function createProxies() {
 		console.log('Creating proxies...');
 
