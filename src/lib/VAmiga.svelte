@@ -100,9 +100,6 @@
 		$enums = new $vAmiga.EnumProxy();
 		$amiga = new $vAmiga.AmigaProxy();
 		$retroShell = new $vAmiga.RetroShellProxy();
-		console.log("type = ");
-		console.log(typeof $retroShell);
-		console.log("type = ");
 	}
 
 	function processMsg(id: number, d1: number, d2: number, d3: number, d4: number) {

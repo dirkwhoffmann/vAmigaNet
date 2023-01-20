@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	export let disabled = false;
 	export let label = '';
 	export let img = '';
