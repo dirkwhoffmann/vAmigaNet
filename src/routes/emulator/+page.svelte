@@ -1,11 +1,12 @@
 <script lang="ts">
 	import '../../app.css';
 	import { onMount } from 'svelte';
-	import Button from '$lib/widgets/Button.svelte';
+	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
+	import Button from '$lib/widgets/Button.svelte';
 	import RetroShell from '$lib/RetroShell.svelte';
 	import FaAngleLeft from 'svelte-icons/fa/FaAngleLeft.svelte';
-	let showShell = true;
+	let showShell = false;
 
 	onMount(() => {
 		console.log('onMount()');
@@ -32,7 +33,7 @@
 			</div>
 		</div>
 		{#if showShell}
-		<div class="border-none border-red-500 flex-grow overflow-scroll">
+		<div transition:fade class="border-none border-red-500 flex-grow overflow-scroll">
 			<RetroShell />
 		</div>
 		{/if}
