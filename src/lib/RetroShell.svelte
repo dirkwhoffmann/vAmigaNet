@@ -44,7 +44,6 @@
 	});
 
 	function onKeyDown(e: KeyboardEvent) {
-		console.log('onKeyDown: ' + e.key);
 		e.preventDefault();
 
 		if (e.ctrlKey) {
@@ -88,26 +87,14 @@
 			case 'Delete':
 				$retroShell.pressDelete();
 				break;
-			/*
-			case ???:
-                $retroShell.pressCut();
-				break;
-			*/
 			case 'Enter':
-				console.log('Return ' + e.shiftKey);
 				e.shiftKey ? $retroShell.pressShiftReturn() : $retroShell.pressReturn();
 				break;
 			case 'Tab':
 				$retroShell.pressTab();
 				break;
-			/*
-			case ???:
-                $retroShell.pressShiftReturn();
-				break;
-			*/
 			default:
 				if (e.key.length == 1) {
-					console.log('Other key: ' + e.key);
 					$retroShell.pressKey(e.key.charCodeAt(0));
 				}
 		}

@@ -6,7 +6,7 @@
 void processMsg(const void *amiga, long id, int d1, int d2, int d3, int d4)
 {
     // Reroute call to JavaScript 
-    EM_ASM({ window.Module.processMsg($0, $1, $2, $3, $4); }, id, d1, d2, d3, d4);
+    MAIN_THREAD_ASYNC_EM_ASM({ self.Module.processMsg($0, $1, $2, $3, $4); }, id, d1, d2, d3, d4);
 }
 
 //
@@ -88,7 +88,6 @@ void RetroShellProxy::press(RetroShellKey key)
 
 void RetroShellProxy::pressKey(char c)
 {
-    printf("pressKey(%c, %d)\n", c, c);
     amiga->retroShell.press(c);
 }
 
