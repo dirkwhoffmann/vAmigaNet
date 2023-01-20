@@ -2,15 +2,18 @@
 	import '../app.css';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
+	import { goto } from '$app/navigation';
 	import Button from '$lib/widgets/Button.svelte';
 	import MainPageLink from '$lib/widgets/MainPageLink.svelte';
 	import FaGithub from 'svelte-icons/fa/FaGithub.svelte';
 	import GoGear from 'svelte-icons/go/GoGear.svelte';
 	import DiGrails from 'svelte-icons/di/DiGrails.svelte';
 	import '@splidejs/svelte-splide/css';
-	import { goto } from '$app/navigation';
 
 	let show = false;
+	let guru = true;
+	setInterval(() => { guru = !guru; }, 800);
+	$: borderColor = guru ? "border-red-800" : "border-black";
 
 	onMount(() => {
 		console.log('onMount()');
@@ -19,14 +22,13 @@
 
 	function powerOn() {
 		console.log('powerOn()');
-		goto("/emulator");
+		goto('/emulator');
 	}
 
 	function gotoGitHub() {
 		console.log('gotoGitHub()');
-		goto("https://dirkwhoffmann.github.io/vAmiga");
+		goto('https://dirkwhoffmann.github.io/vAmiga');
 	}
-
 </script>
 
 <body class="h-screen bg-black text-white">
@@ -36,11 +38,11 @@
 		<div class="flex flex-col h-screen">
 			{#key show}
 				<div
-					in:fade={{ duration: 2000 }}
+					in:fade={{ duration: 3000 }}
 					class="absolute flex flex-grow bg-splashscreen bg-cover h-screen w-screen blur brightness-[0.9]"
 				/>
 				<div
-					in:fade={{ duration: 2000 }}
+					in:fade
 					class="relative bg-transparent flex flex-grow items-center justify-center border-none align-middle border-4 border-blue-500"
 				>
 					<div class="rounded flex justify-center w-1/2">
@@ -53,8 +55,8 @@
 								<div class="font-sofia-extra text-7xl  text-gray-300">Online</div>
 							</div>
 							<div class="font-sofia-semi text-xl text-gray-300 pl-2 pb-10">Version 0.1</div>
-							<div class="flex space-x-5">						
-								<Button on:click={powerOn} label="Power On"></Button>
+							<div class="flex space-x-5">
+								<Button on:click={powerOn} label="Power On" />
 								<Button on:click={gotoGitHub}><FaGithub /></Button>
 							</div>
 						</div>
@@ -72,6 +74,17 @@
 					<div slot="icon"><DiGrails /></div>
 					<div slot="description">Showcase</div>
 				</MainPageLink>
+			</div>
+		</div>
+		<div id="configure" class="border-[20px] {borderColor} h-96 flex justify-center">
+			<div
+				class="h-full w-2/3 border-none flex flex-col justify-center text-xl font-josefin text-center"
+			>
+				<p class="">This page is under development and most features are missing, yet.</p>
+				<p class="">
+					Eventually the user will be able to configure the hardware
+					properties of the virtual Amiga in this section.
+				</p>
 			</div>
 		</div>
 	</div>

@@ -3,7 +3,6 @@
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import Carousel from '$lib/Carousel.svelte';
-	import Icon from '$lib/widgets/Icon.svelte';
 	import * as animateScroll from 'svelte-scrollto';
 	import '@splidejs/svelte-splide/css';
 
