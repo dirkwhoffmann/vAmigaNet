@@ -4,17 +4,15 @@
 	import { MsgScriptDone, MsgScriptPause, MsgScriptAbort, MsgScriptWakeup } from '$lib/stores';
 	import { onMount } from 'svelte';
 
+	let ready = false; 
+
 	// Console contents
 	let value = '';
 
 	let textarea: HTMLTextAreaElement;
 
 	// Message handlers
-	$: {
-		$MsgCloseConsole;
-		console.log('MsgCloseConsole');
-	}
-	$: if ($MsgUpdateConsole > 0) {
+	$: if ($MsgUpdateConsole > 0 && ready) {
 		console.log('MsgUpdateConsole');
 		let rel = $retroShell.getCursorRel();
 		textarea.value = $retroShell.getText();
@@ -22,25 +20,22 @@
 		textarea.setSelectionRange(textarea.value.length + rel - 1, textarea.value.length + rel);
 		textarea.scrollTop = textarea.scrollHeight;
 	}
-	$: {
-		$MsgScriptDone;
+	$: if ($MsgScriptDone > 0 && ready) {
 		console.log('MsgScriptDone');
 	}
-	$: {
-		$MsgScriptPause;
+	$: if ($MsgScriptPause > 0 && ready) {
 		console.log('MsgScriptPause');
 	}
-	$: {
-		$MsgScriptAbort;
+	$: if ($MsgScriptAbort > 0 && ready) {
 		console.log('MsgScriptAbort');
 	}
-	$: {
-		$MsgScriptWakeup;
+	$: if ($MsgScriptWakeup > 0 && ready) {
 		console.log('MsgScriptWakeup');
 	}
 
 	onMount(() => {
 		console.log('RetroShell: onMount');
+		ready = true;
 	});
 
 	function onKeyDown(e: KeyboardEvent) {
