@@ -31,7 +31,7 @@
 	}
 </script>
 
-<body class="h-screen bg-black text-white">
+<body class="h-screen bg-black text-white scroll-smooth overflow-y-scroll">
 	<title>vAmiga Online</title>
 
 	<div transition:fade class="bg-cover bg-transparent">
@@ -76,7 +76,7 @@
 				</MainPageLink>
 			</div>
 		</div>
-		<div id="configure" class="border-[20px] {borderColor} h-96 flex justify-center">
+		<div id="configure" class="relative border-[20px] {borderColor} h-96 flex justify-center bg-slate-600">
 			<div
 				class="h-full w-2/3 border-none flex flex-col justify-center text-xl font-josefin text-center"
 			>
