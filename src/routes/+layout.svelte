@@ -2,7 +2,7 @@
 
 	import { onMount } from 'svelte';
 	import { vAmiga } from '$lib/stores';
-	import Emscripten from '$lib/Emscripten.svelte';
+	import Vamiga from '$lib/VAmiga.svelte';
 
 	let loadWasm = false;
 	
@@ -18,7 +18,7 @@
 </script>
 
 <svelte:head>
-	<Emscripten bind:this={$vAmiga} />
+	<Vamiga bind:this={$vAmiga} />
 	{#if loadWasm}
 		<script>
 			console.log('Loading vAmiga.js');
