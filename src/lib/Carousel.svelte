@@ -1,13 +1,13 @@
-<script>
+<script lang="ts">
 	import { Splide, SplideSlide } from '@splidejs/svelte-splide';
 	import { createEventDispatcher } from 'svelte';
 	import CarouselItem from './CarouselItem.svelte';
 
 	export let category = '';
-	export let items = [{ url: '', title: '', subtitle: '', description: '' }];
+	export let items: DataBaseItem[] = [];
 
+	let cmps: CarouselItem[] = [];
 	const dispatch = createEventDispatcher();
-
 	const options = {
 		type: 'slide',
 		perPage: 5,
@@ -16,13 +16,7 @@
 		gap: '1rem'
 	};
 
-	let cmps = [];
-
-	export function foo() {
-		console.log("foo");
-	}
-
-	export function setActive(name) {
+	export function setActive(name: string) {
 
 		console.log('setActive: ' + category);
 		cmps.forEach((element) => {
@@ -40,7 +34,9 @@
 	<Splide
 		{options}
 		on:click={(e) => {
-			dispatch('message', items[e.detail.Slide.index]);
+			if (e != undefined) {
+				dispatch('message', items[e.detail.Slide.index]);
+			}
 		}}
 	>
 		{#each items as item, index }
