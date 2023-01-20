@@ -1,12 +1,11 @@
 <script lang="ts">
-
-declare global {
-	interface Window {
-		Module: any;
+	declare global {
+		interface Window {
+			Module: any;
+		}
 	}
-}
 
-import { onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import { vAmiga, enums, amiga, retroShell } from '$lib/stores';
 	import {
 		MsgNone,
@@ -94,15 +93,18 @@ import { onMount } from 'svelte';
 
 	let ready_to_load_wasm = false;
 
+	$vAmiga.createProxies = () => {
+		console.log('Creating proxies...');
+		$enums = new $vAmiga.EnumProxy();
+		$amiga = new $vAmiga.AmigaProxy();
+		$retroShell = new $vAmiga.RetroShellProxy();
+	};
+
 	onMount(() => {
 		console.log('layout+: onMount');
 		$vAmiga.onRuntimeInitialized = () => {
 			console.log('layout+: onRuntimeInitialized');
-
-			console.log('Creating proxies...');
-			$enums = new $vAmiga.EnumProxy();
-			$amiga = new $vAmiga.AmigaProxy();
-			$retroShell = new $vAmiga.RetroShellProxy();
+			$vAmiga.createProxies();
 		};
 
 		/**
@@ -465,14 +467,10 @@ import { onMount } from 'svelte';
 </script>
 
 <svelte:head>
-	<script type="text/javascript">
-		calledRun = false;
-	</script>
 	{#if ready_to_load_wasm}
-		<script type="text/javascript">
-			console.log(window.Module);
+		<script>
+			console.log('Loading vAmiga.js');
 		</script>
-
 		<script src="vAmiga.js"></script>
 	{/if}
 </svelte:head>
