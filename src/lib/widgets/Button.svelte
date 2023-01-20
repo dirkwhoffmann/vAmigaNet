@@ -6,7 +6,7 @@
 	export let width = 'w-max';
 </script>
 
-<button class="items-center" on:click>
+<button class="items-center" {disabled} on:click>
 	<div class="bg-blue-300 hover:bg-blue-500 text-gray-800 rounded-md flex items-center h-12 w-max">
 		{#if $$slots.default}
 			<div class="justify-center h-full aspect-square p-1.5 {label != '' ? '-mr-2' : ''}">

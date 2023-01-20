@@ -6,7 +6,6 @@
 	export let category = '';
 	export let items: DataBaseItem[] = [];
 
-	let cmps: CarouselItem[] = [];
 	const dispatch = createEventDispatcher();
 	const options = {
 		type: 'slide',
@@ -15,6 +14,8 @@
 		pagination: false,
 		gap: '1rem'
 	};
+
+	let cmps: CarouselItem[] = [];
 
 	export function setActive(name: string) {
 

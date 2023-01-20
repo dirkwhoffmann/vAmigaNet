@@ -1,12 +1,14 @@
 import { writable } from 'svelte/store';
+import type { Writable } from 'svelte/store';
+import type VAmiga from '$lib/VAmiga.svelte';
 
 // The 'Module' of the emsdk. It is setup in +layout.svelte onmount()
-export const vAmiga:any = writable({});
+export const vAmiga: Writable<VAmiga> = writable();
 
 // Proxies
-export const enums:any = writable({});
-export const amiga:any = writable({});
-export const retroShell:any = writable({});
+export const enums: any = writable();
+export const amiga: any = writable();
+export const retroShell: any = writable();
 
 // Message counters
 export const MsgNone = writable(0);

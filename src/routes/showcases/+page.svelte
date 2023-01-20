@@ -9,7 +9,7 @@
 
 	let show = 0;
 
-	const demos = [
+	const demos: DataBaseItem[] = [
 		{
 			url: 'batmanrises',
 			title: 'Batman Rises',
@@ -47,7 +47,7 @@
 		}
 	];
 
-	const games = [
+	const games: DataBaseItem[] = [
 		{
 			url: 'traprunner',
 			title: 'Trap Runner',
@@ -78,7 +78,7 @@
 		}
 	];
 
-	const tools = [
+	const tools: DataBaseItem[] = [
 		{
 			url: 'sysinfo',
 			title: 'Sysinfo 4.4',
@@ -116,7 +116,7 @@
 		update(demos[0]);
 	});
 
-	function update(detail) {
+	function update(detail: DataBaseItem) {
 		console.log(detail.description);
 		demoCarousel.setActive(detail.title);
 		gamesCarousel.setActive(detail.title);
@@ -127,7 +127,7 @@
 		description = detail.description;
 	}
 
-	function handleMessage(event) {
+	function handleMessage(event: CustomEvent) {
 		console.log(event.detail.description);
 		update(event.detail);
 		animateScroll.scrollToTop();
