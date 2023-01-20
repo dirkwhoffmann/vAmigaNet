@@ -12,7 +12,7 @@
 	let textarea: HTMLTextAreaElement;
 
 	// Message handlers
-	$: if ($MsgUpdateConsole > 0 && ready) {
+	$: if ($MsgUpdateConsole && ready) {
 		console.log('MsgUpdateConsole');
 		let rel = $retroShell.getCursorRel();
 		textarea.value = $retroShell.getText();
@@ -20,16 +20,16 @@
 		textarea.setSelectionRange(textarea.value.length + rel - 1, textarea.value.length + rel);
 		textarea.scrollTop = textarea.scrollHeight;
 	}
-	$: if ($MsgScriptDone > 0 && ready) {
+	$: if ($MsgScriptDone && ready) {
 		console.log('MsgScriptDone');
 	}
-	$: if ($MsgScriptPause > 0 && ready) {
+	$: if ($MsgScriptPause && ready) {
 		console.log('MsgScriptPause');
 	}
-	$: if ($MsgScriptAbort > 0 && ready) {
+	$: if ($MsgScriptAbort && ready) {
 		console.log('MsgScriptAbort');
 	}
-	$: if ($MsgScriptWakeup > 0 && ready) {
+	$: if ($MsgScriptWakeup && ready) {
 		console.log('MsgScriptWakeup');
 	}
 
