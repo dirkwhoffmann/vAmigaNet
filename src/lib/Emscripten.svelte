@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { vAmiga, enums, amiga, retroShell } from '$lib/stores';
 	import {
+        vAmiga, 
+        enums, 
+        amiga, 
+        retroShell,
 		MsgNone,
 		MsgRegister,
 		MsgConfig,
@@ -92,11 +95,6 @@
 	});
 
 	export function onRuntimeInitialized() {
-		console.log('Emscripten: onRuntimeInitialized');
-		createProxies();
-	}
-
-	export function createProxies() {
 		console.log('Creating proxies...');
 
 		$enums = new $vAmiga.EnumProxy();
