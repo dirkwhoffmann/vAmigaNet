@@ -49,25 +49,12 @@ AmigaProxy::AmigaProxy()
     amiga->configure(OPT_AGNUS_REVISION, AGNUS_OCS);
 }
 
-string 
-AmigaProxy::helloAmiga()
-{
-    return "Hello, vAmiga";
-}
-
-string
-AmigaProxy::getExceptionMessage(intptr_t exceptionPtr)
-{
-    printf("Ptr = %ld\n", exceptionPtr);
-    return string(reinterpret_cast<std::exception *>(exceptionPtr)->what());
-}
-
 EMSCRIPTEN_BINDINGS(AmigaProxy)
 {
     class_<AmigaProxy>("AmigaProxy")
         .constructor<>()
-        .function("helloAmiga", &AmigaProxy::helloAmiga)
-        .function("getExceptionMessage", &AmigaProxy::getExceptionMessage);
+        .function("errorCode", &AmigaProxy::errorCode)
+        .function("what", &AmigaProxy::what);
 }
 
 //
@@ -91,16 +78,16 @@ bool MemoryProxy::hasExt() const
 
 bool MemoryProxy::loadRom(string blob, u32 len)
 {
+    printf("loadRom(blob, %d)\n", len);
+
     try
     {
-        printf("in loadRom\n");
         amiga->mem.loadRom((u8 *)blob.data(), len);
-        printf("Exiting...\n");
         return amiga->mem.hasRom();
     }
     catch (VAError &err)
     {
-        printf("VAError: %s\n", err.what());
+        save(err);
         throw;
     }
 }

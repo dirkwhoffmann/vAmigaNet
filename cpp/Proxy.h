@@ -10,6 +10,14 @@ using namespace vamiga;
 
 Amiga *amiga = nullptr;
 
+long errorCode;
+string what;
+
+void save(VAError &error) {
+    errorCode = error.data;
+    what = error.what();
+}
+
 void processMsg(const void *amiga, long id, int data1, int data2, int data3, int data4);
 
 struct EnumProxy
@@ -24,8 +32,8 @@ struct AmigaProxy
 {
     AmigaProxy();
 
-    string helloAmiga();
-    string getExceptionMessage(intptr_t exceptionPtr);
+    int errorCode() { return ::errorCode; }
+    string what() { return ::what; }
 };
 
 struct MemoryProxy

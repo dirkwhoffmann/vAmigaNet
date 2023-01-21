@@ -96,6 +96,10 @@
 		$vAmiga.processMsg = processMsg;
 	});
 
+	function reportException() {
+		console.error('Exception ' + $amiga.errorCode() + ': ' + $amiga.what());
+	}
+
 	export async function startUp() {
 		console.log('VAmiga: startUp()');
 
@@ -103,12 +107,10 @@
 			let response = await fetch('rom/aros-svn55696-rom.bin');
 			let blob = await response.text();
 			$memory.loadRom(blob, blob.length);
-			console.log('After loadRom');
 			response = await fetch('rom/aros-svn55696-ext.bin');
-			console.log('Aros Ext fetched');
+			console.log('Aros Rom loaded');
 		} catch (exc) {
-			console.log(exc);
-			console.error($amiga.getExceptionMessage(exc));
+			reportException();
 		}
 	}
 
@@ -122,7 +124,6 @@
 
 		// Initiate the launch procedure
 		startUp();
-
 	}
 
 	function processMsg(id: number, d1: number, d2: number, d3: number, d4: number) {
