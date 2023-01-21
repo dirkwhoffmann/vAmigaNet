@@ -102,12 +102,17 @@
 
 	export async function startUp() {
 		console.log('VAmiga: startUp()');
-
 		try {
 			let response = await fetch('rom/aros-svn55696-rom.bin');
-			let blob = await response.text();
-			$memory.loadRom(blob, blob.length);
+			let blob = await response.arrayBuffer();
+			let uint8View = new Uint8Array(blob);
+			$memory.loadRom(uint8View, blob.byteLength);
+
 			response = await fetch('rom/aros-svn55696-ext.bin');
+			blob = await response.arrayBuffer();
+			uint8View = new Uint8Array(blob);
+			$memory.loadExt(uint8View, blob.byteLength);
+
 			console.log('Aros Rom loaded');
 		} catch (exc) {
 			reportException();

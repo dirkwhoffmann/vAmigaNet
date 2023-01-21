@@ -42,7 +42,8 @@ struct MemoryProxy
 
     bool hasRom() const;
     bool hasExt() const;
-    bool loadRom(string blob, u32 len);
+    bool loadRom(const string &blob, u32 len);
+    bool loadExt(const string &blob, u32 len);
 };
 
 struct RetroShellProxy

@@ -76,14 +76,26 @@ bool MemoryProxy::hasExt() const
     return amiga->mem.hasExt();
 }
 
-bool MemoryProxy::loadRom(string blob, u32 len)
+bool MemoryProxy::loadRom(const string &blob, u32 len)
 {
-    printf("loadRom(blob, %d)\n", len);
-
     try
     {
-        amiga->mem.loadRom((u8 *)blob.data(), len);
+        amiga->mem.loadRom((u8 *)blob.c_str(), len);
         return amiga->mem.hasRom();
+    }
+    catch (VAError &err)
+    {
+        save(err);
+        throw;
+    }
+}
+
+bool MemoryProxy::loadExt(const string &blob, u32 len)
+{
+    try
+    {
+        amiga->mem.loadExt((u8 *)blob.c_str(), len);
+        return amiga->mem.hasExt();
     }
     catch (VAError &err)
     {
@@ -97,6 +109,7 @@ EMSCRIPTEN_BINDINGS(MemoryProxy)
     class_<MemoryProxy>("MemoryProxy")
         .constructor<>()
         .function("loadRom", &MemoryProxy::loadRom)
+        .function("loadExt", &MemoryProxy::loadExt)
         .property("hasRom", &MemoryProxy::hasRom)
         .property("hasExt", &MemoryProxy::hasExt);
 }
