@@ -13,12 +13,17 @@
 	let show = false;
 	let guru = true;
 	setInterval(() => { guru = !guru; }, 800);
-	$: borderColor = guru ? "border-red-800" : "border-black";
+	$: borderColor = guru ? "border-red-800" : "border-transparent";
 
 	onMount(() => {
 		console.log('onMount()');
 		show = true;
 	});
+
+	function understood() {
+		console.log('understood()');
+		goto('#top');
+	}
 
 	function powerOn() {
 		console.log('powerOn()');
@@ -34,11 +39,11 @@
 <body class="h-screen bg-black text-white scroll-smooth overflow-y-scroll">
 	<title>vAmiga Online</title>
 
-	<div transition:fade class="bg-cover bg-transparent">
+	<div id ="top" transition:fade class="bg-cover bg-transparent">
 		<div class="flex flex-col h-screen">
 			{#key show}
 				<div
-					in:fade={{ duration: 3000 }}
+					in:fade={{ duration: 1000 }}
 					class="absolute flex flex-grow bg-splashscreen bg-cover h-screen w-screen blur brightness-[0.9]"
 				/>
 				<div
@@ -76,7 +81,7 @@
 				</MainPageLink>
 			</div>
 		</div>
-		<div id="configure" class="relative border-[20px] {borderColor} h-96 flex justify-center bg-slate-600">
+		<div id="configure" class="relative border-[20px] {borderColor} h-96 flex justify-center bg-gray-900/50">
 			<div
 				class="h-full w-2/3 border-none flex flex-col justify-center text-xl font-josefin text-center"
 			>
@@ -85,6 +90,9 @@
 					Eventually the user will be able to configure the hardware
 					properties of the virtual Amiga in this section.
 				</p>
+				<div class="flex justify-center mt-10">
+					<Button on:click={understood} label="Understood" />
+				</div>
 			</div>
 		</div>
 	</div>
