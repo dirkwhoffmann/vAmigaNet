@@ -16,7 +16,7 @@
 		if(ctx)
 		{
 			//if we get the context start rendering every VSync
-			requestAnimationFrame(do_animation_frame);
+			window.requestAnimationFrame(do_animation_frame);
 		}
 
 	});
@@ -47,7 +47,7 @@
 		draw(now);
 		if(!stop_request_animation_frame)
 		{
-			requestAnimationFrame(do_animation_frame);   
+			window.requestAnimationFrame(do_animation_frame);   
 		}
 	}
 
