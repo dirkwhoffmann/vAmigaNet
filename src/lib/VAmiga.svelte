@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import {
-        vAmiga, 
-        enums, 
-        amiga, 
-        retroShell,
+		vAmiga,
+		enums,
+		amiga,
+		memory,
+		retroShell,
 		MsgNone,
 		MsgRegister,
 		MsgConfig,
@@ -91,15 +92,37 @@
 	onMount(() => {
 		console.log('VAmiga: onMount()');
 
+		// Prepare to receive messages
 		$vAmiga.processMsg = processMsg;
 	});
+
+	export async function startUp() {
+		console.log('VAmiga: startUp()');
+
+		try {
+			let response = await fetch('rom/aros-svn55696-rom.bin');
+			let blob = await response.text();
+			$memory.loadRom(blob, blob.length);
+			console.log('After loadRom');
+			response = await fetch('rom/aros-svn55696-ext.bin');
+			console.log('Aros Ext fetched');
+		} catch (exc) {
+			console.log(exc);
+			console.error($amiga.getExceptionMessage(exc));
+		}
+	}
 
 	export function onRuntimeInitialized() {
 		console.log('Creating proxies...');
 
 		$enums = new $vAmiga.EnumProxy();
 		$amiga = new $vAmiga.AmigaProxy();
+		$memory = new $vAmiga.MemoryProxy();
 		$retroShell = new $vAmiga.RetroShellProxy();
+
+		// Initiate the launch procedure
+		startUp();
+
 	}
 
 	function processMsg(id: number, d1: number, d2: number, d3: number, d4: number) {

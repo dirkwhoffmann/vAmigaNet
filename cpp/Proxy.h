@@ -20,18 +20,25 @@ struct EnumProxy
     string RetroShellKey(int value) { return RetroShellKeyEnum::key(value); }
 };
 
-class AmigaProxy
+struct AmigaProxy
 {
-public:
     AmigaProxy();
+
+    string helloAmiga();
+    string getExceptionMessage(intptr_t exceptionPtr);
+};
+
+struct MemoryProxy
+{
+    MemoryProxy();
 
     bool hasRom() const;
     bool hasExt() const;
+    bool loadRom(string blob, u32 len);
 };
 
-class RetroShellProxy
+struct RetroShellProxy
 {
-public:
     RetroShellProxy();
 
     string getText();

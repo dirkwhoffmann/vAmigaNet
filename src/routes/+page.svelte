@@ -83,7 +83,7 @@
 		</div>
 		<div id="configure" class="relative border-[20px] {borderColor} h-96 flex justify-center bg-gray-900/50">
 			<div
-				class="h-full w-2/3 border-none flex flex-col justify-center text-xl font-josefin text-center"
+				class="h-full w-2/3 border-none flex flex-col justify-center text-2xl font-josefin text-center"
 			>
 				<p class="">This page is under development and most features are missing, yet.</p>
 				<p class="">

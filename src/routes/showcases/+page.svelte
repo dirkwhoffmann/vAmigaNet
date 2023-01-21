@@ -3,7 +3,6 @@
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import Carousel from '$lib/Carousel.svelte';
-	import * as animateScroll from 'svelte-scrollto';
 	import '@splidejs/svelte-splide/css';
 
 	let show = 0;
@@ -129,12 +128,11 @@
 	function handleMessage(event: CustomEvent) {
 		console.log(event.detail.description);
 		update(event.detail);
-		animateScroll.scrollToTop();
 		show += 1;
 	}
 </script>
 
-<body class="h-screen flex flex-col bg-black text-white">
+<body class="h-screen flex flex-col bg-black text-white scroll-smooth overflow-y-scroll">
 	<div class="">
 		<img class="w-full" src="footage/blank-large.png" alt="Alt" />
 		<div class="absolute top-5 left-10 flex pb-5 z-10">

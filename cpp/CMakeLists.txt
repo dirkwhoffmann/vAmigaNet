@@ -21,7 +21,7 @@ target_link_libraries(vAmiga vAmigaCore)
 # Emscripten linker settings
 set(LF_MEM "-sINITIAL_MEMORY=512MB -sTOTAL_STACK=32MB -sALLOW_MEMORY_GROWTH=0")
 set(LF_OPTI "-O1 -mnontrapping-fptoint -fwasm-exceptions")
-set(LF_EXPORTS "-lembind")
+set(LF_EXPORTS "-lembind -sEXPORT_EXCEPTION_HANDLING_HELPERS")
 set(LF_THREAD "-pthread -sPTHREAD_POOL_SIZE=1 -sWASM_WORKERS")
 set(LF_DEBUG "-sASSERTIONS=0 -sGL_ASSERTIONS=0")
 set(LF_OTHER "-sWASM_BIGINT -sDISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=1 -sLLD_REPORT_UNDEFINED")

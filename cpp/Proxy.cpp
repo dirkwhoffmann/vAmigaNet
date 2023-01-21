@@ -5,7 +5,7 @@
 
 void processMsg(const void *amiga, long id, int d1, int d2, int d3, int d4)
 {
-    // Reroute call to JavaScript 
+    // Reroute call to JavaScript
     MAIN_THREAD_ASYNC_EM_ASM({ self.Module.processMsg($0, $1, $2, $3, $4); }, id, d1, d2, d3, d4);
 }
 
@@ -49,22 +49,69 @@ AmigaProxy::AmigaProxy()
     amiga->configure(OPT_AGNUS_REVISION, AGNUS_OCS);
 }
 
-bool AmigaProxy::hasRom() const
+string 
+AmigaProxy::helloAmiga()
 {
-    return amiga->mem.hasRom();
+    return "Hello, vAmiga";
 }
 
-bool AmigaProxy::hasExt() const
+string
+AmigaProxy::getExceptionMessage(intptr_t exceptionPtr)
 {
-    return amiga->mem.hasExt();
+    printf("Ptr = %ld\n", exceptionPtr);
+    return string(reinterpret_cast<std::exception *>(exceptionPtr)->what());
 }
 
 EMSCRIPTEN_BINDINGS(AmigaProxy)
 {
     class_<AmigaProxy>("AmigaProxy")
         .constructor<>()
-        .property("hasRom", &AmigaProxy::hasRom)
-        .property("hasExt", &AmigaProxy::hasExt);
+        .function("helloAmiga", &AmigaProxy::helloAmiga)
+        .function("getExceptionMessage", &AmigaProxy::getExceptionMessage);
+}
+
+//
+// Memory proxy
+//
+
+MemoryProxy::MemoryProxy()
+{
+    printf("MemoryProxy()\n");
+}
+
+bool MemoryProxy::hasRom() const
+{
+    return amiga->mem.hasRom();
+}
+
+bool MemoryProxy::hasExt() const
+{
+    return amiga->mem.hasExt();
+}
+
+bool MemoryProxy::loadRom(string blob, u32 len)
+{
+    try
+    {
+        printf("in loadRom\n");
+        amiga->mem.loadRom((u8 *)blob.data(), len);
+        printf("Exiting...\n");
+        return amiga->mem.hasRom();
+    }
+    catch (VAError &err)
+    {
+        printf("VAError: %s\n", err.what());
+        throw;
+    }
+}
+
+EMSCRIPTEN_BINDINGS(MemoryProxy)
+{
+    class_<MemoryProxy>("MemoryProxy")
+        .constructor<>()
+        .function("loadRom", &MemoryProxy::loadRom)
+        .property("hasRom", &MemoryProxy::hasRom)
+        .property("hasExt", &MemoryProxy::hasExt);
 }
 
 //
@@ -119,7 +166,7 @@ EMSCRIPTEN_BINDINGS(RetroShellProxy)
 
 EMSCRIPTEN_BINDINGS(Keys)
 {
-    constant("MSG_NONE", (int)MSG_NONE);    
+    constant("MSG_NONE", (int)MSG_NONE);
     constant("MSG_REGISTER", (int)MSG_REGISTER);
     constant("MSG_CONFIG", (int)MSG_CONFIG);
     constant("MSG_POWER_ON", (int)MSG_POWER_ON);
@@ -196,7 +243,7 @@ EMSCRIPTEN_BINDINGS(Keys)
     constant("MSG_RECORDING_STOPPED", (int)MSG_RECORDING_STOPPED);
     constant("MSG_RECORDING_ABORTED", (int)MSG_RECORDING_ABORTED);
     constant("MSG_DMA_DEBUG_ON", (int)MSG_DMA_DEBUG_ON);
-    constant("MSG_DMA_DEBUG_OFF", (int)MSG_DMA_DEBUG_OFF); 
+    constant("MSG_DMA_DEBUG_OFF", (int)MSG_DMA_DEBUG_OFF);
     constant("MSG_SRV_STATE", (int)MSG_SRV_STATE);
     constant("MSG_SRV_RECEIVE", (int)MSG_SRV_RECEIVE);
     constant("MSG_SRV_SEND", (int)MSG_SRV_SEND);
