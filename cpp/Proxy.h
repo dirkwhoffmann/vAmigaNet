@@ -13,7 +13,14 @@ Amiga *amiga = nullptr;
 long errorCode;
 string what;
 
-void save(VAError &error) {
+typedef struct
+{
+    u32 left;
+    u32 right;
+} AudioBuffers;
+
+void save(VAError &error)
+{
     errorCode = error.data;
     what = error.what();
 }
@@ -22,7 +29,7 @@ void processMsg(const void *amiga, long id, int data1, int data2, int data3, int
 
 struct EnumProxy
 {
-    EnumProxy() { };
+    EnumProxy(){};
 
     string MsgTypeKey(int value) { return MsgTypeEnum::key(value); }
     string RetroShellKey(int value) { return RetroShellKeyEnum::key(value); }
@@ -32,8 +39,16 @@ struct AmigaProxy
 {
     AmigaProxy();
 
+    Buffer<float> leftChannel;
+    Buffer<float> rightChannel;
+
+    // Exception handling
     int errorCode() { return ::errorCode; }
     string what() { return ::what; }
+
+    // Audio buffers
+    AudioBuffers createAudioBuffers(i32 size);
+    void copyAudioBuffers();
 };
 
 struct MemoryProxy

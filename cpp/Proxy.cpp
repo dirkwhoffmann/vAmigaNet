@@ -49,11 +49,33 @@ AmigaProxy::AmigaProxy()
     amiga->configure(OPT_AGNUS_REVISION, AGNUS_OCS);
 }
 
+AudioBuffers AmigaProxy::createAudioBuffers(i32 size)
+{
+    assert(leftChannel.size == 0);
+    assert(rightChannel.size == 0);
+
+    leftChannel.alloc(size);
+    rightChannel.alloc(size);
+
+    printf("Left channel buffer: %ld at %p\n", leftChannel.size, leftChannel.ptr);
+    printf("Right channel buffer: %ld at %p\n", rightChannel.size, rightChannel.ptr);
+
+    return AudioBuffers { (u32)leftChannel.ptr, (u32)rightChannel.ptr };
+}
+    
+void AmigaProxy::copyAudioBuffers()
+{
+    assert(leftChannel.size && leftChannel.size == rightChannel.size);
+    amiga->paula.muxer.copy(leftChannel.ptr, rightChannel.ptr, leftChannel.size);
+}
+
 EMSCRIPTEN_BINDINGS(AmigaProxy)
 {
     class_<AmigaProxy>("AmigaProxy")
         .constructor<>()
         .function("errorCode", &AmigaProxy::errorCode)
+        .function("createAudioBuffers", &AmigaProxy::createAudioBuffers)
+        .function("copyAudioBuffers", &AmigaProxy::copyAudioBuffers)
         .function("what", &AmigaProxy::what);
 }
 
