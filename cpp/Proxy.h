@@ -1,7 +1,6 @@
 #include <emscripten.h>
 #include <emscripten/wasm_worker.h>
 #include <emscripten/bind.h>
-#include <emscripten/val.h>
 
 #include "config.h"
 #include "Amiga.h"
@@ -50,7 +49,7 @@ struct AmigaProxy
     // Audio buffers
     AudioBuffers createAudioBuffers(i32 size);
     void copyAudioBuffers();
-    val pixelBuffer(); 
+    u32 pixelBuffer(); 
 };
 
 struct MemoryProxy

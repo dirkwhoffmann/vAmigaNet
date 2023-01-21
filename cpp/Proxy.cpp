@@ -69,13 +69,13 @@ void AmigaProxy::copyAudioBuffers()
     amiga->paula.muxer.copy(leftChannel.ptr, rightChannel.ptr, leftChannel.size);
 }
 
-val AmigaProxy::pixelBuffer()
+u32 AmigaProxy::pixelBuffer()
 {
     auto pixels = amiga->denise.pixelEngine.stablePtr();
     
-    //return pixels; directly did not work 
+    return (u32)pixels;
     
-    return val(typed_memory_view(720*512/*bufferLength*/, pixels));  
+    //return val(typed_memory_view(VPOS_MAX*HPOS_MAX/*bufferLength*/, pixels));  
 }
 
 EMSCRIPTEN_BINDINGS(AmigaProxy)

@@ -30,8 +30,8 @@
 		showShell = !showShell;
 	}
 	
-	let clipped_width=725;
-	let clipped_height=568;
+	let clipped_width=912;
+	let clipped_height=313;
 
 
 	function draw(now){

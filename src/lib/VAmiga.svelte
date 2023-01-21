@@ -120,20 +120,8 @@
 	}
 	export function pixelBuffer()
 	{
-		let pixels=null;
-		let fake=true;
-		if(fake)
-		{
-			pixels=new Uint8Array(800*600);
-			for(var i =0; i < pixels.byteLength; i++)
-			{
-				pixels[i]= i%256;
-			}
-		}
-		else
-		{
-			pixels=$amiga.pixelBuffer();
-		}
+		let pixels_ptr=$amiga.pixelBuffer();
+		let pixels=new Uint8Array($vAmiga.HEAPU32.buffer, pixels_ptr, 912*313*4);
 		return pixels;
 
 	}
