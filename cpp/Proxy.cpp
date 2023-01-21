@@ -69,6 +69,15 @@ void AmigaProxy::copyAudioBuffers()
     amiga->paula.muxer.copy(leftChannel.ptr, rightChannel.ptr, leftChannel.size);
 }
 
+val AmigaProxy::pixelBuffer()
+{
+    auto pixels = amiga->denise.pixelEngine.stablePtr();
+    
+    //return pixels; directly did not work 
+    
+    return val(typed_memory_view(720*512/*bufferLength*/, pixels));  
+}
+
 EMSCRIPTEN_BINDINGS(AmigaProxy)
 {
     class_<AmigaProxy>("AmigaProxy")
@@ -76,6 +85,7 @@ EMSCRIPTEN_BINDINGS(AmigaProxy)
         .function("errorCode", &AmigaProxy::errorCode)
         .function("createAudioBuffers", &AmigaProxy::createAudioBuffers)
         .function("copyAudioBuffers", &AmigaProxy::copyAudioBuffers)
+        .function("pixelBuffer", &AmigaProxy::pixelBuffer, allow_raw_pointers())
         .function("what", &AmigaProxy::what);
 }
 
