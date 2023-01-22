@@ -17,9 +17,13 @@
 	const mergeTextureSize = { width: 2 * HPIXELS, height: 2 * VPIXELS };
 
 	// Textures
-	var lfTexture: WebGLTexture;
-	var sfTexture: WebGLTexture;
-	var mergeTexture: WebGLTexture;
+	let lfTexture: WebGLTexture;
+	let sfTexture: WebGLTexture;
+	let mergeTexture: WebGLTexture;
+
+	// Buffers
+	let vertexCoordBuffer: WebGLBuffer;
+	let textureCoordBuffer: WebGLBuffer;
 
 	// DEPRECATED
 	let texture: WebGLTexture;
@@ -100,49 +104,22 @@
 		return shaderProgram;
 	}
 
-	function initBuffers() {
+	function buildBuffers() {
 		// Setup vertex coordinate buffer
-		const positionBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+		vertexCoordBuffer = gl.createBuffer()!;
+		gl.bindBuffer(gl.ARRAY_BUFFER, vertexCoordBuffer);
 		const positions = [1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0];
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
 		// Setup texture coordinate buffer
-		const textureCoordBuffer = gl.createBuffer();
+		textureCoordBuffer = gl.createBuffer()!;
 		gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
 		const textureCoordinates = [1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0];
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
 
 		// Flip y axis to get the image right
 		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-
-		return {
-			position: positionBuffer,
-			textureCoord: textureCoordBuffer
-		};
 	}
-
-	/*
-	function initPositionBuffer() {
-		const positionBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-
-		const positions = [1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0];
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-
-		return positionBuffer;
-	}
-
-	function initTextureBuffer() {
-		const textureCoordBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
-
-		const textureCoordinates = [1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0];
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
-
-		return textureCoordBuffer;
-	}
-	*/
 
 	function buildTextures() {
 		console.log('buildTextures()');
@@ -157,25 +134,7 @@
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, HPIXELS, VPIXELS, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
 	}
 
-	function drawScene(programInfo, buffers) {
-		// tell webgl how to pull out the texture coordinates from buffer
-		function setTextureAttribute(buffers, programInfo) {
-			const num = 2; // every coordinate composed of 2 values
-			const type = gl.FLOAT; // the data in the buffer is 32-bit float
-			const normalize = false; // don't normalize
-			const stride = 0; // how many bytes to get from one set to the next
-			const offset = 0; // how many bytes inside the buffer to start from
-			gl.bindBuffer(gl.ARRAY_BUFFER, buffers.textureCoord);
-			gl.vertexAttribPointer(
-				programInfo.attribLocations.textureCoord,
-				num,
-				type,
-				normalize,
-				stride,
-				offset
-			);
-			gl.enableVertexAttribArray(programInfo.attribLocations.textureCoord);
-		}
+	function drawScene(programInfo) {
 
 		gl.clearColor(0.0, 1.0, 0.0, 1.0);
 		gl.clearDepth(1.0); // Clear everything
@@ -187,8 +146,8 @@
 
 		// Tell WebGL how to pull out the positions from the position
 		// buffer into the vertexPosition attribute.
-		setPositionAttribute(gl, buffers, programInfo);
-		setTextureAttribute(buffers, programInfo);
+		setPositionAttribute(programInfo);
+		setTextureAttribute(programInfo);
 
 		// Tell WebGL to use our program when drawing
 		gl.useProgram(programInfo.program);
@@ -213,14 +172,14 @@
 
 	// Tell WebGL how to pull out the positions from the position
 	// buffer into the vertexPosition attribute.
-	function setPositionAttribute(gl, buffers, programInfo) {
+	function setPositionAttribute(programInfo) {
 		const numComponents = 2; // pull out 2 values per iteration
 		const type = gl.FLOAT; // the data in the buffer is 32bit floats
 		const normalize = false; // don't normalize
 		const stride = 0; // how many bytes to get from one set of values to the next
 		// 0 = use type and numComponents above
 		const offset = 0; // how many bytes inside the buffer to start from
-		gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
+		gl.bindBuffer(gl.ARRAY_BUFFER, vertexCoordBuffer);
 		gl.vertexAttribPointer(
 			programInfo.attribLocations.vertexPosition,
 			numComponents,
@@ -231,6 +190,24 @@
 		);
 		gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
 	}
+
+	function setTextureAttribute(programInfo) {
+			const num = 2; // every coordinate composed of 2 values
+			const type = gl.FLOAT; // the data in the buffer is 32-bit float
+			const normalize = false; // don't normalize
+			const stride = 0; // how many bytes to get from one set to the next
+			const offset = 0; // how many bytes inside the buffer to start from
+			gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
+			gl.vertexAttribPointer(
+				programInfo.attribLocations.textureCoord,
+				num,
+				type,
+				normalize,
+				stride,
+				offset
+			);
+			gl.enableVertexAttribArray(programInfo.attribLocations.textureCoord);
+		}
 
 	function draw(now) {
 		if ($amiga != undefined) {
@@ -273,7 +250,7 @@
 
 		// Build ressources
 		buildTextures();
-		const buffers = initBuffers();
+		buildBuffers();
 
 		console.log('Calling initShaderProgram');
 		const shaderProgram = initShaderProgram();
@@ -290,7 +267,7 @@
 			}
 		};
 
-		drawScene(programInfo, buffers);
+		drawScene(programInfo);
 		console.log('onMount:Done');
 
 		//if we get the context start rendering every VSync
