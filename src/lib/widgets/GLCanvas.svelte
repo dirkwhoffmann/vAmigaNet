@@ -88,6 +88,14 @@
 		buildShaderProgram();
 		buildBuffers();
 		buildTextures();
+
+		// Set attributes
+		/*
+		gl.bindBuffer(gl.ARRAY_BUFFER, vertexCoordBuffer);
+		setAttribute(shaderProgram, 'aVertexPosition');
+		gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
+		setAttribute(shaderProgram, 'aTextureCoord');
+		*/
 	}
 
 	function buildShader(type: GLenum, source: string) {
@@ -120,12 +128,14 @@
 		gl.bindBuffer(gl.ARRAY_BUFFER, vertexCoordBuffer);
 		const positions = [1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0];
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+		setAttribute(shaderProgram, 'aVertexPosition');
 
 		// Setup texture coordinate buffer
 		textureCoordBuffer = gl.createBuffer()!;
 		gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
 		const textureCoordinates = [1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0];
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
+		setAttribute(shaderProgram, 'aTextureCoord');
 
 		// Flip y axis to get the image right
 		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
@@ -143,18 +153,15 @@
 	}
 
 	function drawScene(programInfo) {
+
+		// Start with a clean buffer
 		gl.clearColor(0.0, 1.0, 0.0, 1.0);
 		gl.clear(gl.COLOR_BUFFER_BIT);
 
-		// Tell WebGL how to pull out the positions from the position
-		// buffer into the vertexPosition attribute.
-		setPositionAttribute(programInfo);
-		setTextureAttribute(programInfo);
-
-		// Tell WebGL to use our program when drawing
+		// Select the shader program
 		gl.useProgram(programInfo.program);
 
-		// Tell WebGL we want to affect texture unit 0
+		// Select texture unit 0
 		gl.activeTexture(gl.TEXTURE0);
 
 		// Bind the texture to texture unit 0
@@ -163,50 +170,14 @@
 		// Tell the shader we bound the texture to texture unit 0
 		gl.uniform1i(programInfo.uniformLocations.uSampler, 0);
 
-		{
-			const offset = 0;
-			const vertexCount = 4;
-			gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
-		}
+		// Draw rectangle
+		gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 	}
 
-	// Tell WebGL how to pull out the positions from the position
-	// buffer into the vertexPosition attribute.
-	function setPositionAttribute(programInfo) {
-		const numComponents = 2; // pull out 2 values per iteration
-		const type = gl.FLOAT; // the data in the buffer is 32bit floats
-		const normalize = false; // don't normalize
-		const stride = 0; // how many bytes to get from one set of values to the next
-		// 0 = use type and numComponents above
-		const offset = 0; // how many bytes inside the buffer to start from
-		gl.bindBuffer(gl.ARRAY_BUFFER, vertexCoordBuffer);
-		gl.vertexAttribPointer(
-			programInfo.attribLocations.vertexPosition,
-			numComponents,
-			type,
-			normalize,
-			stride,
-			offset
-		);
-		gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
-	}
-
-	function setTextureAttribute(programInfo) {
-		const num = 2; // every coordinate composed of 2 values
-		const type = gl.FLOAT; // the data in the buffer is 32-bit float
-		const normalize = false; // don't normalize
-		const stride = 0; // how many bytes to get from one set to the next
-		const offset = 0; // how many bytes inside the buffer to start from
-		gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
-		gl.vertexAttribPointer(
-			programInfo.attribLocations.textureCoord,
-			num,
-			type,
-			normalize,
-			stride,
-			offset
-		);
-		gl.enableVertexAttribArray(programInfo.attribLocations.textureCoord);
+	function setAttribute(program: WebGLProgram, attribute: string) {
+		const a = gl.getAttribLocation(program, attribute);
+		gl.enableVertexAttribArray(a);
+		gl.vertexAttribPointer(a, 2, gl.FLOAT, false, 0, 0);
 	}
 
 	function drawAnimationFrame(now: DOMHighResTimeStamp) {
