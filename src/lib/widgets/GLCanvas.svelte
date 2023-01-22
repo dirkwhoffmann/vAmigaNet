@@ -21,7 +21,8 @@
     varying highp vec2 vTextureCoord;
 
     void main() {
-      gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+	  // gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+      gl_Position = aVertexPosition;
       vTextureCoord = aTextureCoord;
     }
   `;
@@ -233,7 +234,7 @@
 			modelViewMatrix, // matrix to translate
 			[-0.0, 0.0, -6.0]
 		); // amount to translate
-
+	
 		// Tell WebGL how to pull out the positions from the position
 		// buffer into the vertexPosition attribute.
 		setPositionAttribute(gl, buffers, programInfo);
@@ -242,10 +243,15 @@
 		// Tell WebGL to use our program when drawing
 		gl.useProgram(programInfo.program);
 
+		let unity = mat4.create();
+
 		// Set the shader uniforms
 		gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
 		gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
-
+		/*
+		gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, unity);
+		gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, unity);
+		*/
 		// Tell WebGL we want to affect texture unit 0
 		gl.activeTexture(gl.TEXTURE0);
 
@@ -351,6 +357,4 @@
 	});
 </script>
 
-<div>
-	<canvas bind:this={canvas} class="" width="724" height="568" tabindex="-1" />
-</div>
+<canvas bind:this={canvas} class="w-full h-full" tabindex="-1" />
