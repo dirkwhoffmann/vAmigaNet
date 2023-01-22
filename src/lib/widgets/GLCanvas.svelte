@@ -12,14 +12,14 @@
 	let canvas: HTMLCanvasElement;
 
 	// Texture sizes
-	const lfTextureSize = { width: HPIXELS * TPP, height: VPIXELS }
-	const sfTextureSize = { width: HPIXELS * TPP, height: VPIXELS }
-	const mergeTextureSize = { width: 2 * HPIXELS, height: 2 * VPIXELS }
+	const lfTextureSize = { width: HPIXELS * TPP, height: VPIXELS };
+	const sfTextureSize = { width: HPIXELS * TPP, height: VPIXELS };
+	const mergeTextureSize = { width: 2 * HPIXELS, height: 2 * VPIXELS };
 
 	// Textures
 	var lfTexture: WebGLTexture;
-    var sfTexture: WebGLTexture;
-    var mergeTexture: WebGLTexture;
+	var sfTexture: WebGLTexture;
+	var mergeTexture: WebGLTexture;
 
 	// DEPRECATED
 	let texture: WebGLTexture;
@@ -46,7 +46,7 @@
     }
   `;
 
-	let gl: WebGLRenderingContext;
+	let gl: WebGL2RenderingContext;
 
 	function loadShader(type: GLenum, source: string) {
 		console.log('Creating shader of type ' + type);
@@ -129,36 +129,25 @@
 		return positionBuffer;
 	}
 
-	function createEmulatorTexture() {
-		const t = gl.createTexture()!;
-
+	function buildTextures() {
+		console.log('buildTextures()');
+		texture = gl.createTexture()!;
 		let pixels = new Uint8Array(VPIXELS * HPIXELS * 4);
-
-		gl.bindTexture(gl.TEXTURE_2D, t);
+		gl.bindTexture(gl.TEXTURE_2D, texture);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, HPIXELS, VPIXELS, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
-		return t;
 	}
 
 	function initTextureBuffer() {
 		const textureCoordBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
 
-        // (UR, UL, LR, LL)
-		const textureCoordinates = [
-			1.0,
-			0.0,
-			0.0,
-			0.0,
-            1.0,
-			1.0,
-			0.0,
-			1.0,
-		];
+		// (UR, UL, LR, LL)
+		const textureCoordinates = [1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0];
 
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
 
@@ -247,11 +236,10 @@
 			const w = 912;
 			const h = 313;
 
-			const tex = new Uint8Array($vAmiga.HEAPU8.buffer, pixels, w * h * 4);           
+			const tex = new Uint8Array($vAmiga.HEAPU8.buffer, pixels, w * h * 4);
 			gl.activeTexture(gl.TEXTURE0);
 			gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, tex);
-            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-
+			gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 		} else {
 			console.log('Skipping draw: Store not yet initialized');
 		}
@@ -266,43 +254,45 @@
 	}
 
 	onMount(() => {
-		console.log('onMount()');
-		gl = canvas.getContext('webgl');
-		if (gl) {
-			console.log('Graphics context created');
+		console.log('GLCanvas: onMount()');
 
-			console.log('Set clearColor');
-			gl.clearColor(0.0, 1.0, 0.0, 1.0);
-
-			console.log('Clear context');
-			gl.clear(gl.COLOR_BUFFER_BIT);
-
-			console.log('Calling createTexture');
-			texture = createEmulatorTexture()!;
-			// gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-
-			console.log('Calling initShaderProgram');
-			const shaderProgram = initShaderProgram();
-
-			console.log('getLocation');
-			const programInfo = {
-				program: shaderProgram,
-				attribLocations: {
-					vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
-					textureCoord: gl.getAttribLocation(shaderProgram, 'aTextureCoord')
-				},
-				uniformLocations: {
-					uSampler: gl.getUniformLocation(shaderProgram, 'uSampler')
-				}
-			};
-
-			const buffers = initBuffers();
-			drawScene(programInfo, buffers);
-			console.log('onMount:Done');
-
-			//if we get the context start rendering every VSync
-			window.requestAnimationFrame(do_animation_frame);
+		// Only proceed if WebGL2 is supported
+		if (!(canvas.getContext('webgl2') instanceof WebGL2RenderingContext)) {
+			throw new Error('vAmiga Online needs WebGL2 to run.');
 		}
+
+		// Store the context for further use
+		gl = canvas.getContext('webgl2')!;
+
+		// Clear buffer
+		gl.clearColor(0.0, 0.0, 0.0, 1.0);
+		gl.clear(gl.COLOR_BUFFER_BIT);
+
+		// Build ressources
+		buildTextures();
+		// gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+
+		console.log('Calling initShaderProgram');
+		const shaderProgram = initShaderProgram();
+
+		console.log('getLocation');
+		const programInfo = {
+			program: shaderProgram,
+			attribLocations: {
+				vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
+				textureCoord: gl.getAttribLocation(shaderProgram, 'aTextureCoord')
+			},
+			uniformLocations: {
+				uSampler: gl.getUniformLocation(shaderProgram, 'uSampler')
+			}
+		};
+
+		const buffers = initBuffers();
+		drawScene(programInfo, buffers);
+		console.log('onMount:Done');
+
+		//if we get the context start rendering every VSync
+		window.requestAnimationFrame(do_animation_frame);
 	});
 </script>
 
