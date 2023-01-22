@@ -40,6 +40,7 @@
 	"type": "module",
 	"dependencies": {
 		"@splidejs/svelte-splide": "^0.2.9",
+		"gl-matrix": "^3.4.3",
 		"svelte-scrollto": "^0.2.0"
 	}
 }
