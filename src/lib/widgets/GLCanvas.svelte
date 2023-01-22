@@ -24,6 +24,9 @@
 	let vertexCoordBuffer: WebGLBuffer;
 	let textureCoordBuffer: WebGLBuffer;
 
+	// Shaders
+	let shaderProgram: WebGLProgram;
+
 	// DEPRECATED
 	let texture: WebGLTexture;
 
@@ -51,56 +54,36 @@
 
 	let gl: WebGL2RenderingContext;
 
-	function loadShader(type: GLenum, source: string) {
-		console.log('Creating shader of type ' + type);
-		const shader = gl.createShader(type);
-		if (shader == null) {
-			console.log("Can't create shader");
-			return; // TODO: THROW EXCEPTION
+	function init() {
+		// General WebGL options
+		const options = {
+			alpha: true,
+			antialias: true,
+			depth: false,
+			preserveDrawingBuffer: false,
+			stencil: false
+		};
+
+		// Only proceed if WebGL2 is supported
+		if (!(canvas.getContext('webgl2', options) instanceof WebGL2RenderingContext)) {
+			throw new Error('vAmiga Online needs WebGL2 to run.');
 		}
 
-		console.log('Assign shader source');
-		gl.shaderSource(shader, source);
-		console.log('Compile shader');
-		gl.compileShader(shader);
+		// Store the context for further use
+		gl = canvas.getContext('webgl2', options) as WebGL2RenderingContext;
+		gl.disable(gl.BLEND);
+		gl.disable(gl.DEPTH_TEST);
+		gl.disable(gl.SCISSOR_TEST);
+		gl.disable(gl.STENCIL_TEST);
 
-		if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-			alert(`An error occurred compiling the shaders: ${gl.getShaderInfoLog(shader)}`);
-			gl.deleteShader(shader);
-			return null;
-		}
+		// Clear buffer
+		gl.clearColor(0.0, 0.0, 0.0, 1.0);
+		gl.clear(gl.COLOR_BUFFER_BIT);
 
-		console.log('Shader loaded');
-		return shader;
-	}
-
-	function initShaderProgram() {
-		console.log('Load shaders');
-		const vertexShader = loadShader(gl.VERTEX_SHADER, vsSource);
-		const fragmentShader = loadShader(gl.FRAGMENT_SHADER, fsSource);
-
-		console.log('Create programs');
-		const shaderProgram = gl.createProgram();
-		if (shaderProgram == null) {
-			console.log('Cannot create shader program');
-			return;
-		}
-
-		console.log('Attach programs');
-		gl.attachShader(shaderProgram, vertexShader);
-		gl.attachShader(shaderProgram, fragmentShader);
-		console.log('Link programs');
-		gl.linkProgram(shaderProgram);
-
-		// If creating the shader program failed, alert
-
-		if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-			alert(`Unable to initialize the shader program: ${gl.getProgramInfoLog(shaderProgram)}`);
-			return null;
-		}
-
-		console.log('All shaders in place');
-		return shaderProgram;
+		// Build ressources
+		buildBuffers();
+		buildTextures();
+		buildShaderProgram();
 	}
 
 	function buildBuffers() {
@@ -123,7 +106,6 @@
 	function buildTextures() {
 		console.log('buildTextures()');
 		texture = gl.createTexture()!;
-		let pixels = new Uint8Array(VPIXELS * HPIXELS * 4);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
@@ -133,15 +115,35 @@
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, HPIXELS, VPIXELS, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
 	}
 
+	function buildShaderProgram() {
+		console.log('buildShaderProgram()');
+
+		function loadShader(type: GLenum, source: string) {
+			const shader = gl.createShader(type)!;
+			gl.shaderSource(shader, source);
+			gl.compileShader(shader);
+
+			if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+				throw new Error(`Shader compile error: ${gl.getShaderInfoLog(shader)}`);
+			}
+			return shader;
+		}
+
+		const vertexShader = loadShader(gl.VERTEX_SHADER, vsSource)!;
+		const fragmentShader = loadShader(gl.FRAGMENT_SHADER, fsSource)!;
+		shaderProgram = gl.createProgram()!;
+		gl.attachShader(shaderProgram, vertexShader);
+		gl.attachShader(shaderProgram, fragmentShader);
+		gl.linkProgram(shaderProgram);
+
+		if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+			throw new Error(`Shader link error: ${gl.getProgramInfoLog(shaderProgram)}`);
+		}
+	}
+
 	function drawScene(programInfo) {
-
 		gl.clearColor(0.0, 1.0, 0.0, 1.0);
-		gl.clearDepth(1.0); // Clear everything
-		gl.enable(gl.DEPTH_TEST); // Enable depth testing
-		gl.depthFunc(gl.LEQUAL); // Near things obscure far things
-
-		// Clear the canvas before we start drawing on it.
-		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+		gl.clear(gl.COLOR_BUFFER_BIT);
 
 		// Tell WebGL how to pull out the positions from the position
 		// buffer into the vertexPosition attribute.
@@ -189,22 +191,22 @@
 	}
 
 	function setTextureAttribute(programInfo) {
-			const num = 2; // every coordinate composed of 2 values
-			const type = gl.FLOAT; // the data in the buffer is 32-bit float
-			const normalize = false; // don't normalize
-			const stride = 0; // how many bytes to get from one set to the next
-			const offset = 0; // how many bytes inside the buffer to start from
-			gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
-			gl.vertexAttribPointer(
-				programInfo.attribLocations.textureCoord,
-				num,
-				type,
-				normalize,
-				stride,
-				offset
-			);
-			gl.enableVertexAttribArray(programInfo.attribLocations.textureCoord);
-		}
+		const num = 2; // every coordinate composed of 2 values
+		const type = gl.FLOAT; // the data in the buffer is 32-bit float
+		const normalize = false; // don't normalize
+		const stride = 0; // how many bytes to get from one set to the next
+		const offset = 0; // how many bytes inside the buffer to start from
+		gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
+		gl.vertexAttribPointer(
+			programInfo.attribLocations.textureCoord,
+			num,
+			type,
+			normalize,
+			stride,
+			offset
+		);
+		gl.enableVertexAttribArray(programInfo.attribLocations.textureCoord);
+	}
 
 	function draw(now) {
 		if ($amiga != undefined) {
@@ -233,24 +235,7 @@
 	onMount(() => {
 		console.log('GLCanvas: onMount()');
 
-		// Only proceed if WebGL2 is supported
-		if (!(canvas.getContext('webgl2') instanceof WebGL2RenderingContext)) {
-			throw new Error('vAmiga Online needs WebGL2 to run.');
-		}
-
-		// Store the context for further use
-		gl = canvas.getContext('webgl2')!;
-
-		// Clear buffer
-		gl.clearColor(0.0, 0.0, 0.0, 1.0);
-		gl.clear(gl.COLOR_BUFFER_BIT);
-
-		// Build ressources
-		buildTextures();
-		buildBuffers();
-
-		console.log('Calling initShaderProgram');
-		const shaderProgram = initShaderProgram();
+		init();
 
 		console.log('getLocation');
 		const programInfo = {
