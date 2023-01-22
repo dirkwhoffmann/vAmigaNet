@@ -1,11 +1,11 @@
-<svelte:options accessors={true}/>
+<svelte:options accessors={true} />
 
 <script lang="ts">
-	import { amiga } from '$lib/stores';
+	import { vAmiga, amiga } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import * as mat4 from 'gl-matrix/mat4';
 
-    export let enableDrawing = false; 
+	export let enableDrawing = false;
 
 	// Reference to the canvas element
 	let canvas: HTMLCanvasElement;
@@ -159,8 +159,16 @@
 		const textureCoordBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
 
+        // (UR, UL, LR, LL)
 		const textureCoordinates = [
-			1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0 // (UR, UL, LR, LL)
+			1.0,
+			0.0,
+			0.0,
+			0.0,
+            1.0,
+			1.0,
+			0.0,
+			1.0,
 		];
 
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
@@ -275,20 +283,27 @@
 		gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
 	}
 
-    function draw(now) {
-        if ($amiga != undefined) {
-    		let pixels = $amiga.pixelBuffer();
+	function draw(now) {
+		if ($amiga != undefined) {
+			let pixels = $amiga.pixelBuffer();
 
-            // TODO: Update texture data
-        } else {
-            console.log("Skipping draw: Store not yet initialized");
-        }
-    }
+			const w = 912;
+			const h = 313;
+
+			const tex = new Uint8Array($vAmiga.HEAPU8.buffer, pixels, w * h * 4);           
+			gl.activeTexture(gl.TEXTURE0);
+			gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, tex);
+            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+		} else {
+			console.log('Skipping draw: Store not yet initialized');
+		}
+	}
 
 	// let stop_request_animation_frame = false;
 	function do_animation_frame(now) {
 		if (enableDrawing) {
-            draw(now);
+			draw(now);
 			window.requestAnimationFrame(do_animation_frame);
 		}
 	}
