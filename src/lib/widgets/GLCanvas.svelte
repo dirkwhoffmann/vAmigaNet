@@ -1,22 +1,33 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import * as mat4 from 'gl-matrix/mat4';
 
-    // Reference to the canvas element
-    let canvas: HTMLCanvasElement; 
+	// Reference to the canvas element
+	let canvas: HTMLCanvasElement;
+	let texture: WebGLTexture;
 
 	const vsSource = `
     attribute vec4 aVertexPosition;
+    attribute vec2 aTextureCoord;
+
     uniform mat4 uModelViewMatrix;
     uniform mat4 uProjectionMatrix;
+
+    varying highp vec2 vTextureCoord;
+
     void main() {
       gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+      vTextureCoord = aTextureCoord;
     }
   `;
 
 	const fsSource = `
+    varying highp vec2 vTextureCoord;
+
+    uniform sampler2D uSampler;
+
     void main() {
-      gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);
+        gl_FragColor = texture2D(uSampler, vTextureCoord);    
     }
   `;
 
@@ -30,9 +41,9 @@
 			return; // TODO: THROW EXCEPTION
 		}
 
-        console.log('Assign shader source');
+		console.log('Assign shader source');
 		gl.shaderSource(shader, source);
-        console.log('Compile shader');
+		console.log('Compile shader');
 		gl.compileShader(shader);
 
 		if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
@@ -41,7 +52,7 @@
 			return null;
 		}
 
-        console.log('Shader loaded');
+		console.log('Shader loaded');
 		return shader;
 	}
 
@@ -52,11 +63,11 @@
 
 		console.log('Create programs');
 		const shaderProgram = gl.createProgram();
-        if (shaderProgram == null) {
-            console.log("Cannot create shader program");
-            return;
-        }
-    
+		if (shaderProgram == null) {
+			console.log('Cannot create shader program');
+			return;
+		}
+
 		console.log('Attach programs');
 		gl.attachShader(shaderProgram, vertexShader);
 		gl.attachShader(shaderProgram, fragmentShader);
@@ -70,15 +81,17 @@
 			return null;
 		}
 
-        console.log('All shaders in place');
+		console.log('All shaders in place');
 		return shaderProgram;
 	}
 
 	function initBuffers() {
-		const positionBuffer = initPositionBuffer(gl);
+		const positionBuffer = initPositionBuffer();
+		const textureCoordBuffer = initTextureBuffer();
 
 		return {
-			position: positionBuffer
+			position: positionBuffer,
+			textureCoord: textureCoordBuffer
 		};
 	}
 
@@ -90,7 +103,7 @@
 		// operations to from here out.
 		gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-		// Now create an array of positions for the square.
+		// Canvas coordinates (UR, UL, LR, LL)
 		const positions = [1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0];
 
 		// Now pass the list of positions into WebGL to build the
@@ -101,7 +114,75 @@
 		return positionBuffer;
 	}
 
+	function createEmulatorTexture() {
+		const t = gl.createTexture()!;
+
+		const w = 912;
+		const h = 313;
+		const bytes = w * h * 4;
+		console.log('Texture size: ' + h + ' x ' + w);
+		let pixels = new Uint8Array(bytes);
+
+		for (let y = 0; y < h; y++) {
+			for (let x = 0; x < w; x++) {
+				if (((y >> 3) & 1) == ((x >> 3) & 1)) {
+					pixels[4 * (y * w + x) + 0] = 100;
+					pixels[4 * (y * w + x) + 1] = 100;
+					pixels[4 * (y * w + x) + 2] = 100;
+					pixels[4 * (y * w + x) + 3] = 255;
+				} else {
+					pixels[4 * (y * w + x) + 0] = 0;
+					pixels[4 * (y * w + x) + 1] = 0;
+					pixels[4 * (y * w + x) + 2] = 0;
+					pixels[4 * (y * w + x) + 3] = 255;
+				}
+			}
+		}
+
+		gl.bindTexture(gl.TEXTURE_2D, t);
+
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+		return t;
+	}
+
+	function initTextureBuffer() {
+		const textureCoordBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
+
+		const textureCoordinates = [
+			1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0 // (UR, UL, LR, LL)
+		];
+
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
+
+		return textureCoordBuffer;
+	}
+
 	function drawScene(programInfo, buffers) {
+		// tell webgl how to pull out the texture coordinates from buffer
+		function setTextureAttribute(buffers, programInfo) {
+			const num = 2; // every coordinate composed of 2 values
+			const type = gl.FLOAT; // the data in the buffer is 32-bit float
+			const normalize = false; // don't normalize
+			const stride = 0; // how many bytes to get from one set to the next
+			const offset = 0; // how many bytes inside the buffer to start from
+			gl.bindBuffer(gl.ARRAY_BUFFER, buffers.textureCoord);
+			gl.vertexAttribPointer(
+				programInfo.attribLocations.textureCoord,
+				num,
+				type,
+				normalize,
+				stride,
+				offset
+			);
+			gl.enableVertexAttribArray(programInfo.attribLocations.textureCoord);
+		}
+
 		gl.clearColor(0.0, 1.0, 0.0, 1.0);
 		gl.clearDepth(1.0); // Clear everything
 		gl.enable(gl.DEPTH_TEST); // Enable depth testing
@@ -143,6 +224,7 @@
 		// Tell WebGL how to pull out the positions from the position
 		// buffer into the vertexPosition attribute.
 		setPositionAttribute(gl, buffers, programInfo);
+		setTextureAttribute(buffers, programInfo);
 
 		// Tell WebGL to use our program when drawing
 		gl.useProgram(programInfo.program);
@@ -150,6 +232,15 @@
 		// Set the shader uniforms
 		gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
 		gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
+
+		// Tell WebGL we want to affect texture unit 0
+		gl.activeTexture(gl.TEXTURE0);
+
+		// Bind the texture to texture unit 0
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+
+		// Tell the shader we bound the texture to texture unit 0
+		gl.uniform1i(programInfo.uniformLocations.uSampler, 0);
 
 		{
 			const offset = 0;
@@ -191,6 +282,10 @@
 			console.log('Clear context');
 			gl.clear(gl.COLOR_BUFFER_BIT);
 
+			console.log('Calling createTexture');
+			texture = createEmulatorTexture()!;
+			// gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+
 			console.log('Calling initShaderProgram');
 			const shaderProgram = initShaderProgram();
 
@@ -198,21 +293,23 @@
 			const programInfo = {
 				program: shaderProgram,
 				attribLocations: {
-					vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition')
+					vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
+					textureCoord: gl.getAttribLocation(shaderProgram, 'aTextureCoord')
 				},
 				uniformLocations: {
 					projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
-					modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix')
+					modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
+					uSampler: gl.getUniformLocation(shaderProgram, 'uSampler')
 				}
 			};
 
 			const buffers = initBuffers();
 			drawScene(programInfo, buffers);
-            console.log('onMount:Done');
+			console.log('onMount:Done');
 		}
 	});
 </script>
 
 <div>
-    <canvas bind:this={canvas} class="" width="724" height="568" tabindex="-1" />
+	<canvas bind:this={canvas} class="" width="724" height="568" tabindex="-1" />
 </div>
