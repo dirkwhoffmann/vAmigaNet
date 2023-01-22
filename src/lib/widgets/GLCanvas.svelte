@@ -31,7 +31,10 @@
 	let fsScript:HTMLScriptElement;
 	let vsScript:HTMLScriptElement;
 
-
+	//
+	let uSampler: WebGLUniformLocation;
+	
+	
 	// DEPRECATED
 	let texture: WebGLTexture;
 
@@ -86,6 +89,9 @@
 		buildShaderProgram();
 		buildBuffers();
 		buildTextures();
+
+		// 
+		uSampler = gl.getUniformLocation(shaderProgram, 'uSampler')
 
 		// Set attributes
 		/*
@@ -150,14 +156,14 @@
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, HPIXELS, VPIXELS, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
 	}
 
-	function drawScene(programInfo) {
+	function drawScene() {
 
 		// Start with a clean buffer
 		gl.clearColor(0.0, 1.0, 0.0, 1.0);
 		gl.clear(gl.COLOR_BUFFER_BIT);
 
 		// Select the shader program
-		gl.useProgram(programInfo.program);
+		gl.useProgram(shaderProgram);
 
 		// Select texture unit 0
 		gl.activeTexture(gl.TEXTURE0);
@@ -166,7 +172,7 @@
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 
 		// Tell the shader we bound the texture to texture unit 0
-		gl.uniform1i(programInfo.uniformLocations.uSampler, 0);
+		gl.uniform1i(uSampler, 0);
 
 		// Draw rectangle
 		gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
@@ -207,6 +213,7 @@
 		init();
 
 		console.log('getLocation');
+		/*
 		const programInfo = {
 			program: shaderProgram,
 			attribLocations: {
@@ -217,8 +224,9 @@
 				uSampler: gl.getUniformLocation(shaderProgram, 'uSampler')
 			}
 		};
+		*/
 
-		drawScene(programInfo);
+		drawScene();
 		console.log('onMount:Done');
 
 		//if we get the context start rendering every VSync
