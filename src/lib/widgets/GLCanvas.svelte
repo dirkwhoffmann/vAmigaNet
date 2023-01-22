@@ -57,7 +57,7 @@
 
 	let gl: WebGL2RenderingContext;
 
-	function init() {
+	function initWebGL() {
 		// General WebGL options
 		const options = {
 			alpha: true,
@@ -79,23 +79,20 @@
 		gl.disable(gl.SCISSOR_TEST);
 		gl.disable(gl.STENCIL_TEST);
 
-		// Clear buffer
+		// Start with a clean buffer
 		gl.clearColor(0.0, 0.0, 0.0, 1.0);
 		gl.clear(gl.COLOR_BUFFER_BIT);
 
-		// Build ressources
-		/*
-		vertexShader = buildShader(gl.VERTEX_SHADER, vsSource)!;
- 		fragmentShader = buildShader(gl.FRAGMENT_SHADER, fsSource)!;
-		buildShaderProgram();
-		*/
+		// Create the shader program 
 		shaderProgram = compileProgram(vsSource, fsSource);
 		texture = createTexture();
 
+		// Setup the vertex coordinate buffer 
 		const vCoords = new Float32Array([1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0]);
 		vertexCoordBuffer = createBuffer(vCoords);
 		setAttribute(shaderProgram, 'aVertexPosition');
 
+		// Setup the texture coordinate buffer 
 		const tCoords = new Float32Array([1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0]);
 		textureCoordBuffer = createBuffer(tCoords);
 		setAttribute(shaderProgram, 'aTextureCoord');
@@ -103,8 +100,18 @@
 		// Flip y axis to get the image right
 		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
-		//
+		// Select the active shader program
+		gl.useProgram(shaderProgram);
+		// this._lweight = this.gl.getUniformLocation(this._merge, 'u_lweight');
+	    // this._sweight = this.gl.getUniformLocation(this._merge, 'u_sweight');
+
+		// Select the active texture
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+
+		// Tell the shader we bound the texture to texture unit 0
 		uSampler = gl.getUniformLocation(shaderProgram, 'uSampler')!;
+		gl.uniform1i(uSampler, 0);
 	}
 
 	function compileProgram(vSource: string, fSource: string) {
@@ -161,86 +168,6 @@
 		return buffer;
 	}
 
-	/*
-	function buildShader(type: GLenum, source: string) {
-		console.log('buildShader(' + type + ')');
-		const shader = gl.createShader(type)!;
-		gl.shaderSource(shader, source);
-		gl.compileShader(shader);
-
-		if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-			throw new Error(`Shader compile error: ${gl.getShaderInfoLog(shader)}`);
-		}
-		return shader;
-	}
-
-	function buildShaderProgram() {
-		console.log('buildShaderProgram()');
-		shaderProgram = gl.createProgram()!;
-		gl.attachShader(shaderProgram, vertexShader);
-		gl.attachShader(shaderProgram, fragmentShader);
-		gl.linkProgram(shaderProgram);
-
-		if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-			throw new Error(`Shader link error: ${gl.getProgramInfoLog(shaderProgram)}`);
-		}
-	}
-	*/
-
-	/*
-	function buildBuffers() {
-		// Setup vertex coordinate buffer
-		vertexCoordBuffer = gl.createBuffer()!;
-		gl.bindBuffer(gl.ARRAY_BUFFER, vertexCoordBuffer);
-		const positions = [1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0];
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-		setAttribute(shaderProgram, 'aVertexPosition');
-
-		// Setup texture coordinate buffer
-		textureCoordBuffer = gl.createBuffer()!;
-		gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
-		const textureCoordinates = [1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0];
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
-		setAttribute(shaderProgram, 'aTextureCoord');
-
-		// Flip y axis to get the image right
-		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-	}
-	*/
-	/*
-	function buildTextures() {
-		console.log('buildTextures()');
-		texture = gl.createTexture()!;
-		gl.bindTexture(gl.TEXTURE_2D, texture);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, HPIXELS, VPIXELS, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
-	}
-	*/
-
-	function drawScene() {
-		// Start with a clean buffer
-		gl.clearColor(0.0, 1.0, 0.0, 1.0);
-		gl.clear(gl.COLOR_BUFFER_BIT);
-
-		// Select the shader program
-		gl.useProgram(shaderProgram);
-
-		// Select texture unit 0
-		gl.activeTexture(gl.TEXTURE0);
-
-		// Bind the texture to texture unit 0
-		gl.bindTexture(gl.TEXTURE_2D, texture);
-
-		// Tell the shader we bound the texture to texture unit 0
-		gl.uniform1i(uSampler, 0);
-
-		// Draw rectangle
-		gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-	}
-
 	function setAttribute(program: WebGLProgram, attribute: string) {
 		const a = gl.getAttribLocation(program, attribute);
 		gl.enableVertexAttribArray(a);
@@ -272,15 +199,7 @@
 
 	onMount(() => {
 		console.log('GLCanvas: onMount()');
-
-		init();
-
-		console.log('getLocation');
-
-		drawScene();
-		console.log('onMount:Done');
-
-		//if we get the context start rendering every VSync
+		initWebGL();
 		window.requestAnimationFrame(drawAnimationFrame);
 	});
 </script>
