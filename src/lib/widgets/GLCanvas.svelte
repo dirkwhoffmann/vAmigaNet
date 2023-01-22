@@ -101,8 +101,20 @@
 	}
 
 	function initBuffers() {
-		const positionBuffer = initPositionBuffer();
-		const textureCoordBuffer = initTextureBuffer();
+		// Setup vertex coordinate buffer
+		const positionBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+		const positions = [1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0];
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+
+		// Setup texture coordinate buffer
+		const textureCoordBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
+		const textureCoordinates = [1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0];
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
+
+		// Flip y axis to get the image right
+		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
 		return {
 			position: positionBuffer,
@@ -110,24 +122,27 @@
 		};
 	}
 
+	/*
 	function initPositionBuffer() {
-		// Create a buffer for the square's positions.
 		const positionBuffer = gl.createBuffer();
-
-		// Select the positionBuffer as the one to apply buffer
-		// operations to from here out.
 		gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-		// Canvas coordinates (UR, UL, LR, LL)
 		const positions = [1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0];
-
-		// Now pass the list of positions into WebGL to build the
-		// shape. We do this by creating a Float32Array from the
-		// JavaScript array, then use it to fill the current buffer.
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
 		return positionBuffer;
 	}
+
+	function initTextureBuffer() {
+		const textureCoordBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
+
+		const textureCoordinates = [1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0];
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
+
+		return textureCoordBuffer;
+	}
+	*/
 
 	function buildTextures() {
 		console.log('buildTextures()');
@@ -140,18 +155,6 @@
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, HPIXELS, VPIXELS, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
-	}
-
-	function initTextureBuffer() {
-		const textureCoordBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
-
-		// (UR, UL, LR, LL)
-		const textureCoordinates = [1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0];
-
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
-
-		return textureCoordBuffer;
 	}
 
 	function drawScene(programInfo, buffers) {
@@ -270,7 +273,7 @@
 
 		// Build ressources
 		buildTextures();
-		// gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+		const buffers = initBuffers();
 
 		console.log('Calling initShaderProgram');
 		const shaderProgram = initShaderProgram();
@@ -287,7 +290,6 @@
 			}
 		};
 
-		const buffers = initBuffers();
 		drawScene(programInfo, buffers);
 		console.log('onMount:Done');
 
