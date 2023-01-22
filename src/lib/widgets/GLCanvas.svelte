@@ -1,4 +1,5 @@
 <svelte:options accessors={true} />
+
 <script lang="ts">
 	import { vAmiga, amiga } from '$lib/stores';
 	import { VPIXELS, HPIXELS, TPP } from '$lib/constants';
@@ -28,13 +29,12 @@
 	let fragmentShader: WebGLShader;
 	let shaderProgram: WebGLProgram;
 
-	let fsScript:HTMLScriptElement;
-	let vsScript:HTMLScriptElement;
+	let fsScript: HTMLScriptElement;
+	let vsScript: HTMLScriptElement;
 
 	//
 	let uSampler: WebGLUniformLocation;
-	
-	
+
 	// DEPRECATED
 	let texture: WebGLTexture;
 
@@ -47,7 +47,7 @@
        vTextureCoord = aTextureCoord;
      }
    `;
- 	const fsSource = `
+	const fsSource = `
      varying highp vec2 vTextureCoord;
      uniform sampler2D uSampler;
      void main() {
@@ -84,24 +84,84 @@
 		gl.clear(gl.COLOR_BUFFER_BIT);
 
 		// Build ressources
+		/*
 		vertexShader = buildShader(gl.VERTEX_SHADER, vsSource)!;
  		fragmentShader = buildShader(gl.FRAGMENT_SHADER, fsSource)!;
 		buildShaderProgram();
-		buildBuffers();
-		buildTextures();
-
-		// 
-		uSampler = gl.getUniformLocation(shaderProgram, 'uSampler')
-
-		// Set attributes
-		/*
-		gl.bindBuffer(gl.ARRAY_BUFFER, vertexCoordBuffer);
-		setAttribute(shaderProgram, 'aVertexPosition');
-		gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
-		setAttribute(shaderProgram, 'aTextureCoord');
 		*/
+		shaderProgram = compileProgram(vsSource, fsSource);
+		texture = createTexture();
+
+		const vCoords = new Float32Array([1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0]);
+		vertexCoordBuffer = createBuffer(vCoords);
+		setAttribute(shaderProgram, 'aVertexPosition');
+
+		const tCoords = new Float32Array([1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0]);
+		textureCoordBuffer = createBuffer(tCoords);
+		setAttribute(shaderProgram, 'aTextureCoord');
+
+		// Flip y axis to get the image right
+		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+
+		//
+		uSampler = gl.getUniformLocation(shaderProgram, 'uSampler')!;
 	}
 
+	function compileProgram(vSource: string, fSource: string) {
+		console.log('compile()');
+
+		const vert = compileShader(gl.VERTEX_SHADER, vSource);
+		const frag = compileShader(gl.FRAGMENT_SHADER, fSource);
+		const prog = gl.createProgram()!;
+
+		gl.attachShader(prog, vert);
+		gl.attachShader(prog, frag);
+		gl.linkProgram(prog);
+
+		if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+			throw new Error(`Shader link error: ${gl.getProgramInfoLog(prog)}`);
+		}
+		return prog;
+	}
+
+	function compileShader(type: number, source: string) {
+		console.log('compileShader()');
+
+		const shader = gl.createShader(type)!;
+		gl.shaderSource(shader, source);
+		gl.compileShader(shader);
+
+		if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+			throw new Error(`Shader compile error: ${gl.getShaderInfoLog(shader)}`);
+		}
+		return shader;
+	}
+
+	function createTexture() {
+		console.log('createTexture()');
+
+		const texture = gl.createTexture()!;
+		gl.bindTexture(gl.TEXTURE_2D, texture);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, HPIXELS, VPIXELS, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+
+		return texture;
+	}
+
+	function createBuffer(values: Float32Array) {
+		console.log('createBuffer()');
+
+		const buffer = gl.createBuffer()!;
+		gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+		gl.bufferData(gl.ARRAY_BUFFER, values, gl.STATIC_DRAW);
+
+		return buffer;
+	}
+
+	/*
 	function buildShader(type: GLenum, source: string) {
 		console.log('buildShader(' + type + ')');
 		const shader = gl.createShader(type)!;
@@ -125,7 +185,9 @@
 			throw new Error(`Shader link error: ${gl.getProgramInfoLog(shaderProgram)}`);
 		}
 	}
+	*/
 
+	/*
 	function buildBuffers() {
 		// Setup vertex coordinate buffer
 		vertexCoordBuffer = gl.createBuffer()!;
@@ -144,7 +206,8 @@
 		// Flip y axis to get the image right
 		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 	}
-
+	*/
+	/*
 	function buildTextures() {
 		console.log('buildTextures()');
 		texture = gl.createTexture()!;
@@ -155,9 +218,9 @@
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, HPIXELS, VPIXELS, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
 	}
+	*/
 
 	function drawScene() {
-
 		// Start with a clean buffer
 		gl.clearColor(0.0, 1.0, 0.0, 1.0);
 		gl.clear(gl.COLOR_BUFFER_BIT);
@@ -213,18 +276,6 @@
 		init();
 
 		console.log('getLocation');
-		/*
-		const programInfo = {
-			program: shaderProgram,
-			attribLocations: {
-				vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
-				textureCoord: gl.getAttribLocation(shaderProgram, 'aTextureCoord')
-			},
-			uniformLocations: {
-				uSampler: gl.getUniformLocation(shaderProgram, 'uSampler')
-			}
-		};
-		*/
 
 		drawScene();
 		console.log('onMount:Done');
