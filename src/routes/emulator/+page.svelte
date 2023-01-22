@@ -7,12 +7,14 @@
 	import GLCanvas from '$lib/widgets/GLCanvas.svelte';
 	import RetroShell from '$lib/RetroShell.svelte';
 	import FaAngleLeft from 'svelte-icons/fa/FaAngleLeft.svelte';
-	// import { vAmiga } from '$lib/stores';
 	
 	let showShell = false;
+	let glCanvas: GLCanvas;
 
 	onMount(() => {
 		console.log('onMount()');
+		glCanvas.enableDrawing = true;
+		
 	});
 
 	function goBack() {
@@ -57,7 +59,7 @@
 			</div>
 		</div>
 		<div class="relative w-full h-full">
-			<GLCanvas />
+			<GLCanvas bind:this={glCanvas} />
 			{#if showShell}
 				<div
 					transition:fade

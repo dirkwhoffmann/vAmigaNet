@@ -1,6 +1,11 @@
+<svelte:options accessors={true}/>
+
 <script lang="ts">
+	import { amiga } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import * as mat4 from 'gl-matrix/mat4';
+
+    export let enableDrawing = false; 
 
 	// Reference to the canvas element
 	let canvas: HTMLCanvasElement;
@@ -270,6 +275,24 @@
 		gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
 	}
 
+    function draw(now) {
+        if ($amiga != undefined) {
+    		let pixels = $amiga.pixelBuffer();
+
+            // TODO: Update texture data
+        } else {
+            console.log("Skipping draw: Store not yet initialized");
+        }
+    }
+
+	// let stop_request_animation_frame = false;
+	function do_animation_frame(now) {
+		if (enableDrawing) {
+            draw(now);
+			window.requestAnimationFrame(do_animation_frame);
+		}
+	}
+
 	onMount(() => {
 		console.log('onMount()');
 		gl = canvas.getContext('webgl');
@@ -306,6 +329,9 @@
 			const buffers = initBuffers();
 			drawScene(programInfo, buffers);
 			console.log('onMount:Done');
+
+			//if we get the context start rendering every VSync
+			window.requestAnimationFrame(do_animation_frame);
 		}
 	});
 </script>

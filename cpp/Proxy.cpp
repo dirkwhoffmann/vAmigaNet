@@ -71,11 +71,8 @@ void AmigaProxy::copyAudioBuffers()
 
 u32 AmigaProxy::pixelBuffer()
 {
-    auto pixels = amiga->denise.pixelEngine.stablePtr();
-    
-    return (u32)pixels;
-    
-    //return val(typed_memory_view(VPOS_MAX*HPOS_MAX/*bufferLength*/, pixels));  
+    auto result = amiga->denise.pixelEngine.stablePtr();
+    return (u32)result;
 }
 
 EMSCRIPTEN_BINDINGS(AmigaProxy)
@@ -85,7 +82,7 @@ EMSCRIPTEN_BINDINGS(AmigaProxy)
         .function("errorCode", &AmigaProxy::errorCode)
         .function("createAudioBuffers", &AmigaProxy::createAudioBuffers)
         .function("copyAudioBuffers", &AmigaProxy::copyAudioBuffers)
-        .function("pixelBuffer", &AmigaProxy::pixelBuffer, allow_raw_pointers())
+        .function("pixelBuffer", &AmigaProxy::pixelBuffer)
         .function("what", &AmigaProxy::what);
 }
 
