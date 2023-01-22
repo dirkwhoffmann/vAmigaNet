@@ -1,28 +1,4 @@
 <svelte:options accessors={true} />
-<svelte:head>
-	<script bind:this={fsScript} type="x-shader/x-fragment">
-	    varying highp vec2 vTextureCoord;
-
-		uniform sampler2D uSampler;
-
-		void main() {
-			gl_FragColor = texture2D(uSampler, vTextureCoord);    
-		}
-	</script>
-
-	<script bind:this={vsScript} type="x-shader/x-vertex">
-		attribute vec4 aVertexPosition;
-		attribute vec2 aTextureCoord;
-
-		varying highp vec2 vTextureCoord;
-
-		void main() {
-		gl_Position = aVertexPosition;
-		vTextureCoord = aTextureCoord;
-		}
-	</script>
-</svelte:head>
-
 <script lang="ts">
 	import { vAmiga, amiga } from '$lib/stores';
 	import { VPIXELS, HPIXELS, TPP } from '$lib/constants';
@@ -59,7 +35,23 @@
 	// DEPRECATED
 	let texture: WebGLTexture;
 
-	
+	const vsSource = `
+     attribute vec4 aVertexPosition;
+     attribute vec2 aTextureCoord;
+     varying highp vec2 vTextureCoord;
+     void main() {
+       gl_Position = aVertexPosition;
+       vTextureCoord = aTextureCoord;
+     }
+   `;
+ 	const fsSource = `
+     varying highp vec2 vTextureCoord;
+     uniform sampler2D uSampler;
+     void main() {
+         gl_FragColor = texture2D(uSampler, vTextureCoord);    
+     }
+   `;
+
 	let gl: WebGL2RenderingContext;
 
 	function init() {
@@ -89,8 +81,8 @@
 		gl.clear(gl.COLOR_BUFFER_BIT);
 
 		// Build ressources
-		vertexShader = buildShader(gl.VERTEX_SHADER, vsScript.innerHTML)!;
-		fragmentShader = buildShader(gl.FRAGMENT_SHADER, fsScript.innerHTML)!;
+		vertexShader = buildShader(gl.VERTEX_SHADER, vsSource)!;
+ 		fragmentShader = buildShader(gl.FRAGMENT_SHADER, fsSource)!;
 		buildShaderProgram();
 		buildBuffers();
 		buildTextures();
