@@ -3,7 +3,6 @@
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import Carousel from '$lib/Carousel.svelte';
-	import * as animateScroll from 'svelte-scrollto';
 	import '@splidejs/svelte-splide/css';
 
 	let show = false;
@@ -128,7 +127,6 @@
 
 		// console.log(event.detail.description);
 		update(event.detail);
-		animateScroll.scrollToTop();
 		show += 1;
 	}
 </script>
