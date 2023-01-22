@@ -2,6 +2,7 @@
 
 <script lang="ts">
 	import { vAmiga, amiga } from '$lib/stores';
+	import { VPIXELS, HPIXELS, TPP } from '$lib/constants.ts';
 	import { onMount } from 'svelte';
 	import * as mat4 from 'gl-matrix/mat4';
 
@@ -9,19 +10,27 @@
 
 	// Reference to the canvas element
 	let canvas: HTMLCanvasElement;
+
+	// Texture sizes
+	const lfTextureSize = { width: HPIXELS * TPP, height: VPIXELS }
+	const sfTextureSize = { width: HPIXELS * TPP, height: VPIXELS }
+	const mergeTextureSize = { width: 2 * HPIXELS, height: 2 * VPIXELS }
+
+	// Textures
+	var lfTexture: WebGLTexture;
+    var sfTexture: WebGLTexture;
+    var mergeTexture: WebGLTexture;
+
+	// DEPRECATED
 	let texture: WebGLTexture;
 
 	const vsSource = `
     attribute vec4 aVertexPosition;
     attribute vec2 aTextureCoord;
 
-    uniform mat4 uModelViewMatrix;
-    uniform mat4 uProjectionMatrix;
-
     varying highp vec2 vTextureCoord;
 
     void main() {
-	  // gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
       gl_Position = aVertexPosition;
       vTextureCoord = aTextureCoord;
     }
@@ -123,36 +132,15 @@
 	function createEmulatorTexture() {
 		const t = gl.createTexture()!;
 
-		const w = 912;
-		const h = 313;
-		const bytes = w * h * 4;
-		console.log('Texture size: ' + h + ' x ' + w);
-		let pixels = new Uint8Array(bytes);
-
-		for (let y = 0; y < h; y++) {
-			for (let x = 0; x < w; x++) {
-				if (((y >> 3) & 1) == ((x >> 3) & 1)) {
-					pixels[4 * (y * w + x) + 0] = 100;
-					pixels[4 * (y * w + x) + 1] = 100;
-					pixels[4 * (y * w + x) + 2] = 100;
-					pixels[4 * (y * w + x) + 3] = 255;
-				} else {
-					pixels[4 * (y * w + x) + 0] = 0;
-					pixels[4 * (y * w + x) + 1] = 0;
-					pixels[4 * (y * w + x) + 2] = 0;
-					pixels[4 * (y * w + x) + 3] = 255;
-				}
-			}
-		}
+		let pixels = new Uint8Array(VPIXELS * HPIXELS * 4);
 
 		gl.bindTexture(gl.TEXTURE_2D, t);
-
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 
-		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, HPIXELS, VPIXELS, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
 		return t;
 	}
 
@@ -203,38 +191,8 @@
 		gl.depthFunc(gl.LEQUAL); // Near things obscure far things
 
 		// Clear the canvas before we start drawing on it.
-
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-		// Create a perspective matrix, a special matrix that is
-		// used to simulate the distortion of perspective in a camera.
-		// Our field of view is 45 degrees, with a width/height
-		// ratio that matches the display size of the canvas
-		// and we only want to see objects between 0.1 units
-		// and 100 units away from the camera.
-
-		const fieldOfView = (45 * Math.PI) / 180; // in radians
-		const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-		const zNear = 0.1;
-		const zFar = 100.0;
-		const projectionMatrix = mat4.create();
-
-		// note: glmatrix.js always has the first argument
-		// as the destination to receive the result.
-		mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
-
-		// Set the drawing position to the "identity" point, which is
-		// the center of the scene.
-		const modelViewMatrix = mat4.create();
-
-		// Now move the drawing position a bit to where we want to
-		// start drawing the square.
-		mat4.translate(
-			modelViewMatrix, // destination matrix
-			modelViewMatrix, // matrix to translate
-			[-0.0, 0.0, -6.0]
-		); // amount to translate
-	
 		// Tell WebGL how to pull out the positions from the position
 		// buffer into the vertexPosition attribute.
 		setPositionAttribute(gl, buffers, programInfo);
@@ -245,13 +203,6 @@
 
 		let unity = mat4.create();
 
-		// Set the shader uniforms
-		gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
-		gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
-		/*
-		gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, unity);
-		gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, unity);
-		*/
 		// Tell WebGL we want to affect texture unit 0
 		gl.activeTexture(gl.TEXTURE0);
 
@@ -341,8 +292,6 @@
 					textureCoord: gl.getAttribLocation(shaderProgram, 'aTextureCoord')
 				},
 				uniformLocations: {
-					projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
-					modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
 					uSampler: gl.getUniformLocation(shaderProgram, 'uSampler')
 				}
 			};

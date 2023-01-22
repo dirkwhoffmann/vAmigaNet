@@ -193,6 +193,13 @@ EMSCRIPTEN_BINDINGS(RetroShellProxy)
         .function("pressKey", &RetroShellProxy::pressKey);
 }
 
+EMSCRIPTEN_BINDINGS(Constants)
+{
+    constant("HPIXELS", (int)HPIXELS);
+    constant("VPIXELS", (int)VPIXELS);
+    constant("TPP", (int)TPP);
+}
+
 EMSCRIPTEN_BINDINGS(Keys)
 {
     constant("MSG_NONE", (int)MSG_NONE);
