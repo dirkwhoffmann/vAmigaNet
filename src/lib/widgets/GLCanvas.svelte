@@ -2,7 +2,7 @@
 
 <script lang="ts">
 	import { vAmiga, amiga } from '$lib/stores';
-	import { VPIXELS, HPIXELS, TPP } from '$lib/constants.ts';
+	import { VPIXELS, HPIXELS, TPP } from '$lib/constants';
 	import { onMount } from 'svelte';
 
 	export let enableDrawing = false;
@@ -25,6 +25,8 @@
 	let textureCoordBuffer: WebGLBuffer;
 
 	// Shaders
+	let vertexShader: WebGLShader;
+	let fragmentShader: WebGLShader;
 	let shaderProgram: WebGLProgram;
 
 	// DEPRECATED
@@ -81,9 +83,35 @@
 		gl.clear(gl.COLOR_BUFFER_BIT);
 
 		// Build ressources
+		vertexShader = buildShader(gl.VERTEX_SHADER, vsSource)!;
+		fragmentShader = buildShader(gl.FRAGMENT_SHADER, fsSource)!;
+		buildShaderProgram();
 		buildBuffers();
 		buildTextures();
-		buildShaderProgram();
+	}
+
+	function buildShader(type: GLenum, source: string) {
+		console.log('buildShader(' + type + ')');
+		const shader = gl.createShader(type)!;
+		gl.shaderSource(shader, source);
+		gl.compileShader(shader);
+
+		if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+			throw new Error(`Shader compile error: ${gl.getShaderInfoLog(shader)}`);
+		}
+		return shader;
+	}
+
+	function buildShaderProgram() {
+		console.log('buildShaderProgram()');
+		shaderProgram = gl.createProgram()!;
+		gl.attachShader(shaderProgram, vertexShader);
+		gl.attachShader(shaderProgram, fragmentShader);
+		gl.linkProgram(shaderProgram);
+
+		if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+			throw new Error(`Shader link error: ${gl.getProgramInfoLog(shaderProgram)}`);
+		}
 	}
 
 	function buildBuffers() {
@@ -111,34 +139,7 @@
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, HPIXELS, VPIXELS, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
-	}
-
-	function buildShaderProgram() {
-		console.log('buildShaderProgram()');
-
-		function loadShader(type: GLenum, source: string) {
-			const shader = gl.createShader(type)!;
-			gl.shaderSource(shader, source);
-			gl.compileShader(shader);
-
-			if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-				throw new Error(`Shader compile error: ${gl.getShaderInfoLog(shader)}`);
-			}
-			return shader;
-		}
-
-		const vertexShader = loadShader(gl.VERTEX_SHADER, vsSource)!;
-		const fragmentShader = loadShader(gl.FRAGMENT_SHADER, fsSource)!;
-		shaderProgram = gl.createProgram()!;
-		gl.attachShader(shaderProgram, vertexShader);
-		gl.attachShader(shaderProgram, fragmentShader);
-		gl.linkProgram(shaderProgram);
-
-		if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-			throw new Error(`Shader link error: ${gl.getProgramInfoLog(shaderProgram)}`);
-		}
 	}
 
 	function drawScene(programInfo) {
@@ -208,7 +209,14 @@
 		gl.enableVertexAttribArray(programInfo.attribLocations.textureCoord);
 	}
 
-	function draw(now) {
+	function drawAnimationFrame(now: DOMHighResTimeStamp) {
+		if ($amiga != undefined) {
+			draw();
+		}
+		window.requestAnimationFrame(drawAnimationFrame);
+	}
+
+	function draw() {
 		if ($amiga != undefined) {
 			let pixels = $amiga.pixelBuffer();
 
@@ -221,14 +229,6 @@
 			gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 		} else {
 			console.log('Skipping draw: Store not yet initialized');
-		}
-	}
-
-	// let stop_request_animation_frame = false;
-	function do_animation_frame(now) {
-		if (enableDrawing) {
-			draw(now);
-			window.requestAnimationFrame(do_animation_frame);
 		}
 	}
 
@@ -253,7 +253,7 @@
 		console.log('onMount:Done');
 
 		//if we get the context start rendering every VSync
-		window.requestAnimationFrame(do_animation_frame);
+		window.requestAnimationFrame(drawAnimationFrame);
 	});
 </script>
 
