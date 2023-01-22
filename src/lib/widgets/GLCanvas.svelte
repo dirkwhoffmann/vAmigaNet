@@ -4,7 +4,6 @@
 	import { vAmiga, amiga } from '$lib/stores';
 	import { VPIXELS, HPIXELS, TPP } from '$lib/constants.ts';
 	import { onMount } from 'svelte';
-	import * as mat4 from 'gl-matrix/mat4';
 
 	export let enableDrawing = false;
 
@@ -151,8 +150,6 @@
 
 		// Tell WebGL to use our program when drawing
 		gl.useProgram(programInfo.program);
-
-		let unity = mat4.create();
 
 		// Tell WebGL we want to affect texture unit 0
 		gl.activeTexture(gl.TEXTURE0);
