@@ -30,9 +30,6 @@
 	let sfSampler: WebGLUniformLocation;
 	let lfSampler: WebGLUniformLocation;
 
-	// DEPRECATED
-	let texture: WebGLTexture;
-
 	const vsSource = `
     	attribute vec4 aVertexPosition;
     	attribute vec2 aTextureCoord;
@@ -47,7 +44,6 @@
 		precision mediump float;
     
 		varying highp vec2 vTextureCoord;
-    	uniform sampler2D uSampler;
     	uniform sampler2D u_lfSampler;
     	uniform sampler2D u_sfSampler;
 		uniform float u_lweight;
@@ -62,7 +58,7 @@
 			} else {
 				w = u_lweight;
 			}
-    		gl_FragColor = texture2D(u_lfSampler, vTextureCoord) * vec4(w, w, w, 1.0);    
+    		gl_FragColor = texture2D(u_sfSampler, vTextureCoord) * vec4(w, w, w, 1.0);    
     	}
    `;
 
@@ -129,15 +125,6 @@
 		sfSampler = gl.getUniformLocation(shaderProgram, 'u_sfSampler')!;
     	gl.uniform1i(sfSampler, 1);
     	gl.uniform1f(sweight, 1.0);
-
-		// DEPRECATED
-		texture = createTexture();
-		gl.activeTexture(gl.TEXTURE0);
-		gl.bindTexture(gl.TEXTURE_2D, texture);
-
-		// Tell the shader we bound the texture to texture unit 0
-		// uSampler = gl.getUniformLocation(shaderProgram, 'uSampler')!;
-		// gl.uniform1i(uSampler, 0);
 	}
 
 	function compileProgram(vSource: string, fSource: string) {
@@ -207,6 +194,8 @@
 		window.requestAnimationFrame(drawAnimationFrame);
 	}
 
+	let weight = 1.0;
+
 	function draw() {
 		if ($amiga != undefined) {
 			let pixels = $amiga.pixelBuffer();
@@ -215,8 +204,9 @@
 			const h = 313;
 
 			gl.useProgram(shaderProgram);
-			gl.uniform1f(lweight, 1.0);
-	        gl.uniform1f(sweight, 1.0);
+			gl.uniform1f(lweight, weight);
+	        gl.uniform1f(sweight, 1.0 - weight);
+			weight = 1.0 - weight; 
 
 			const tex = new Uint8Array($vAmiga.HEAPU8.buffer, pixels, w * h * 4);
 			gl.activeTexture(gl.TEXTURE0);
