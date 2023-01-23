@@ -21,7 +21,7 @@
 	// Texture sizes
 	const lfTextureSize = { width: HPIXELS * TPP, height: VPIXELS };
 	const sfTextureSize = { width: HPIXELS * TPP, height: VPIXELS };
-	const mergeTextureSize = { width: 2 * HPIXELS, height: 2 * VPIXELS };
+	const mergeTextureSize = { width: 2 * HPIXELS + TPP, height: 2 * VPIXELS };
 
 	// Buffers
 	let vertexCoordBuffer: WebGLBuffer;
@@ -29,16 +29,19 @@
 
 	// Shaders
 	let shaderProgram: WebGLProgram;
+	let newShaderProgram: WebGLProgram;
 
 	// Textures
 	let lfTexture: WebGLTexture;
 	let sfTexture: WebGLTexture;
+	let mergeTexture: WebGLTexture;
 
 	// Uniforms
 	let lweight: WebGLUniformLocation;
 	let sweight: WebGLUniformLocation;
 	let sfSampler: WebGLUniformLocation;
 	let lfSampler: WebGLUniformLocation;
+	let sampler: WebGLUniformLocation;
 
 	const vsSource = `
     	attribute vec4 aVertexPosition;
@@ -46,10 +49,46 @@
     	varying highp vec2 vTextureCoord;
     	void main() {
     		gl_Position = aVertexPosition;
-    	vTextureCoord = aTextureCoord;
+    		vTextureCoord = aTextureCoord;
     	}
    	`;
 
+	const mergeSource = `		
+		precision mediump float;
+
+		varying highp vec2 vTextureCoord;
+
+	   	uniform sampler2D u_lfSampler;
+		uniform sampler2D u_sfSampler;
+		uniform vec2 textureSize;
+
+		void main()
+		{
+		    vec2 unit = vec2(1.0, 1.0) / textureSize;
+		    vec2 coord = vTextureCoord / unit;
+    
+		    vec4 color;
+		    if (mod(coord.y, 2.0) < 1.0) {
+		        color = texture2D(u_lfSampler, vTextureCoord);
+		    } else {
+		        color = texture2D(u_sfSampler, vTextureCoord);
+		    }
+
+		    gl_FragColor = color;
+		}
+   `;
+
+	const fsSource = `		
+		precision mediump float;
+    
+		varying highp vec2 vTextureCoord;
+    	uniform sampler2D sampler;
+    	void main() {
+			gl_FragColor = texture2D(sampler, vTextureCoord);
+    	}
+   `;
+
+     /*
 	const fsSource = `		
 		precision mediump float;
     
@@ -74,6 +113,7 @@
     		gl_FragColor = texel * vec4(w, w, w, 1.0);    
     	}
    `;
+	*/
 
 	let gl: WebGL2RenderingContext;
 
@@ -105,6 +145,7 @@
 
 		// Create the shader program
 		shaderProgram = compileProgram(vsSource, fsSource);
+		newShaderProgram = compileProgram(vsSource, mergeSource);
 
 		// Setup the vertex coordinate buffer
 		const vCoords = new Float32Array([1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0]);
@@ -125,14 +166,18 @@
 		sweight = gl.getUniformLocation(shaderProgram, 'u_sweight')!;
 
 		// Create textures
-		lfTexture = createTexture();
-		sfTexture = createTexture();
+		lfTexture = createTexture(HPIXELS, VPIXELS);
+		sfTexture = createTexture(HPIXELS, VPIXELS);
+		mergeTexture = createTexture(HPIXELS, 2 * VPIXELS);
 
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, lfTexture);
 		lfSampler = gl.getUniformLocation(shaderProgram, 'u_lfSampler')!;
 		gl.uniform1i(lfSampler, 0);
 		gl.uniform1f(lweight, 1.0);
+
+		sampler = gl.getUniformLocation(shaderProgram, 'sampler')!;
+		gl.uniform1i(sampler, 0);
 
 		gl.activeTexture(gl.TEXTURE1);
 		gl.bindTexture(gl.TEXTURE_2D, sfTexture);
@@ -171,27 +216,27 @@
 		return shader;
 	}
 
-	function createTexture() {
+	function createTexture(width: number, height: number) {
 		console.log('createTexture()');
 
-		const w = HPIXELS;
-		const h = VPIXELS;
+		/*
 		let pixels = new Uint8Array(HPIXELS * VPIXELS * 4);
-		for (let y = 0; y < h; y++) {
-			for (let x = 0; x < w; x++) {
+		for (let y = 0; y < height; y++) {
+			for (let x = 0; x < width; x++) {
 				if (((y >> 3) & 1) == ((x >> 3) & 1)) {
-					pixels[4 * (y * w + x) + 0] = 255;
-					pixels[4 * (y * w + x) + 1] = 0;
-					pixels[4 * (y * w + x) + 2] = 0;
-					pixels[4 * (y * w + x) + 3] = 255;
+					pixels[4 * (y * width + x) + 0] = 255;
+					pixels[4 * (y * width + x) + 1] = 0;
+					pixels[4 * (y * width + x) + 2] = 0;
+					pixels[4 * (y * width + x) + 3] = 255;
 				} else {
-					pixels[4 * (y * w + x) + 0] = 255;
-					pixels[4 * (y * w + x) + 1] = 255;
-					pixels[4 * (y * w + x) + 2] = 0;
-					pixels[4 * (y * w + x) + 3] = 255;
+					pixels[4 * (y * width + x) + 0] = 255;
+					pixels[4 * (y * width + x) + 1] = 255;
+					pixels[4 * (y * width + x) + 2] = 0;
+					pixels[4 * (y * width + x) + 3] = 255;
 				}
 			}
 		}
+		*/
 
 		const texture = gl.createTexture()!;
 		gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -208,7 +253,7 @@
 			0,
 			gl.RGBA,
 			gl.UNSIGNED_BYTE,
-			pixels
+			null
 		);
 
 		return texture;
