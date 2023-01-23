@@ -5,8 +5,6 @@
 	import { VPIXELS, HPIXELS, TPP } from '$lib/constants';
 	import { onMount } from 'svelte';
 
-	export let enableDrawing = false;
-
 	// Reference to the canvas element
 	let canvas: HTMLCanvasElement;
 
@@ -15,44 +13,57 @@
 	const sfTextureSize = { width: HPIXELS * TPP, height: VPIXELS };
 	const mergeTextureSize = { width: 2 * HPIXELS, height: 2 * VPIXELS };
 
-	// Textures
-	let lfTexture: WebGLTexture;
-	let sfTexture: WebGLTexture;
-	let mergeTexture: WebGLTexture;
-
 	// Buffers
 	let vertexCoordBuffer: WebGLBuffer;
 	let textureCoordBuffer: WebGLBuffer;
 
 	// Shaders
-	let vertexShader: WebGLShader;
-	let fragmentShader: WebGLShader;
 	let shaderProgram: WebGLProgram;
 
-	let fsScript: HTMLScriptElement;
-	let vsScript: HTMLScriptElement;
+	// Textures
+	let lfTexture: WebGLTexture;
+	let sfTexture: WebGLTexture;
 
-	//
-	let uSampler: WebGLUniformLocation;
+	// Uniforms
+	let lweight: WebGLUniformLocation;
+	let sweight: WebGLUniformLocation;
+	let sfSampler: WebGLUniformLocation;
+	let lfSampler: WebGLUniformLocation;
 
 	// DEPRECATED
 	let texture: WebGLTexture;
 
 	const vsSource = `
-     attribute vec4 aVertexPosition;
-     attribute vec2 aTextureCoord;
-     varying highp vec2 vTextureCoord;
-     void main() {
-       gl_Position = aVertexPosition;
-       vTextureCoord = aTextureCoord;
-     }
-   `;
-	const fsSource = `
-     varying highp vec2 vTextureCoord;
-     uniform sampler2D uSampler;
-     void main() {
-         gl_FragColor = texture2D(uSampler, vTextureCoord);    
-     }
+    	attribute vec4 aVertexPosition;
+    	attribute vec2 aTextureCoord;
+    	varying highp vec2 vTextureCoord;
+    	void main() {
+    		gl_Position = aVertexPosition;
+    	vTextureCoord = aTextureCoord;
+    	}
+   	`;
+
+	const fsSource = `		
+		precision mediump float;
+    
+		varying highp vec2 vTextureCoord;
+    	uniform sampler2D uSampler;
+    	uniform sampler2D u_lfSampler;
+    	uniform sampler2D u_sfSampler;
+		uniform float u_lweight;
+		uniform float u_sweight;
+    	void main() {
+
+			float y = floor(gl_FragCoord.y);
+
+			float w;
+			if (mod(y, 2.0) == 0.0) {
+				w = u_sweight;
+			} else {
+				w = u_lweight;
+			}
+    		gl_FragColor = texture2D(u_lfSampler, vTextureCoord) * vec4(w, w, w, 1.0);    
+    	}
    `;
 
 	let gl: WebGL2RenderingContext;
@@ -85,7 +96,6 @@
 
 		// Create the shader program 
 		shaderProgram = compileProgram(vsSource, fsSource);
-		texture = createTexture();
 
 		// Setup the vertex coordinate buffer 
 		const vCoords = new Float32Array([1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0]);
@@ -102,16 +112,32 @@
 
 		// Select the active shader program
 		gl.useProgram(shaderProgram);
-		// this._lweight = this.gl.getUniformLocation(this._merge, 'u_lweight');
-	    // this._sweight = this.gl.getUniformLocation(this._merge, 'u_sweight');
+		lweight = gl.getUniformLocation(shaderProgram, 'u_lweight');
+	    sweight = gl.getUniformLocation(shaderProgram, 'u_sweight');
 
-		// Select the active texture
+		// Create textures
+		lfTexture = createTexture();
+		gl.activeTexture(gl.TEXTURE0);
+    	gl.bindTexture(gl.TEXTURE_2D, lfTexture);
+		lfSampler = gl.getUniformLocation(shaderProgram, 'u_lfSampler')!;
+    	gl.uniform1i(lfSampler, 0);
+    	gl.uniform1f(lweight, 1.0);
+
+		sfTexture = createTexture();
+		gl.activeTexture(gl.TEXTURE1);
+	    gl.bindTexture(gl.TEXTURE_2D, sfTexture);
+		sfSampler = gl.getUniformLocation(shaderProgram, 'u_sfSampler')!;
+    	gl.uniform1i(sfSampler, 1);
+    	gl.uniform1f(sweight, 1.0);
+
+		// DEPRECATED
+		texture = createTexture();
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 
 		// Tell the shader we bound the texture to texture unit 0
-		uSampler = gl.getUniformLocation(shaderProgram, 'uSampler')!;
-		gl.uniform1i(uSampler, 0);
+		// uSampler = gl.getUniformLocation(shaderProgram, 'uSampler')!;
+		// gl.uniform1i(uSampler, 0);
 	}
 
 	function compileProgram(vSource: string, fSource: string) {
@@ -187,6 +213,10 @@
 
 			const w = 912;
 			const h = 313;
+
+			gl.useProgram(shaderProgram);
+			gl.uniform1f(lweight, 1.0);
+	        gl.uniform1f(sweight, 1.0);
 
 			const tex = new Uint8Array($vAmiga.HEAPU8.buffer, pixels, w * h * 4);
 			gl.activeTexture(gl.TEXTURE0);
