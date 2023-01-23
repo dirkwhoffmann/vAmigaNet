@@ -8,6 +8,16 @@
 	// Reference to the canvas element
 	let canvas: HTMLCanvasElement;
 
+	// Indicates whether the recently drawn frames were long or short frames
+	let currLOF = true;
+	let prevLOF = true;
+
+	// Used to determine if the GPU texture needs to be updated
+	let prevNr = 0;
+
+	// Variable used to emulate interlace flickering
+	let flickerCnt = 0;
+
 	// Texture sizes
 	const lfTextureSize = { width: HPIXELS * TPP, height: VPIXELS };
 	const sfTextureSize = { width: HPIXELS * TPP, height: VPIXELS };
@@ -111,8 +121,8 @@
 
 		// Select the active shader program
 		gl.useProgram(shaderProgram);
-		lweight = gl.getUniformLocation(shaderProgram, 'u_lweight');
-		sweight = gl.getUniformLocation(shaderProgram, 'u_sweight');
+		lweight = gl.getUniformLocation(shaderProgram, 'u_lweight')!;
+		sweight = gl.getUniformLocation(shaderProgram, 'u_sweight')!;
 
 		// Create textures
 		lfTexture = createTexture();
@@ -227,16 +237,44 @@
 		window.requestAnimationFrame(drawAnimationFrame);
 	}
 
-	let weight = 0.75;
-
 	function draw() {
 		if ($amiga != undefined) {
 			updateTexture();
-			gl.useProgram(shaderProgram);
-			gl.uniform1f(lweight, 1.0 - weight);
-			weight = 0.75 - weight;
-			gl.uniform1f(sweight, 1.0 - weight);
 
+			// Compute the merge texture
+			if (currLOF == prevLOF) {
+				if (currLOF) {
+					// Case 1: Non-interlace mode, two long frames in a row
+					gl.useProgram(shaderProgram);
+					gl.uniform1f(lweight, 1.0);
+					gl.uniform1f(sweight, 1.0);
+					gl.uniform1i(lfSampler, 0);
+					gl.uniform1i(sfSampler, 0);
+				} else {
+					// Case 2: Non-interlace mode, two short frames in a row
+					gl.useProgram(shaderProgram);
+					gl.uniform1f(lweight, 1.0);
+					gl.uniform1f(sweight, 1.0);
+					gl.uniform1i(lfSampler, 1);
+					gl.uniform1i(sfSampler, 1);
+				}
+			} else {
+				// Case 3: Interlace mode, long frame followed by a short frame
+				gl.useProgram(shaderProgram);
+				gl.uniform1i(lfSampler, 1);
+				gl.uniform1i(sfSampler, 0);
+
+				const weight = 0.5; // TODO: USE OPTION PARAMETER
+
+				if (weight) {
+					gl.useProgram(shaderProgram);
+					gl.uniform1f(lweight, flickerCnt % 4 >= 2 ? 1.0 : weight);
+					gl.uniform1f(sweight, flickerCnt % 4 >= 2 ? weight : 1.0);
+					flickerCnt += 1;
+				}
+			}
+
+			// Draw rectangle
 			gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 		} else {
 			console.log('Skipping draw: Store not yet initialized');
@@ -248,20 +286,48 @@
 		const h = VPIXELS;
 
 		if ($amiga.poweredOff()) {
+			// Get the noise texture
 			const noise = $denise.noise();
-			const tex = new Uint8Array($vAmiga.HEAPU8.buffer, noise, w * h * 4);
-			gl.activeTexture(gl.TEXTURE0);
-			gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, tex);
-			gl.activeTexture(gl.TEXTURE1);
-			gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, tex);
-		} else {
-			const frame = $denise.getEmulatorTexture();
-			const tex = new Uint8Array($vAmiga.HEAPU8.buffer, frame.data, w * h * 4);
-			gl.activeTexture(gl.TEXTURE0);
-			gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, tex);
-			gl.activeTexture(gl.TEXTURE1);
-			gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, tex);
 
+			// Ensure that the merge shader is used
+			prevLOF = currLOF;
+			currLOF = !prevLOF;
+
+			// Update the GPU texture
+			const tex = new Uint8Array($vAmiga.HEAPU8.buffer, noise, w * h * 4);
+			if (currLOF) {
+				gl.activeTexture(gl.TEXTURE0);
+				gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, tex);
+			} else {
+				gl.activeTexture(gl.TEXTURE1);
+				gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, tex);
+			}
+		} else {
+			// Get the emulator texture
+			const frame = $denise.getEmulatorTexture();
+
+			// Store the LOF bits
+			prevLOF = frame.prevLOF;
+			currLOF = frame.currLOF;
+
+			// Check for duplicate frames or frame drops
+			if (frame.frameNr != prevNr + 1) {
+				console.log('Frame sync mismatch: ' + prevNr + ' -> ' + frame.frameNr);
+
+				// Return immediately if we alredy have this texture
+				if (frame.frameNr == prevNr) return;
+			}
+			prevNr = frame.frameNr;
+
+			// Update the GPU texture
+			const tex = new Uint8Array($vAmiga.HEAPU8.buffer, frame.data, w * h * 4);
+			if (currLOF) {
+				gl.activeTexture(gl.TEXTURE0);
+				gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, tex);
+			} else {
+				gl.activeTexture(gl.TEXTURE1);
+				gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, tex);
+			}
 		}
 	}
 
