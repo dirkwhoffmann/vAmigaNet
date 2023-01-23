@@ -1,7 +1,7 @@
 <svelte:options accessors={true} />
 
 <script lang="ts">
-	import { vAmiga, amiga } from '$lib/stores';
+	import { vAmiga, amiga, denise } from '$lib/stores';
 	import { VPIXELS, HPIXELS, TPP } from '$lib/constants';
 	import { onMount } from 'svelte';
 
@@ -93,15 +93,15 @@
 		gl.clearColor(0.0, 0.0, 0.0, 1.0);
 		gl.clear(gl.COLOR_BUFFER_BIT);
 
-		// Create the shader program 
+		// Create the shader program
 		shaderProgram = compileProgram(vsSource, fsSource);
 
-		// Setup the vertex coordinate buffer 
+		// Setup the vertex coordinate buffer
 		const vCoords = new Float32Array([1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0]);
 		vertexCoordBuffer = createBuffer(vCoords);
 		setAttribute(shaderProgram, 'aVertexPosition');
 
-		// Setup the texture coordinate buffer 
+		// Setup the texture coordinate buffer
 		const tCoords = new Float32Array([1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0]);
 		textureCoordBuffer = createBuffer(tCoords);
 		setAttribute(shaderProgram, 'aTextureCoord');
@@ -112,23 +112,23 @@
 		// Select the active shader program
 		gl.useProgram(shaderProgram);
 		lweight = gl.getUniformLocation(shaderProgram, 'u_lweight');
-	    sweight = gl.getUniformLocation(shaderProgram, 'u_sweight');
+		sweight = gl.getUniformLocation(shaderProgram, 'u_sweight');
 
 		// Create textures
 		lfTexture = createTexture();
 		sfTexture = createTexture();
 
 		gl.activeTexture(gl.TEXTURE0);
-    	gl.bindTexture(gl.TEXTURE_2D, lfTexture);
+		gl.bindTexture(gl.TEXTURE_2D, lfTexture);
 		lfSampler = gl.getUniformLocation(shaderProgram, 'u_lfSampler')!;
-    	gl.uniform1i(lfSampler, 0);
-    	gl.uniform1f(lweight, 1.0);
+		gl.uniform1i(lfSampler, 0);
+		gl.uniform1f(lweight, 1.0);
 
 		gl.activeTexture(gl.TEXTURE1);
-	    gl.bindTexture(gl.TEXTURE_2D, sfTexture);
+		gl.bindTexture(gl.TEXTURE_2D, sfTexture);
 		sfSampler = gl.getUniformLocation(shaderProgram, 'u_sfSampler')!;
-    	gl.uniform1i(sfSampler, 1);
-    	gl.uniform1f(sweight, 1.0);
+		gl.uniform1i(sfSampler, 1);
+		gl.uniform1f(sweight, 1.0);
 	}
 
 	function compileProgram(vSource: string, fSource: string) {
@@ -189,7 +189,17 @@
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, HPIXELS, VPIXELS, 0, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+		gl.texImage2D(
+			gl.TEXTURE_2D,
+			0,
+			gl.RGBA,
+			HPIXELS,
+			VPIXELS,
+			0,
+			gl.RGBA,
+			gl.UNSIGNED_BYTE,
+			pixels
+		);
 
 		return texture;
 	}
@@ -221,24 +231,37 @@
 
 	function draw() {
 		if ($amiga != undefined) {
-			let pixels = $amiga.pixelBuffer();
-
-			const w = 912;
-			const h = 313;
-
+			updateTexture();
 			gl.useProgram(shaderProgram);
 			gl.uniform1f(lweight, 1.0 - weight);
-			weight = 0.75 - weight; 
-	        gl.uniform1f(sweight, 1.0 - weight);
+			weight = 0.75 - weight;
+			gl.uniform1f(sweight, 1.0 - weight);
 
-			const tex = new Uint8Array($vAmiga.HEAPU8.buffer, pixels, w * h * 4);
+			gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+		} else {
+			console.log('Skipping draw: Store not yet initialized');
+		}
+	}
+
+	function updateTexture() {
+		const w = HPIXELS;
+		const h = VPIXELS;
+
+		if ($amiga.poweredOff()) {
+			const noise = $denise.noise();
+			const tex = new Uint8Array($vAmiga.HEAPU8.buffer, noise, w * h * 4);
 			gl.activeTexture(gl.TEXTURE0);
 			gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, tex);
 			gl.activeTexture(gl.TEXTURE1);
 			gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, tex);
-			gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 		} else {
-			console.log('Skipping draw: Store not yet initialized');
+			const frame = $denise.getEmulatorTexture();
+			const tex = new Uint8Array($vAmiga.HEAPU8.buffer, frame.data, w * h * 4);
+			gl.activeTexture(gl.TEXTURE0);
+			gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, tex);
+			gl.activeTexture(gl.TEXTURE1);
+			gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, tex);
+
 		}
 	}
 

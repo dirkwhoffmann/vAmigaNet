@@ -8,6 +8,14 @@
 using namespace emscripten;
 using namespace vamiga;
 
+typedef struct
+{
+    u32 frameNr;
+    u32 data;
+    bool currLof;
+    bool prevLof;
+} TextureWrapper;
+
 Amiga *amiga = nullptr;
 
 long errorCode;
@@ -46,10 +54,36 @@ struct AmigaProxy
     int errorCode() { return ::errorCode; }
     string what() { return ::what; }
 
-    // Audio buffers
+    // State
+    void hardReset() { amiga->hardReset(); }
+    void softReset() { amiga->softReset(); }
+
+    bool poweredOn() { return amiga->isPoweredOn(); }
+    bool poweredOff() { return amiga->isPoweredOff(); }
+    bool isRunning() { return amiga->isRunning(); }
+    bool isPaused() { return amiga->isPaused(); }
+    // - (void)isReady:(ExceptionWrapper *)ex;
+    void powerOn() { amiga->powerOn(); }
+    void powerOff() { amiga->powerOff(); }
+    void run() { amiga->run(); }
+    void pause() { amiga->pause(); }
+    void halt() { amiga->halt(); }
+
+    // Audio
     AudioBuffers createAudioBuffers(i32 size);
     void copyAudioBuffers();
-    u32 pixelBuffer(); 
+
+    // DEPRECATED
+    u32 pixelBuffer();
+};
+
+struct DeniseProxy
+{
+    DeniseProxy();
+
+    // Textures
+    TextureWrapper getEmulatorTexture();
+    u32 noise() const;
 };
 
 struct MemoryProxy

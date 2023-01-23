@@ -4,6 +4,7 @@
 		vAmiga,
 		enums,
 		amiga,
+		denise,
 		memory,
 		retroShell,
 		MsgNone,
@@ -131,6 +132,7 @@
 
 		$enums = new $vAmiga.EnumProxy();
 		$amiga = new $vAmiga.AmigaProxy();
+		$denise = new $vAmiga.DeniseProxy();
 		$memory = new $vAmiga.MemoryProxy();
 		$retroShell = new $vAmiga.RetroShellProxy();
 

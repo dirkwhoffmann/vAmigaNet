@@ -10,6 +10,19 @@ void processMsg(const void *amiga, long id, int d1, int d2, int d3, int d4)
 }
 
 //
+// Structures
+//
+
+EMSCRIPTEN_BINDINGS(Structures)
+{
+    value_object<TextureWrapper>("TextureWrapper")
+        .field("frameNr", &TextureWrapper::frameNr)
+        .field("data", &TextureWrapper::data)
+        .field("currLof", &TextureWrapper::currLof)
+        .field("prevLof", &TextureWrapper::prevLof);
+}
+
+//
 // Enum Proxy
 //
 
@@ -60,9 +73,9 @@ AudioBuffers AmigaProxy::createAudioBuffers(i32 size)
     printf("Left channel buffer: %ld at %p\n", leftChannel.size, leftChannel.ptr);
     printf("Right channel buffer: %ld at %p\n", rightChannel.size, rightChannel.ptr);
 
-    return AudioBuffers { (u32)leftChannel.ptr, (u32)rightChannel.ptr };
+    return AudioBuffers{(u32)leftChannel.ptr, (u32)rightChannel.ptr};
 }
-    
+
 void AmigaProxy::copyAudioBuffers()
 {
     assert(leftChannel.size && leftChannel.size == rightChannel.size);
@@ -83,7 +96,57 @@ EMSCRIPTEN_BINDINGS(AmigaProxy)
         .function("createAudioBuffers", &AmigaProxy::createAudioBuffers)
         .function("copyAudioBuffers", &AmigaProxy::copyAudioBuffers)
         .function("pixelBuffer", &AmigaProxy::pixelBuffer)
-        .function("what", &AmigaProxy::what);
+        .function("what", &AmigaProxy::what)
+
+        .function("hardReset", &AmigaProxy::hardReset)
+        .function("softReset", &AmigaProxy::softReset)
+
+        .function("poweredOn", &AmigaProxy::poweredOn)
+        .function("poweredOff", &AmigaProxy::poweredOff)
+        .function("isRunning", &AmigaProxy::isRunning)
+        .function("isPaused", &AmigaProxy::isPaused)
+        // isReady
+        .function("powerOn", &AmigaProxy::powerOn)
+        .function("powerOff", &AmigaProxy::powerOff)
+        .function("run", &AmigaProxy::run)
+        .function("pause", &AmigaProxy::pause)
+        .function("halt", &AmigaProxy::halt);
+}
+
+//
+// Denise proxy
+//
+
+DeniseProxy::DeniseProxy()
+{
+    printf("DeniseProxy()\n");
+}
+
+u32 DeniseProxy::noise() const
+{
+    return (u32)amiga->denise.pixelEngine.getNoise();
+}
+
+TextureWrapper DeniseProxy::getEmulatorTexture()
+{
+    TextureWrapper result;
+
+    auto &buffer = amiga->denise.pixelEngine.getStableBuffer();
+
+    result.frameNr = (u32)buffer.nr;
+    result.currLof = buffer.lof;
+    result.prevLof = buffer.prevlof;
+    result.data = (u32)buffer.pixels.ptr;
+
+    return result;
+}
+
+EMSCRIPTEN_BINDINGS(DeniseProxy)
+{
+    class_<DeniseProxy>("DeniseProxy")
+        .constructor<>()
+        .function("noise", &DeniseProxy::noise)
+        .function("getEmulatorTexture", &DeniseProxy::getEmulatorTexture);
 }
 
 //

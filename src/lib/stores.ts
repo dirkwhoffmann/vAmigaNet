@@ -8,6 +8,7 @@ export const vAmiga: Writable<VAmiga> = writable();
 // Proxies
 export const enums: any = writable();
 export const amiga: any = writable();
+export const denise: any = writable();
 export const memory: any = writable();
 export const retroShell: any = writable();
 
