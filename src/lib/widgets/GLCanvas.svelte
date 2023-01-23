@@ -51,14 +51,17 @@
     	void main() {
 
 			float y = floor(gl_FragCoord.y);
-
 			float w;
+			vec4 texel;
+
 			if (mod(y, 2.0) == 0.0) {
 				w = u_sweight;
+				texel = texture2D(u_sfSampler, vTextureCoord);
 			} else {
 				w = u_lweight;
+				texel = texture2D(u_lfSampler, vTextureCoord);
 			}
-    		gl_FragColor = texture2D(u_sfSampler, vTextureCoord) * vec4(w, w, w, 1.0);    
+    		gl_FragColor = texel * vec4(w, w, w, 1.0);    
     	}
    `;
 
@@ -113,13 +116,14 @@
 
 		// Create textures
 		lfTexture = createTexture();
+		sfTexture = createTexture();
+
 		gl.activeTexture(gl.TEXTURE0);
     	gl.bindTexture(gl.TEXTURE_2D, lfTexture);
 		lfSampler = gl.getUniformLocation(shaderProgram, 'u_lfSampler')!;
     	gl.uniform1i(lfSampler, 0);
     	gl.uniform1f(lweight, 1.0);
 
-		sfTexture = createTexture();
 		gl.activeTexture(gl.TEXTURE1);
 	    gl.bindTexture(gl.TEXTURE_2D, sfTexture);
 		sfSampler = gl.getUniformLocation(shaderProgram, 'u_sfSampler')!;
@@ -160,13 +164,32 @@
 	function createTexture() {
 		console.log('createTexture()');
 
+		const w = HPIXELS;
+		const h = VPIXELS;
+		let pixels = new Uint8Array(HPIXELS * VPIXELS * 4);
+		for (let y = 0; y < h; y++) {
+			for (let x = 0; x < w; x++) {
+				if (((y >> 3) & 1) == ((x >> 3) & 1)) {
+					pixels[4 * (y * w + x) + 0] = 255;
+					pixels[4 * (y * w + x) + 1] = 0;
+					pixels[4 * (y * w + x) + 2] = 0;
+					pixels[4 * (y * w + x) + 3] = 255;
+				} else {
+					pixels[4 * (y * w + x) + 0] = 255;
+					pixels[4 * (y * w + x) + 1] = 255;
+					pixels[4 * (y * w + x) + 2] = 0;
+					pixels[4 * (y * w + x) + 3] = 255;
+				}
+			}
+		}
+
 		const texture = gl.createTexture()!;
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, HPIXELS, VPIXELS, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, HPIXELS, VPIXELS, 0, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
 
 		return texture;
 	}
@@ -194,7 +217,7 @@
 		window.requestAnimationFrame(drawAnimationFrame);
 	}
 
-	let weight = 1.0;
+	let weight = 0.75;
 
 	function draw() {
 		if ($amiga != undefined) {
@@ -204,12 +227,14 @@
 			const h = 313;
 
 			gl.useProgram(shaderProgram);
-			gl.uniform1f(lweight, weight);
+			gl.uniform1f(lweight, 1.0 - weight);
+			weight = 0.75 - weight; 
 	        gl.uniform1f(sweight, 1.0 - weight);
-			weight = 1.0 - weight; 
 
 			const tex = new Uint8Array($vAmiga.HEAPU8.buffer, pixels, w * h * 4);
 			gl.activeTexture(gl.TEXTURE0);
+			gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, tex);
+			gl.activeTexture(gl.TEXTURE1);
 			gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, tex);
 			gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 		} else {
