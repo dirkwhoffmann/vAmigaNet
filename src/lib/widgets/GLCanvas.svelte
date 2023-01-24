@@ -57,14 +57,14 @@
 
 		void main()
 		{
-		    vec2 coord = vTextureCoord * vec2(912.0, 2.0 * 313.0);
+		    vec2 coord = vTextureCoord * vec2(912.0, 626.0);
 
 			vec4 color;
-		    if (mod(coord.y, 2.0) < 1.0) {
+		    if (mod(coord.y, 3.0) < 1.5) {
 			// if (coord.y < 313.0) {
-		        color = texture2D(u_lfSampler, vTextureCoord);
+		        color = vec4(1.0, 0.0, 0.0, 1.0); // texture2D(u_lfSampler, vTextureCoord);
 		    } else {
-		        color = texture2D(u_sfSampler, vTextureCoord);
+		        color = vec4(1.0, 1.0, 0.0, 1.0); // texture2D(u_sfSampler, vTextureCoord);
 		    }
 
 		    gl_FragColor = color;
@@ -77,7 +77,12 @@
 		varying highp vec2 vTextureCoord;
     	uniform sampler2D sampler;
     	void main() {
-			gl_FragColor = texture2D(sampler, vTextureCoord);
+			vec2 coord = vec2(floor(gl_FragCoord.x), floor(gl_FragCoord.y));
+		    if (mod(coord.y, 2.0) == 0.0) {
+		        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+		    } else {
+		        gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);
+		    }
     	}
    `;
 
@@ -86,20 +91,22 @@
 	function initWebGL() {
 		// General WebGL options
 		const options = {
-			alpha: true,
-			antialias: true,
+			alpha: false,
+			antialias: false,
 			depth: false,
 			preserveDrawingBuffer: false,
 			stencil: false
 		};
 
 		// Only proceed if WebGL2 is supported
+		/*
 		if (!(canvas.getContext('webgl2', options) instanceof WebGL2RenderingContext)) {
 			throw new Error('vAmiga Online needs WebGL2 to run.');
 		}
+		*/
 
 		// Store the context for further use
-		gl = canvas.getContext('webgl2', options) as WebGL2RenderingContext;
+		gl = canvas.getContext('webgl2') as WebGL2RenderingContext;
 		gl.disable(gl.BLEND);
 		gl.disable(gl.DEPTH_TEST);
 		gl.disable(gl.SCISSOR_TEST);
@@ -143,6 +150,26 @@
 		gl.uniform1i(lfSampler, 0);
 		gl.uniform1i(sfSampler, 1);
 		gl.uniform1i(sampler, 0);
+
+		resizeCanvasToDisplaySize();
+	}
+
+	function resizeCanvasToDisplaySize() {
+		// Lookup the size the browser is displaying the canvas in CSS pixels.
+		const displayWidth = canvas.clientWidth;
+		const displayHeight = canvas.clientHeight;
+
+		// Check if the canvas is not the same size.
+		const needResize = canvas.width !== displayWidth || canvas.height !== displayHeight;
+
+		if (needResize) {
+			// Make the canvas the same size
+			canvas.width = displayWidth;
+			canvas.height = displayHeight;
+			console.log("New size is " + displayWidth + " x " + displayHeight);
+		}
+
+		return needResize;
 	}
 
 	function compileProgram(vSource: string, fSource: string) {
@@ -357,4 +384,5 @@
 	});
 </script>
 
-<canvas bind:this={canvas} class="w-full h-full" tabindex="-1" />
+<canvas bind:this={canvas} style="image-rendering: pixelated" class="w-full h-full" tabindex="-1" />
+<!-- <canvas bind:this={canvas} style="image-rendering: pixelated" tabindex="-1" />-->
