@@ -58,13 +58,15 @@
 		void main()
 		{
 		    vec2 coord = vTextureCoord * vec2(912.0, 626.0);
+			vec2 coord2 = vec2(floor(coord.x), floor(coord.y));
 
 			vec4 color;
-		    if (mod(coord.y, 3.0) < 1.5) {
-			// if (coord.y < 313.0) {
-		        color = vec4(1.0, 0.0, 0.0, 1.0); // texture2D(u_lfSampler, vTextureCoord);
+		    if (mod(coord2.y, 2.0) == 0.0) {
+		        // color = vec4(1.0, 0.0, 0.0, 1.0); 
+				color = texture2D(u_lfSampler, vTextureCoord);
 		    } else {
-		        color = vec4(1.0, 1.0, 0.0, 1.0); // texture2D(u_sfSampler, vTextureCoord);
+		        // color = vec4(1.0, 1.0, 0.0, 1.0); 
+				color = texture2D(u_sfSampler, vTextureCoord);
 		    }
 
 		    gl_FragColor = color;
@@ -77,12 +79,15 @@
 		varying highp vec2 vTextureCoord;
     	uniform sampler2D sampler;
     	void main() {
+			gl_FragColor = texture2D(sampler, vTextureCoord);
+			/*
 			vec2 coord = vec2(floor(gl_FragCoord.x), floor(gl_FragCoord.y));
 		    if (mod(coord.y, 2.0) == 0.0) {
 		        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
 		    } else {
 		        gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);
 		    }
+			*/
     	}
    `;
 
