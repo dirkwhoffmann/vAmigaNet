@@ -4,12 +4,16 @@
 	import { vAmiga, amiga, denise } from '$lib/stores';
 	import { VPIXELS, HPIXELS, TPP } from '$lib/constants';
 	import { onMount } from 'svelte';
+	import { TextureRect } from '$lib/utils/TextureRect';
 
 	// Reference to the canvas element
 	let canvas: HTMLCanvasElement;
 
 	// The rendering context of the canvas
 	let gl: WebGL2RenderingContext;
+
+	// The currently visible area
+	let textureRect = new TextureRect;
 
 	// Indicates whether the recently drawn frames were long or short frames
 	let currLOF = true;
