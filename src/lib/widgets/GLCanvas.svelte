@@ -128,34 +128,21 @@
 		// Flip y axis to get the image right
 		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
-		// Select the active shader program
-		gl.useProgram(mainShaderProgram);
-		lweight = gl.getUniformLocation(mainShaderProgram, 'u_lweight')!;
-		sweight = gl.getUniformLocation(mainShaderProgram, 'u_sweight')!;
-
 		// Create textures
 		lfTexture = createTexture(HPIXELS, VPIXELS);
 		sfTexture = createTexture(HPIXELS, VPIXELS);
 		mergeTexture = createTexture(HPIXELS, 2 * VPIXELS);
 
-		// gl.activeTexture(gl.TEXTURE0);
-		// gl.bindTexture(gl.TEXTURE_2D, lfTexture);
-		/*
-		lfSampler = gl.getUniformLocation(shaderProgram, 'u_lfSampler')!;
-		gl.uniform1i(lfSampler, 0);
-		gl.uniform1f(lweight, 1.0);
-		*/
-
+		// Bind uniforms
+		gl.useProgram(mainShaderProgram);
+		lweight = gl.getUniformLocation(mainShaderProgram, 'u_lweight')!;
+		sweight = gl.getUniformLocation(mainShaderProgram, 'u_sweight')!;
+		lfSampler = gl.getUniformLocation(mergeShaderProgram, 'u_lfSampler')!;
+		sfSampler = gl.getUniformLocation(mergeShaderProgram, 'u_sfSampler')!;
 		sampler = gl.getUniformLocation(mainShaderProgram, 'sampler')!;
-		gl.uniform1i(sampler, 0);
-
-		/*
-		gl.activeTexture(gl.TEXTURE1);
-		gl.bindTexture(gl.TEXTURE_2D, sfTexture);
-		sfSampler = gl.getUniformLocation(shaderProgram, 'u_sfSampler')!;
+		gl.uniform1i(lfSampler, 0);
 		gl.uniform1i(sfSampler, 1);
-		gl.uniform1f(sweight, 1.0);
-		*/
+		gl.uniform1i(sampler, 0);
 	}
 
 	function compileProgram(vSource: string, fSource: string) {
@@ -191,7 +178,6 @@
 	function createTexture(width: number, height: number) {
 		console.log('createTexture()');
 
-		
 		let pixels = new Uint8Array(width * height * 4);
 		for (let y = 0; y < height; y++) {
 			for (let x = 0; x < width; x++) {
@@ -208,7 +194,6 @@
 				}
 			}
 		}
-		
 
 		const texture = gl.createTexture()!;
 		gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -216,17 +201,7 @@
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-		gl.texImage2D(
-			gl.TEXTURE_2D,
-			0,
-			gl.RGBA,
-			width,
-			height,
-			0,
-			gl.RGBA,
-			gl.UNSIGNED_BYTE,
-			pixels
-		);
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
 
 		return texture;
 	}
@@ -254,75 +229,14 @@
 
 	function draw() {
 		if ($amiga != undefined) {
+			// Get the latest half-picture from the emulator
 			updateTexture();
 
-			// Compute the merge texture
+			// Merge half-pictures
+			createMergeTexture();
 
-			// Render to the framebuffer
-			const fb = gl.createFramebuffer();
-			gl.activeTexture(gl.TEXTURE0);
-			gl.bindTexture(gl.TEXTURE_2D, lfTexture);
-			gl.activeTexture(gl.TEXTURE1);
-			gl.bindTexture(gl.TEXTURE_2D, sfTexture);
-			gl.useProgram(mergeShaderProgram);
-			lfSampler = gl.getUniformLocation(mergeShaderProgram, 'u_lfSampler')!;
-			gl.uniform1i(lfSampler, 0);
-			sfSampler = gl.getUniformLocation(mergeShaderProgram, 'u_sfSampler')!;
-			gl.uniform1i(sfSampler, 1);
-			gl.bindFramebuffer(gl.FRAMEBUFFER, fb); 
-			gl.viewport(0, 0, HPIXELS, 2 * VPIXELS);
-			gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, mergeTexture, 0);
-
-			gl.useProgram(mergeShaderProgram);
-			gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-			
-			
-			// Render to the canvas
-			gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-			gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-			gl.activeTexture(gl.TEXTURE0);
-			gl.bindTexture(gl.TEXTURE_2D, mergeTexture);
-			gl.useProgram(mainShaderProgram);
-			gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-			
-
-			/*
-			// Compute the merge texture
-			if (currLOF == prevLOF) {
-				if (currLOF) {
-					// Case 1: Non-interlace mode, two long frames in a row
-					gl.useProgram(shaderProgram);
-					gl.uniform1f(lweight, 1.0);
-					gl.uniform1f(sweight, 1.0);
-					gl.uniform1i(lfSampler, 0);
-					gl.uniform1i(sfSampler, 0);
-				} else {
-					// Case 2: Non-interlace mode, two short frames in a row
-					gl.useProgram(shaderProgram);
-					gl.uniform1f(lweight, 1.0);
-					gl.uniform1f(sweight, 1.0);
-					gl.uniform1i(lfSampler, 1);
-					gl.uniform1i(sfSampler, 1);
-				}
-			} else {
-				// Case 3: Interlace mode, long frame followed by a short frame
-				gl.useProgram(shaderProgram);
-				gl.uniform1i(lfSampler, 1);
-				gl.uniform1i(sfSampler, 0);
-
-				const weight = 0.5; // TODO: USE OPTION PARAMETER
-
-				if (weight) {
-					gl.useProgram(shaderProgram);
-					gl.uniform1f(lweight, flickerCnt % 4 >= 2 ? 1.0 : weight);
-					gl.uniform1f(sweight, flickerCnt % 4 >= 2 ? weight : 1.0);
-					flickerCnt += 1;
-				}
-			}
-			*/
-
-			// Draw rectangle
-			// gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+			// Render to final texture to the canvas
+			renderFinalTexture();
 		} else {
 			console.log('Skipping draw: Store not yet initialized');
 		}
@@ -343,16 +257,13 @@
 			// Update the GPU texture
 			const tex = new Uint8Array($vAmiga.HEAPU8.buffer, noise, w * h * 4);
 			if (currLOF) {
-				
 				gl.activeTexture(gl.TEXTURE0);
 				gl.bindTexture(gl.TEXTURE_2D, lfTexture);
 				gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, tex);
-				
 			} else {
 				gl.activeTexture(gl.TEXTURE1);
 				gl.bindTexture(gl.TEXTURE_2D, sfTexture);
 				gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, tex);
-		
 			}
 		} else {
 			// Get the emulator texture
@@ -361,7 +272,7 @@
 			// Store the LOF bits
 			prevLOF = frame.prevLof;
 			currLOF = frame.currLof;
-			// console.log("LOF bits " + prevLOF + " " + currLOF);
+
 			// Check for duplicate frames or frame drops
 			if (frame.frameNr != prevNr + 1) {
 				console.log('Frame sync mismatch: ' + prevNr + ' -> ' + frame.frameNr);
@@ -383,6 +294,60 @@
 				gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, tex);
 			}
 		}
+	}
+
+	function createMergeTexture() {
+		if (currLOF == prevLOF) {
+			if (currLOF) {
+				// Case 1: Non-interlace mode, two long frames in a row
+				gl.useProgram(mergeShaderProgram);
+				gl.uniform1f(lweight, 1.0);
+				gl.uniform1f(sweight, 1.0);
+				gl.uniform1i(lfSampler, 0);
+				gl.uniform1i(sfSampler, 0);
+			} else {
+				// Case 2: Non-interlace mode, two short frames in a row
+				gl.useProgram(mergeShaderProgram);
+				gl.uniform1f(lweight, 1.0);
+				gl.uniform1f(sweight, 1.0);
+				gl.uniform1i(lfSampler, 1);
+				gl.uniform1i(sfSampler, 1);
+			}
+		} else {
+			// Case 3: Interlace mode, long frame followed by a short frame
+			gl.useProgram(mergeShaderProgram);
+			gl.uniform1i(lfSampler, 1);
+			gl.uniform1i(sfSampler, 0);
+
+			const weight = 0.5; // TODO: USE OPTION PARAMETER
+
+			if (weight) {
+				gl.useProgram(mergeShaderProgram);
+				gl.uniform1f(lweight, flickerCnt % 4 >= 2 ? 1.0 : weight);
+				gl.uniform1f(sweight, flickerCnt % 4 >= 2 ? weight : 1.0);
+				flickerCnt += 1;
+			}
+		}
+
+		const fb = gl.createFramebuffer();
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, lfTexture);
+		gl.activeTexture(gl.TEXTURE1);
+		gl.bindTexture(gl.TEXTURE_2D, sfTexture);
+		gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+		gl.viewport(0, 0, HPIXELS, 2 * VPIXELS);
+		gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, mergeTexture, 0);
+		gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+	}
+
+	function renderFinalTexture() {
+		// Render to the canvas instead of the framebuffer
+		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+		gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, mergeTexture);
+		gl.useProgram(mainShaderProgram);
+		gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 	}
 
 	onMount(() => {
