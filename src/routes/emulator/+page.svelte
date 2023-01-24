@@ -1,16 +1,24 @@
 <script lang="ts">
 	import '../../app.css';
-	import { amiga } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
+	import { amiga } from '$lib/stores';
+	import { TextureRect } from '$lib/utils/TextureRect';
 	import Button from '$lib/widgets/Button.svelte';
 	import GLCanvas from '$lib/widgets/GLCanvas.svelte';
 	import RetroShell from '$lib/RetroShell.svelte';
 	import FaAngleLeft from 'svelte-icons/fa/FaAngleLeft.svelte';
+	import { text } from 'svelte/internal';
 
-	let showShell = false;
+	// Component references
 	let glCanvas: GLCanvas;
+
+	// Indicates if RetroShell should be displayed
+	let showShell = false;
+
+	// The currently visible area
+	let textureRect = new TextureRect();
 
 	onMount(() => {
 		console.log('onMount()');
@@ -21,12 +29,30 @@
 
 	function doAnimationFrame(now: DOMHighResTimeStamp) {
 		if ($amiga != undefined) {
-			glCanvas.update(now);
-			glCanvas.render();
+			update(now);
+			render();
 		} else {
 			console.log('Skipping draw: Store not yet initialized');
 		}
 		window.requestAnimationFrame(doAnimationFrame);
+	}
+
+	function update(now: DOMHighResTimeStamp) {
+		if (textureRect.animates()) {
+			textureRect.move();
+			glCanvas.updateTextureRect(
+				textureRect.x1.current,
+				textureRect.y1.current,
+				textureRect.x2.current,
+				textureRect.y2.current
+			);
+		}
+
+		glCanvas.update(now);
+	}
+
+	function render() {
+		glCanvas.render();
 	}
 
 	function goBack() {
@@ -36,6 +62,15 @@
 	function openShell() {
 		console.log('openShell()');
 		showShell = !showShell;
+	}
+
+	function openMonitor() {
+		console.log('openMonitor()');
+		if (textureRect.x2.target == 1.0) {
+			textureRect.zoomIn();
+		} else {
+			textureRect.zoomOut();
+		}
 	}
 
 	let clipped_width = 912;
@@ -50,6 +85,7 @@
 			<div class="z-30 w-screen bg-white/30 flex space-x-2 p-2">
 				<Button on:click={goBack}><FaAngleLeft /></Button>
 				<Button on:click={openShell} img="retroShellIcon.png" />
+				<Button on:click={openMonitor} img="monitorIcon.png" />
 			</div>
 		</div>
 		<!-- <div class="relative w-full h-full"> -->

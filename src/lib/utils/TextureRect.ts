@@ -7,11 +7,11 @@ export class TextureRect {
     x2 = new AnimatedFloat(1.0);
     y2 = new AnimatedFloat(1.0);
 
-    animates() {
-        return this.x1.animates || this.x2.animates || this.x2.animates || this.y2.animates;
+    animates(): boolean {
+        return this.x1.animates() || this.y1.animates() || this.x2.animates() || this.y2.animates();
     }
 
-    zoomIn() {
+    zoomIn(): void {
         /*
         let x1 = Int(4 * TPP * HBLANK_CNT)
         let x2 = Int(4 * TPP * HPOS_CNT_PAL)
@@ -25,17 +25,20 @@ export class TextureRect {
         this.y2.set(0.9);
     }
 
-    zoomOut() {
+    zoomOut(): void {
         this.x1.set(0.0);
         this.y1.set(0.0);
         this.x2.set(1.0);
         this.y2.set(1.0);
     }
 
-    move() {
+    move(): void {
         this.x1.move();
         this.y1.move();
         this.x2.move();
         this.y2.move();
+        console.log("New current: " + this.x1 .current + ", " + this.y1.current + ", " + this.x2.current + ", " +this.y2.current);
+        console.log("New target: " + this.x1 .target + ", " + this.y1.target + ", " + this.x2.target + ", " +this.y2.target);
+        console.log("Animates = " + this.animates());
     }
 }

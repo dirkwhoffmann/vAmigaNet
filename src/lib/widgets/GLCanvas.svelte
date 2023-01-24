@@ -4,16 +4,12 @@
 	import { vAmiga, amiga, denise } from '$lib/stores';
 	import { VPIXELS, HPIXELS, TPP } from '$lib/constants';
 	import { onMount } from 'svelte';
-	import { TextureRect } from '$lib/utils/TextureRect';
 
 	// Reference to the canvas element
 	let canvas: HTMLCanvasElement;
 
 	// The rendering context of the canvas
 	let gl: WebGL2RenderingContext;
-
-	// The currently visible area
-	let textureRect = new TextureRect();
 
 	// Indicates whether the recently drawn frames were long or short frames
 	let currLOF = true;
@@ -24,6 +20,10 @@
 
 	// Variable used to emulate interlace flickering
 	let flickerCnt = 0;
+
+	// Buffers
+	let vBuffer: WebGLBuffer;
+	let tBuffer: WebGLBuffer;
 
 	// Textures
 	let lfTexture: WebGLTexture;
@@ -141,13 +141,13 @@
 
 		// Setup the vertex coordinate buffer
 		const vCoords = new Float32Array([1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0]);
-		createBuffer(vCoords);
+		vBuffer = createBuffer(vCoords);
 		setAttribute(mainShaderProgram, 'aVertexPosition');
 		setAttribute(mergeShaderProgram, 'aVertexPosition');
 
 		// Setup the texture coordinate buffer
 		const tCoords = new Float32Array([1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0]);
-		createBuffer(tCoords);
+		tBuffer = createBuffer(tCoords);
 		setAttribute(mainShaderProgram, 'aTextureCoord');
 		setAttribute(mergeShaderProgram, 'aTextureCoord');
 
@@ -158,6 +158,14 @@
 		lfTexture = createTexture(HPIXELS, VPIXELS);
 		sfTexture = createTexture(HPIXELS, VPIXELS);
 		mergeTexture = createTexture(HPIXELS, 2 * VPIXELS);
+	}
+
+	export function updateTextureRect(x1: number, y1: number, x2: number, y2: number) {
+
+		// console.log("updateTextureRect(" + x1 + ", " + y1 + " ," + x2 + ", " + y2 + ")");
+		const array = new Float32Array([x1,y1, x2,y1, x1,y2, x2,y2]);
+		gl.bindBuffer(gl.ARRAY_BUFFER, tBuffer);
+		gl.bufferSubData(gl.ARRAY_BUFFER, 0, array);
 	}
 
 	function resizeCanvasToDisplaySize() {
@@ -239,6 +247,7 @@
 		const buffer = gl.createBuffer()!;
 		gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 		gl.bufferData(gl.ARRAY_BUFFER, values, gl.STATIC_DRAW);
+		return buffer; 
 	}
 
 	function setAttribute(program: WebGLProgram, attribute: string) {
