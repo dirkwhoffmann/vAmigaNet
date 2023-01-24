@@ -18,11 +18,6 @@
 	// Variable used to emulate interlace flickering
 	let flickerCnt = 0;
 
-	// Texture sizes
-	const lfTextureSize = { width: HPIXELS * TPP, height: VPIXELS };
-	const sfTextureSize = { width: HPIXELS * TPP, height: VPIXELS };
-	const mergeTextureSize = { width: 2 * HPIXELS + TPP, height: 2 * VPIXELS };
-
 	// Buffers
 	let vertexCoordBuffer: WebGLBuffer;
 	let textureCoordBuffer: WebGLBuffer;
@@ -57,6 +52,27 @@
 		precision mediump float;
 
 		varying highp vec2 vTextureCoord;
+	   	uniform sampler2D u_lfSampler;
+
+		void main()
+		{
+			float y = floor(gl_FragCoord.y);
+
+			gl_FragColor = vec4(vTextureCoord.x,0.0,vTextureCoord.y,1.0);
+			/*
+			if (mod(y, 2.0) == 0.0) {
+				vec2 coord = vTextureCoord * (1.0,1.0);
+				gl_FragColor = texture2D(u_lfSampler, coord) * vec4(0.5,0.5,0,0.5);
+			}
+			*/
+		}
+   `;
+
+	/*
+	const mergeSource = `		
+		precision mediump float;
+
+		varying highp vec2 vTextureCoord;
 
 	   	uniform sampler2D u_lfSampler;
 		uniform sampler2D u_sfSampler;
@@ -77,6 +93,7 @@
 		    gl_FragColor = color;
 		}
    `;
+	*/
 
 	const fsSource = `		
 		precision mediump float;
@@ -85,6 +102,7 @@
     	uniform sampler2D sampler;
     	void main() {
 			gl_FragColor = texture2D(sampler, vTextureCoord);
+			// gl_FragColor = vec4(vTextureCoord.x,vTextureCoord.y,0.0,1.0);
     	}
    `;
 
@@ -149,13 +167,15 @@
 
 		// Setup the vertex coordinate buffer
 		const vCoords = new Float32Array([1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0]);
-		vertexCoordBuffer = createBuffer(vCoords);
+		createBuffer(vCoords);
 		setAttribute(shaderProgram, 'aVertexPosition');
+		setAttribute(newShaderProgram, 'aVertexPosition');
 
 		// Setup the texture coordinate buffer
 		const tCoords = new Float32Array([1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0]);
-		textureCoordBuffer = createBuffer(tCoords);
+		createBuffer(tCoords);
 		setAttribute(shaderProgram, 'aTextureCoord');
+		setAttribute(newShaderProgram, 'aTextureCoord');
 
 		// Flip y axis to get the image right
 		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
@@ -170,20 +190,24 @@
 		sfTexture = createTexture(HPIXELS, VPIXELS);
 		mergeTexture = createTexture(HPIXELS, 2 * VPIXELS);
 
-		gl.activeTexture(gl.TEXTURE0);
-		gl.bindTexture(gl.TEXTURE_2D, lfTexture);
+		// gl.activeTexture(gl.TEXTURE0);
+		// gl.bindTexture(gl.TEXTURE_2D, lfTexture);
+		/*
 		lfSampler = gl.getUniformLocation(shaderProgram, 'u_lfSampler')!;
 		gl.uniform1i(lfSampler, 0);
 		gl.uniform1f(lweight, 1.0);
+		*/
 
 		sampler = gl.getUniformLocation(shaderProgram, 'sampler')!;
 		gl.uniform1i(sampler, 0);
 
+		/*
 		gl.activeTexture(gl.TEXTURE1);
 		gl.bindTexture(gl.TEXTURE_2D, sfTexture);
 		sfSampler = gl.getUniformLocation(shaderProgram, 'u_sfSampler')!;
 		gl.uniform1i(sfSampler, 1);
 		gl.uniform1f(sweight, 1.0);
+		*/
 	}
 
 	function compileProgram(vSource: string, fSource: string) {
@@ -219,8 +243,8 @@
 	function createTexture(width: number, height: number) {
 		console.log('createTexture()');
 
-		/*
-		let pixels = new Uint8Array(HPIXELS * VPIXELS * 4);
+		
+		let pixels = new Uint8Array(width * height * 4);
 		for (let y = 0; y < height; y++) {
 			for (let x = 0; x < width; x++) {
 				if (((y >> 3) & 1) == ((x >> 3) & 1)) {
@@ -236,7 +260,7 @@
 				}
 			}
 		}
-		*/
+		
 
 		const texture = gl.createTexture()!;
 		gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -248,12 +272,12 @@
 			gl.TEXTURE_2D,
 			0,
 			gl.RGBA,
-			HPIXELS,
-			VPIXELS,
+			width,
+			height,
 			0,
 			gl.RGBA,
 			gl.UNSIGNED_BYTE,
-			null
+			pixels
 		);
 
 		return texture;
@@ -265,8 +289,6 @@
 		const buffer = gl.createBuffer()!;
 		gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 		gl.bufferData(gl.ARRAY_BUFFER, values, gl.STATIC_DRAW);
-
-		return buffer;
 	}
 
 	function setAttribute(program: WebGLProgram, attribute: string) {
@@ -286,6 +308,30 @@
 		if ($amiga != undefined) {
 			updateTexture();
 
+			// Compute the merge texture
+
+			// Render to the framebuffer
+			const fb = gl.createFramebuffer();
+			gl.activeTexture(gl.TEXTURE0);
+			gl.bindTexture(gl.TEXTURE_2D, lfTexture);
+			gl.bindFramebuffer(gl.FRAMEBUFFER, fb); 
+			gl.viewport(0, 0, HPIXELS, 2 * VPIXELS);
+			gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, mergeTexture, 0);
+
+			gl.useProgram(newShaderProgram);
+			gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+			
+			
+			// Render to the canvas
+			gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+			gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+			// gl.activeTexture(gl.TEXTURE0);
+			gl.bindTexture(gl.TEXTURE_2D, mergeTexture);
+			gl.useProgram(shaderProgram);
+			gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+			
+
+			/*
 			// Compute the merge texture
 			if (currLOF == prevLOF) {
 				if (currLOF) {
@@ -318,9 +364,10 @@
 					flickerCnt += 1;
 				}
 			}
+			*/
 
 			// Draw rectangle
-			gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+			// gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 		} else {
 			console.log('Skipping draw: Store not yet initialized');
 		}
@@ -342,9 +389,11 @@
 			const tex = new Uint8Array($vAmiga.HEAPU8.buffer, noise, w * h * 4);
 			if (currLOF) {
 				gl.activeTexture(gl.TEXTURE0);
+				gl.bindTexture(gl.TEXTURE_2D, lfTexture);
 				gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, tex);
 			} else {
 				gl.activeTexture(gl.TEXTURE1);
+				gl.bindTexture(gl.TEXTURE_2D, sfTexture);
 				gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, tex);
 			}
 		} else {
