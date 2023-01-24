@@ -23,8 +23,8 @@
 	let textureCoordBuffer: WebGLBuffer;
 
 	// Shaders
-	let shaderProgram: WebGLProgram;
-	let newShaderProgram: WebGLProgram;
+	let mainShaderProgram: WebGLProgram;
+	let mergeShaderProgram: WebGLProgram;
 
 	// Textures
 	let lfTexture: WebGLTexture;
@@ -38,7 +38,7 @@
 	let lfSampler: WebGLUniformLocation;
 	let sampler: WebGLUniformLocation;
 
-	const vsSource = `
+	const vertexShaderSource = `
     	attribute vec4 aVertexPosition;
     	attribute vec2 aTextureCoord;
     	varying highp vec2 vTextureCoord;
@@ -48,7 +48,7 @@
     	}
    	`;
 
-	const mergeSource = `		
+	const mergeShaderSource = `		
 		precision mediump float;
 
 		varying highp vec2 vTextureCoord;
@@ -71,7 +71,7 @@
 		}
    `;
 
-	const fsSource = `		
+	const mainShaderSource = `		
 		precision mediump float;
     
 		varying highp vec2 vTextureCoord;
@@ -110,28 +110,28 @@
 		gl.clear(gl.COLOR_BUFFER_BIT);
 
 		// Create the shader program
-		shaderProgram = compileProgram(vsSource, fsSource);
-		newShaderProgram = compileProgram(vsSource, mergeSource);
+		mergeShaderProgram = compileProgram(vertexShaderSource, mergeShaderSource);
+		mainShaderProgram = compileProgram(vertexShaderSource, mainShaderSource);
 
 		// Setup the vertex coordinate buffer
 		const vCoords = new Float32Array([1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0]);
 		createBuffer(vCoords);
-		setAttribute(shaderProgram, 'aVertexPosition');
-		setAttribute(newShaderProgram, 'aVertexPosition');
+		setAttribute(mainShaderProgram, 'aVertexPosition');
+		setAttribute(mergeShaderProgram, 'aVertexPosition');
 
 		// Setup the texture coordinate buffer
 		const tCoords = new Float32Array([1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0]);
 		createBuffer(tCoords);
-		setAttribute(shaderProgram, 'aTextureCoord');
-		setAttribute(newShaderProgram, 'aTextureCoord');
+		setAttribute(mainShaderProgram, 'aTextureCoord');
+		setAttribute(mergeShaderProgram, 'aTextureCoord');
 
 		// Flip y axis to get the image right
 		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
 		// Select the active shader program
-		gl.useProgram(shaderProgram);
-		lweight = gl.getUniformLocation(shaderProgram, 'u_lweight')!;
-		sweight = gl.getUniformLocation(shaderProgram, 'u_sweight')!;
+		gl.useProgram(mainShaderProgram);
+		lweight = gl.getUniformLocation(mainShaderProgram, 'u_lweight')!;
+		sweight = gl.getUniformLocation(mainShaderProgram, 'u_sweight')!;
 
 		// Create textures
 		lfTexture = createTexture(HPIXELS, VPIXELS);
@@ -146,7 +146,7 @@
 		gl.uniform1f(lweight, 1.0);
 		*/
 
-		sampler = gl.getUniformLocation(shaderProgram, 'sampler')!;
+		sampler = gl.getUniformLocation(mainShaderProgram, 'sampler')!;
 		gl.uniform1i(sampler, 0);
 
 		/*
@@ -264,16 +264,16 @@
 			gl.bindTexture(gl.TEXTURE_2D, lfTexture);
 			gl.activeTexture(gl.TEXTURE1);
 			gl.bindTexture(gl.TEXTURE_2D, sfTexture);
-			gl.useProgram(newShaderProgram);
-			lfSampler = gl.getUniformLocation(newShaderProgram, 'u_lfSampler')!;
+			gl.useProgram(mergeShaderProgram);
+			lfSampler = gl.getUniformLocation(mergeShaderProgram, 'u_lfSampler')!;
 			gl.uniform1i(lfSampler, 0);
-			sfSampler = gl.getUniformLocation(newShaderProgram, 'u_sfSampler')!;
+			sfSampler = gl.getUniformLocation(mergeShaderProgram, 'u_sfSampler')!;
 			gl.uniform1i(sfSampler, 1);
 			gl.bindFramebuffer(gl.FRAMEBUFFER, fb); 
 			gl.viewport(0, 0, HPIXELS, 2 * VPIXELS);
 			gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, mergeTexture, 0);
 
-			gl.useProgram(newShaderProgram);
+			gl.useProgram(mergeShaderProgram);
 			gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 			
 			
@@ -282,7 +282,7 @@
 			gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 			gl.activeTexture(gl.TEXTURE0);
 			gl.bindTexture(gl.TEXTURE_2D, mergeTexture);
-			gl.useProgram(shaderProgram);
+			gl.useProgram(mainShaderProgram);
 			gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 			
 
