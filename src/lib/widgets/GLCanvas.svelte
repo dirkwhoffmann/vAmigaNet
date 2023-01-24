@@ -96,6 +96,8 @@
    `;
 
 	function initWebGL() {
+		console.log("initWebGL()");
+
 		// General WebGL options
 		const options = {
 			alpha: false,
@@ -121,9 +123,17 @@
 		gl.clearColor(0.0, 0.0, 0.0, 1.0);
 		gl.clear(gl.COLOR_BUFFER_BIT);
 
-		// Create the shader programs
+		// Create the merge shader
 		mergeShaderProgram = compileProgram(vertexShaderSource, mergeShaderSource);
+		lfWeight = gl.getUniformLocation(mergeShaderProgram, 'u_lweight')!;
+		sfWeight = gl.getUniformLocation(mergeShaderProgram, 'u_sweight')!;
+		lfSampler = gl.getUniformLocation(mergeShaderProgram, 'u_lfSampler')!;
+		sfSampler = gl.getUniformLocation(mergeShaderProgram, 'u_sfSampler')!;
+
+		// Create the main shader
 		mainShaderProgram = compileProgram(vertexShaderSource, mainShaderSource);
+		sampler = gl.getUniformLocation(mainShaderProgram, 'sampler')!;
+		gl.uniform1i(sampler, 0);
 
 		// Setup the vertex coordinate buffer
 		const vCoords = new Float32Array([1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0]);
@@ -140,24 +150,10 @@
 		// Flip y axis to get the image right
 		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
-		// Bind uniforms
-		gl.useProgram(mergeShaderProgram);
-		lfWeight = gl.getUniformLocation(mergeShaderProgram, 'u_lweight')!;
-		sfWeight = gl.getUniformLocation(mergeShaderProgram, 'u_sweight')!;
-		lfSampler = gl.getUniformLocation(mergeShaderProgram, 'u_lfSampler')!;
-		sfSampler = gl.getUniformLocation(mergeShaderProgram, 'u_sfSampler')!;
-		gl.uniform1i(lfSampler, 0);
-		gl.uniform1i(sfSampler, 1);
-
-		gl.useProgram(mainShaderProgram);
-		sampler = gl.getUniformLocation(mainShaderProgram, 'sampler')!;
-		gl.uniform1i(sampler, 0);
-
 		// Create textures
 		lfTexture = createTexture(HPIXELS, VPIXELS);
 		sfTexture = createTexture(HPIXELS, VPIXELS);
-		mergeTexture = createTexture(HPIXELS, 2 * VPIXELS);
-
+		mergeTexture = createTexture(HPIXELS, 2 * VPIXELS);		
 	}
 
 	function resizeCanvasToDisplaySize() {
@@ -177,7 +173,6 @@
 	}
 
 	function compileProgram(vSource: string, fSource: string) {
-		console.log('compile()');
 
 		const vert = compileShader(gl.VERTEX_SHADER, vSource);
 		const frag = compileShader(gl.FRAGMENT_SHADER, fSource);
@@ -190,11 +185,12 @@
 		if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
 			throw new Error(`Shader link error: ${gl.getProgramInfoLog(prog)}`);
 		}
+
+		gl.useProgram(prog);
 		return prog;
 	}
 
 	function compileShader(type: number, source: string) {
-		console.log('compileShader()');
 
 		const shader = gl.createShader(type)!;
 		gl.shaderSource(shader, source);
@@ -207,7 +203,6 @@
 	}
 
 	function createTexture(width: number, height: number) {
-		console.log('createTexture()');
 
 		/*
 		let pixels = new Uint8Array(width * height * 4);
@@ -240,8 +235,6 @@
 	}
 
 	function createBuffer(values: Float32Array) {
-		console.log('createBuffer()');
-
 		const buffer = gl.createBuffer()!;
 		gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 		gl.bufferData(gl.ARRAY_BUFFER, values, gl.STATIC_DRAW);
@@ -388,7 +381,6 @@
 	}
 
 	onMount(() => {
-		console.log('GLCanvas: onMount()');
 		initWebGL();
 		window.requestAnimationFrame(drawAnimationFrame);
 	});

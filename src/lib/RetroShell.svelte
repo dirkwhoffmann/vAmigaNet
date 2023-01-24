@@ -100,6 +100,6 @@
 	bind:this={textarea}
 	readonly
 	style="resize: none;"
-	class="font-azeret text-lg outline-0 font-normal text-blue-100 bg-gray-500/50 w-full h-full p-2"
+	class="font-azeret text-lg outline-0 font-normal text-white bg-gray-500/75 w-full h-full p-2"
 	on:keydown={onKeyDown}
 />
