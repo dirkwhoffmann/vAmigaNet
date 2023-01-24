@@ -28,24 +28,6 @@
 
 	let clipped_width = 912;
 	let clipped_height = 313;
-
-	/*
-	function draw(now) {
-		let pixels = $vAmiga.pixelBuffer();
-
-		let image_data = gl.createImageData(clipped_width, clipped_height);
-		image_data.data.set(pixels, 0);
-		gl.putImageData(image_data, 0, 0);
-	}
-
-	let stop_request_animation_frame = false;
-	function do_animation_frame(now) {
-		draw(now);
-		if (!stop_request_animation_frame) {
-			window.requestAnimationFrame(do_animation_frame);
-		}
-	}
-	*/
 </script>
 
 <body class="h-screen bg-black text-white">
@@ -58,7 +40,8 @@
 				<Button on:click={openShell} img="retroShellIcon.png" />
 			</div>
 		</div>
-		<div class="relative w-full h-full">
+		<!-- <div class="relative w-full h-full"> -->
+		<div class="relative w-[912px] h-[626px]">
 			<GLCanvas bind:this={glCanvas} />
 			{#if showShell}
 				<div
