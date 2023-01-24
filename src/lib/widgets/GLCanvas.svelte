@@ -53,38 +53,15 @@
 
 		varying highp vec2 vTextureCoord;
 	   	uniform sampler2D u_lfSampler;
+	   	uniform sampler2D u_sfSampler;
 
 		void main()
 		{
-			float y = floor(gl_FragCoord.y);
+		    vec2 coord = vTextureCoord * vec2(912.0, 2.0 * 313.0);
 
-			gl_FragColor = vec4(vTextureCoord.x,0.0,vTextureCoord.y,1.0);
-			/*
-			if (mod(y, 2.0) == 0.0) {
-				vec2 coord = vTextureCoord * (1.0,1.0);
-				gl_FragColor = texture2D(u_lfSampler, coord) * vec4(0.5,0.5,0,0.5);
-			}
-			*/
-		}
-   `;
-
-	/*
-	const mergeSource = `		
-		precision mediump float;
-
-		varying highp vec2 vTextureCoord;
-
-	   	uniform sampler2D u_lfSampler;
-		uniform sampler2D u_sfSampler;
-		uniform vec2 textureSize;
-
-		void main()
-		{
-		    vec2 unit = vec2(1.0, 1.0) / textureSize;
-		    vec2 coord = vTextureCoord / unit;
-    
-		    vec4 color;
+			vec4 color;
 		    if (mod(coord.y, 2.0) < 1.0) {
+			// if (coord.y < 313.0) {
 		        color = texture2D(u_lfSampler, vTextureCoord);
 		    } else {
 		        color = texture2D(u_sfSampler, vTextureCoord);
@@ -93,7 +70,6 @@
 		    gl_FragColor = color;
 		}
    `;
-	*/
 
 	const fsSource = `		
 		precision mediump float;
@@ -102,36 +78,8 @@
     	uniform sampler2D sampler;
     	void main() {
 			gl_FragColor = texture2D(sampler, vTextureCoord);
-			// gl_FragColor = vec4(vTextureCoord.x,vTextureCoord.y,0.0,1.0);
     	}
    `;
-
-     /*
-	const fsSource = `		
-		precision mediump float;
-    
-		varying highp vec2 vTextureCoord;
-    	uniform sampler2D u_lfSampler;
-    	uniform sampler2D u_sfSampler;
-		uniform float u_lweight;
-		uniform float u_sweight;
-    	void main() {
-
-			float y = floor(gl_FragCoord.y);
-			float w;
-			vec4 texel;
-
-			if (mod(y, 2.0) == 0.0) {
-				w = u_sweight;
-				texel = texture2D(u_sfSampler, vTextureCoord);
-			} else {
-				w = u_lweight;
-				texel = texture2D(u_lfSampler, vTextureCoord);
-			}
-    		gl_FragColor = texel * vec4(w, w, w, 1.0);    
-    	}
-   `;
-	*/
 
 	let gl: WebGL2RenderingContext;
 
@@ -314,6 +262,13 @@
 			const fb = gl.createFramebuffer();
 			gl.activeTexture(gl.TEXTURE0);
 			gl.bindTexture(gl.TEXTURE_2D, lfTexture);
+			gl.activeTexture(gl.TEXTURE1);
+			gl.bindTexture(gl.TEXTURE_2D, sfTexture);
+			gl.useProgram(newShaderProgram);
+			lfSampler = gl.getUniformLocation(newShaderProgram, 'u_lfSampler')!;
+			gl.uniform1i(lfSampler, 0);
+			sfSampler = gl.getUniformLocation(newShaderProgram, 'u_sfSampler')!;
+			gl.uniform1i(sfSampler, 1);
 			gl.bindFramebuffer(gl.FRAMEBUFFER, fb); 
 			gl.viewport(0, 0, HPIXELS, 2 * VPIXELS);
 			gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, mergeTexture, 0);
@@ -325,7 +280,7 @@
 			// Render to the canvas
 			gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 			gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-			// gl.activeTexture(gl.TEXTURE0);
+			gl.activeTexture(gl.TEXTURE0);
 			gl.bindTexture(gl.TEXTURE_2D, mergeTexture);
 			gl.useProgram(shaderProgram);
 			gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
@@ -388,22 +343,25 @@
 			// Update the GPU texture
 			const tex = new Uint8Array($vAmiga.HEAPU8.buffer, noise, w * h * 4);
 			if (currLOF) {
+				
 				gl.activeTexture(gl.TEXTURE0);
 				gl.bindTexture(gl.TEXTURE_2D, lfTexture);
 				gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, tex);
+				
 			} else {
 				gl.activeTexture(gl.TEXTURE1);
 				gl.bindTexture(gl.TEXTURE_2D, sfTexture);
 				gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, tex);
+		
 			}
 		} else {
 			// Get the emulator texture
 			const frame = $denise.getEmulatorTexture();
 
 			// Store the LOF bits
-			prevLOF = frame.prevLOF;
-			currLOF = frame.currLOF;
-
+			prevLOF = frame.prevLof;
+			currLOF = frame.currLof;
+			// console.log("LOF bits " + prevLOF + " " + currLOF);
 			// Check for duplicate frames or frame drops
 			if (frame.frameNr != prevNr + 1) {
 				console.log('Frame sync mismatch: ' + prevNr + ' -> ' + frame.frameNr);
@@ -417,9 +375,11 @@
 			const tex = new Uint8Array($vAmiga.HEAPU8.buffer, frame.data, w * h * 4);
 			if (currLOF) {
 				gl.activeTexture(gl.TEXTURE0);
+				gl.bindTexture(gl.TEXTURE_2D, lfTexture);
 				gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, tex);
 			} else {
 				gl.activeTexture(gl.TEXTURE1);
+				gl.bindTexture(gl.TEXTURE_2D, sfTexture);
 				gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, tex);
 			}
 		}
