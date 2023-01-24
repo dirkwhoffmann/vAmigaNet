@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '../../app.css';
+	import { amiga } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
@@ -7,15 +8,26 @@
 	import GLCanvas from '$lib/widgets/GLCanvas.svelte';
 	import RetroShell from '$lib/RetroShell.svelte';
 	import FaAngleLeft from 'svelte-icons/fa/FaAngleLeft.svelte';
-	
+
 	let showShell = false;
 	let glCanvas: GLCanvas;
 
 	onMount(() => {
 		console.log('onMount()');
 		glCanvas.enableDrawing = true;
-		
+
+		window.requestAnimationFrame(doAnimationFrame);
 	});
+
+	function doAnimationFrame(now: DOMHighResTimeStamp) {
+		if ($amiga != undefined) {
+			glCanvas.update(now);
+			glCanvas.render();
+		} else {
+			console.log('Skipping draw: Store not yet initialized');
+		}
+		window.requestAnimationFrame(doAnimationFrame);
+	}
 
 	function goBack() {
 		console.log('goBack()');

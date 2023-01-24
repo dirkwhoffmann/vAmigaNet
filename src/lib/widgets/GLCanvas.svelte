@@ -13,7 +13,7 @@
 	let gl: WebGL2RenderingContext;
 
 	// The currently visible area
-	let textureRect = new TextureRect;
+	let textureRect = new TextureRect();
 
 	// Indicates whether the recently drawn frames were long or short frames
 	let currLOF = true;
@@ -37,7 +37,7 @@
 	let sfSampler: WebGLUniformLocation;
 	let lfSampler: WebGLUniformLocation;
 
-	// The main shader for drawing the final texture on the canvas 
+	// The main shader for drawing the final texture on the canvas
 	let mainShaderProgram: WebGLProgram;
 	let sampler: WebGLUniformLocation;
 
@@ -100,7 +100,7 @@
    `;
 
 	function initWebGL() {
-		console.log("initWebGL()");
+		console.log('initWebGL()');
 
 		// General WebGL options
 		const options = {
@@ -157,7 +157,7 @@
 		// Create textures
 		lfTexture = createTexture(HPIXELS, VPIXELS);
 		sfTexture = createTexture(HPIXELS, VPIXELS);
-		mergeTexture = createTexture(HPIXELS, 2 * VPIXELS);		
+		mergeTexture = createTexture(HPIXELS, 2 * VPIXELS);
 	}
 
 	function resizeCanvasToDisplaySize() {
@@ -168,16 +168,15 @@
 		// Check if the canvas size matches
 		const needResize = canvas.width !== displayWidth || canvas.height !== displayHeight;
 
-		// Rectify the canvas size if not 
+		// Rectify the canvas size if not
 		if (needResize) {
 			canvas.width = displayWidth;
 			canvas.height = displayHeight;
-			console.log("Resizing canvas to " + displayWidth + " x " + displayHeight);
+			console.log('Resizing canvas to ' + displayWidth + ' x ' + displayHeight);
 		}
 	}
 
 	function compileProgram(vSource: string, fSource: string) {
-
 		const vert = compileShader(gl.VERTEX_SHADER, vSource);
 		const frag = compileShader(gl.FRAGMENT_SHADER, fSource);
 		const prog = gl.createProgram()!;
@@ -195,7 +194,6 @@
 	}
 
 	function compileShader(type: number, source: string) {
-
 		const shader = gl.createShader(type)!;
 		gl.shaderSource(shader, source);
 		gl.compileShader(shader);
@@ -207,7 +205,6 @@
 	}
 
 	function createTexture(width: number, height: number) {
-
 		/*
 		let pixels = new Uint8Array(width * height * 4);
 		for (let y = 0; y < height; y++) {
@@ -250,30 +247,20 @@
 		gl.vertexAttribPointer(a, 2, gl.FLOAT, false, 0, 0);
 	}
 
-	function drawAnimationFrame(now: DOMHighResTimeStamp) {
-		if ($amiga != undefined) {
-			draw();
-		}
-		window.requestAnimationFrame(drawAnimationFrame);
+	export function update(now: DOMHighResTimeStamp) {
+		// Rectify canvas size if needed
+		resizeCanvasToDisplaySize();
+
+		// Get the latest half-picture from the emulator
+		updateTexture();
 	}
 
-	function draw() {
-		if ($amiga != undefined) {
+	export function render() {
+		// Merge half-pictures
+		createMergeTexture();
 
-			// Rectify canvas size if needed
-			resizeCanvasToDisplaySize();
-
-			// Get the latest half-picture from the emulator
-			updateTexture();
-
-			// Merge half-pictures
-			createMergeTexture();
-
-			// Render to final texture to the canvas
-			renderFinalTexture();
-		} else {
-			console.log('Skipping draw: Store not yet initialized');
-		}
+		// Render to final texture to the canvas
+		renderFinalTexture();
 	}
 
 	function updateTexture() {
@@ -386,9 +373,7 @@
 
 	onMount(() => {
 		initWebGL();
-		window.requestAnimationFrame(drawAnimationFrame);
 	});
 </script>
 
 <canvas bind:this={canvas} style="image-rendering: pixelated" class="w-full h-full" tabindex="-1" />
-<!-- <canvas bind:this={canvas} style="image-rendering: pixelated" tabindex="-1" />-->
