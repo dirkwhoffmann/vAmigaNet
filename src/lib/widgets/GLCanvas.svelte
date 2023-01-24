@@ -54,22 +54,27 @@
 		varying highp vec2 vTextureCoord;
 	   	uniform sampler2D u_lfSampler;
 	   	uniform sampler2D u_sfSampler;
+		uniform float u_lweight;
+		uniform float u_sweight;
 
 		void main()
 		{
 		    vec2 coord = vTextureCoord * vec2(912.0, 626.0);
 			vec2 coord2 = vec2(floor(coord.x), floor(coord.y));
+			float w; 
 
 			vec4 color;
 		    if (mod(coord2.y, 2.0) == 0.0) {
 		        // color = vec4(1.0, 0.0, 0.0, 1.0); 
 				color = texture2D(u_lfSampler, vTextureCoord);
+				w = u_lweight;
 		    } else {
 		        // color = vec4(1.0, 1.0, 0.0, 1.0); 
 				color = texture2D(u_sfSampler, vTextureCoord);
+				w = u_sweight;
 		    }
 
-		    gl_FragColor = color;
+		    gl_FragColor = color * vec4(w, w, w, 1.0);
 		}
    `;
 
@@ -146,35 +151,32 @@
 		mergeTexture = createTexture(HPIXELS, 2 * VPIXELS);
 
 		// Bind uniforms
-		gl.useProgram(mainShaderProgram);
-		lweight = gl.getUniformLocation(mainShaderProgram, 'u_lweight')!;
-		sweight = gl.getUniformLocation(mainShaderProgram, 'u_sweight')!;
+		gl.useProgram(mergeShaderProgram);
+		lweight = gl.getUniformLocation(mergeShaderProgram, 'u_lweight')!;
+		sweight = gl.getUniformLocation(mergeShaderProgram, 'u_sweight')!;
 		lfSampler = gl.getUniformLocation(mergeShaderProgram, 'u_lfSampler')!;
 		sfSampler = gl.getUniformLocation(mergeShaderProgram, 'u_sfSampler')!;
+		gl.useProgram(mainShaderProgram);
 		sampler = gl.getUniformLocation(mainShaderProgram, 'sampler')!;
 		gl.uniform1i(lfSampler, 0);
 		gl.uniform1i(sfSampler, 1);
 		gl.uniform1i(sampler, 0);
-
-		resizeCanvasToDisplaySize();
 	}
 
 	function resizeCanvasToDisplaySize() {
-		// Lookup the size the browser is displaying the canvas in CSS pixels.
+		// Lookup the size the browser is displaying the canvas
 		const displayWidth = canvas.clientWidth;
 		const displayHeight = canvas.clientHeight;
 
-		// Check if the canvas is not the same size.
+		// Check if the canvas size matches
 		const needResize = canvas.width !== displayWidth || canvas.height !== displayHeight;
 
+		// Rectify the canvas size if not 
 		if (needResize) {
-			// Make the canvas the same size
 			canvas.width = displayWidth;
 			canvas.height = displayHeight;
-			console.log("New size is " + displayWidth + " x " + displayHeight);
+			console.log("Resizing canvas to " + displayWidth + " x " + displayHeight);
 		}
-
-		return needResize;
 	}
 
 	function compileProgram(vSource: string, fSource: string) {
@@ -210,6 +212,7 @@
 	function createTexture(width: number, height: number) {
 		console.log('createTexture()');
 
+		/*
 		let pixels = new Uint8Array(width * height * 4);
 		for (let y = 0; y < height; y++) {
 			for (let x = 0; x < width; x++) {
@@ -226,6 +229,7 @@
 				}
 			}
 		}
+		*/
 
 		const texture = gl.createTexture()!;
 		gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -233,7 +237,7 @@
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
 
 		return texture;
 	}
@@ -261,6 +265,10 @@
 
 	function draw() {
 		if ($amiga != undefined) {
+
+			// Rectify canvas size if needed
+			resizeCanvasToDisplaySize();
+
 			// Get the latest half-picture from the emulator
 			updateTexture();
 
