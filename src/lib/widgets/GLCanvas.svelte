@@ -8,34 +8,33 @@
 	// Reference to the canvas element
 	let canvas: HTMLCanvasElement;
 
+	// The rendering context of the canvas
+	let gl: WebGL2RenderingContext;
+
 	// Indicates whether the recently drawn frames were long or short frames
 	let currLOF = true;
 	let prevLOF = true;
 
-	// Used to determine if the GPU texture needs to be updated
-	let prevNr = 0;
+	// Frame counter
+	let frameNr = 0;
 
 	// Variable used to emulate interlace flickering
 	let flickerCnt = 0;
-
-	// Buffers
-	let vertexCoordBuffer: WebGLBuffer;
-	let textureCoordBuffer: WebGLBuffer;
-
-	// Shaders
-	let mainShaderProgram: WebGLProgram;
-	let mergeShaderProgram: WebGLProgram;
 
 	// Textures
 	let lfTexture: WebGLTexture;
 	let sfTexture: WebGLTexture;
 	let mergeTexture: WebGLTexture;
 
-	// Uniforms
-	let lweight: WebGLUniformLocation;
-	let sweight: WebGLUniformLocation;
+	// The merge shader for rendering the merge texture
+	let mergeShaderProgram: WebGLProgram;
+	let lfWeight: WebGLUniformLocation;
+	let sfWeight: WebGLUniformLocation;
 	let sfSampler: WebGLUniformLocation;
 	let lfSampler: WebGLUniformLocation;
+
+	// The main shader for drawing the final texture on the canvas 
+	let mainShaderProgram: WebGLProgram;
 	let sampler: WebGLUniformLocation;
 
 	const vertexShaderSource = `
@@ -96,8 +95,6 @@
     	}
    `;
 
-	let gl: WebGL2RenderingContext;
-
 	function initWebGL() {
 		// General WebGL options
 		const options = {
@@ -109,14 +106,12 @@
 		};
 
 		// Only proceed if WebGL2 is supported
-		/*
 		if (!(canvas.getContext('webgl2', options) instanceof WebGL2RenderingContext)) {
 			throw new Error('vAmiga Online needs WebGL2 to run.');
 		}
-		*/
 
 		// Store the context for further use
-		gl = canvas.getContext('webgl2') as WebGL2RenderingContext;
+		gl = canvas.getContext('webgl2', options) as WebGL2RenderingContext;
 		gl.disable(gl.BLEND);
 		gl.disable(gl.DEPTH_TEST);
 		gl.disable(gl.SCISSOR_TEST);
@@ -126,7 +121,7 @@
 		gl.clearColor(0.0, 0.0, 0.0, 1.0);
 		gl.clear(gl.COLOR_BUFFER_BIT);
 
-		// Create the shader program
+		// Create the shader programs
 		mergeShaderProgram = compileProgram(vertexShaderSource, mergeShaderSource);
 		mainShaderProgram = compileProgram(vertexShaderSource, mainShaderSource);
 
@@ -145,22 +140,24 @@
 		// Flip y axis to get the image right
 		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
+		// Bind uniforms
+		gl.useProgram(mergeShaderProgram);
+		lfWeight = gl.getUniformLocation(mergeShaderProgram, 'u_lweight')!;
+		sfWeight = gl.getUniformLocation(mergeShaderProgram, 'u_sweight')!;
+		lfSampler = gl.getUniformLocation(mergeShaderProgram, 'u_lfSampler')!;
+		sfSampler = gl.getUniformLocation(mergeShaderProgram, 'u_sfSampler')!;
+		gl.uniform1i(lfSampler, 0);
+		gl.uniform1i(sfSampler, 1);
+
+		gl.useProgram(mainShaderProgram);
+		sampler = gl.getUniformLocation(mainShaderProgram, 'sampler')!;
+		gl.uniform1i(sampler, 0);
+
 		// Create textures
 		lfTexture = createTexture(HPIXELS, VPIXELS);
 		sfTexture = createTexture(HPIXELS, VPIXELS);
 		mergeTexture = createTexture(HPIXELS, 2 * VPIXELS);
 
-		// Bind uniforms
-		gl.useProgram(mergeShaderProgram);
-		lweight = gl.getUniformLocation(mergeShaderProgram, 'u_lweight')!;
-		sweight = gl.getUniformLocation(mergeShaderProgram, 'u_sweight')!;
-		lfSampler = gl.getUniformLocation(mergeShaderProgram, 'u_lfSampler')!;
-		sfSampler = gl.getUniformLocation(mergeShaderProgram, 'u_sfSampler')!;
-		gl.useProgram(mainShaderProgram);
-		sampler = gl.getUniformLocation(mainShaderProgram, 'sampler')!;
-		gl.uniform1i(lfSampler, 0);
-		gl.uniform1i(sfSampler, 1);
-		gl.uniform1i(sampler, 0);
 	}
 
 	function resizeCanvasToDisplaySize() {
@@ -314,13 +311,13 @@
 			currLOF = frame.currLof;
 
 			// Check for duplicate frames or frame drops
-			if (frame.frameNr != prevNr + 1) {
-				console.log('Frame sync mismatch: ' + prevNr + ' -> ' + frame.frameNr);
+			if (frame.frameNr != frameNr + 1) {
+				console.log('Frame sync mismatch: ' + frameNr + ' -> ' + frame.frameNr);
 
 				// Return immediately if we alredy have this texture
-				if (frame.frameNr == prevNr) return;
+				if (frame.frameNr == frameNr) return;
 			}
-			prevNr = frame.frameNr;
+			frameNr = frame.frameNr;
 
 			// Update the GPU texture
 			const tex = new Uint8Array($vAmiga.HEAPU8.buffer, frame.data, w * h * 4);
@@ -341,15 +338,15 @@
 			if (currLOF) {
 				// Case 1: Non-interlace mode, two long frames in a row
 				gl.useProgram(mergeShaderProgram);
-				gl.uniform1f(lweight, 1.0);
-				gl.uniform1f(sweight, 1.0);
+				gl.uniform1f(lfWeight, 1.0);
+				gl.uniform1f(sfWeight, 1.0);
 				gl.uniform1i(lfSampler, 0);
 				gl.uniform1i(sfSampler, 0);
 			} else {
 				// Case 2: Non-interlace mode, two short frames in a row
 				gl.useProgram(mergeShaderProgram);
-				gl.uniform1f(lweight, 1.0);
-				gl.uniform1f(sweight, 1.0);
+				gl.uniform1f(lfWeight, 1.0);
+				gl.uniform1f(sfWeight, 1.0);
 				gl.uniform1i(lfSampler, 1);
 				gl.uniform1i(sfSampler, 1);
 			}
@@ -363,8 +360,8 @@
 
 			if (weight) {
 				gl.useProgram(mergeShaderProgram);
-				gl.uniform1f(lweight, flickerCnt % 4 >= 2 ? 1.0 : weight);
-				gl.uniform1f(sweight, flickerCnt % 4 >= 2 ? weight : 1.0);
+				gl.uniform1f(lfWeight, flickerCnt % 4 >= 2 ? 1.0 : weight);
+				gl.uniform1f(sfWeight, flickerCnt % 4 >= 2 ? weight : 1.0);
 				flickerCnt += 1;
 			}
 		}
