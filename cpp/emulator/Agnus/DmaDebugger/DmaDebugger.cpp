@@ -83,6 +83,8 @@ DmaDebugger::setConfigItem(Option option, i64 value)
 
         case OPT_DMA_DEBUG_ENABLE:
 
+            printf("OPT_DMA_DEBUG_ENABLE: %d\n", (int)value);
+
             config.enabled = value;
             msgQueue.put(value ? MSG_DMA_DEBUG_ON : MSG_DMA_DEBUG_OFF);
             return;

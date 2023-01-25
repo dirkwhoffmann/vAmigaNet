@@ -23,7 +23,6 @@ export class AnimatedFloat {
     }
 
     move() {
-        console.log("move");
         if (this.current + this.deltaStep <= this.target) {
             this.current += this.deltaStep;
         } else if (this.current - this.deltaStep >= this.target) {            

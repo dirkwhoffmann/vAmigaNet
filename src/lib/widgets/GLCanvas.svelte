@@ -146,7 +146,7 @@
 		setAttribute(mergeShaderProgram, 'aVertexPosition');
 
 		// Setup the texture coordinate buffer
-		const tCoords = new Float32Array([1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0]);
+		const tCoords = new Float32Array([0.9, 0.9, 0.1, 0.9, 0.9, 0.1, 0.1, 0.1]);
 		tBuffer = createBuffer(tCoords);
 		setAttribute(mainShaderProgram, 'aTextureCoord');
 		setAttribute(mergeShaderProgram, 'aTextureCoord');

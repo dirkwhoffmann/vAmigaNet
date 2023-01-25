@@ -2,10 +2,10 @@ import { AnimatedFloat } from "$lib/utils/AnimatedFloat";
 
 export class TextureRect {
 
-    x1 = new AnimatedFloat(0.0);
-    y1 = new AnimatedFloat(0.0);
-    x2 = new AnimatedFloat(1.0);
-    y2 = new AnimatedFloat(1.0);
+    x1 = new AnimatedFloat(0.1);
+    y1 = new AnimatedFloat(0.1);
+    x2 = new AnimatedFloat(0.9);
+    y2 = new AnimatedFloat(0.9);
 
     animates(): boolean {
         return this.x1.animates() || this.y1.animates() || this.x2.animates() || this.y2.animates();
@@ -37,8 +37,5 @@ export class TextureRect {
         this.y1.move();
         this.x2.move();
         this.y2.move();
-        console.log("New current: " + this.x1 .current + ", " + this.y1.current + ", " + this.x2.current + ", " +this.y2.current);
-        console.log("New target: " + this.x1 .target + ", " + this.y1.target + ", " + this.x2.target + ", " +this.y2.target);
-        console.log("Animates = " + this.animates());
     }
 }

@@ -62,6 +62,32 @@ AmigaProxy::AmigaProxy()
     amiga->configure(OPT_AGNUS_REVISION, AGNUS_OCS);
 }
 
+void AmigaProxy::configure(int option, int value)
+{
+    try
+    {
+        amiga->configure((Option)option, (i64)value);
+    }
+    catch (VAError &err)
+    {
+        save(err);
+        throw;
+    }
+}
+
+void AmigaProxy::configureDrive(int option, int id, int value)
+{
+    try
+    {
+        amiga->configure((Option)option, (i64)id, (i64)value);
+    }
+    catch (VAError &err)
+    {
+        save(err);
+        throw;
+    }
+}
+
 AudioBuffers AmigaProxy::createAudioBuffers(i32 size)
 {
     assert(leftChannel.size == 0);
@@ -97,6 +123,9 @@ EMSCRIPTEN_BINDINGS(AmigaProxy)
         .function("copyAudioBuffers", &AmigaProxy::copyAudioBuffers)
         .function("pixelBuffer", &AmigaProxy::pixelBuffer)
         .function("what", &AmigaProxy::what)
+
+        .function("configure", &AmigaProxy::configure)
+        .function("configureDrive", &AmigaProxy::configureDrive)
 
         .function("hardReset", &AmigaProxy::hardReset)
         .function("softReset", &AmigaProxy::softReset)
@@ -346,4 +375,84 @@ EMSCRIPTEN_BINDINGS(Keys)
     constant("MSG_SRV_STATE", (int)MSG_SRV_STATE);
     constant("MSG_SRV_RECEIVE", (int)MSG_SRV_RECEIVE);
     constant("MSG_SRV_SEND", (int)MSG_SRV_SEND);
+    constant("OPT_VIDEO_FORMAT", (int)OPT_VIDEO_FORMAT);
+    constant("OPT_SYNC_MODE", (int)OPT_SYNC_MODE);
+    constant("OPT_PROPOSED_FPS", (int)OPT_PROPOSED_FPS);
+    constant("OPT_AGNUS_REVISION", (int)OPT_AGNUS_REVISION);
+    constant("OPT_SLOW_RAM_MIRROR", (int)OPT_SLOW_RAM_MIRROR);
+    constant("OPT_PTR_DROPS", (int)OPT_PTR_DROPS);
+    constant("OPT_DENISE_REVISION", (int)OPT_DENISE_REVISION);
+    constant("OPT_VIEWPORT_TRACKING", (int)OPT_VIEWPORT_TRACKING);
+    constant("OPT_PALETTE", (int)OPT_PALETTE);
+    constant("OPT_BRIGHTNESS", (int)OPT_BRIGHTNESS);
+    constant("OPT_CONTRAST", (int)OPT_CONTRAST);
+    constant("OPT_SATURATION", (int)OPT_SATURATION);
+    constant("OPT_DMA_DEBUG_ENABLE", (int)OPT_DMA_DEBUG_ENABLE);
+    constant("OPT_DMA_DEBUG_MODE", (int)OPT_DMA_DEBUG_MODE);
+    constant("OPT_DMA_DEBUG_OPACITY", (int)OPT_DMA_DEBUG_OPACITY);
+    constant("OPT_DMA_DEBUG_CHANNEL", (int)OPT_DMA_DEBUG_CHANNEL);
+    constant("OPT_DMA_DEBUG_COLOR", (int)OPT_DMA_DEBUG_COLOR);
+    constant("OPT_CPU_REVISION", (int)OPT_CPU_REVISION);
+    constant("OPT_CPU_DASM_REVISION", (int)OPT_CPU_DASM_REVISION);
+    constant("OPT_CPU_DASM_SYNTAX", (int)OPT_CPU_DASM_SYNTAX);
+    constant("OPT_CPU_OVERCLOCKING", (int)OPT_CPU_OVERCLOCKING);
+    constant("OPT_CPU_RESET_VAL", (int)OPT_CPU_RESET_VAL);
+    constant("OPT_RTC_MODEL", (int)OPT_RTC_MODEL);
+    constant("OPT_CHIP_RAM", (int)OPT_CHIP_RAM);
+    constant("OPT_SLOW_RAM", (int)OPT_SLOW_RAM);
+    constant("OPT_FAST_RAM", (int)OPT_FAST_RAM);
+    constant("OPT_EXT_START", (int)OPT_EXT_START);
+    constant("OPT_SAVE_ROMS", (int)OPT_SAVE_ROMS);
+    constant("OPT_SLOW_RAM_DELAY", (int)OPT_SLOW_RAM_DELAY);
+    constant("OPT_BANKMAP", (int)OPT_BANKMAP);
+    constant("OPT_UNMAPPING_TYPE", (int)OPT_UNMAPPING_TYPE);
+    constant("OPT_RAM_INIT_PATTERN", (int)OPT_RAM_INIT_PATTERN);
+    constant("OPT_DRIVE_CONNECT", (int)OPT_DRIVE_CONNECT);
+    constant("OPT_DRIVE_SPEED", (int)OPT_DRIVE_SPEED);
+    constant("OPT_LOCK_DSKSYNC", (int)OPT_LOCK_DSKSYNC);
+    constant("OPT_AUTO_DSKSYNC", (int)OPT_AUTO_DSKSYNC);
+    constant("OPT_DRIVE_TYPE", (int)OPT_DRIVE_TYPE);
+    constant("OPT_DRIVE_MECHANICS", (int)OPT_DRIVE_MECHANICS);
+    constant("OPT_DRIVE_RPM", (int)OPT_DRIVE_RPM);
+    constant("OPT_DISK_SWAP_DELAY", (int)OPT_DISK_SWAP_DELAY);
+    constant("OPT_DRIVE_PAN", (int)OPT_DRIVE_PAN);
+    constant("OPT_STEP_VOLUME", (int)OPT_STEP_VOLUME);
+    constant("OPT_POLL_VOLUME", (int)OPT_POLL_VOLUME);
+    constant("OPT_INSERT_VOLUME", (int)OPT_INSERT_VOLUME);
+    constant("OPT_EJECT_VOLUME", (int)OPT_EJECT_VOLUME);
+    constant("OPT_HDC_CONNECT", (int)OPT_HDC_CONNECT);
+    constant("OPT_HDR_TYPE", (int)OPT_HDR_TYPE);
+    constant("OPT_HDR_PAN", (int)OPT_HDR_PAN);
+    constant("OPT_HDR_STEP_VOLUME", (int)OPT_HDR_STEP_VOLUME);
+    constant("OPT_SERIAL_DEVICE", (int)OPT_SERIAL_DEVICE);
+    constant("OPT_HIDDEN_BITPLANES", (int)OPT_HIDDEN_BITPLANES);
+    constant("OPT_HIDDEN_SPRITES", (int)OPT_HIDDEN_SPRITES);
+    constant("OPT_HIDDEN_LAYERS", (int)OPT_HIDDEN_LAYERS);
+    constant("OPT_HIDDEN_LAYER_ALPHA", (int)OPT_HIDDEN_LAYER_ALPHA);
+    constant("OPT_CLX_SPR_SPR", (int)OPT_CLX_SPR_SPR);
+    constant("OPT_CLX_SPR_PLF", (int)OPT_CLX_SPR_PLF);
+    constant(" OPT_CLX_PLF_PLF", (int)OPT_CLX_PLF_PLF);
+    constant("OPT_BLITTER_ACCURACY", (int)OPT_BLITTER_ACCURACY);
+    constant("OPT_CIA_REVISION", (int)OPT_CIA_REVISION);
+    constant("OPT_TODBUG", (int)OPT_TODBUG);
+    constant(" OPT_ECLOCK_SYNCING", (int)OPT_ECLOCK_SYNCING);
+    constant("OPT_ACCURATE_KEYBOARD", (int)OPT_ACCURATE_KEYBOARD);
+    constant("OPT_PULLUP_RESISTORS", (int)OPT_PULLUP_RESISTORS);
+    constant("OPT_SHAKE_DETECTION", (int)OPT_SHAKE_DETECTION);
+    constant("OPT_MOUSE_VELOCITY", (int)OPT_MOUSE_VELOCITY);
+    constant("OPT_AUTOFIRE", (int)OPT_AUTOFIRE);
+    constant("OPT_AUTOFIRE_BULLETS", (int)OPT_AUTOFIRE_BULLETS);
+    constant("OPT_AUTOFIRE_DELAY", (int)OPT_AUTOFIRE_DELAY);
+    constant("OPT_SAMPLING_METHOD", (int)OPT_SAMPLING_METHOD);
+    constant("OPT_FILTER_TYPE", (int)OPT_FILTER_TYPE);
+    constant("OPT_FILTER_ACTIVATION", (int)OPT_FILTER_ACTIVATION);
+    constant("OPT_AUDPAN", (int)OPT_AUDPAN);
+    constant("OPT_AUDVOL", (int)OPT_AUDVOL);
+    constant("OPT_AUDVOLL", (int)OPT_AUDVOLL);
+    constant("OPT_AUDVOLR", (int)OPT_AUDVOLR);
+    constant("OPT_DIAG_BOARD", (int)OPT_DIAG_BOARD);
+    constant("OPT_SRV_PORT", (int)OPT_SRV_PORT);
+    constant("OPT_SRV_PROTOCOL", (int)OPT_SRV_PROTOCOL);
+    constant("OPT_SRV_AUTORUN", (int)OPT_SRV_AUTORUN);
+    constant("OPT_SRV_VERBOSE", (int)OPT_SRV_VERBOSE);
 }

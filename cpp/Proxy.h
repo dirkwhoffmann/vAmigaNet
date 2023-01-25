@@ -50,11 +50,15 @@ struct AmigaProxy
     Buffer<float> leftChannel;
     Buffer<float> rightChannel;
 
-    // Exception handling
+    // Handling exceptions
     int errorCode() { return ::errorCode; }
     string what() { return ::what; }
 
-    // State
+    // Configuring
+    void configure(int option, int value);
+    void configureDrive(int option, int id, int value);
+
+    // Managing state
     void hardReset() { amiga->hardReset(); }
     void softReset() { amiga->softReset(); }
 
