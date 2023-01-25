@@ -89,7 +89,7 @@ void AmigaProxy::configureDrive(int option, int id, int value)
         throw;
     }
 }
-
+/*
 AudioBuffers AmigaProxy::createAudioBuffers(i32 size)
 {
     assert(leftChannel.size == 0);
@@ -109,6 +109,53 @@ void AmigaProxy::copyAudioBuffers()
     assert(leftChannel.size && leftChannel.size == rightChannel.size);
     amiga->paula.muxer.copy(leftChannel.ptr, rightChannel.ptr, leftChannel.size);
 }
+*/
+void AmigaProxy::wasm_set_sample_rate(unsigned sample_rate)
+{
+    printf("set paula.muxer to freq= %d\n", sample_rate);
+    amiga->host.setSampleRate(sample_rate);
+    printf("amiga.host.getSampleRate()==%f\n", amiga->host.getSampleRate());
+}
+
+float sound_buffer[16384 * 2];
+u32 AmigaProxy::wasm_get_sound_buffer_address()
+{
+  return (u32)sound_buffer;
+}
+int sum_samples=0;
+unsigned AmigaProxy::wasm_copy_into_sound_buffer()
+{
+  auto count=amiga->paula.muxer.stream.count();
+  
+  auto copied_samples=0;
+  for(unsigned ipos=1024;ipos<=count;ipos+=1024)
+  {
+    amiga->paula.muxer.copy(
+    sound_buffer+copied_samples,
+     sound_buffer+copied_samples+1024, 
+     1024); 
+    copied_samples+=1024*2;
+//  printf("fillLevel (%lf)",wrapper->amiga->paula.muxer.stream.fillLevel());
+  }
+  sum_samples += copied_samples/2; 
+
+/*  printf("copyMono[%d]: ", 16);
+  for(int i=0; i<16; i++)
+  {
+    //printf("%hhu,",stream[i]);
+    printf("%f,",sound_buffer[i]);
+  }
+  printf("\n"); 
+*/
+  return copied_samples/2;
+}
+
+
+
+
+
+
+
 
 void AmigaProxy::insertDisk(const string &blob, u32 len, u8 drive)
 {
@@ -148,8 +195,13 @@ EMSCRIPTEN_BINDINGS(AmigaProxy)
     class_<AmigaProxy>("AmigaProxy")
         .constructor<>()
         .function("errorCode", &AmigaProxy::errorCode)
-        .function("createAudioBuffers", &AmigaProxy::createAudioBuffers)
-        .function("copyAudioBuffers", &AmigaProxy::copyAudioBuffers)
+
+        .function("wasm_get_sound_buffer_address", &AmigaProxy::wasm_get_sound_buffer_address)
+        .function("wasm_copy_into_sound_buffer", &AmigaProxy::wasm_copy_into_sound_buffer)
+        .function("wasm_set_sample_rate", &AmigaProxy::wasm_set_sample_rate)
+
+//        .function("createAudioBuffers", &AmigaProxy::createAudioBuffers)
+//        .function("copyAudioBuffers", &AmigaProxy::copyAudioBuffers)
         .function("what", &AmigaProxy::what)
 
         .function("configure", &AmigaProxy::configure)

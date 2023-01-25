@@ -76,8 +76,12 @@ struct AmigaProxy
     void halt() { amiga->halt(); }
 
     // Handling audio
-    AudioBuffers createAudioBuffers(i32 size);
-    void copyAudioBuffers();
+//    AudioBuffers createAudioBuffers(i32 size);
+//    void copyAudioBuffers();
+
+    void wasm_set_sample_rate(unsigned sample_rate);
+    u32 wasm_get_sound_buffer_address();
+    unsigned wasm_copy_into_sound_buffer();
 
     // Juggling disks
     void insertDisk(const string &blob, u32 len, u8 drive);
