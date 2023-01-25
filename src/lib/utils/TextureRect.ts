@@ -1,4 +1,6 @@
 import { AnimatedFloat } from "$lib/utils/AnimatedFloat";
+import { HBLANK_CNT, VBLANK_CNT, HPOS_CNT_PAL, VPOS_CNT_PAL, VPOS_CNT_NTSC, TPP } from '$lib/constants';
+import { HPOS_CNT, VPOS_CNT } from '$lib/constants';
 
 export class TextureRect {
 
@@ -12,20 +14,20 @@ export class TextureRect {
     }
 
     zoomIn(): void {
-        /*
-        let x1 = Int(4 * TPP * HBLANK_CNT)
-        let x2 = Int(4 * TPP * HPOS_CNT_PAL)
-        let y1 = Int(VBLANK_CNT)
-        let y2 = pal ? Int(VPOS_CNT_PAL) : Int(VPOS_CNT_NTSC)
-        return CGRect(x: x1, y: y1, width: x2 - x1, height: y2 - y1)
-        */
-        this.x1.set(0.1);
-        this.y1.set(0.1);
-        this.x2.set(0.9);
-        this.y2.set(0.9);
+        console.log("zoomIn");
+        const x1 = HBLANK_CNT;
+        const y1 = VBLANK_CNT + 4;
+        const x2 = HPOS_CNT_PAL;
+        const y2 = VPOS_CNT_PAL; // pal ? VPOS_CNT_PAL : VPOS_CNT_NTSC
+        this.x1.set(x1 / HPOS_CNT);
+        this.y1.set(y1 / VPOS_CNT);
+        this.x2.set(x2 / HPOS_CNT);
+        this.y2.set(y2 / VPOS_CNT);
+        console.log("New rect: " + this.x1.target + ", " + this.y1.target + ", " + this.x2.target + ", " + this.y2.target);
     }
 
     zoomOut(): void {
+        console.log("zoomOut");
         this.x1.set(0.0);
         this.y1.set(0.0);
         this.x2.set(1.0);

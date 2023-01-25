@@ -157,7 +157,7 @@
 	}
 
 	function processMsg(id: number, d1: number, d2: number, d3: number, d4: number) {
-		console.log(`Message: ${$enums.MsgTypeKey(id)}(${d1}, ${d2}, ${d3}, ${d4})`);
+		// console.log(`Message: ${$enums.MsgTypeKey(id)}(${d1}, ${d2}, ${d3}, ${d4})`);
 
 		switch (id) {
 			case $vAmiga.MSG_NONE:
