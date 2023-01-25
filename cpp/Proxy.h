@@ -4,6 +4,8 @@
 
 #include "config.h"
 #include "Amiga.h"
+#include "DMSFile.h"
+#include "EXEFile.h"
 
 using namespace emscripten;
 using namespace vamiga;
@@ -73,12 +75,12 @@ struct AmigaProxy
     void pause() { amiga->pause(); }
     void halt() { amiga->halt(); }
 
-    // Audio
+    // Handling audio
     AudioBuffers createAudioBuffers(i32 size);
     void copyAudioBuffers();
 
-    // DEPRECATED
-    u32 pixelBuffer();
+    // Juggling disks
+    void insertDisk(const string &blob, u32 len, u8 drive);
 };
 
 struct DeniseProxy

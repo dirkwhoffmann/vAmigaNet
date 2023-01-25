@@ -57,9 +57,11 @@ AmigaProxy::AmigaProxy()
     amiga->configure(OPT_AUDVOL, 0, 100);
     amiga->configure(OPT_AUDPAN, 0, 0);
 
-    amiga->configure(OPT_CHIP_RAM, 512);
+    amiga->configure(OPT_CHIP_RAM, 1024);
     amiga->configure(OPT_SLOW_RAM, 512);
     amiga->configure(OPT_AGNUS_REVISION, AGNUS_OCS);
+
+    amiga->configure(OPT_DRIVE_CONNECT, 1, true);
 }
 
 void AmigaProxy::configure(int option, int value)
@@ -108,10 +110,37 @@ void AmigaProxy::copyAudioBuffers()
     amiga->paula.muxer.copy(leftChannel.ptr, rightChannel.ptr, leftChannel.size);
 }
 
-u32 AmigaProxy::pixelBuffer()
+void AmigaProxy::insertDisk(const string &blob, u32 len, u8 drive)
 {
-    auto result = amiga->denise.pixelEngine.stablePtr();
-    return (u32)result;
+    printf("insertDisk(%d)\n", drive);
+    try
+    {
+        std::stringstream stream;
+        stream.write((const char *)blob.data(), len);
+
+        if (ADFFile::isCompatible(stream))
+        {
+            ADFFile adf{(u8 *)blob.data(), (isize)len};
+            amiga->df[drive]->swapDisk(std::make_unique<FloppyDisk>(adf));
+        }
+
+        if (EXEFile::isCompatible(stream))
+        {
+            EXEFile exe{(u8 *)blob.data(), (isize)len};
+            amiga->df[drive]->swapDisk(std::make_unique<FloppyDisk>(exe));
+        }
+
+        if (DMSFile::isCompatible(stream))
+        {
+            DMSFile dms{(u8 *)blob.data(), (isize)len};
+            amiga->df[drive]->swapDisk(std::make_unique<FloppyDisk>(dms));
+        }
+    }
+    catch (VAError &err)
+    {
+        save(err);
+        throw;
+    }
 }
 
 EMSCRIPTEN_BINDINGS(AmigaProxy)
@@ -121,7 +150,6 @@ EMSCRIPTEN_BINDINGS(AmigaProxy)
         .function("errorCode", &AmigaProxy::errorCode)
         .function("createAudioBuffers", &AmigaProxy::createAudioBuffers)
         .function("copyAudioBuffers", &AmigaProxy::copyAudioBuffers)
-        .function("pixelBuffer", &AmigaProxy::pixelBuffer)
         .function("what", &AmigaProxy::what)
 
         .function("configure", &AmigaProxy::configure)
@@ -139,7 +167,9 @@ EMSCRIPTEN_BINDINGS(AmigaProxy)
         .function("powerOff", &AmigaProxy::powerOff)
         .function("run", &AmigaProxy::run)
         .function("pause", &AmigaProxy::pause)
-        .function("halt", &AmigaProxy::halt);
+        .function("halt", &AmigaProxy::halt)
+
+        .function("insertDisk", &AmigaProxy::insertDisk);
 }
 
 //

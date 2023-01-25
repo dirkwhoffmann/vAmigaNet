@@ -104,21 +104,37 @@
 	export async function startUp() {
 		console.log('VAmiga: startUp()');
 		try {
+			// Load AROS ROM
 			let response = await fetch('roms/aros-svn55696-rom.bin');
 			let blob = await response.arrayBuffer();
 			let uint8View = new Uint8Array(blob);
 			$memory.loadRom(uint8View, blob.byteLength);
 
+			// Load AROS extension ROM
 			response = await fetch('roms/aros-svn55696-ext.bin');
 			blob = await response.arrayBuffer();
 			uint8View = new Uint8Array(blob);
 			$memory.loadExt(uint8View, blob.byteLength);
 
-			console.log('Aros ROM loaded');
+			// Insert some test disks
+			response = await fetch('adf/BatmanRises1.adf');
+			blob = await response.arrayBuffer();
+			uint8View = new Uint8Array(blob);
+			console.log("Inserting");
+			$amiga.insertDisk(uint8View, blob.byteLength, 0);
+
+			response = await fetch('adf/BatmanRises2.adf');
+			blob = await response.arrayBuffer();
+			uint8View = new Uint8Array(blob);
+			$amiga.insertDisk(uint8View, blob.byteLength, 1);
+
+			$amiga.run();
+
 		} catch (exc) {
 			reportException();
 		}
 	}
+	/*
 	export function pixelBuffer()
 	{
 		let pixels_ptr=$amiga.pixelBuffer();
@@ -126,7 +142,7 @@
 		return pixels;
 
 	}
-
+	*/
 	export function onRuntimeInitialized() {
 		console.log('Creating proxies...');
 

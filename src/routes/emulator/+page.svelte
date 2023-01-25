@@ -9,7 +9,6 @@
 	import GLCanvas from '$lib/widgets/GLCanvas.svelte';
 	import RetroShell from '$lib/RetroShell.svelte';
 	import FaAngleLeft from 'svelte-icons/fa/FaAngleLeft.svelte';
-	import { text } from 'svelte/internal';
 
 	// Component references
 	let glCanvas: GLCanvas;
@@ -74,9 +73,6 @@
 			$amiga.configure($vAmiga.OPT_DMA_DEBUG_ENABLE, 1);
 		}
 	}
-
-	let clipped_width = 912;
-	let clipped_height = 313;
 </script>
 
 <body class="h-screen bg-black text-white">
