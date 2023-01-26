@@ -9,7 +9,6 @@
 	import GLCanvas from '$lib/widgets/GLCanvas.svelte';
 	import RetroShell from '$lib/RetroShell.svelte';
 	import FaAngleLeft from 'svelte-icons/fa/FaAngleLeft.svelte';
-	import AudioNode from '$lib/audio/AudioNode.svelte';
 
 	// Component references
 	let glCanvas: GLCanvas;
@@ -89,7 +88,6 @@
 		</div>
 		<!-- <div class="relative w-full h-full"> -->
 		<div class="relative w-[912px] h-[626px]">
-			<AudioNode/>
 			<GLCanvas bind:this={glCanvas} />
 			{#if showShell}
 				<div

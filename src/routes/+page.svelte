@@ -33,21 +33,15 @@
 		const sampleRate = audioContext.sampleRate;
 		console.log("Sample rate = " + sampleRate);
 		console.log("Channels: ", audioContext.destination.channelCount); 
-		$amiga.wasm_set_sample_rate(audioContext.sampleRate);
+		$amiga.setSampleRate(audioContext.sampleRate);
 		console.log("Adding audio processor...");
 		await audioContext.audioWorklet.addModule('js/white-noise-processor.js');
-		console.log("Added");
 		const whiteNoiseNode = new AudioWorkletNode(audioContext, 'white-noise-processor', {outputChannelCount : [2]});
-		// const port = whiteNoiseNode.port;
 		whiteNoiseNode.port.onmessage = (e) => {
 			let offset = e.data as number; 
-			console.log("PONG: " + offset + " type = " + typeof(offset));
-			console.log("$amiga  = " + $amiga + "\n");
 			$amiga.updateAudio(e.data);
-			console.log("PONGED");
 		};
 		whiteNoiseNode.connect(audioContext.destination);
-		whiteNoiseNode.port.postMessage("ping");
 		const buffers = [ $amiga.leftChannelBuffer(), $amiga.rightChannelBuffer()];
 		whiteNoiseNode.port.postMessage({cmd: "bind", pointers:buffers, buffer:$vAmiga.HEAPF32.buffer, length:1024});
 	}
