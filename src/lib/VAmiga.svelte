@@ -103,6 +103,7 @@
 
 	export async function startUp() {
 		console.log('VAmiga: startUp()');
+
 		try {
 			// Load AROS ROM
 			let response = await fetch('roms/aros-svn55696-rom.bin');

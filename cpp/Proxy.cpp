@@ -89,6 +89,16 @@ void AmigaProxy::configureDrive(int option, int id, int value)
         throw;
     }
 }
+
+void AmigaProxy::updateAudio(int offset)
+{
+    assert(offset == 0 || offset == 1024); 
+        
+    float *left = leftChannel + offset; 
+    float *right = rightChannel + offset;
+    amiga->paula.muxer.copy(left, right, 1024); 
+}
+
 /*
 AudioBuffers AmigaProxy::createAudioBuffers(i32 size)
 {
@@ -149,13 +159,6 @@ unsigned AmigaProxy::wasm_copy_into_sound_buffer()
 */
   return copied_samples/2;
 }
-
-
-
-
-
-
-
 
 void AmigaProxy::insertDisk(const string &blob, u32 len, u8 drive)
 {
@@ -221,7 +224,11 @@ EMSCRIPTEN_BINDINGS(AmigaProxy)
         .function("pause", &AmigaProxy::pause)
         .function("halt", &AmigaProxy::halt)
 
-        .function("insertDisk", &AmigaProxy::insertDisk);
+        .function("insertDisk", &AmigaProxy::insertDisk)
+
+        .function("updateAudio", &AmigaProxy::updateAudio)
+        .function("leftChannelBuffer", &AmigaProxy::leftChannelBuffer)
+        .function("rightChannelBuffer", &AmigaProxy::rightChannelBuffer);
 }
 
 //

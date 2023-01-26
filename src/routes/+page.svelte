@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '../app.css';
+	import { vAmiga, amiga } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
@@ -12,8 +13,10 @@
 
 	let show = false;
 	let guru = true;
-	setInterval(() => { guru = !guru; }, 800);
-	$: borderColor = guru ? "border-red-800" : "border-transparent";
+	setInterval(() => {
+		guru = !guru;
+	}, 800);
+	$: borderColor = guru ? 'border-red-800' : 'border-transparent';
 
 	onMount(() => {
 		console.log('onMount()');
@@ -25,8 +28,33 @@
 		goto('#top');
 	}
 
-	function powerOn() {
+	async function setupAudio() {
+		const audioContext = new AudioContext();
+		const sampleRate = audioContext.sampleRate;
+		console.log("Sample rate = " + sampleRate);
+		console.log("Channels: ", audioContext.destination.channelCount); 
+		$amiga.wasm_set_sample_rate(audioContext.sampleRate);
+		console.log("Adding audio processor...");
+		await audioContext.audioWorklet.addModule('js/white-noise-processor.js');
+		console.log("Added");
+		const whiteNoiseNode = new AudioWorkletNode(audioContext, 'white-noise-processor', {outputChannelCount : [2]});
+		// const port = whiteNoiseNode.port;
+		whiteNoiseNode.port.onmessage = (e) => {
+			let offset = e.data as number; 
+			console.log("PONG: " + offset + " type = " + typeof(offset));
+			console.log("$amiga  = " + $amiga + "\n");
+			$amiga.updateAudio(e.data);
+			console.log("PONGED");
+		};
+		whiteNoiseNode.connect(audioContext.destination);
+		whiteNoiseNode.port.postMessage("ping");
+		const buffers = [ $amiga.leftChannelBuffer(), $amiga.rightChannelBuffer()];
+		whiteNoiseNode.port.postMessage({cmd: "bind", pointers:buffers, buffer:$vAmiga.HEAPF32.buffer, length:1024});
+	}
+
+	async function powerOn() {
 		console.log('powerOn()');
+		await setupAudio();
 		goto('/emulator');
 	}
 
@@ -39,7 +67,7 @@
 <body class="h-screen bg-black text-white scroll-smooth overflow-y-scroll">
 	<title>vAmiga Online</title>
 
-	<div id ="top" transition:fade class="bg-cover bg-transparent">
+	<div id="top" transition:fade class="bg-cover bg-transparent">
 		<div class="flex flex-col h-screen">
 			{#key show}
 				<div
@@ -81,14 +109,17 @@
 				</MainPageLink>
 			</div>
 		</div>
-		<div id="configure" class="relative border-[20px] {borderColor} h-96 flex justify-center bg-gray-900/50">
+		<div
+			id="configure"
+			class="relative border-[20px] {borderColor} h-96 flex justify-center bg-gray-900/50"
+		>
 			<div
 				class="h-full w-2/3 border-none flex flex-col justify-center text-2xl font-josefin text-center"
 			>
 				<p class="">This page is under development and most features are missing, yet.</p>
 				<p class="">
-					Eventually the user will be able to configure the hardware
-					properties of the virtual Amiga in this section.
+					Eventually the user will be able to configure the hardware properties of the virtual Amiga
+					in this section.
 				</p>
 				<div class="flex justify-center mt-10">
 					<Button on:click={understood} label="Understood" />

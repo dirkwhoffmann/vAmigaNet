@@ -49,8 +49,12 @@ struct AmigaProxy
 {
     AmigaProxy();
 
-    Buffer<float> leftChannel;
-    Buffer<float> rightChannel;
+   //  Buffer<float> leftChannel;
+   //  Buffer<float> rightChannel;
+
+    // EXPERIMENTAL
+    float leftChannel[2048]; 
+    float rightChannel[2048];
 
     // Handling exceptions
     int errorCode() { return ::errorCode; }
@@ -74,6 +78,10 @@ struct AmigaProxy
     void run() { amiga->run(); }
     void pause() { amiga->pause(); }
     void halt() { amiga->halt(); }
+
+    void updateAudio(int offset);
+    u32 leftChannelBuffer() { return (u32)leftChannel; }
+    u32 rightChannelBuffer() { return (u32)rightChannel; }
 
     // Handling audio
 //    AudioBuffers createAudioBuffers(i32 size);
