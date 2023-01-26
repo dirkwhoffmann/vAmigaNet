@@ -97,34 +97,24 @@ void AmigaProxy::setSampleRate(unsigned sample_rate)
 
 void AmigaProxy::updateAudio(int offset)
 {
-    assert(offset == 0 || offset == 1024); 
+    assert(offset == 0 || offset == leftChannel.size / 2); 
         
-    float *left = leftChannel + offset; 
-    float *right = rightChannel + offset;
-    amiga->paula.muxer.copy(left, right, 1024); 
+    float *left = leftChannel.ptr + offset; 
+    float *right = rightChannel.ptr + offset;
+    amiga->paula.muxer.copy(left, right, leftChannel.size / 2); 
 }
 
-/*
-AudioBuffers AmigaProxy::createAudioBuffers(i32 size)
-{
-    assert(leftChannel.size == 0);
-    assert(rightChannel.size == 0);
-
-    leftChannel.alloc(size);
-    rightChannel.alloc(size);
-
-    printf("Left channel buffer: %ld at %p\n", leftChannel.size, leftChannel.ptr);
-    printf("Right channel buffer: %ld at %p\n", rightChannel.size, rightChannel.ptr);
-
-    return AudioBuffers{(u32)leftChannel.ptr, (u32)rightChannel.ptr};
+u32 AmigaProxy::leftChannelBuffer() 
+{ 
+    if (leftChannel.size == 0) leftChannel.alloc(2048);
+    return (u32)leftChannel.ptr; 
 }
 
-void AmigaProxy::copyAudioBuffers()
-{
-    assert(leftChannel.size && leftChannel.size == rightChannel.size);
-    amiga->paula.muxer.copy(leftChannel.ptr, rightChannel.ptr, leftChannel.size);
+u32 AmigaProxy::rightChannelBuffer() 
+{ 
+    if (rightChannel.size == 0) rightChannel.alloc(2048);
+    return (u32)rightChannel.ptr; 
 }
-*/
 
 void AmigaProxy::insertDisk(const string &blob, u32 len, u8 drive)
 {

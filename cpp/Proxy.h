@@ -23,12 +23,6 @@ Amiga *amiga = nullptr;
 long errorCode;
 string what;
 
-typedef struct
-{
-    u32 left;
-    u32 right;
-} AudioBuffers;
-
 void save(VAError &error)
 {
     errorCode = error.data;
@@ -49,12 +43,8 @@ struct AmigaProxy
 {
     AmigaProxy();
 
-   //  Buffer<float> leftChannel;
-   //  Buffer<float> rightChannel;
-
-    // EXPERIMENTAL
-    float leftChannel[2048]; 
-    float rightChannel[2048];
+   Buffer<float> leftChannel;
+   Buffer<float> rightChannel;
 
     // Handling exceptions
     int errorCode() { return ::errorCode; }
@@ -79,15 +69,10 @@ struct AmigaProxy
     void pause() { amiga->pause(); }
     void halt() { amiga->halt(); }
 
-    void updateAudio(int offset);
-    u32 leftChannelBuffer() { return (u32)leftChannel; }
-    u32 rightChannelBuffer() { return (u32)rightChannel; }
-
-    // Handling audio
-//    AudioBuffers createAudioBuffers(i32 size);
-//    void copyAudioBuffers();
-
     void setSampleRate(unsigned sample_rate);
+    void updateAudio(int offset);
+    u32 leftChannelBuffer();
+    u32 rightChannelBuffer();
 
     // Juggling disks
     void insertDisk(const string &blob, u32 len, u8 drive);
