@@ -106,13 +106,13 @@ void AmigaProxy::updateAudio(int offset)
 
 u32 AmigaProxy::leftChannelBuffer() 
 { 
-    if (leftChannel.size == 0) leftChannel.alloc(2048);
+    if (leftChannel.size == 0) leftChannel.init(2048, 0);
     return (u32)leftChannel.ptr; 
 }
 
 u32 AmigaProxy::rightChannelBuffer() 
 { 
-    if (rightChannel.size == 0) rightChannel.alloc(2048);
+    if (rightChannel.size == 0) rightChannel.init(2048, 0);
     return (u32)rightChannel.ptr; 
 }
 

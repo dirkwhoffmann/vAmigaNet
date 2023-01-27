@@ -7,7 +7,7 @@
 	let loadWasm = false;
 	
 	onMount(() => {
-		
+
 		// Bind to emscripten 
 		window.Module = $proxy;
  
