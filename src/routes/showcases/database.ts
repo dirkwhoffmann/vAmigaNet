@@ -6,7 +6,7 @@ export const demos: DataBaseItem[] = [
         description:
             'Batman Rises is a demo released in December 2022 at Posadas Party Autumn Edition. It quickly caught public attention and is considered by many to be one of the best demos ever made for the Commodore Amiga.',
         adf: ["BatmanRises1.adf", "BatmanRises2.adf"],
-        memory: [512, 512, 0],
+        memory: [1024, 0, 0],
             locked: false
     },
     {

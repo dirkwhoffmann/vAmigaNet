@@ -8,12 +8,11 @@
 	import FaAngleLeft from 'svelte-icons/fa/FaAngleLeft.svelte';
 	import '@splidejs/svelte-splide/css';
 	import { demos, games, tools } from './database';
+	import { amiga, proxy } from '$lib/stores';
 	let show = 0;
 
-	var src = '';
-	var title = '';
-	var subtitle = '';
-	var description = '';
+	var selected: DataBaseItem = demos[0];
+	$: src = 'footage/' + selected.url + '-large.jpg';
 
 	let demoCarousel: Carousel;
 	let gamesCarousel: Carousel;
@@ -26,18 +25,15 @@
 
 	function goBack() {
 		console.log('goBack()');
-		goto('/');
+		goto("/");
 	}
 
-	function update(detail: DataBaseItem) {
-		demoCarousel.setActive(detail.title);
-		gamesCarousel.setActive(detail.title);
-		toolsCarousel.setActive(detail.title);
-		src = 'footage/' + detail.url + '-large.jpg';
-		title = detail.title;
-		subtitle = detail.subtitle;
-		description = detail.description;
-		goto('#top');
+	function update(item: DataBaseItem) {
+		demoCarousel.setActive(item.title);
+		gamesCarousel.setActive(item.title);
+		toolsCarousel.setActive(item.title);		
+		selected = item; 
+		goto("#top");
 	}
 
 	function handleMessage(event: CustomEvent) {
@@ -48,9 +44,21 @@
 	}
 
 	function runTitle() {
-		console.log("runTitle()");
+		console.log("Running " + selected.title + "...");
+		$amiga.powerOff();
+		console.log("Configuring CHIP: " + selected.memory[0]);
+		$amiga.configure($proxy.OPT_CHIP_RAM, selected.memory[0]);
+		console.log("Configuring SLOW: " + selected.memory[1]);
+		$amiga.configure($proxy.OPT_SLOW_RAM, selected.memory[1]);
+		console.log("Configuring FAST: " + selected.memory[2]);
+		$amiga.configure($proxy.OPT_FAST_RAM, selected.memory[2]);
+		for (let i = 0; i < selected.adf.length; i++) {
+			console.log("Inserting disk " + i + ": " + selected.adf[i]);
+			$proxy.insert(selected.adf[i], i);
+		}
+		$amiga.run();
+		goto("/emulator");
 	}
-
 </script>
 
 <body class="h-screen flex flex-col bg-black text-white scroll-smooth overflow-y-scroll">
@@ -72,9 +80,9 @@
 					</div>
 					<div class="">
 						<div class="absolute top-[5rem] left-10 w-full">
-							<div class="font-sofia-extra text-8xl">{title}</div>
-							<div class="font-sofia-semi text-2xl pb-10">{subtitle}</div>
-							<div class="flex font-josefin text-lg w-1/2">{description}</div>
+							<div class="font-sofia-extra text-8xl">{selected.title}</div>
+							<div class="font-sofia-semi text-2xl pb-10">{selected.subtitle}</div>
+							<div class="flex font-josefin text-lg w-1/2">{selected.description}</div>
 							<Button on:click={runTitle} label="Start" />
 						</div>
 					</div>
@@ -106,8 +114,9 @@
 			/>
 		</div>
 	</div>
-	<div class="absolute bottom-0 left-0 w-full h-32 z-40 bg-gradient-to-b from-transparent to-black">
-	</div>
+	<div
+		class="absolute bottom-0 left-0 w-full h-32 z-40 bg-gradient-to-b from-transparent to-black"
+	/>
 	<div class="absolute top-0 right-0 p-4 w-full h-32">
 		<div class="flex justify-end">
 			<button class=""><img class="h-11" src="va-icon.png" alt="vAmiga Icon" /></button>

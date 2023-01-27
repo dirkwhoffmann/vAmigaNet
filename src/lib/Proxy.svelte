@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { 
+	import {
 		proxy,
-		enums, 
-		amiga, 
+		enums,
+		amiga,
 		denise,
-		memory,  
-		retroShell, 
+		memory,
+		retroShell,
 		MsgNone,
 		MsgRegister,
 		MsgConfig,
@@ -34,7 +34,7 @@
 		MsgScriptAbort,
 		MsgScriptWakeup,
 		MsgVideoFormat,
-		MsgOverclocking, 
+		MsgOverclocking,
 		MsgBreakpointReached,
 		MsgBreakpointUpdated,
 		MsgWatchpointReached,
@@ -101,6 +101,17 @@
 		console.error('Exception ' + $amiga.errorCode() + ': ' + $amiga.what());
 	}
 
+	export async function insert(name: string, drive: number) {
+		try {
+			let response = await fetch("adf/" + name);
+			let blob = await response.arrayBuffer();
+			let uint8View = new Uint8Array(blob);
+			$amiga.insertDisk(uint8View, blob.byteLength, 0);
+		} catch (exc) {
+			reportException();
+		}
+	}
+
 	export async function startUp() {
 		console.log('VAmiga: startUp()');
 
@@ -117,6 +128,7 @@
 			uint8View = new Uint8Array(blob);
 			$memory.loadExt(uint8View, blob.byteLength);
 
+			/*
 			// Insert some test disks
 			response = await fetch('adf/BatmanRises1.adf');
 			blob = await response.arrayBuffer();
@@ -129,7 +141,7 @@
 			$amiga.insertDisk(uint8View, blob.byteLength, 1);
 
 			$amiga.run();
-
+			*/
 		} catch (exc) {
 			reportException();
 		}
