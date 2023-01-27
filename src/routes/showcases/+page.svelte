@@ -7,6 +7,7 @@
 	import Button from '$lib/widgets/Button.svelte';
 	import FaAngleLeft from 'svelte-icons/fa/FaAngleLeft.svelte';
 	import '@splidejs/svelte-splide/css';
+	import { RinkADink } from './showcases';
 
 	let show = 0;
 
@@ -151,6 +152,13 @@
 			show += 1;
 		}
 	}
+
+	function runTitle() {
+		console.log("runTitle()");
+		let title = new RinkADink;
+		title.setupEmulator();
+	}
+
 </script>
 
 <body class="h-screen flex flex-col bg-black text-white scroll-smooth overflow-y-scroll">
@@ -175,6 +183,7 @@
 							<div class="font-sofia-extra text-8xl">{title}</div>
 							<div class="font-sofia-semi text-2xl pb-10">{subtitle}</div>
 							<div class="flex font-josefin text-lg w-1/2">{description}</div>
+							<Button on:click={runTitle} label="Start" />
 						</div>
 					</div>
 				</div>
