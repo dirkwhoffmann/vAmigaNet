@@ -149,6 +149,13 @@ void AmigaProxy::insertDisk(const string &blob, u32 len, u8 drive)
     }
 }
 
+// This didn't work. I received a null pointer all the tome
+string AmigaProxy::getExceptionMessage(intptr_t exceptionPtr) {
+    printf("getExceptionMessage: %d\n", exceptionPtr);
+    // return "Hallo";
+    return std::string(reinterpret_cast<VAError *>(exceptionPtr)->what());
+}
+
 EMSCRIPTEN_BINDINGS(AmigaProxy)
 {
     class_<AmigaProxy>("AmigaProxy")
@@ -179,7 +186,9 @@ EMSCRIPTEN_BINDINGS(AmigaProxy)
         .function("setSampleRate", &AmigaProxy::setSampleRate)
         .function("updateAudio", &AmigaProxy::updateAudio)
         .function("leftChannelBuffer", &AmigaProxy::leftChannelBuffer)
-        .function("rightChannelBuffer", &AmigaProxy::rightChannelBuffer);
+        .function("rightChannelBuffer", &AmigaProxy::rightChannelBuffer)
+
+        .function("getExceptionMessage", &AmigaProxy::getExceptionMessage);
 }
 
 //

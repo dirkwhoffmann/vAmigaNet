@@ -130,23 +130,28 @@
 	}
 
 	export async function runShowcase(showcase: DataBaseItem) {
-		console.log("Setting up audio...");
+		console.log('Setting up audio...');
 		await $proxy.setupAudio();
 
-		console.log("Running " + showcase.title + "...");
-		$amiga.powerOff();
-		console.log("Configuring CHIP: " + showcase.memory[0]);
-		$amiga.configure($proxy.OPT_CHIP_RAM, showcase.memory[0]);
-		console.log("Configuring SLOW: " + showcase.memory[1]);
-		$amiga.configure($proxy.OPT_SLOW_RAM, showcase.memory[1]);
-		console.log("Configuring FAST: " + showcase.memory[2]);
-		$amiga.configure($proxy.OPT_FAST_RAM, showcase.memory[2]);
-		for (let i = 0; i < showcase.adf.length; i++) {
-			console.log("Inserting disk " + i + ": " + showcase.adf[i]);
-			$proxy.insert(showcase.adf[i], i);
+		try {
+			console.log('Running ' + showcase.title + '...');
+			$amiga.powerOff();
+			console.log('Configuring CHIP: ' + showcase.memory[0]);
+			$amiga.configure($proxy.OPT_CHIP_RAM, showcase.memory[0]);
+			console.log('Configuring SLOW: ' + showcase.memory[1]);
+			$amiga.configure($proxy.OPT_SLOW_RAM, showcase.memory[1]);
+			console.log('Configuring FAST: ' + showcase.memory[2]);
+			$amiga.configure($proxy.OPT_FAST_RAM, showcase.memory[2]);
+			for (let i = 0; i < showcase.adf.length; i++) {
+				console.log('Inserting disk ' + i + ': ' + showcase.adf[i]);
+				$proxy.insert(showcase.adf[i], i);
+			}
+			$amiga.run();
+		} catch (exception) {
+			console.log("CATCHED" + exception);
+			// console.error($amiga.getExceptionMessage(exception));
 		}
-		$amiga.run();
-		goto("/emulator");
+		goto('/emulator');
 	}
 
 	function reportException() {

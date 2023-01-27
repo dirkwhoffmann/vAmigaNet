@@ -22,6 +22,7 @@
 	onMount(() => {
 		console.log('onMount()');
 		glCanvas.enableDrawing = true;
+		textureRect.zoomIn();
 
 		window.requestAnimationFrame(doAnimationFrame);
 	});
