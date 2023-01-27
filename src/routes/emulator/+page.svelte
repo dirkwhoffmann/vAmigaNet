@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
-	import { vAmiga, amiga } from '$lib/stores';
+	import { proxy, amiga } from '$lib/stores';
 	import { TextureRect } from '$lib/utils/TextureRect';
 	import Button from '$lib/widgets/Button.svelte';
 	import GLCanvas from '$lib/widgets/GLCanvas.svelte';
@@ -67,10 +67,10 @@
 		console.log('openMonitor()');
 		if (textureRect.x2.target == 1.0) {
 			textureRect.zoomIn();
-			$amiga.configure($vAmiga.OPT_DMA_DEBUG_ENABLE, 0);
+			$amiga.configure($proxy.OPT_DMA_DEBUG_ENABLE, 0);
 		} else {
 			textureRect.zoomOut();
-			$amiga.configure($vAmiga.OPT_DMA_DEBUG_ENABLE, 1);
+			$amiga.configure($proxy.OPT_DMA_DEBUG_ENABLE, 1);
 		}
 	}
 </script>

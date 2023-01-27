@@ -1,9 +1,9 @@
 import { writable } from 'svelte/store';
 import type { Writable } from 'svelte/store';
-import type VAmiga from '$lib/VAmiga.svelte';
+import type Proxy from '$lib/Proxy.svelte';
 
 // The 'Module' of the emsdk. It is setup in +layout.svelte onmount()
-export const vAmiga: Writable<VAmiga> = writable();
+export const proxy: Writable<Proxy> = writable();
 
 // Proxies
 export const enums: any = writable();

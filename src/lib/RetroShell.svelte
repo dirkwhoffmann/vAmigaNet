@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { vAmiga, amiga, retroShell } from '$lib/stores';
+	import { proxy, amiga, retroShell } from '$lib/stores';
 	import { MsgCloseConsole, MsgUpdateConsole } from '$lib/stores';
 	import { MsgScriptDone, MsgScriptPause, MsgScriptAbort, MsgScriptWakeup } from '$lib/stores';
 	import { onMount } from 'svelte';

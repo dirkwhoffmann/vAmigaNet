@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../app.css';
-	import { vAmiga, amiga } from '$lib/stores';
+	import { proxy, amiga } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
@@ -49,7 +49,7 @@
 		whiteNoiseNode.port.postMessage({
 			cmd: 'bind',
 			pointers: buffers,
-			buffer: $vAmiga.HEAPF32.buffer,
+			buffer: $proxy.HEAPF32.buffer,
 			length: 1024
 		});
 	}
@@ -93,8 +93,8 @@
 							</div>
 							<div class="font-sofia-semi text-xl text-gray-300 pl-2 pb-10">Version 0.1</div>
 							<div class="flex space-x-5">
-								<!--<Button on:click={powerOn} label="Power On" />-->
-								<Button on:click={openShowcases} label="Run Demo" />
+								<Button on:click={powerOn} label="Power On" />
+								<!--<Button on:click={openShowcases} label="Run Demo" />-->
 								<Button on:click={gotoGitHub}><FaGithub /></Button>
 							</div>
 						</div>

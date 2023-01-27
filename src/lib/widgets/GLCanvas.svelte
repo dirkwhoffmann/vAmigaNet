@@ -1,7 +1,7 @@
 <svelte:options accessors={true} />
 
 <script lang="ts">
-	import { vAmiga, amiga, denise } from '$lib/stores';
+	import { proxy, amiga, denise } from '$lib/stores';
 	import { VPIXELS, HPIXELS, TPP } from '$lib/constants';
 	import { onMount } from 'svelte';
 
@@ -285,7 +285,7 @@
 			currLOF = !prevLOF;
 
 			// Update the GPU texture
-			const tex = new Uint8Array($vAmiga.HEAPU8.buffer, noise, w * h * 4);
+			const tex = new Uint8Array($proxy.HEAPU8.buffer, noise, w * h * 4);
 			if (currLOF) {
 				gl.activeTexture(gl.TEXTURE0);
 				gl.bindTexture(gl.TEXTURE_2D, lfTexture);
@@ -313,7 +313,7 @@
 			frameNr = frame.frameNr;
 
 			// Update the GPU texture
-			const tex = new Uint8Array($vAmiga.HEAPU8.buffer, frame.data, w * h * 4);
+			const tex = new Uint8Array($proxy.HEAPU8.buffer, frame.data, w * h * 4);
 			if (currLOF) {
 				gl.activeTexture(gl.TEXTURE0);
 				gl.bindTexture(gl.TEXTURE_2D, lfTexture);
