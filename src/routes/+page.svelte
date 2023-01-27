@@ -85,16 +85,16 @@
 			<div
 				class="relative flex justify-center border-none align-middle bg-gray-900/50 space-x-8 border-4 border-red-500"
 			>
-				<!--
 				<MainPageLink href="#configure">
 					<div slot="icon"><GoGear /></div>
 					<div slot="description">Configure</div>
 				</MainPageLink>
-				-->
+				<!--
 				<MainPageLink href="#about">
 					<div slot="icon"><FaInfoCircle /></div>
 					<div slot="description">Learn more</div>
 				</MainPageLink>
+				-->
 				<MainPageLink href="/showcases">
 					<div slot="icon"><DiGrails /></div>
 					<div slot="description">Showcase</div>
@@ -102,16 +102,18 @@
 			</div>
 		</div>
 		<div
-			id="about"
+			id="configure"
 			class="relative border-[20px] {borderColor} h-96 flex justify-center bg-gray-900/50"
 		>
 			<div
 				class="h-full w-2/3 border-none flex flex-col justify-center text-2xl font-josefin text-center"
 			>
-				<p class="">This page is under development and most features are missing, yet.</p>
 				<p class="">
-					It gives an impression how the emulator will look like. Feedback on GitHub is highly
-					appreciated.
+					This page is under construction and offers very little functionality, yet. I.e., it is
+					only possible to launch vAmiga with a number of preset demos. You'll find a suitable
+					selection in the Showcases section. The site is intended as a feature preview to gather
+					feedback from the user base. Based on the feedback I will decide to continue the project
+					or to shut it down.
 				</p>
 				<div class="flex justify-center mt-10">
 					<Button on:click={understood} label="Understood" />

@@ -1,9 +1,7 @@
 import { writable } from 'svelte/store';
-import type { Writable } from 'svelte/store';
-import type Proxy from '$lib/Proxy.svelte';
 
 // The 'Module' of the emsdk. It is setup in +layout.svelte onmount()
-export const proxy: Writable<Proxy> = writable();
+export const proxy: any = writable();
 
 // Proxies
 export const enums: any = writable();
