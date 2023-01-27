@@ -9,6 +9,7 @@
 	import FaGithub from 'svelte-icons/fa/FaGithub.svelte';
 	import GoGear from 'svelte-icons/go/GoGear.svelte';
 	import DiGrails from 'svelte-icons/di/DiGrails.svelte';
+	import FaInfoCircle from 'svelte-icons/fa/FaInfoCircle.svelte';
 	import '@splidejs/svelte-splide/css';
 
 	let show = false;
@@ -31,29 +32,38 @@
 	async function setupAudio() {
 		const audioContext = new AudioContext();
 		const sampleRate = audioContext.sampleRate;
-		console.log("Sample rate = " + sampleRate);
-		console.log("Channels: ", audioContext.destination.channelCount); 
+		console.log('Sample rate = ' + sampleRate);
+		console.log('Channels: ', audioContext.destination.channelCount);
 		$amiga.setSampleRate(audioContext.sampleRate);
-		console.log("Adding audio processor...");
+		console.log('Adding audio processor...');
 		await audioContext.audioWorklet.addModule('js/white-noise-processor.js');
-		const whiteNoiseNode = new AudioWorkletNode(audioContext, 'white-noise-processor', {outputChannelCount : [2]});
+		const whiteNoiseNode = new AudioWorkletNode(audioContext, 'white-noise-processor', {
+			outputChannelCount: [2]
+		});
 		whiteNoiseNode.port.onmessage = (e) => {
-			let offset = e.data as number; 
+			let offset = e.data as number;
 			$amiga.updateAudio(e.data);
 		};
 		whiteNoiseNode.connect(audioContext.destination);
-		const buffers = [ $amiga.leftChannelBuffer(), $amiga.rightChannelBuffer()];
-		whiteNoiseNode.port.postMessage({cmd: "bind", pointers:buffers, buffer:$vAmiga.HEAPF32.buffer, length:1024});
+		const buffers = [$amiga.leftChannelBuffer(), $amiga.rightChannelBuffer()];
+		whiteNoiseNode.port.postMessage({
+			cmd: 'bind',
+			pointers: buffers,
+			buffer: $vAmiga.HEAPF32.buffer,
+			length: 1024
+		});
 	}
 
 	async function powerOn() {
-		console.log('powerOn()');
 		await setupAudio();
 		goto('/emulator');
 	}
 
+	function openShowcases() {
+		goto('/showcases');
+	}
+
 	function gotoGitHub() {
-		console.log('gotoGitHub()');
 		goto('https://dirkwhoffmann.github.io/vAmiga');
 	}
 </script>
@@ -83,7 +93,8 @@
 							</div>
 							<div class="font-sofia-semi text-xl text-gray-300 pl-2 pb-10">Version 0.1</div>
 							<div class="flex space-x-5">
-								<Button on:click={powerOn} label="Power On" />
+								<!--<Button on:click={powerOn} label="Power On" />-->
+								<Button on:click={openShowcases} label="Run Demo" />
 								<Button on:click={gotoGitHub}><FaGithub /></Button>
 							</div>
 						</div>
@@ -93,18 +104,26 @@
 			<div
 				class="relative flex justify-center border-none align-middle bg-gray-900/50 space-x-8 border-4 border-red-500"
 			>
+				<!--
 				<MainPageLink href="#configure">
 					<div slot="icon"><GoGear /></div>
 					<div slot="description">Configure</div>
 				</MainPageLink>
+				-->
+				<MainPageLink href="#about">
+					<div slot="icon"><FaInfoCircle /></div>
+					<div slot="description">Learn more</div>
+				</MainPageLink>
+				<!--
 				<MainPageLink href="/showcases">
 					<div slot="icon"><DiGrails /></div>
 					<div slot="description">Showcase</div>
 				</MainPageLink>
+				-->
 			</div>
 		</div>
 		<div
-			id="configure"
+			id="about"
 			class="relative border-[20px] {borderColor} h-96 flex justify-center bg-gray-900/50"
 		>
 			<div
@@ -112,8 +131,7 @@
 			>
 				<p class="">This page is under development and most features are missing, yet.</p>
 				<p class="">
-					Eventually the user will be able to configure the hardware properties of the virtual Amiga
-					in this section.
+					It gives an impression how the emulator will look like. Feedback on GitHub is highly appreciated.
 				</p>
 				<div class="flex justify-center mt-10">
 					<Button on:click={understood} label="Understood" />
