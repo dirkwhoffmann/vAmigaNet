@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
+	import { demos } from './showcases/database';
 	import Button from '$lib/widgets/Button.svelte';
 	import MainPageLink from '$lib/widgets/MainPageLink.svelte';
 	import FaGithub from 'svelte-icons/fa/FaGithub.svelte';
@@ -29,33 +30,13 @@
 		goto('#top');
 	}
 
-	async function setupAudio() {
-		const audioContext = new AudioContext();
-		const sampleRate = audioContext.sampleRate;
-		console.log('Sample rate = ' + sampleRate);
-		console.log('Channels: ', audioContext.destination.channelCount);
-		$amiga.setSampleRate(audioContext.sampleRate);
-		console.log('Adding audio processor...');
-		await audioContext.audioWorklet.addModule('js/white-noise-processor.js');
-		const whiteNoiseNode = new AudioWorkletNode(audioContext, 'white-noise-processor', {
-			outputChannelCount: [2]
-		});
-		whiteNoiseNode.port.onmessage = (e) => {
-			let offset = e.data as number;
-			$amiga.updateAudio(e.data);
-		};
-		whiteNoiseNode.connect(audioContext.destination);
-		const buffers = [$amiga.leftChannelBuffer(), $amiga.rightChannelBuffer()];
-		whiteNoiseNode.port.postMessage({
-			cmd: 'bind',
-			pointers: buffers,
-			buffer: $proxy.HEAPF32.buffer,
-			length: 1024
-		});
+	async function powerOn() {
+		// await $proxy.setupAudio();
+		goto('/emulator');
 	}
 
-	async function powerOn() {
-		await setupAudio();
+	async function runDemo() {
+		await $proxy.runShowcase(demos[0]);
 		goto('/emulator');
 	}
 
@@ -93,8 +74,8 @@
 							</div>
 							<div class="font-sofia-semi text-xl text-gray-300 pl-2 pb-10">Version 0.1</div>
 							<div class="flex space-x-5">
-								<Button on:click={powerOn} label="Power On" />
-								<!--<Button on:click={openShowcases} label="Run Demo" />-->
+								<!--<Button on:click={powerOn} label="Power On" />-->
+								<Button on:click={runDemo} label="Run Demo" />
 								<Button on:click={gotoGitHub}><FaGithub /></Button>
 							</div>
 						</div>

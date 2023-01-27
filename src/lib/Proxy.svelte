@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
 	import {
 		proxy,
 		enums,
@@ -90,6 +91,8 @@
 		MsgSrvSend
 	} from '$lib/stores';
 
+	export let audioContext: AudioContext | null = null;
+
 	onMount(() => {
 		console.log('Proxy: onMount()');
 
@@ -97,16 +100,65 @@
 		$proxy.processMsg = processMsg;
 	});
 
+	export async function setupAudio() {
+		if (audioContext != null) {
+			console.log('Audio context already initialized');
+			return;
+		}
+		audioContext = new AudioContext();
+		const sampleRate = audioContext.sampleRate;
+		console.log('Sample rate = ' + sampleRate);
+		console.log('Channels: ', audioContext.destination.channelCount);
+		$amiga.setSampleRate(audioContext.sampleRate);
+		console.log('Adding audio processor...');
+		await audioContext.audioWorklet.addModule('js/white-noise-processor.js');
+		const whiteNoiseNode = new AudioWorkletNode(audioContext, 'white-noise-processor', {
+			outputChannelCount: [2]
+		});
+		whiteNoiseNode.port.onmessage = (e) => {
+			let offset = e.data as number;
+			$amiga.updateAudio(e.data);
+		};
+		whiteNoiseNode.connect(audioContext.destination);
+		const buffers = [$amiga.leftChannelBuffer(), $amiga.rightChannelBuffer()];
+		whiteNoiseNode.port.postMessage({
+			cmd: 'bind',
+			pointers: buffers,
+			buffer: $proxy.HEAPF32.buffer,
+			length: 1024
+		});
+	}
+
+	export async function runShowcase(showcase: DataBaseItem) {
+		console.log("Setting up audio...");
+		await $proxy.setupAudio();
+
+		console.log("Running " + showcase.title + "...");
+		$amiga.powerOff();
+		console.log("Configuring CHIP: " + showcase.memory[0]);
+		$amiga.configure($proxy.OPT_CHIP_RAM, showcase.memory[0]);
+		console.log("Configuring SLOW: " + showcase.memory[1]);
+		$amiga.configure($proxy.OPT_SLOW_RAM, showcase.memory[1]);
+		console.log("Configuring FAST: " + showcase.memory[2]);
+		$amiga.configure($proxy.OPT_FAST_RAM, showcase.memory[2]);
+		for (let i = 0; i < showcase.adf.length; i++) {
+			console.log("Inserting disk " + i + ": " + showcase.adf[i]);
+			$proxy.insert(showcase.adf[i], i);
+		}
+		$amiga.run();
+		goto("/emulator");
+	}
+
 	function reportException() {
 		console.error('Exception ' + $amiga.errorCode() + ': ' + $amiga.what());
 	}
 
 	export async function insert(name: string, drive: number) {
 		try {
-			let response = await fetch("adf/" + name);
+			let response = await fetch('adf/' + name);
 			let blob = await response.arrayBuffer();
 			let uint8View = new Uint8Array(blob);
-			$amiga.insertDisk(uint8View, blob.byteLength, 0);
+			$amiga.insertDisk(uint8View, blob.byteLength, drive);
 		} catch (exc) {
 			reportException();
 		}

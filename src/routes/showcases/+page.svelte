@@ -43,7 +43,11 @@
 		}
 	}
 
-	function runTitle() {
+	async function runTitle() {
+
+		console.log("Setting up audio...");
+		await $proxy.setupAudio();
+
 		console.log("Running " + selected.title + "...");
 		$amiga.powerOff();
 		console.log("Configuring CHIP: " + selected.memory[0]);
