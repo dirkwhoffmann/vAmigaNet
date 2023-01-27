@@ -2,6 +2,8 @@
 // for information about these interfaces
 // and what to do when importing types
 
+import Proxy from '$lib/Proxy.svelte';
+
 interface DataBaseItem {
 	url: string;
 	title: string;
@@ -14,4 +16,10 @@ declare namespace App {
 	// interface Locals {}
 	// interface PageData {}
 	// interface Platform {}
+}
+
+declare global {
+	interface Window {
+		Module: Proxy;
+	}
 }
