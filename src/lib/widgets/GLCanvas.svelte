@@ -161,9 +161,8 @@
 	}
 
 	export function updateTextureRect(x1: number, y1: number, x2: number, y2: number) {
-
 		// console.log("updateTextureRect(" + x1 + ", " + y1 + " ," + x2 + ", " + y2 + ")");
-		const array = new Float32Array([x1,y1, x2,y1, x1,y2, x2,y2]);
+		const array = new Float32Array([x1, y1, x2, y1, x1, y2, x2, y2]);
 		gl.bindBuffer(gl.ARRAY_BUFFER, tBuffer);
 		gl.bufferSubData(gl.ARRAY_BUFFER, 0, array);
 	}
@@ -247,7 +246,7 @@
 		const buffer = gl.createBuffer()!;
 		gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 		gl.bufferData(gl.ARRAY_BUFFER, values, gl.STATIC_DRAW);
-		return buffer; 
+		return buffer;
 	}
 
 	function setAttribute(program: WebGLProgram, attribute: string) {

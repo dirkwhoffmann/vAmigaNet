@@ -1,8 +1,11 @@
 <script lang="ts">
 	import '../../app.css';
+	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import Carousel from '$lib/Carousel.svelte';
+	import Button from '$lib/widgets/Button.svelte';
+	import FaAngleLeft from 'svelte-icons/fa/FaAngleLeft.svelte';
 	import '@splidejs/svelte-splide/css';
 
 	let show = 0;
@@ -126,6 +129,11 @@
 		update(demos[0]);
 	});
 
+	function goBack() {
+		console.log('goBack()');
+		goto('/');
+	}
+
 	function update(detail: DataBaseItem) {
 		demoCarousel.setActive(detail.title);
 		gamesCarousel.setActive(detail.title);
@@ -134,6 +142,7 @@
 		title = detail.title;
 		subtitle = detail.subtitle;
 		description = detail.description;
+		goto('#top');
 	}
 
 	function handleMessage(event: CustomEvent) {
@@ -145,37 +154,36 @@
 </script>
 
 <body class="h-screen flex flex-col bg-black text-white scroll-smooth overflow-y-scroll">
-	<div class="">
-		<img class="w-full" src="footage/blank-large.png" alt="Alt" />
-		<div class="absolute top-5 left-10 flex pb-5 z-10">
-			<a href="/" class="" title="Go to the main page">
-				<button class=""><img class="h-11" src="va-icon.png" alt="vAmiga Icon" /></button></a
-			>
-			<div class="font-sofia-extra text-3xl px-3 pt-1 text-gray-700">vAmiga Online</div>
-		</div>
-		{#key show}
-			<div in:fade={{ duration: 1000 }}>
-				<div class="">
-					<img
-						class="absolute top-0 left-0 w-full brightness-90 blur-[2px]"
-						{src}
-						alt="Background"
-					/>
-					<img class="absolute top-0 left-0  w-full" src="footage/blank-large.png" alt="Alt" />
-				</div>
-				<div class="">
-					<div class="absolute top-[5rem] left-10 w-full">
-						<div class="font-sofia-extra text-8xl">{title}</div>
-						<div class="font-sofia-semi text-2xl pb-10">{subtitle}</div>
-						<div class="flex font-josefin text-lg w-1/2">{description}</div>
+	<div id="top" class="border-none">
+		<div class="relative">
+			<img class="w-full" src="footage/blank-large.png" alt="Alt" />
+			<div class="absolute top-5 left-10 flex pb-5 z-50">
+				<Button on:click={goBack}><FaAngleLeft /></Button>
+			</div>
+			{#key show}
+				<div in:fade={{ duration: 1000 }}>
+					<div class="">
+						<img
+							class="absolute top-0 left-0 w-full brightness-90 blur-[2px]"
+							{src}
+							alt="Background"
+						/>
+						<img class="absolute top-0 left-0  w-full" src="footage/blank-large.png" alt="Alt" />
+					</div>
+					<div class="">
+						<div class="absolute top-[5rem] left-10 w-full">
+							<div class="font-sofia-extra text-8xl">{title}</div>
+							<div class="font-sofia-semi text-2xl pb-10">{subtitle}</div>
+							<div class="flex font-josefin text-lg w-1/2">{description}</div>
+						</div>
 					</div>
 				</div>
-			</div>
-		{/key}
-		<div class=" pb-2" />
+			{/key}
+			<div class="" />
+		</div>
 	</div>
-	<div class="border-none border-red-500 flex-grow overflow-scroll">
-		<img class="fixed z-50 border-none" src="footage/transparent-large.png" alt="Alt" />
+	<div class="border-none border-red-500">
+		<!-- <img class="fixed z-50 border-none" src="footage/transparent-large.png" alt="Alt" />-->
 		<div class="mt-10">
 			<Carousel
 				category="Demos"
@@ -195,6 +203,14 @@
 				items={tools}
 				on:message={handleMessage}
 			/>
+		</div>
+	</div>
+	<div class="absolute bottom-0 left-0 w-full h-32 z-40 bg-gradient-to-b from-transparent to-black">
+	</div>
+	<div class="absolute top-0 right-0 p-4 w-full h-32">
+		<div class="flex justify-end">
+			<button class=""><img class="h-11" src="va-icon.png" alt="vAmiga Icon" /></button>
+			<div class="font-sofia-extra text-3xl px-3 pt-1 text-white">vAmiga Online</div>
 		</div>
 	</div>
 </body>

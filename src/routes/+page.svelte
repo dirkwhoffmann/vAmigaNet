@@ -129,7 +129,8 @@
 			>
 				<p class="">This page is under development and most features are missing, yet.</p>
 				<p class="">
-					It gives an impression how the emulator will look like. Feedback on GitHub is highly appreciated.
+					It gives an impression how the emulator will look like. Feedback on GitHub is highly
+					appreciated.
 				</p>
 				<div class="flex justify-center mt-10">
 					<Button on:click={understood} label="Understood" />
