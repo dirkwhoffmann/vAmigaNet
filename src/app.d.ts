@@ -17,6 +17,8 @@ declare global {
 		title: string;
 		subtitle: string;
 		description: string;
+		adf: string[];
+		memory: number[];
 		locked: boolean;
 	}
 

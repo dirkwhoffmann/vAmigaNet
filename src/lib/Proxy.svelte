@@ -121,7 +121,6 @@
 			response = await fetch('adf/BatmanRises1.adf');
 			blob = await response.arrayBuffer();
 			uint8View = new Uint8Array(blob);
-			console.log("Inserting");
 			$amiga.insertDisk(uint8View, blob.byteLength, 0);
 
 			response = await fetch('adf/BatmanRises2.adf');
