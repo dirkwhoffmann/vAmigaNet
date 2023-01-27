@@ -114,12 +114,10 @@
 					<div slot="icon"><FaInfoCircle /></div>
 					<div slot="description">Learn more</div>
 				</MainPageLink>
-				<!--
 				<MainPageLink href="/showcases">
 					<div slot="icon"><DiGrails /></div>
 					<div slot="description">Showcase</div>
 				</MainPageLink>
-				-->
 			</div>
 		</div>
 		<div

@@ -4,13 +4,6 @@
 
 import Proxy from '$lib/Proxy.svelte';
 
-interface DataBaseItem {
-	url: string;
-	title: string;
-	subtitle: string;
-	description: string;
-}
-
 declare namespace App {
 	// interface Error {}
 	// interface Locals {}
@@ -19,7 +12,17 @@ declare namespace App {
 }
 
 declare global {
+	interface DataBaseItem {
+		url: string;
+		title: string;
+		subtitle: string;
+		description: string;
+		locked: boolean;
+	}
+
 	interface Window {
 		Module: Proxy;
 	}
 }
+
+export {};

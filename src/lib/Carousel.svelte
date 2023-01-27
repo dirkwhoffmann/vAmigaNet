@@ -46,6 +46,7 @@
 					bind:this={cmps[index]}
 					src="footage/{item.url}-small.jpg"
 					title={item.title}
+					locked={item.locked}
 				/>
 			</SplideSlide>
 		{/each}
