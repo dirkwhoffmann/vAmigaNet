@@ -10,7 +10,7 @@
 	import RetroShell from '$lib/RetroShell.svelte';
 	import FaAngleLeft from 'svelte-icons/fa/FaAngleLeft.svelte';
 	import Toolbar from '$lib/toolbar/Toolbar.svelte';
-	import { MsgPause } from '$lib/stores';
+	import { MsgPause, running } from '$lib/stores';
 
 	// Component references
 	let glCanvas: GLCanvas;
@@ -21,7 +21,7 @@
 
 	// The currently visible area
 	let textureRect = new TextureRect();
-
+	
 	onMount(() => {
 		console.log('onMount()');
 		glCanvas.enableDrawing = true;

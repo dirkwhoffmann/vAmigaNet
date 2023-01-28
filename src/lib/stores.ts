@@ -12,6 +12,7 @@ export const retroShell: any = writable();
 
 // State
 export const poweredOn = writable(false);
+export const running = writable(false);
 
 // Message counters
 export const MsgNone = writable(0);

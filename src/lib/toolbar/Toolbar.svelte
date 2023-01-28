@@ -3,11 +3,14 @@
 	import ToolbarSeparator from '$lib/toolbar/ToolbarSeparator.svelte';
 	import ToolbarSection from '$lib/toolbar/ToolbarSection.svelte';
 	import { fade } from 'svelte/transition';
+	import { running } from '$lib/stores';
 
 	export let bgcolor = 'bg-gray-300';
 	let tbcolor1 = 'bg-gray-500/50';
 	let tbcolor2 = 'transparent';
 	let show = true;
+
+	$: stopAndGoIcon = $running ? "icons/pauseIcon.png" : "icons/runIcon.png";
 
 	export function showToolbar() {
 		console.log('show');
@@ -59,7 +62,7 @@
 	-->
 		<ToolbarSeparator />
 		<ToolbarSection bgcolor={tbcolor2}>
-			<ToolbarItem id="pause" icon="icons/pauseIcon.png" {bgcolor} on:click />
+			<ToolbarItem id="pause" icon="{stopAndGoIcon}" {bgcolor} on:click />
 			<ToolbarItem id="reset" icon="icons/resetIcon.png" {bgcolor} on:click />
 			<ToolbarItem id="power" icon="icons/powerIcon.png" {bgcolor} on:click />
 		</ToolbarSection>
