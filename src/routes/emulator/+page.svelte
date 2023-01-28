@@ -58,10 +58,42 @@
 
 	//
 	// Event handling
-	// 
+	//
 
-	function processToolbarMsg(event: CustomEvent) {
-		console.log("Received: " + event.name);
+	function buttonClicked(e: PointerEvent) {
+		let button = e.currentTarget! as HTMLButtonElement;
+
+		console.log('id = ' + button.id);
+
+		switch (button.id) {
+			case 'retroShell':
+				showShell = !showShell;
+				break;
+			case 'monitor':
+				if ($amiga.getConfig($proxy.OPT_DMA_DEBUG_ENABLE)) {
+					textureRect.zoomIn();
+					$amiga.configure($proxy.OPT_DMA_DEBUG_ENABLE, 0);
+				} else {
+					textureRect.zoomOut();
+					$amiga.configure($proxy.OPT_DMA_DEBUG_ENABLE, 1);
+				}
+				break;
+			case 'pause':
+				$amiga.stopAndGo();
+				break;
+			case 'power':
+				if ($amiga.poweredOn()) {
+					$amiga.powerOff();
+				} else {
+					$amiga.run();
+				}
+				break;
+			case 'reset':
+				$amiga.hardReset();
+				break;
+			default:
+				console.log('Invalid id: ' + button.id);
+		}
 	}
 
 	function goBack() {
@@ -90,14 +122,7 @@
 
 	<div class="h-screen flex flex-col">
 		<!-- Toolbar -->
-		<Toolbar on:message={processToolbarMsg}/>
-		<div>
-			<div class="z-30 w-screen bg-white/30 flex space-x-2 p-2">
-				<Button on:click={goBack}><FaAngleLeft /></Button>
-				<Button on:click={openShell} img="retroShellIcon.png" />
-				<Button on:click={openMonitor} img="monitorIcon.png" />
-			</div>
-		</div>
+		<Toolbar on:click={buttonClicked} />
 		<!-- Canvas -->
 		<!-- <div class="relative w-full h-full"> -->
 		<div class="relative w-[912px] h-[626px]">

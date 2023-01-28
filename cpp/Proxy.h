@@ -53,6 +53,8 @@ struct AmigaProxy
     // Configuring
     void configure(int option, int value);
     void configureDrive(int option, int id, int value);
+    int getConfig(int option);
+    int getDriveConfig(int option, int id);
 
     // Managing state
     void hardReset() { amiga->hardReset(); }
@@ -68,6 +70,7 @@ struct AmigaProxy
     void run() { amiga->run(); }
     void pause() { amiga->pause(); }
     void halt() { amiga->halt(); }
+    void stopAndGo() { amiga->stopAndGo(); }
 
     void setSampleRate(unsigned sample_rate);
     void updateAudio(int offset);

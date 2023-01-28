@@ -90,6 +90,16 @@ void AmigaProxy::configureDrive(int option, int id, int value)
     }
 }
 
+int AmigaProxy::getConfig(int option)
+{
+    return (int)amiga->getConfigItem(option);
+}
+
+int AmigaProxy::getDriveConfig(int option, int id)
+{
+    return (int)amiga->getConfigItem(option, id);
+}
+
 void AmigaProxy::setSampleRate(unsigned sample_rate)
 {
     amiga->host.setSampleRate(sample_rate);
@@ -97,23 +107,25 @@ void AmigaProxy::setSampleRate(unsigned sample_rate)
 
 void AmigaProxy::updateAudio(int offset)
 {
-    assert(offset == 0 || offset == leftChannel.size / 2); 
-        
-    float *left = leftChannel.ptr + offset; 
+    assert(offset == 0 || offset == leftChannel.size / 2);
+
+    float *left = leftChannel.ptr + offset;
     float *right = rightChannel.ptr + offset;
-    amiga->paula.muxer.copy(left, right, leftChannel.size / 2); 
+    amiga->paula.muxer.copy(left, right, leftChannel.size / 2);
 }
 
-u32 AmigaProxy::leftChannelBuffer() 
-{ 
-    if (leftChannel.size == 0) leftChannel.init(2048, 0);
-    return (u32)leftChannel.ptr; 
+u32 AmigaProxy::leftChannelBuffer()
+{
+    if (leftChannel.size == 0)
+        leftChannel.init(2048, 0);
+    return (u32)leftChannel.ptr;
 }
 
-u32 AmigaProxy::rightChannelBuffer() 
-{ 
-    if (rightChannel.size == 0) rightChannel.init(2048, 0);
-    return (u32)rightChannel.ptr; 
+u32 AmigaProxy::rightChannelBuffer()
+{
+    if (rightChannel.size == 0)
+        rightChannel.init(2048, 0);
+    return (u32)rightChannel.ptr;
 }
 
 void AmigaProxy::insertDisk(const string &blob, u32 len, u8 drive)
@@ -150,7 +162,8 @@ void AmigaProxy::insertDisk(const string &blob, u32 len, u8 drive)
 }
 
 // This didn't work. I received a null pointer all the tome
-string AmigaProxy::getExceptionMessage(intptr_t exceptionPtr) {
+string AmigaProxy::getExceptionMessage(intptr_t exceptionPtr)
+{
     printf("getExceptionMessage: %ld\n", exceptionPtr);
     // return "Hallo";
     return std::string(reinterpret_cast<VAError *>(exceptionPtr)->what());
@@ -166,6 +179,8 @@ EMSCRIPTEN_BINDINGS(AmigaProxy)
 
         .function("configure", &AmigaProxy::configure)
         .function("configureDrive", &AmigaProxy::configureDrive)
+        .function("getConfig", &AmigaProxy::getConfig)
+        .function("getDriveConfig", &AmigaProxy::getDriveConfig)
 
         .function("hardReset", &AmigaProxy::hardReset)
         .function("softReset", &AmigaProxy::softReset)
@@ -180,6 +195,7 @@ EMSCRIPTEN_BINDINGS(AmigaProxy)
         .function("run", &AmigaProxy::run)
         .function("pause", &AmigaProxy::pause)
         .function("halt", &AmigaProxy::halt)
+        .function("stopAndGo", &AmigaProxy::stopAndGo)
 
         .function("insertDisk", &AmigaProxy::insertDisk)
 

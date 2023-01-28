@@ -2,9 +2,9 @@
 	import ToolbarItem from '$lib/toolbar/ToolbarItem.svelte';
 	import ToolbarSeparator from '$lib/toolbar/ToolbarSeparator.svelte';
 	import ToolbarSection from '$lib/toolbar/ToolbarSection.svelte';
-	import { showShell } from '$lib/stores';
 	import { createEventDispatcher } from 'svelte';
 
+	/*
 	import {
 		proxy,
 		enums,
@@ -16,72 +16,19 @@
 		MsgPause,
 		MsgHalt
 	} from '$lib/stores';
-
-	const dispatch = createEventDispatcher();
+	*/
 
 	export let bgcolor = 'bg-red-600';
 	let tbcolor1 = 'bg-gray-300';
 	let tbcolor2 = 'bg-gray-300';
-
-	//
-	// Click handlers
-	//
-
-	function goBack() {
-		console.log('goBack()');
-		goto('/');
-	}
-
-	function buttonClicked(e: PointerEvent) {
-		console.log('buttonClicked e = ' + e);
-		console.log('target = ' + e.target);
-		console.log('id = ' + e.currentTarget!.id);
-		alert(e.currentTarget!.id);
-	}
-
-	function shellButtonClicked() {
-		console.log('shellButtonClicked');
-		dispatch('shellButtonClicked');
-		// $showShell = !$showShell;
-	}
-
-	function monitorButtonClicked() {
-		console.log('monitorButtonClicked');
-		dispatch('monitorButtonClicked');
-
-		/*
-		if (textureRect.x2.target == 1.0) {
-			textureRect.zoomIn();
-			$amiga.configure($proxy.OPT_DMA_DEBUG_ENABLE, 0);
-		} else {
-			textureRect.zoomOut();
-			$amiga.configure($proxy.OPT_DMA_DEBUG_ENABLE, 1);
-		}
-		*/
-	}
-
-	function pauseButtonClicked() {
-		console.log('pauseButtonClicked');
-		dispatch('pauseButtonClicked');
-	}
-
-	function resetButtonClicked() {
-		console.log('resetButtonClicked');
-		dispatch('resetButtonClicked');
-	}
-
-	function powerButtonClicked() {
-		console.log('powertButtonClicked');
-		dispatch('powertButtonClicked');
-	}
 </script>
 
 <div class="{bgcolor} flex w-screen justify-between p-0">
 	<!--<ToolbarSeparator />-->
 	<ToolbarSection bgcolor={tbcolor2}>
 		<!--<ToolbarItem iconName="inspectorIcon" />-->
-		<ToolbarItem id="retroShell" iconName="retroShellIcon" on:click={buttonClicked} />
-		<ToolbarItem iconName="monitorIcon" on:click={monitorButtonClicked} />
+		<ToolbarItem id="retroShell" iconName="retroShellIcon" on:click />
+		<ToolbarItem id="monitor" iconName="monitorIcon" on:click />
 	</ToolbarSection>
 	<!-- <ToolbarSeparator />-->
 	<!--
@@ -110,8 +57,8 @@
 	-->
 	<ToolbarSeparator />
 	<ToolbarSection bgcolor={tbcolor2}>
-		<ToolbarItem iconName="pauseIcon" on:click={pauseButtonClicked} />
-		<ToolbarItem iconName="resetIcon" on:click={resetButtonClicked} />
-		<ToolbarItem iconName="powerIcon" on:click={powerButtonClicked} />
+		<ToolbarItem id="pause" iconName="pauseIcon" on:click />
+		<ToolbarItem id="reset" iconName="resetIcon" on:click />
+		<ToolbarItem id="power" iconName="powerIcon" on:click />
 	</ToolbarSection>
 </div>
