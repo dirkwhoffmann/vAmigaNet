@@ -151,7 +151,7 @@ void AmigaProxy::insertDisk(const string &blob, u32 len, u8 drive)
 
 // This didn't work. I received a null pointer all the tome
 string AmigaProxy::getExceptionMessage(intptr_t exceptionPtr) {
-    printf("getExceptionMessage: %d\n", exceptionPtr);
+    printf("getExceptionMessage: %ld\n", exceptionPtr);
     // return "Hallo";
     return std::string(reinterpret_cast<VAError *>(exceptionPtr)->what());
 }
