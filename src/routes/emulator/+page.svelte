@@ -13,6 +13,7 @@
 
 	// Component references
 	let glCanvas: GLCanvas;
+	let toolbar: Toolbar; 
 
 	// Indicates if RetroShell should be displayed
 	let showShell = false;
@@ -98,15 +99,39 @@
 				console.log('Invalid id: ' + button.id);
 		}
 	}
+
+	let m = { x: 0, y: 0 };
+
+	function handleMousemove(event) {
+
+		const threshold = 50;
+
+		if (m.y >= threshold && event.clientY < threshold) { 
+			console.log("-> SHOW");
+			toolbar.showToolbar();
+		} 
+		if (m.y < threshold && event.clientY >= threshold) {
+			console.log("-> HIDE");
+			toolbar.hideToolbar();
+		}
+		m.x = event.clientX;
+		m.y = event.clientY;
+	}
 </script>
 
-<body class="h-screen bg-black text-white">
+<body class="h-screen bg-black text-white"  on:mousemove={handleMousemove}>
 	<title>vAmiga Online</title>
+
+	<!--
+	<div>
+		The mouse position is {m.x} x {m.y}
+	</div>
+	-->
 
 	<div class="h-screen flex flex-col">
 		<!-- Canvas -->
 		<!-- <div class="relative w-full h-full"> -->
-		<div class="border-4 w-[912px] h-[626px]">
+		<div class="border-none w-[912px] h-[626px]">
 			<GLCanvas bind:this={glCanvas} />
 			<!-- Retro Shell -->
 			{#if showShell}
@@ -120,7 +145,7 @@
 		</div>
 		<!-- Toolbar -->
 		<div class="absolute top-0 left-0">
-			<Toolbar on:click={buttonClicked} />
+			<Toolbar bind:this={toolbar} on:click={buttonClicked} />
 		</div>
 	</div>
 </body>
