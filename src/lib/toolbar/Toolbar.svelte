@@ -4,31 +4,18 @@
 	import ToolbarSection from '$lib/toolbar/ToolbarSection.svelte';
 	import { createEventDispatcher } from 'svelte';
 
-	/*
-	import {
-		proxy,
-		enums,
-		amiga,
-		retroShell,
-		MsgPowerOn,
-		MsgPowerOff,
-		MsgRun,
-		MsgPause,
-		MsgHalt
-	} from '$lib/stores';
-	*/
-
-	export let bgcolor = 'bg-gray-200';
+	export let bgcolor = 'bg-gray-300';
 	let tbcolor1 = 'bg-gray-500/50';
 	let tbcolor2 = 'transparent';
 </script>
 
-<div class="bg-gray-300/50 flex w-screen justify-between p-0">
+<div class="bg-gray-500/80 flex w-screen justify-between p-0">
 	<!--<ToolbarSeparator />-->
 	<ToolbarSection bgcolor={tbcolor2}>
+		<ToolbarItem id="home" icon="icons/homeIcon.png" {bgcolor} on:click />
 		<!--<ToolbarItem iconName="inspectorIcon" />-->
-		<ToolbarItem id="retroShell" iconName="retroShellIcon" {bgcolor} on:click />
-		<ToolbarItem id="monitor" iconName="monitorIcon" {bgcolor} on:click />
+		<ToolbarItem id="retroShell" icon="icons/retroShellIcon.png" {bgcolor} on:click />
+		<ToolbarItem id="monitor" icon="icons/monitorIcon.png" {bgcolor} on:click />
 	</ToolbarSection>
 	<!-- <ToolbarSeparator />-->
 	<!--
@@ -57,8 +44,8 @@
 	-->
 	<ToolbarSeparator />
 	<ToolbarSection bgcolor={tbcolor2}>
-		<ToolbarItem id="pause" iconName="pauseIcon" {bgcolor} on:click />
-		<ToolbarItem id="reset" iconName="resetIcon" {bgcolor} on:click />
-		<ToolbarItem id="power" iconName="powerIcon" {bgcolor} on:click />
+		<ToolbarItem id="pause" icon="icons/pauseIcon.png" {bgcolor} on:click />
+		<ToolbarItem id="reset" icon="icons/resetIcon.png" {bgcolor} on:click />
+		<ToolbarItem id="power" icon="icons/powerIcon.png" {bgcolor} on:click />
 	</ToolbarSection>
 </div>

@@ -9,7 +9,7 @@
 	export let cssVar = 'unset';
 	export let active = false;
 	export let title = '';
-	export let iconName = '';
+	export let icon = '';
 	export let id = '';
 </script>
 
@@ -23,6 +23,6 @@
 	on:click
 	class:active
 >
-	<img class="" src="{iconName}.png" alt="Power Icon" />
+	<img class="" src="{icon}" alt="Power Icon" />
 	<slot />
 </button>

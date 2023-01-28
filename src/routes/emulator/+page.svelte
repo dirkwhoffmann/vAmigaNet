@@ -66,6 +66,9 @@
 		console.log('id = ' + button.id);
 
 		switch (button.id) {
+			case 'home':
+				goto('/');
+				break;
 			case 'retroShell':
 				showShell = !showShell;
 				break;
@@ -94,11 +97,6 @@
 			default:
 				console.log('Invalid id: ' + button.id);
 		}
-	}
-
-	function goBack() {
-		console.log('goBack()');
-		goto('/');
 	}
 </script>
 
