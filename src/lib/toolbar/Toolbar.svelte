@@ -32,10 +32,11 @@
 		goto('/');
 	}
 
-	function buttonClicked(e: Event) {
+	function buttonClicked(e: PointerEvent) {
 		console.log('buttonClicked e = ' + e);
 		console.log('target = ' + e.target);
-		console.log('id = ' + e.target.id);
+		console.log('id = ' + e.currentTarget!.id);
+		alert(e.currentTarget!.id);
 	}
 
 	function shellButtonClicked() {
