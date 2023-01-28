@@ -90,6 +90,7 @@
 		MsgSrvReceive,
 		MsgSrvSend
 	} from '$lib/stores';
+	import { poweredOn } from '$lib/stores';
 
 	export let audioContext: AudioContext | null = null;
 
@@ -236,10 +237,12 @@
 
 			case $proxy.MSG_POWER_ON:
 				$MsgPowerOn++;
+				$poweredOn = true;
 				break;
 
 			case $proxy.MSG_POWER_OFF:
 				$MsgPowerOff++;
+				$poweredOn = false;
 				break;
 
 			case $proxy.MSG_RUN:

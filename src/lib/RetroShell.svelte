@@ -3,7 +3,7 @@
 	import { MsgCloseConsole, MsgUpdateConsole } from '$lib/stores';
 	import { MsgScriptDone, MsgScriptPause, MsgScriptAbort, MsgScriptWakeup } from '$lib/stores';
 	import { onMount } from 'svelte';
-
+	
 	let ready = false; 
 
 	// Console contents

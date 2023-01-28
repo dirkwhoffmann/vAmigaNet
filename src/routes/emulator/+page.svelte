@@ -10,10 +10,11 @@
 	import RetroShell from '$lib/RetroShell.svelte';
 	import FaAngleLeft from 'svelte-icons/fa/FaAngleLeft.svelte';
 	import Toolbar from '$lib/toolbar/Toolbar.svelte';
+	import { MsgPause } from '$lib/stores';
 
 	// Component references
 	let glCanvas: GLCanvas;
-	let toolbar: Toolbar; 
+	let toolbar: Toolbar;
 
 	// Indicates if RetroShell should be displayed
 	let showShell = false;
@@ -103,15 +104,14 @@
 	let m = { x: 0, y: 0 };
 
 	function handleMousemove(event) {
-
 		const threshold = 50;
 
-		if (m.y >= threshold && event.clientY < threshold) { 
-			console.log("-> SHOW");
+		if (m.y >= threshold && event.clientY < threshold) {
+			console.log('-> SHOW');
 			toolbar.showToolbar();
-		} 
+		}
 		if (m.y < threshold && event.clientY >= threshold) {
-			console.log("-> HIDE");
+			console.log('-> HIDE');
 			toolbar.hideToolbar();
 		}
 		m.x = event.clientX;
@@ -119,7 +119,7 @@
 	}
 </script>
 
-<body class="h-screen bg-black text-white"  on:mousemove={handleMousemove}>
+<body class="h-screen bg-black text-white" on:mousemove={handleMousemove}>
 	<title>vAmiga Online</title>
 
 	<!--

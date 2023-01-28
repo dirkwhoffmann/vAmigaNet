@@ -12,6 +12,7 @@
 	import DiGrails from 'svelte-icons/di/DiGrails.svelte';
 	import FaInfoCircle from 'svelte-icons/fa/FaInfoCircle.svelte';
 	import '@splidejs/svelte-splide/css';
+	import { poweredOn } from '$lib/stores';
 
 	let show = false;
 	let guru = true;
@@ -20,8 +21,11 @@
 	}, 800);
 	$: borderColor = guru ? 'border-red-800' : 'border-transparent';
 
+	let buttonText = 'Run Demo';
+
 	onMount(() => {
-		console.log('onMount()');
+		console.log('+page: onMount()');
+		buttonText = $poweredOn ? "Continue" : "Run Demo";
 		show = true;
 	});
 
@@ -36,7 +40,9 @@
 	}
 
 	async function runDemo() {
-		await $proxy.runShowcase(demos[0]);
+		if (!$poweredOn) {
+			await $proxy.runShowcase(demos[0]);
+		}
 		goto('/emulator');
 	}
 
@@ -75,7 +81,7 @@
 							<div class="font-sofia-semi text-xl text-gray-300 pl-2 pb-10">Version 0.1</div>
 							<div class="flex space-x-5">
 								<!--<Button on:click={powerOn} label="Power On" />-->
-								<Button on:click={runDemo} label="Run Demo" />
+								<Button on:click={runDemo} label="{buttonText}" />
 								<Button on:click={gotoGitHub}><FaGithub /></Button>
 							</div>
 						</div>

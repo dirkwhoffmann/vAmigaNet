@@ -1,20 +1,19 @@
 <script lang="ts">
-
 	import { onMount } from 'svelte';
 	import { proxy } from '$lib/stores';
 	import Proxy from '$lib/Proxy.svelte';
 
 	let loadWasm = false;
-	
-	onMount(() => {
 
-		// Bind to emscripten 
+	onMount(() => {
+		console.log('+layout: onMount()');
+
+		// Bind to emscripten
 		window.Module = $proxy;
- 
-		// Let the script source in vAmiga.js 
+
+		// Let the script source in vAmiga.js
 		loadWasm = true;
 	});
-
 </script>
 
 <svelte:head>
