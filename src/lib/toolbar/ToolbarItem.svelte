@@ -15,7 +15,7 @@
 
 <button
 	type="button"
-	class="flex-none mx-px w-8 rounded {bgcolor} p-1.5 text-white hover:shadow-lg hover:text-gray-200 hover:scale-110"
+	class="flex-none mx-px w-8 rounded {bgcolor} p-1.5 text-white hover:bg-gray-100 hover:scale-100"
 	class:hasIcon
 	{id}
 	{title}

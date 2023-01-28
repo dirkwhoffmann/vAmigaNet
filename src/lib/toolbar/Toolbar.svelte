@@ -18,17 +18,17 @@
 	} from '$lib/stores';
 	*/
 
-	export let bgcolor = 'bg-red-600';
-	let tbcolor1 = 'bg-gray-300';
-	let tbcolor2 = 'bg-gray-300';
+	export let bgcolor = 'bg-gray-200';
+	let tbcolor1 = 'bg-gray-500/50';
+	let tbcolor2 = 'transparent';
 </script>
 
-<div class="{bgcolor} flex w-screen justify-between p-0">
+<div class="bg-gray-300/50 flex w-screen justify-between p-0">
 	<!--<ToolbarSeparator />-->
 	<ToolbarSection bgcolor={tbcolor2}>
 		<!--<ToolbarItem iconName="inspectorIcon" />-->
-		<ToolbarItem id="retroShell" iconName="retroShellIcon" on:click />
-		<ToolbarItem id="monitor" iconName="monitorIcon" on:click />
+		<ToolbarItem id="retroShell" iconName="retroShellIcon" {bgcolor} on:click />
+		<ToolbarItem id="monitor" iconName="monitorIcon" {bgcolor} on:click />
 	</ToolbarSection>
 	<!-- <ToolbarSeparator />-->
 	<!--
@@ -57,8 +57,8 @@
 	-->
 	<ToolbarSeparator />
 	<ToolbarSection bgcolor={tbcolor2}>
-		<ToolbarItem id="pause" iconName="pauseIcon" on:click />
-		<ToolbarItem id="reset" iconName="resetIcon" on:click />
-		<ToolbarItem id="power" iconName="powerIcon" on:click />
+		<ToolbarItem id="pause" iconName="pauseIcon" {bgcolor} on:click />
+		<ToolbarItem id="reset" iconName="resetIcon" {bgcolor} on:click />
+		<ToolbarItem id="power" iconName="powerIcon" {bgcolor} on:click />
 	</ToolbarSection>
 </div>

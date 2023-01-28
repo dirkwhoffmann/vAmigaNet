@@ -100,32 +100,15 @@
 		console.log('goBack()');
 		goto('/');
 	}
-	function openShell() {
-		console.log('openShell()');
-		showShell = !showShell;
-	}
-
-	function openMonitor() {
-		console.log('openMonitor()');
-		if (textureRect.x2.target == 1.0) {
-			textureRect.zoomIn();
-			$amiga.configure($proxy.OPT_DMA_DEBUG_ENABLE, 0);
-		} else {
-			textureRect.zoomOut();
-			$amiga.configure($proxy.OPT_DMA_DEBUG_ENABLE, 1);
-		}
-	}
 </script>
 
 <body class="h-screen bg-black text-white">
 	<title>vAmiga Online</title>
 
 	<div class="h-screen flex flex-col">
-		<!-- Toolbar -->
-		<Toolbar on:click={buttonClicked} />
 		<!-- Canvas -->
 		<!-- <div class="relative w-full h-full"> -->
-		<div class="relative w-[912px] h-[626px]">
+		<div class="border-4 w-[912px] h-[626px]">
 			<GLCanvas bind:this={glCanvas} />
 			<!-- Retro Shell -->
 			{#if showShell}
@@ -136,6 +119,10 @@
 					<RetroShell />
 				</div>
 			{/if}
+		</div>
+		<!-- Toolbar -->
+		<div class="absolute top-0 left-0">
+			<Toolbar on:click={buttonClicked} />
 		</div>
 	</div>
 </body>
