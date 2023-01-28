@@ -304,7 +304,7 @@
 
 			// Check for duplicate frames or frame drops
 			if (frame.frameNr != frameNr + 1) {
-				console.log('Frame sync mismatch: ' + frameNr + ' -> ' + frame.frameNr);
+				// console.log('Frame sync mismatch: ' + frameNr + ' -> ' + frame.frameNr);
 
 				// Return immediately if we alredy have this texture
 				if (frame.frameNr == frameNr) return;

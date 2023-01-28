@@ -10,6 +10,9 @@ export const denise: any = writable();
 export const memory: any = writable();
 export const retroShell: any = writable();
 
+// State
+export const showShell = writable(false);
+
 // Message counters
 export const MsgNone = writable(0);
 export const MsgRegister = writable(0);

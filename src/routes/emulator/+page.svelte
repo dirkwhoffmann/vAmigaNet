@@ -9,6 +9,7 @@
 	import GLCanvas from '$lib/widgets/GLCanvas.svelte';
 	import RetroShell from '$lib/RetroShell.svelte';
 	import FaAngleLeft from 'svelte-icons/fa/FaAngleLeft.svelte';
+	import Toolbar from '$lib/toolbar/Toolbar.svelte';
 
 	// Component references
 	let glCanvas: GLCanvas;
@@ -55,6 +56,14 @@
 		glCanvas.render();
 	}
 
+	//
+	// Event handling
+	// 
+
+	function processToolbarMsg(event: CustomEvent) {
+		console.log("Received: " + event.name);
+	}
+
 	function goBack() {
 		console.log('goBack()');
 		goto('/');
@@ -80,6 +89,8 @@
 	<title>vAmiga Online</title>
 
 	<div class="h-screen flex flex-col">
+		<!-- Toolbar -->
+		<Toolbar on:message={processToolbarMsg}/>
 		<div>
 			<div class="z-30 w-screen bg-white/30 flex space-x-2 p-2">
 				<Button on:click={goBack}><FaAngleLeft /></Button>
@@ -87,9 +98,11 @@
 				<Button on:click={openMonitor} img="monitorIcon.png" />
 			</div>
 		</div>
+		<!-- Canvas -->
 		<!-- <div class="relative w-full h-full"> -->
 		<div class="relative w-[912px] h-[626px]">
 			<GLCanvas bind:this={glCanvas} />
+			<!-- Retro Shell -->
 			{#if showShell}
 				<div
 					transition:fade
