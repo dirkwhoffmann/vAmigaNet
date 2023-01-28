@@ -25,7 +25,7 @@
 
 	onMount(() => {
 		console.log('+page: onMount()');
-		buttonText = $poweredOn ? "Continue" : "Run Demo";
+		buttonText = $poweredOn ? 'Continue' : 'Run Demo';
 		show = true;
 	});
 
@@ -62,18 +62,16 @@
 		<div class="flex flex-col h-screen">
 			{#key show}
 				<div
-					in:fade={{ duration: 1000 }}
-					class="absolute flex flex-grow bg-splashscreen bg-cover h-screen w-screen blur brightness-[0.9]"
+					in:fade={{ duration: 2000 }}
+					class="absolute bg-splashscreen bg-cover h-screen w-screen blur brightness-[0.9]"
 				/>
 				<div
 					in:fade
 					class="relative bg-transparent flex flex-grow items-center justify-center border-none align-middle border-4 border-blue-500"
 				>
-					<div class="rounded flex justify-center w-1/2">
-						<div class="border-none border-4 p-4">
-							<img class="h-24" src="va-icon.png" alt="vAmiga Icon" />
-						</div>
-						<div class="border-none border-4 p-4">
+					<div class="rounded flex justify-center">
+						<img class="h-24 p-2 mt-3" src="va-icon.png" alt="vAmiga Icon" />
+						<div class="border-none border-4 p-6">
 							<div class="flex">
 								<div class="font-sofia-extra text-7xl mr-2">vAmiga</div>
 								<div class="font-sofia-extra text-7xl  text-gray-300">Online</div>
@@ -81,7 +79,7 @@
 							<div class="font-sofia-semi text-xl text-gray-300 pl-2 pb-10">Version 0.1</div>
 							<div class="flex space-x-5">
 								<!--<Button on:click={powerOn} label="Power On" />-->
-								<Button on:click={runDemo} label="{buttonText}" />
+								<Button on:click={runDemo} label={buttonText} />
 								<Button on:click={gotoGitHub}><FaGithub /></Button>
 							</div>
 						</div>
