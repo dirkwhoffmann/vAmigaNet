@@ -9,8 +9,9 @@ const config: UserConfig = {
 			name: 'configure-response-headers',
 			configureServer: server => {
 			  server.middlewares.use((_req, res, next) => {
-				res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
-				res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+				//these two headers are added by the serviceWorker.js so we do not need them to add here 
+				//res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+				//res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
 				next();
 			  });
 			}
