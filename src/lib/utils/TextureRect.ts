@@ -26,17 +26,17 @@ export class TextureRect {
         this.y2.set(y2 / VPOS_CNT);
         */
        
-        this.x1.set(0.18894736623554872);
-        this.y1.set(0.10633885841210426);
-        this.x2.set(0.18894736623554872 + 0.7333333442608515);
-        this.y2.set(0.10633885841210426 + 0.8674185119878751);
-        /*
+        this.x1.set(0.188);
+        this.y1.set(0.106);
+        this.x2.set(0.188 + 0.733);
+        this.y2.set(0.106 + 0.867);
+
+        /*        
         this.x1.set(0.5);
         this.y1.set(0.0);
         this.x2.set(1.0);
-        this.y2.set(0.5);
+        this.y2.set(1.0);
         */
-
         console.log("New rect: " + this.x1.target + ", " + this.y1.target + ", " + this.x2.target + ", " + this.y2.target);
     }
 

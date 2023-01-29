@@ -41,6 +41,15 @@
 	let mainShaderProgram: WebGLProgram;
 	let sampler: WebGLUniformLocation;
 
+	const vertexShaderSource0 = `
+    	attribute vec4 aVertexPosition;
+    	varying highp vec2 vTextureCoord;
+    	void main() {
+    		gl_Position = aVertexPosition;
+			vTextureCoord = gl_Position.xy * .5 + .5;
+    	}
+   	`;
+
 	const vertexShaderSource = `
     	attribute vec4 aVertexPosition;
     	attribute vec2 aTextureCoord;
@@ -128,7 +137,7 @@
 		gl.clear(gl.COLOR_BUFFER_BIT);
 
 		// Create the merge shader
-		mergeShaderProgram = compileProgram(vertexShaderSource, mergeShaderSource);
+		mergeShaderProgram = compileProgram(vertexShaderSource0, mergeShaderSource);
 		lfWeight = gl.getUniformLocation(mergeShaderProgram, 'u_lweight')!;
 		sfWeight = gl.getUniformLocation(mergeShaderProgram, 'u_sweight')!;
 		lfSampler = gl.getUniformLocation(mergeShaderProgram, 'u_lfSampler')!;
@@ -143,13 +152,12 @@
 		const vCoords = new Float32Array([-1.0, 1.0, 1.0, 1.0, -1.0, -1.0, 1.0, -1.0]);
 		vBuffer = createBuffer(vCoords);
 		setAttribute(mainShaderProgram, 'aVertexPosition');
-		setAttribute(mergeShaderProgram, 'aVertexPosition');
+		setAttribute(mergeShaderProgram, 'aVertexPosition0');
 
 		// Setup the texture coordinate buffer
-		const tCoords = new Float32Array([0.9, 0.9, 0.1, 0.9, 0.9, 0.1, 0.1, 0.1]);
+		const tCoords = new Float32Array([0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0]);
 		tBuffer = createBuffer(tCoords);
 		setAttribute(mainShaderProgram, 'aTextureCoord');
-		setAttribute(mergeShaderProgram, 'aTextureCoord');
 
 		// Flip y axis to get the image right
 		gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
@@ -162,7 +170,7 @@
 
 	export function updateTextureRect(x1: number, y1: number, x2: number, y2: number) {
 		console.log("updateTextureRect(" + x1 + ", " + y1 + " ," + x2 + ", " + y2 + ")");
-		const array = new Float32Array([x1, y1, x2, y1, x1, y2, x2, y2]);
+		const array = new Float32Array([x1, 1.0-y1, x2, 1.0-y1, x1, 1.0-y2, x2, 1.0-y2]);
 		gl.bindBuffer(gl.ARRAY_BUFFER, tBuffer);
 		gl.bufferSubData(gl.ARRAY_BUFFER, 0, array);
 	}
