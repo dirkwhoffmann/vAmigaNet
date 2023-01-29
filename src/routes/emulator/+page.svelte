@@ -129,8 +129,8 @@
 
 	<div class="h-screen flex flex-col">
 		<!-- Canvas -->
-		<!-- <div class="relative w-full h-full"> -->
-		<div class="border-none w-[912px] h-[626px]">
+		<div class="relative w-full h-full">
+		<!-- <div class="border-none w-[912px] h-[626px]"> -->
 			<GLCanvas bind:this={glCanvas} />
 			<!-- Retro Shell -->
 			{#if showShell}
