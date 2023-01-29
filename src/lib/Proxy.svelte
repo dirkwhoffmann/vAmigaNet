@@ -133,7 +133,7 @@
 
 	export async function runShowcase(showcase: DataBaseItem) {
 		console.log('Setting up audio...');
-		await $proxy.setupAudio();
+		await setupAudio();
 
 		try {
 			console.log('Running ' + showcase.title + '...');
@@ -146,11 +146,11 @@
 			$amiga.configure($proxy.OPT_FAST_RAM, showcase.memory[2]);
 			for (let i = 0; i < showcase.adf.length; i++) {
 				console.log('Inserting disk ' + i + ': ' + showcase.adf[i]);
-				$proxy.insert(showcase.adf[i], i);
+				await insert(showcase.adf[i], i);
 			}
 			$amiga.run();
 		} catch (exception) {
-			console.log("CATCHED" + exception);
+			console.log('CATCHED' + exception);
 			// console.error($amiga.getExceptionMessage(exception));
 		}
 		goto('/emulator');
@@ -162,9 +162,11 @@
 
 	export async function insert(name: string, drive: number) {
 		try {
+			console.log('Fetching adf/' + name);
 			let response = await fetch('adf/' + name);
 			let blob = await response.arrayBuffer();
 			let uint8View = new Uint8Array(blob);
+			console.log('Calling $amiga.insertDisk');
 			$amiga.insertDisk(uint8View, blob.byteLength, drive);
 		} catch (exc) {
 			reportException();
@@ -186,21 +188,6 @@
 			blob = await response.arrayBuffer();
 			uint8View = new Uint8Array(blob);
 			$memory.loadExt(uint8View, blob.byteLength);
-
-			/*
-			// Insert some test disks
-			response = await fetch('adf/BatmanRises1.adf');
-			blob = await response.arrayBuffer();
-			uint8View = new Uint8Array(blob);
-			$amiga.insertDisk(uint8View, blob.byteLength, 0);
-
-			response = await fetch('adf/BatmanRises2.adf');
-			blob = await response.arrayBuffer();
-			uint8View = new Uint8Array(blob);
-			$amiga.insertDisk(uint8View, blob.byteLength, 1);
-
-			$amiga.run();
-			*/
 		} catch (exc) {
 			reportException();
 		}
