@@ -25,7 +25,7 @@ self.addEventListener('fetch', function(event){
               }
               else
               {
-                console.error(`serviceWorker: status=${networkResponse.code} for fetched resource: ${event.request.url}`)
+                console.error(`serviceWorker: status=${networkResponse.status} for fetched resource: ${event.request.url}`)
               }
             }
             catch(e) { console.error(`exception during fetch ${e}`); }

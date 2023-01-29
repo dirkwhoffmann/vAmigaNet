@@ -1,38 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-	<meta charset="utf-8,initial-scale=1,user-scalable=no" />
-	<link rel="preconnect" href="https://fonts.googleapis.com"> 
+	<head>
+		<meta charset="utf-8,initial-scale=1,user-scalable=no" />
+		<!--
+  <link rel="preconnect" href="https://fonts.googleapis.com"> 
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
 	<link href="https://fonts.googleapis.com/css2?family=Azeret+Mono&family=Josefin+Sans&family=Sofia+Sans+Extra+Condensed:wght@800&family=Sofia+Sans+Semi+Condensed:wght@600&family=Source+Sans+Pro:ital,wght@0,300;0,600;1,300;1,600&display=swap" rel="stylesheet">
-	<!-- <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Sofia+Sans+Extra+Condensed:wght@800&family=Sofia+Sans+Semi+Condensed:wght@600&family=Source+Sans+Pro:ital,wght@0,300;0,600;1,300;1,600&display=swap" rel="stylesheet">	<meta name="viewport" content="width=device-width" />-->
-	<script>
-(async function() {
-    if(window.crossOriginIsolated !== false) return;
+-->
+		<style>
+			/* josefin-sans-regular - latin */
+			@font-face {
+				font-family: 'Josefin Sans';
+				font-style: normal;
+				font-weight: 400;
+				src: url('fonts/josefin-sans-v25-latin-regular.eot'); /* IE9 Compat Modes */
+				src: local(''),
+					url('fonts/josefin-sans-v25-latin-regular.eot?#iefix') format('embedded-opentype'),
+					/* IE6-IE8 */ url('fonts/josefin-sans-v25-latin-regular.woff2') format('woff2'),
+					/* Super Modern Browsers */ url('fonts/josefin-sans-v25-latin-regular.woff')
+						format('woff'),
+					/* Modern Browsers */ url('fonts/josefin-sans-v25-latin-regular.ttf') format('truetype'),
+					/* Safari, Android, iOS */ url('fonts/josefin-sans-v25-latin-regular.svg#JosefinSans')
+						format('svg'); /* Legacy iOS */
+			}
+			/* azeret-mono-regular - latin */
+			@font-face {
+				font-family: 'Azeret Mono';
+				font-style: normal;
+				font-weight: 400;
+				src: url('fonts/azeret-mono-v11-latin-regular.eot'); /* IE9 Compat Modes */
+				src: local(''),
+					url('fonts/azeret-mono-v11-latin-regular.eot?#iefix') format('embedded-opentype'),
+					/* IE6-IE8 */ url('fonts/azeret-mono-v11-latin-regular.woff2') format('woff2'),
+					/* Super Modern Browsers */ url('fonts/azeret-mono-v11-latin-regular.woff') format('woff'),
+					/* Modern Browsers */ url('fonts/azeret-mono-v11-latin-regular.ttf') format('truetype'),
+					/* Safari, Android, iOS */ url('fonts/azeret-mono-v11-latin-regular.svg#AzeretMono')
+						format('svg'); /* Legacy iOS */
+			}
+			/* sofia-sans-extra-condensed-regular - latin */
+			@font-face {
+				font-family: 'Sofia Sans Extra Condensed';
+				font-style: normal;
+				font-weight: 400;
+				src: url('fonts/sofia-sans-extra-condensed-v1-latin-regular.eot'); /* IE9 Compat Modes */
+				src: local(''),
+					url('fonts/sofia-sans-extra-condensed-v1-latin-regular.eot?#iefix')
+						format('embedded-opentype'),
+					/* IE6-IE8 */ url('fonts/sofia-sans-extra-condensed-v1-latin-regular.woff2')
+						format('woff2'),
+					/* Super Modern Browsers */ url('fonts/sofia-sans-extra-condensed-v1-latin-regular.woff')
+						format('woff'),
+					/* Modern Browsers */ url('fonts/sofia-sans-extra-condensed-v1-latin-regular.ttf')
+						format('truetype'),
+					/* Safari, Android, iOS */
+						url('fonts/sofia-sans-extra-condensed-v1-latin-regular.svg#SofiaSansExtraCondensed')
+						format('svg'); /* Legacy iOS */
+			}
+			/* sofia-sans-extra-condensed-800 - latin */
+			@font-face {
+				font-family: 'Sofia Sans Extra Condensed';
+				font-style: normal;
+				font-weight: 800;
+				src: url('fonts/sofia-sans-extra-condensed-v1-latin-800.eot'); /* IE9 Compat Modes */
+				src: local(''),
+					url('fonts/sofia-sans-extra-condensed-v1-latin-800.eot?#iefix')
+						format('embedded-opentype'),
+					/* IE6-IE8 */ url('fonts/sofia-sans-extra-condensed-v1-latin-800.woff2') format('woff2'),
+					/* Super Modern Browsers */ url('fonts/sofia-sans-extra-condensed-v1-latin-800.woff')
+						format('woff'),
+					/* Modern Browsers */ url('fonts/sofia-sans-extra-condensed-v1-latin-800.ttf')
+						format('truetype'),
+					/* Safari, Android, iOS */
+						url('fonts/sofia-sans-extra-condensed-v1-latin-800.svg#SofiaSansExtraCondensed')
+						format('svg'); /* Legacy iOS */
+			}
+			/* sofia-sans-semi-condensed-regular - latin */
+			@font-face {
+				font-family: 'Sofia Sans Semi Condensed';
+				font-style: normal;
+				font-weight: 400;
+				src: url('../fonts/sofia-sans-semi-condensed-v1-latin-regular.eot'); /* IE9 Compat Modes */
+				src: local(''),
+					url('../fonts/sofia-sans-semi-condensed-v1-latin-regular.eot?#iefix')
+						format('embedded-opentype'),
+					/* IE6-IE8 */ url('../fonts/sofia-sans-semi-condensed-v1-latin-regular.woff2')
+						format('woff2'),
+					/* Super Modern Browsers */
+						url('../fonts/sofia-sans-semi-condensed-v1-latin-regular.woff') format('woff'),
+					/* Modern Browsers */ url('../fonts/sofia-sans-semi-condensed-v1-latin-regular.ttf')
+						format('truetype'),
+					/* Safari, Android, iOS */
+						url('../fonts/sofia-sans-semi-condensed-v1-latin-regular.svg#SofiaSansSemiCondensed')
+						format('svg'); /* Legacy iOS */
+			}
+			/* sofia-sans-semi-condensed-600 - latin */
+			@font-face {
+				font-family: 'Sofia Sans Semi Condensed';
+				font-style: normal;
+				font-weight: 600;
+				src: url('../fonts/sofia-sans-semi-condensed-v1-latin-600.eot'); /* IE9 Compat Modes */
+				src: local(''),
+					url('../fonts/sofia-sans-semi-condensed-v1-latin-600.eot?#iefix')
+						format('embedded-opentype'),
+					/* IE6-IE8 */ url('../fonts/sofia-sans-semi-condensed-v1-latin-600.woff2') format('woff2'),
+					/* Super Modern Browsers */ url('../fonts/sofia-sans-semi-condensed-v1-latin-600.woff')
+						format('woff'),
+					/* Modern Browsers */ url('../fonts/sofia-sans-semi-condensed-v1-latin-600.ttf')
+						format('truetype'),
+					/* Safari, Android, iOS */
+						url('../fonts/sofia-sans-semi-condensed-v1-latin-600.svg#SofiaSansSemiCondensed')
+						format('svg'); /* Legacy iOS */
+			}
+		</style>
 
-    let registration = await navigator.serviceWorker.register('serviceWorker.js').catch(e => console.error("COOP/COEP Service Worker failed to register:", e));
-    if(registration) {
-      console.log("COOP/COEP Service Worker registered", registration.scope);
+		<script>
+			(async function () {
+				if (window.crossOriginIsolated !== false) return;
 
-      registration.addEventListener("updatefound", () => {
-        console.log("Reloading page to make use of updated COOP/COEP Service Worker.");
-        window.location.reload();
-      });
+				let registration = await navigator.serviceWorker
+					.register('serviceWorker.js')
+					.catch((e) => console.error('COOP/COEP Service Worker failed to register:', e));
+				if (registration) {
+					console.log('COOP/COEP Service Worker registered', registration.scope);
 
-      // If the registration is active, but it's not controlling the page
-      if(registration.active && !navigator.serviceWorker.controller) {
-        console.log("Reloading page to make use of COOP/COEP Service Worker.");
-        window.location.reload();
-      }
-    }
-  })();
-	</script>
-	%sveltekit.head%
-</head>
+					registration.addEventListener('updatefound', () => {
+						console.log('Reloading page to make use of updated COOP/COEP Service Worker.');
+						window.location.reload();
+					});
 
-<body data-sveltekit-preload-data="hover">
-	<div style="display: contents">%sveltekit.body%</div>
-</body>
+					// If the registration is active, but it's not controlling the page
+					if (registration.active && !navigator.serviceWorker.controller) {
+						console.log('Reloading page to make use of COOP/COEP Service Worker.');
+						window.location.reload();
+					}
+				}
+			})();
+		</script>
+		%sveltekit.head%
+	</head>
 
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents">%sveltekit.body%</div>
+	</body>
 </html>
