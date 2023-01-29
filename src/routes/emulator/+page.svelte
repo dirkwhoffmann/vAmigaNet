@@ -5,7 +5,6 @@
 	import { goto } from '$app/navigation';
 	import { proxy, amiga } from '$lib/stores';
 	import { TextureRect } from '$lib/utils/TextureRect';
-	import Button from '$lib/widgets/Button.svelte';
 	import GLCanvas from '$lib/widgets/GLCanvas.svelte';
 	import RetroShell from '$lib/RetroShell.svelte';
 	import FaAngleLeft from 'svelte-icons/fa/FaAngleLeft.svelte';

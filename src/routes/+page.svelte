@@ -10,7 +10,7 @@
 	import FaGithub from 'svelte-icons/fa/FaGithub.svelte';
 	import GoGear from 'svelte-icons/go/GoGear.svelte';
 	import DiGrails from 'svelte-icons/di/DiGrails.svelte';
-	import FaInfoCircle from 'svelte-icons/fa/FaInfoCircle.svelte';
+	// import FaInfoCircle from 'svelte-icons/fa/FaInfoCircle.svelte';
 	import '@splidejs/svelte-splide/css';
 	import { poweredOn } from '$lib/stores';
 
@@ -34,11 +34,6 @@
 		goto('#top');
 	}
 
-	async function powerOn() {
-		// await $proxy.setupAudio();
-		goto('/emulator');
-	}
-
 	async function runDemo() {
 		if (!$poweredOn) {
 			await $proxy.runShowcase(demos[0]);
@@ -46,13 +41,10 @@
 		goto('/emulator');
 	}
 
-	function openShowcases() {
-		goto('/showcases');
-	}
-
 	function gotoGitHub() {
 		goto('https://dirkwhoffmann.github.io/vAmiga');
 	}
+
 </script>
 
 <body class="h-screen bg-black text-white scroll-smooth overflow-y-scroll">
@@ -63,8 +55,9 @@
 			{#key show}
 				<div
 					in:fade={{ duration: 2000 }}
-					class="absolute bg-splashscreen bg-cover h-screen w-screen blur brightness-[0.9]"
-				/>
+					class="absolute bg-[url('matrix1.jpg')] bg-cover h-screen w-screen blur brightness-[0.9]"
+				>
+				</div>
 				<div
 					in:fade
 					class="relative bg-transparent flex flex-grow items-center justify-center border-none align-middle border-4 border-blue-500"
@@ -99,7 +92,7 @@
 					<div slot="description">Learn more</div>
 				</MainPageLink>
 				-->
-				<MainPageLink href="/showcases">
+				<MainPageLink href="showcases">
 					<div slot="icon"><DiGrails /></div>
 					<div slot="description">Showcase</div>
 				</MainPageLink>
