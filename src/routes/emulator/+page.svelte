@@ -127,7 +127,6 @@
 		The mouse position is {m.x} x {m.y}
 	</div>
 	-->
-
 	<DragAndDrop>
 		<div class="h-screen flex flex-col">
 			<!-- Canvas -->

@@ -78,7 +78,7 @@
 					<div class="grid grid-cols-1">
 						<img class="z-10 col-start-1 row-start-1 brightness-90 blur-[2px]" {src} alt="Bg" />
 						<img class="z-20 col-start-1 row-start-1" src="footage/blank-large.png" alt="Alt" />
-						<div class="z-30 col-start-1 row-start-1">
+						<div class="z-30 col-start-1 row-start-1 pt-4 px-6">
 							<div class="font-sofia-extra text-8xl">{selected.title}</div>
 							<div class="font-sofia-semi text-2xl pb-10">{selected.subtitle}</div>
 							<div class="flex font-josefin text-lg w-2/3 pb-5">{selected.description}</div>
@@ -116,12 +116,15 @@
 		</div>
 	</div>
 
-	<!--<div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-black" />
-	<div class="absolute bottom-0 right-0 p-4 w-full">
-		<div class="flex justify-end">
-			<button class=""><img class="h-11" src="va-icon.png" alt="vAmiga Icon" /></button>
-			<div class="font-sofia-extra text-3xl px-3 pt-1 text-white">vAmiga Online</div>
+	<div class="pointer-events-none">
+		<div
+			class="z-50 absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-black"
+		/>
+		<div class="z-50 absolute bottom-0 right-0 p-4">
+			<div class="z-50 flex justify-end">
+				<button class=""><img class="h-11" src="va-icon.png" alt="vAmiga Icon" /></button>
+				<div class="font-sofia-extra text-3xl px-3 pt-1 text-white">vAmiga Online</div>
+			</div>
 		</div>
 	</div>
-	-->
 </body>
