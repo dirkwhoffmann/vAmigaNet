@@ -10,6 +10,7 @@
 	import FaAngleLeft from 'svelte-icons/fa/FaAngleLeft.svelte';
 	import Toolbar from '$lib/toolbar/Toolbar.svelte';
 	import { MsgPause, running } from '$lib/stores';
+	import DragAndDrop from './DragAndDrop.svelte';
 
 	// Component references
 	let glCanvas: GLCanvas;
@@ -20,7 +21,7 @@
 
 	// The currently visible area
 	let textureRect = new TextureRect();
-	
+
 	onMount(() => {
 		console.log('onMount()');
 		glCanvas.enableDrawing = true;
@@ -127,24 +128,26 @@
 	</div>
 	-->
 
-	<div class="h-screen flex flex-col">
-		<!-- Canvas -->
-		<div class="relative w-full h-full">
-		<!-- <div class="border-none w-[912px] h-[626px]"> -->
-			<GLCanvas bind:this={glCanvas} />
-			<!-- Retro Shell -->
-			{#if showShell}
-				<div
-					transition:fade
-					class="absolute top-0 left-0 w-full h-full border-none border-red-500 flex-grow overflow-scroll"
-				>
-					<RetroShell />
-				</div>
-			{/if}
+	<DragAndDrop>
+		<div class="h-screen flex flex-col">
+			<!-- Canvas -->
+			<div class="relative w-full h-full">
+				<!-- <div class="border-none w-[912px] h-[626px]"> -->
+				<GLCanvas bind:this={glCanvas} />
+				<!-- Retro Shell -->
+				{#if showShell}
+					<div
+						transition:fade
+						class="absolute top-0 left-0 w-full h-full border-none border-red-500 flex-grow overflow-scroll"
+					>
+						<RetroShell />
+					</div>
+				{/if}
+			</div>
+			<!-- Toolbar -->
+			<div class="absolute top-0 left-0">
+				<Toolbar bind:this={toolbar} on:click={buttonClicked} />
+			</div>
 		</div>
-		<!-- Toolbar -->
-		<div class="absolute top-0 left-0">
-			<Toolbar bind:this={toolbar} on:click={buttonClicked} />
-		</div>
-	</div>
+	</DragAndDrop>
 </body>

@@ -44,7 +44,6 @@
 	function gotoGitHub() {
 		goto('https://dirkwhoffmann.github.io/vAmiga');
 	}
-
 </script>
 
 <body class="h-screen bg-black text-white scroll-smooth overflow-y-scroll">
@@ -53,10 +52,8 @@
 	<div id="top" transition:fade class="bg-cover bg-transparent">
 		<div class="flex flex-col h-screen">
 			{#key show}
-				<div
-					in:fade={{ duration: 2000 }}
-					class="absolute bg-[url('matrix1.jpg')] bg-cover h-screen w-screen blur brightness-[0.9]"
-				>
+				<div in:fade={{ duration: 2000 }} class="absolute h-screen w-screen blur brightness-[0.9]">
+					<img src="matrix1.jpg" alt="Background" />
 				</div>
 				<div
 					in:fade
