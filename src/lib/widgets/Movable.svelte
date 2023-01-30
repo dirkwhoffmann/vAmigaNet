@@ -27,7 +27,7 @@
 />
     
 <div class={css_class}
-    bind:clientWidth={client_width} bind:clientHeight={client_height} style={free_positioning? "left:"+x+"px; top:"+y+"px;":""}>
+    bind:clientWidth={client_width} bind:clientHeight={client_height} style={free_positioning? "position:absolute;left:"+x+"px; top:"+y+"px;":""}>
     <div class="cursor-move select-none" 
         on:mousedown={(e)=>{
                 start_x = e.clientX; 
