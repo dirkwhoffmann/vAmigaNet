@@ -104,6 +104,11 @@
 	export async function setupAudio() {
 		if (audioContext != null) {
 			console.log('Audio context already initialized');
+			console.log(`audioContext=${audioContext.state}`);
+			if(audioContext.state==="suspended")
+			{
+				audioContext.resume();
+			}			
 			return;
 		}
 		audioContext = new AudioContext();
@@ -129,6 +134,11 @@
 			buffer: $proxy.HEAPF32.buffer,
 			length: 1024
 		});
+		if(audioContext.state==="suspended")
+		{
+			audioContext.resume();
+		}			
+		console.log(`audioContext=${audioContext.state}`);
 	}
 
 	export async function runShowcase(showcase: DataBaseItem) {

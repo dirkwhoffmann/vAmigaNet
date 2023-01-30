@@ -14,6 +14,7 @@
 	import '@splidejs/svelte-splide/css';
 	import { poweredOn } from '$lib/stores';
 	import Movable from '$lib/widgets/Movable.svelte';
+	import MovableWindow from '$lib/widgets/MovableWindow.svelte';
 
 	let show = false;
 	let guru = true;
@@ -51,19 +52,20 @@
 
 <body class="h-screen bg-black text-white scroll-smooth overflow-y-scroll">
 	<title>vAmiga Online</title>
-	<Movable free_positioning={true} css_class="z-50 rounded-md flex flex-col w-96 {hideInfoWindow?'hidden':''}"  x={100} y={250}>
-		<div slot="title" class="bg-blue-600 flex justify-between p-3">
-			<div>Info</div>
-			<button class="px-2" on:click={()=>hideInfoWindow=true}>&#120;</button>
+	<MovableWindow bind:hide={hideInfoWindow} x={30} y={500}>
+		<div slot="title">Info</div>
+		<div slot="body">
+			<div class="mb-8">
+				Welcome to vAmigaOnline...
+				<br>
+				have fun exploring the world of the Amiga...
+			</div>
 		</div>
-		<div slot="body" class="bg-gray-300 text-slate-700 h-42 p-4">
-			Welcome to vAmigaOnline...
-			<br>
-			have fun exploring the world of the Amiga...
-			
-			<button class="mt-16 ml-48 p-2 bg-blue-500 rounded-lg text-white" on:click={()=>hideInfoWindow=true}>close me</button>
+		<div slot="buttons">
+			<button class=" p-2 bg-blue-500 rounded-lg text-white" on:click={()=>hideInfoWindow=true}>close me</button>
 		</div>
-	</Movable>
+	</MovableWindow>
+
 	<div id="top" transition:fade class="bg-cover bg-transparent">
 		<div class="flex flex-col h-screen">
 			{#key show}
