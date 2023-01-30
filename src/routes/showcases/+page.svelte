@@ -67,7 +67,7 @@
 <body class="h-screen flex flex-col bg-black text-white scroll-smooth overflow-y-scroll">
 	<div id="top" class="">
 		<div class="relative">
-			<img class="absolute top-0 left-0 w-full" src="footage/blank-large.png" alt="Alt" />
+			<!--<img class="absolute top-0 left-0 w-full" src="footage/blank-large.png" alt="Alt" />-->
 			<!--
 			<div class="flex pb-5 z-40">
 				<Button on:click={goBack}><FaAngleLeft /></Button>
@@ -75,10 +75,10 @@
 			-->
 			{#key show}
 				<div in:fade={{ duration: 1000 }}>
-					<img class="absolute top-0 left-0 w-full brightness-90 blur-[2px]" {src} alt="Bg" />
-					<img class="absolute top-0 left-0 w-full" src="footage/blank-large.png" alt="Alt" />
-					<div class="relative top-4 left-6">
-						<div class="w-full">
+					<div class="grid grid-cols-1">
+						<img class="z-10 col-start-1 row-start-1 brightness-90 blur-[2px]" {src} alt="Bg" />
+						<img class="z-20 col-start-1 row-start-1" src="footage/blank-large.png" alt="Alt" />
+						<div class="z-30 col-start-1 row-start-1">
 							<div class="font-sofia-extra text-8xl">{selected.title}</div>
 							<div class="font-sofia-semi text-2xl pb-10">{selected.subtitle}</div>
 							<div class="flex font-josefin text-lg w-2/3 pb-5">{selected.description}</div>
@@ -92,7 +92,7 @@
 			<div class="" />
 		</div>
 	</div>
-	<div class="relative border-none border-red-500">
+	<div class="relative border-none border-red-500 -top-10 z-40">
 		<!-- <img class="fixed z-50 border-none" src="footage/transparent-large.png" alt="Alt" />-->
 		<div class="mt-10">
 			<Carousel
@@ -115,14 +115,13 @@
 			/>
 		</div>
 	</div>
-	
-	<div
-		class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-black"
-	/>
+
+	<!--<div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-black" />
 	<div class="absolute bottom-0 right-0 p-4 w-full">
 		<div class="flex justify-end">
 			<button class=""><img class="h-11" src="va-icon.png" alt="vAmiga Icon" /></button>
 			<div class="font-sofia-extra text-3xl px-3 pt-1 text-white">vAmiga Online</div>
 		</div>
 	</div>
+	-->
 </body>
