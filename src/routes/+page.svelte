@@ -15,6 +15,7 @@
 	import { poweredOn } from '$lib/stores';
 	import Movable from '$lib/widgets/Movable.svelte';
 	import MovableWindow from '$lib/widgets/MovableWindow.svelte';
+	import { Alert } from 'flowbite-svelte';
 
 	let show = false;
 	let guru = true;
@@ -98,6 +99,12 @@
 					</div>
 				</div>
 			{/key}
+			<div class="p-16">
+				<Alert>
+					<span class="font-josefin">Info alert!</span> Change a few things up and try submitting again.
+				</Alert>
+			</div>
+
 			<div
 				class="relative flex justify-center border-none align-middle bg-gray-900/50 space-x-8 border-4 border-red-500"
 			>
