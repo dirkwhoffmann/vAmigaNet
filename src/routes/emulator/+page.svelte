@@ -56,8 +56,8 @@
 			let y1 = textureRect.y1.current * textureRect.texH;
 			let x2 = textureRect.x2.current * textureRect.texW;
 			let y2 = textureRect.y2.current * textureRect.texH;
-			w = x2 - x1;
-			h = y2 - y1;
+			w = (x2 - x1) + 2;
+			h = (y2 - y1) + 2;
 			// console.log("New canvas size: " + x1 + ", " + y1 + ", " + x2 + ", " + y2);
 			console.log('New canvas size: ' + w + ', ' + h);
 		}
