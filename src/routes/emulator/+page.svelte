@@ -11,6 +11,7 @@
 	import Toolbar from '$lib/toolbar/Toolbar.svelte';
 	import { MsgPause, running } from '$lib/stores';
 	import DragAndDrop from './DragAndDrop.svelte';
+	import Logo from '$lib/widgets/Logo.svelte';
 
 	// Component references
 	let glCanvas: GLCanvas;
@@ -162,4 +163,5 @@
 			</div>
 		</div>
 	</DragAndDrop>
+	<Logo />
 </body>
