@@ -1,3 +1,5 @@
+<svelte:options accessors={true}/>
+
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
@@ -112,6 +114,11 @@
 			return;
 		}
 		audioContext = new AudioContext();
+		let gainNode = audioContext.createGain();
+		gainNode.gain.value = 0.2;
+		gainNode.connect(audioContext.destination);
+		
+	    console.log("After createGain: " + audioContext.state);
 		const sampleRate = audioContext.sampleRate;
 		console.log('Sample rate = ' + sampleRate);
 		console.log('Channels: ', audioContext.destination.channelCount);
@@ -134,9 +141,11 @@
 			buffer: $proxy.HEAPF32.buffer,
 			length: 1024
 		});
+		console.log("State in setup: " + audioContext.state);
 		if(audioContext.state==="suspended")
-		{
+		{	console.log(audioContext.state);
 			audioContext.resume();
+			audioContext.onstatechange = () => console.log("onstatechange: " + audioContext.state);
 		}			
 		console.log(`audioContext=${audioContext.state}`);
 	}

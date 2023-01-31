@@ -59,8 +59,6 @@
 			let y2 = textureRect.y2.current * textureRect.texH;
 			w = (x2 - x1) + 2;
 			h = (y2 - y1) + 2;
-			// console.log("New canvas size: " + x1 + ", " + y1 + ", " + x2 + ", " + y2);
-			console.log('New canvas size: ' + w + ', ' + h);
 		}
 
 		glCanvas.update(now);

@@ -36,7 +36,11 @@
 		goto('#top');
 	}
 
-	async function runDemo() {
+	function runDemo() {
+		runMe();
+		$proxy.audioContext.resume();
+	}
+	async function runMe() {
 		if (!$poweredOn) {
 			await $proxy.runShowcase(demos[0]);
 		}
