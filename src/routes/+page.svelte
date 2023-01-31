@@ -52,6 +52,7 @@
 
 <body class="h-screen bg-black text-white scroll-smooth overflow-y-scroll">
 	<title>vAmiga Online</title>
+	<!--
 	<MovableWindow bind:hide={hideInfoWindow} x={30} y={500}>
 		<div slot="title">Info</div>
 		<div slot="body">
@@ -65,7 +66,7 @@
 			<button class=" p-2 bg-blue-500 rounded-lg text-white" on:click={()=>hideInfoWindow=true}>close me</button>
 		</div>
 	</MovableWindow>
-
+-->
 	<div id="top" transition:fade class="bg-cover bg-transparent">
 		<div class="flex flex-col h-screen">
 			{#key show}

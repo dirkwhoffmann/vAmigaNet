@@ -16,6 +16,9 @@
 	let glCanvas: GLCanvas;
 	let toolbar: Toolbar;
 
+	let w = 0;
+	let h = 0;
+
 	// Indicates if RetroShell should be displayed
 	let showShell = false;
 
@@ -49,6 +52,14 @@
 				textureRect.x2.current,
 				textureRect.y2.current
 			);
+			let x1 = textureRect.x1.current * textureRect.texW;
+			let y1 = textureRect.y1.current * textureRect.texH;
+			let x2 = textureRect.x2.current * textureRect.texW;
+			let y2 = textureRect.y2.current * textureRect.texH;
+			w = x2 - x1;
+			h = y2 - y1;
+			// console.log("New canvas size: " + x1 + ", " + y1 + ", " + x2 + ", " + y2);
+			console.log('New canvas size: ' + w + ', ' + h);
 		}
 
 		glCanvas.update(now);
@@ -128,20 +139,22 @@
 	</div>
 	-->
 	<DragAndDrop>
-		<div class="h-screen flex flex-col">
+		<div class="border-4 h-screen w-screen flex flex-col justify-center">
 			<!-- Canvas -->
-			<div class="relative w-full h-full">
-				<!-- <div class="border-none w-[912px] h-[626px]"> -->
-				<GLCanvas bind:this={glCanvas} />
-				<!-- Retro Shell -->
-				{#if showShell}
-					<div
-						transition:fade
-						class="absolute top-0 left-0 w-full h-full border-none border-red-500 flex-grow overflow-scroll"
-					>
-						<RetroShell />
-					</div>
-				{/if}
+			<!--<div class="relative w-full h-full">-->
+			<div class="flex justify-center">
+				<div class="border-2 border-gray-600" style="height:{2 * h}px; width:{w}px">
+					<GLCanvas bind:this={glCanvas} />
+					<!-- Retro Shell -->
+					{#if showShell}
+						<div
+							transition:fade
+							class="absolute top-0 left-0 w-full h-full border-none border-red-500 flex-grow overflow-scroll"
+						>
+							<RetroShell />
+						</div>
+					{/if}
+				</div>
 			</div>
 			<!-- Toolbar -->
 			<div class="absolute top-0 left-0">
