@@ -10,6 +10,10 @@
 	import ConfigCategory from '$lib/settings/ConfigCategory.svelte';
 	import ConfigSection from './ConfigSection.svelte';
 	import ConfigRow from '$lib/settings/ConfigRow.svelte';
+
+	function handler(event) {
+		console.log("Received id = " + event.detail.text);
+	}
 </script>
 
 <div class="font-sofia-semi text-white bg-gray-500/75 w-screen h-screen p-2 overflow-scroll">
@@ -25,8 +29,8 @@
 			</div>
 		</div>
 		<ConfigSection name="CPU">
-			<ConfigRow name="Revision" />
-			<ConfigRow name="Speed" />
+			<ConfigRow on:select={handler} name="Revision" />
+			<ConfigRow on:select={handler} name="Speed" />
 		</ConfigSection>
 		<ConfigSection name="Custom Chipset">
 			<ConfigRow name="Agnus Revision" />
