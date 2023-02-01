@@ -164,7 +164,7 @@
 					{#if showSettings}
 						<div
 							transition:fade
-							class="absolute top-0 left-0 w-full h-full border-4 border-red-500 flex-grow overflow-scroll"
+							class="absolute top-0 left-0 w-full h-full border-none border-red-500 flex-grow overflow-scroll"
 						>
 							<Settings />
 						</div>

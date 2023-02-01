@@ -1,15 +1,11 @@
 <script lang="ts">
 	import { Button, Dropdown, DropdownItem, DropdownDivider, DropdownHeader, Chevron } from 'flowbite-svelte';
+    import ConfigRow from '$lib/settings/ConfigRow.svelte';
+
 </script>
 
-<div class="p-16 z-50">
-    <Button class="font-sofia-semi !bg-gray-100/20" pill={true}><Chevron>Dropdown button</Chevron></Button>
-    <Button color="green"><Chevron>Dropdown button</Chevron></Button>
-    <Dropdown>
-        <DropdownItem>Dashboard</DropdownItem>
-        <DropdownDivider />
-        <DropdownItem>Settings</DropdownItem>
-        <DropdownItem>Earnings</DropdownItem>
-        <DropdownItem slot="footer">Separated link</DropdownItem>
-    </Dropdown>
+<div class="font-sofia-semi text-white bg-gray-500/75 w-full h-full p-2">
+    <ConfigRow name="Agnus Revision" />
+    <ConfigRow name="Denise Revision" />
+    <ConfigRow name="CIA Revision" />
 </div>
