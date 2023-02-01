@@ -12,11 +12,19 @@
 	export let name = '???';
 	export let value = 'undefined';
 
-    const dispatch = createEventDispatcher();
-        
+	let values = [
+		{ name: 'Old OCS', id: 0 },
+		{ name: 'New OCS', id: 1 },
+		{ name: 'Old ECS', id: 2 },
+		{ name: 'New ECS', id: 3 },
+	];
+	const dispatch = createEventDispatcher();
+
 	const handleClick = (e: PointerEvent) => {
 		e.preventDefault();
-        dispatch('select', {
+        console.log("Click");
+        console.log("ID = " + e.target!.id);
+		dispatch('select', {
 			text: e.target!.id
 		});
 	};
@@ -27,10 +35,9 @@
 		<div class="text-xl text-blue-200">{name}</div>
 		<Button color="transparent" class="!text-xl !text-blue-200"><Chevron>{value}</Chevron></Button>
 		<Dropdown>
-			<DropdownItem on:click={handleClick} id="Ernie">Old OCS</DropdownItem>
-			<DropdownItem on:click={handleClick} id="Bert">New OCS</DropdownItem>
-			<DropdownItem on:click={handleClick} id="Oskar">ECS 1MB</DropdownItem>
-			<DropdownItem on:click={handleClick} id="Bibo">ECS 2MB</DropdownItem>
+            {#each values as { name, id }, i}
+			<DropdownItem on:click={handleClick} id={id}>{name}</DropdownItem>
+            {/each}
 		</Dropdown>
 	</div>
 </div>

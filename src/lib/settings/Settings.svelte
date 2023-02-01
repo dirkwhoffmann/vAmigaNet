@@ -11,8 +11,8 @@
 	import ConfigSection from './ConfigSection.svelte';
 	import ConfigRow from '$lib/settings/ConfigRow.svelte';
 
-	function handler(event) {
-		console.log("Received id = " + event.detail.text);
+	function cpuAction(event) {
+        console.log("CPU: " + event.detail.text);
 	}
 </script>
 
@@ -29,8 +29,8 @@
 			</div>
 		</div>
 		<ConfigSection name="CPU">
-			<ConfigRow on:select={handler} name="Revision" />
-			<ConfigRow on:select={handler} name="Speed" />
+			<ConfigRow on:select={cpuAction} name="Revision" />
+			<ConfigRow on:select={cpuAction} name="Speed" />
 		</ConfigSection>
 		<ConfigSection name="Custom Chipset">
 			<ConfigRow name="Agnus Revision" />
