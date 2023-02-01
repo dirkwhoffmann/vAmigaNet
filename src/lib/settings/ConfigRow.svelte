@@ -8,32 +8,27 @@
 		Chevron
 	} from 'flowbite-svelte';
 
-    export let name = "???";
+	export let name = '???';
+
+	function doClick1(arg) {
+		console.log('Click Clack 1 ' + arg);
+	}
+	function doClick2(arg) {
+		console.log('Click Clack 2' + arg);
+	}
 </script>
 
-<div class="py-0.5 px-10">
-	<div class="p-1 bg-gray-400/20 w-full flex text-2xl justify-between items-center">
-		<div class="">{name}</div>
-		<Button color="transparent" class="!text-2xl"><Chevron>Dropdown button</Chevron></Button>
+<div class="py-0.5 px-0">
+	<div class="pl-5 bg-blue-400/20 w-full flex text-xl justify-between items-center">
+		<div class="text-xl text-blue-200">{name}</div>
+		<Button color="transparent" class="!text-xl !text-blue-200"
+			><Chevron>Dropdown button</Chevron></Button
+		>
 		<Dropdown>
-			<DropdownItem>Old OCS</DropdownItem>
-			<DropdownItem>New OCS</DropdownItem>
+			<DropdownItem id="Waldfee" on:click={doClick1("Hallo")}>Old OCS</DropdownItem>
+			<DropdownItem on:click={doClick2("Huhu")}>New OCS</DropdownItem>
 			<DropdownItem>ECS 1MB</DropdownItem>
 			<DropdownItem>ECS 2MB</DropdownItem>
 		</Dropdown>
 	</div>
 </div>
-
-<!--
-<div class="p-16 z-50">
-    <Button class="font-sofia-semi !bg-gray-100/20" pill={true}><Chevron>Dropdown button</Chevron></Button>
-    <Button color="green"><Chevron>Dropdown button</Chevron></Button>
-    <Dropdown>
-        <DropdownItem>Dashboard</DropdownItem>
-        <DropdownDivider />
-        <DropdownItem>Settings</DropdownItem>
-        <DropdownItem>Earnings</DropdownItem>
-        <DropdownItem slot="footer">Separated link</DropdownItem>
-    </Dropdown>
-</div>
--->
