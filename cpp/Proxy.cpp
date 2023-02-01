@@ -362,6 +362,12 @@ EMSCRIPTEN_BINDINGS(Constants)
 
 EMSCRIPTEN_BINDINGS(Keys)
 {
+    // CPURevision
+    constant("CPU_68000", (int)CPU_68000);
+    constant("CPU_68010", (int)CPU_68010);
+    constant("CPU_68EC020", (int)CPU_68EC020);
+
+    // MsgType
     constant("MSG_NONE", (int)MSG_NONE);
     constant("MSG_REGISTER", (int)MSG_REGISTER);
     constant("MSG_CONFIG", (int)MSG_CONFIG);
@@ -443,6 +449,8 @@ EMSCRIPTEN_BINDINGS(Keys)
     constant("MSG_SRV_STATE", (int)MSG_SRV_STATE);
     constant("MSG_SRV_RECEIVE", (int)MSG_SRV_RECEIVE);
     constant("MSG_SRV_SEND", (int)MSG_SRV_SEND);
+
+    // Option
     constant("OPT_VIDEO_FORMAT", (int)OPT_VIDEO_FORMAT);
     constant("OPT_SYNC_MODE", (int)OPT_SYNC_MODE);
     constant("OPT_PROPOSED_FPS", (int)OPT_PROPOSED_FPS);

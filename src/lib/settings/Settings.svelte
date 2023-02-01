@@ -10,6 +10,7 @@
 	import ConfigCategory from '$lib/settings/ConfigCategory.svelte';
 	import ConfigSection from './ConfigSection.svelte';
 	import ConfigItem from '$lib/settings/ConfigItem.svelte';
+	import { proxy } from '$lib/stores';
 
 	function cpuAction(event) {
 		console.log('CPU: ' + event.detail.text);
@@ -29,12 +30,12 @@
 			</div>
 		</div>
 		<ConfigSection name="CPU">
-			<ConfigItem
+			<ConfigItem on:select={cpuAction}
 				name="CPU"
 				values={[
-					{ name: '68000', id: 0 },
-					{ name: '68010', id: 1 },
-					{ name: '68EC020', id: 2 }
+					{ name: '68000', id: $proxy.CPU_68000 },
+					{ name: '68010', id: $proxy.CPU_68010 },
+					{ name: '68EC020', id: $proxy.CPU_68EC020 }
 				]}
 			/>
 			<ConfigItem

@@ -43,11 +43,10 @@
 			>
 			<Dropdown frameClass="!{bgcolor}">
 				{#each values as { name, id }, i}
-					<DropdownItem
+					{id}<DropdownItem
 						on:click={handleClick}
-						{id}
 						defaultClass="font-medium py-2 px-4 text-xl text-blue-200 {bgcolor} hover:bg-slate-500"
-						><div class="">{name}</div></DropdownItem
+						><div class="" {id}>{name}</div></DropdownItem
 					>
 				{/each}
 			</Dropdown>
