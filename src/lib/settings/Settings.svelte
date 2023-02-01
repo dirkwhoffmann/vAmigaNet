@@ -9,10 +9,10 @@
 	} from 'flowbite-svelte';
 	import ConfigCategory from '$lib/settings/ConfigCategory.svelte';
 	import ConfigSection from './ConfigSection.svelte';
-	import ConfigRow from '$lib/settings/ConfigRow.svelte';
+	import ConfigItem from '$lib/settings/ConfigItem.svelte';
 
 	function cpuAction(event) {
-        console.log("CPU: " + event.detail.text);
+		console.log('CPU: ' + event.detail.text);
 	}
 </script>
 
@@ -29,24 +29,56 @@
 			</div>
 		</div>
 		<ConfigSection name="CPU">
-			<ConfigRow on:select={cpuAction} name="Revision" />
-			<ConfigRow on:select={cpuAction} name="Speed" />
+			<ConfigItem
+				name="CPU"
+				values={[
+					{ name: '68000', id: 0 },
+					{ name: '68010', id: 1 },
+					{ name: '68EC020', id: 2 }
+				]}
+			/>
+			<ConfigItem
+				name="Frequency"
+				values={[
+					{ name: '7 Mhz', id: 0 },
+					{ name: '14 Mhz', id: 1 },
+					{ name: '21 Mhz', id: 2 },
+					{ name: '28 Mhz', id: 3 },
+					{ name: '35 Mhz', id: 4 },
+					{ name: '42 Mhz', id: 5 },
+					{ name: '84 Mhz', id: 6 },
+				]}
+			/>
 		</ConfigSection>
 		<ConfigSection name="Custom Chipset">
-			<ConfigRow name="Agnus Revision" />
-			<ConfigRow name="Denise Revision" />
-			<ConfigRow name="Real-Time Clock" />
+			<ConfigItem
+				name="Agnus Revision"
+				values={[
+					{ name: 'Early OCS', id: 0 },
+					{ name: 'OCS', id: 1 },
+					{ name: 'ECS (1MB)', id: 2 },
+					{ name: 'ECS (2MB)', id: 3 }
+				]}
+			/>
+			<ConfigItem
+				name="Denise Revision"
+				values={[
+					{ name: 'OCS', id: 0 },
+					{ name: 'ECS', id: 1 }
+				]}
+			/>
+			<ConfigItem name="Real-Time Clock" />
 		</ConfigSection>
 		<ConfigSection name="Memory">
-			<ConfigRow name="Chip RAM" />
-			<ConfigRow name="Slow RAM" />
-			<ConfigRow name="Fast RAM" />
-			<ConfigRow name="Memory Layout" />
-			<ConfigRow name="Memory Startup Pattern" />
-			<ConfigRow name="Unmapped Area" />
-			<ConfigRow name="Unmapped Area" />
-			<ConfigRow name="Emulate Slow RAM Mirror" />
-			<ConfigRow name="Emulate Slow RAM Bus Delays" />
+			<ConfigItem name="Chip RAM" />
+			<ConfigItem name="Slow RAM" />
+			<ConfigItem name="Fast RAM" />
+			<ConfigItem name="Memory Layout" />
+			<ConfigItem name="Memory Startup Pattern" />
+			<ConfigItem name="Unmapped Area" />
+			<ConfigItem name="Unmapped Area" />
+			<ConfigItem name="Emulate Slow RAM Mirror" />
+			<ConfigItem name="Emulate Slow RAM Bus Delays" />
 		</ConfigSection>
 	</div>
 </div>
