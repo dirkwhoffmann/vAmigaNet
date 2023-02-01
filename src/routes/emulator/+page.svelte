@@ -7,6 +7,7 @@
 	import { TextureRect } from '$lib/utils/TextureRect';
 	import GLCanvas from '$lib/widgets/GLCanvas.svelte';
 	import RetroShell from '$lib/RetroShell.svelte';
+	import Settings from '$lib/settings/Settings.svelte';
 	import FaAngleLeft from 'svelte-icons/fa/FaAngleLeft.svelte';
 	import Toolbar from '$lib/toolbar/Toolbar.svelte';
 	import { MsgPause, running } from '$lib/stores';
@@ -20,8 +21,9 @@
 	let w = 0;
 	let h = 0;
 
-	// Indicates if RetroShell should be displayed
+	// Indicates if additional layers should be displayed
 	let showShell = false;
+	let showSettings = false;
 
 	// The currently visible area
 	let textureRect = new TextureRect();
@@ -57,8 +59,8 @@
 			let y1 = textureRect.y1.current * textureRect.texH;
 			let x2 = textureRect.x2.current * textureRect.texW;
 			let y2 = textureRect.y2.current * textureRect.texH;
-			w = (x2 - x1) + 2;
-			h = (y2 - y1) + 2;
+			w = x2 - x1 + 2;
+			h = y2 - y1 + 2;
 		}
 
 		glCanvas.update(now);
@@ -83,6 +85,9 @@
 				break;
 			case 'retroShell':
 				showShell = !showShell;
+				break;
+			case 'settings':
+				showSettings = !showSettings;
 				break;
 			case 'monitor':
 				if ($amiga.getConfig($proxy.OPT_DMA_DEBUG_ENABLE)) {
@@ -144,6 +149,7 @@
 			<div class="flex justify-center">
 				<div class="border-2 border-gray-600" style="height:{2 * h}px; width:{w}px">
 					<GLCanvas bind:this={glCanvas} />
+
 					<!-- Retro Shell -->
 					{#if showShell}
 						<div
@@ -151,6 +157,16 @@
 							class="absolute top-0 left-0 w-full h-full border-none border-red-500 flex-grow overflow-scroll"
 						>
 							<RetroShell />
+						</div>
+					{/if}
+
+					<!-- Settings -->
+					{#if showSettings}
+						<div
+							transition:fade
+							class="absolute top-0 left-0 w-full h-full border-4 border-red-500 flex-grow overflow-scroll"
+						>
+							<Settings />
 						</div>
 					{/if}
 				</div>
@@ -161,5 +177,5 @@
 			</div>
 		</div>
 	</DragAndDrop>
-	<Logo />
+	<Logo shadow={false} />
 </body>

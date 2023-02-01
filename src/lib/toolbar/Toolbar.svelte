@@ -10,7 +10,7 @@
 	let tbcolor2 = 'transparent';
 	let show = true;
 
-	$: stopAndGoIcon = $running ? "icons/pauseIcon.png" : "icons/runIcon.png";
+	$: stopAndGoIcon = $running ? 'icons/pauseIcon.png' : 'icons/runIcon.png';
 
 	export function showToolbar() {
 		console.log('show');
@@ -24,10 +24,7 @@
 </script>
 
 {#if show}
-	<div
-		class="bg-gray-500/80 flex w-screen justify-between p-0"
-		transition:fade={{ duration: 500 }}
-	>
+	<div class="bg-gray-500/80 flex w-screen justify-between p-0" transition:fade={{ duration: 500 }}>
 		<!--<ToolbarSeparator />-->
 		<ToolbarSection bgcolor={tbcolor2}>
 			<ToolbarItem id="home" icon="icons/homeIcon.png" {bgcolor} on:click />
@@ -62,7 +59,11 @@
 	-->
 		<ToolbarSeparator />
 		<ToolbarSection bgcolor={tbcolor2}>
-			<ToolbarItem id="pause" icon="{stopAndGoIcon}" {bgcolor} on:click />
+			<ToolbarItem id="settings" icon="icons/settingsIcon.png" {bgcolor} on:click />
+		</ToolbarSection>
+		<ToolbarSeparator />
+		<ToolbarSection bgcolor={tbcolor2}>
+			<ToolbarItem id="pause" icon={stopAndGoIcon} {bgcolor} on:click />
 			<ToolbarItem id="reset" icon="icons/resetIcon.png" {bgcolor} on:click />
 			<ToolbarItem id="power" icon="icons/powerIcon.png" {bgcolor} on:click />
 		</ToolbarSection>

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Splide, SplideSlide } from '@splidejs/svelte-splide';
 	import { createEventDispatcher } from 'svelte';
-	import CarouselItem from './CarouselItem.svelte';
+	import CarouselItem from '$lib/widgets/CarouselItem.svelte';
 
 	export let category = '';
 	export let items: DataBaseItem[] = [];

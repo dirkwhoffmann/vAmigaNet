@@ -5,7 +5,7 @@
 	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
 	import { demos } from './showcases/database';
-	import Button from '$lib/widgets/Button.svelte';
+	import MyButton from '$lib/widgets/MyButton.svelte';
 	import MainPageLink from '$lib/widgets/MainPageLink.svelte';
 	import FaGithub from 'svelte-icons/fa/FaGithub.svelte';
 	import GoGear from 'svelte-icons/go/GoGear.svelte';
@@ -13,9 +13,6 @@
 	// import FaInfoCircle from 'svelte-icons/fa/FaInfoCircle.svelte';
 	import '@splidejs/svelte-splide/css';
 	import { poweredOn } from '$lib/stores';
-	import Movable from '$lib/widgets/Movable.svelte';
-	import MovableWindow from '$lib/widgets/MovableWindow.svelte';
-	import { Alert } from 'flowbite-svelte';
 
 	let show = false;
 	let guru = true;
@@ -52,7 +49,7 @@
 		goto('https://dirkwhoffmann.github.io/vAmiga');
 	}
 
-	let hideInfoWindow=false;
+	let hideInfoWindow = false;
 </script>
 
 <body class="h-screen bg-black text-white scroll-smooth overflow-y-scroll">
@@ -91,20 +88,14 @@
 							</div>
 							<div class="font-sofia-semi text-xl text-gray-300 pl-2 pb-10">Version 0.1</div>
 							<div class="flex space-x-5">
-								<!--<Button on:click={powerOn} label="Power On" />-->
-								<Button on:click={runDemo} label={buttonText} />
-								<Button on:click={gotoGitHub}><FaGithub /></Button>
+								<!--<MyButton on:click={powerOn} label="Power On" />-->
+								<MyButton on:click={runDemo} label={buttonText} />
+								<MyButton on:click={gotoGitHub}><FaGithub /></MyButton>
 							</div>
 						</div>
 					</div>
 				</div>
 			{/key}
-			<div class="p-16">
-				<Alert>
-					<span class="font-josefin">Info alert!</span> Change a few things up and try submitting again.
-				</Alert>
-			</div>
-
 			<div
 				class="relative flex justify-center border-none align-middle bg-gray-900/50 space-x-8 border-4 border-red-500"
 			>
@@ -139,7 +130,7 @@
 					or to shut it down.
 				</p>
 				<div class="flex justify-center mt-10">
-					<Button on:click={understood} label="Understood" />
+					<MyButton on:click={understood} label="Understood" />
 				</div>
 			</div>
 		</div>

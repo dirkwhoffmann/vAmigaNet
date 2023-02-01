@@ -3,8 +3,8 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import Carousel from '$lib/Carousel.svelte';
-	import Button from '$lib/widgets/Button.svelte';
+	import Carousel from '$lib/widgets/Carousel.svelte';
+	import MyButton from '$lib/widgets/MyButton.svelte';
 	import FaAngleLeft from 'svelte-icons/fa/FaAngleLeft.svelte';
 	import '@splidejs/svelte-splide/css';
 	import { demos, games, tools } from './database';
@@ -72,7 +72,7 @@
 			<!--<img class="absolute top-0 left-0 w-full" src="footage/blank-large.png" alt="Alt" />-->
 			<!--
 			<div class="flex pb-5 z-40">
-				<Button on:click={goBack}><FaAngleLeft /></Button>
+				<MyButton on:click={goBack}><FaAngleLeft /></MyButton>
 			</div>
 			-->
 			{#key show}
@@ -85,7 +85,7 @@
 							<div class="font-sofia-semi text-2xl pb-10">{selected.subtitle}</div>
 							<div class="flex font-josefin text-lg w-2/3 pb-5">{selected.description}</div>
 							<div class="pb-5">
-								<Button on:click={runTitle} label="Start" />
+								<MyButton on:click={runTitle} label="Start" />
 							</div>
 						</div>
 					</div>

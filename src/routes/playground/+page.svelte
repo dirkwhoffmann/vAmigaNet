@@ -2,7 +2,7 @@
 	import '../../app.css';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import Carousel from '$lib/Carousel.svelte';
+	import Carousel from '$lib/widgets/Carousel.svelte';
 	import '@splidejs/svelte-splide/css';
 
 	let show = false;
