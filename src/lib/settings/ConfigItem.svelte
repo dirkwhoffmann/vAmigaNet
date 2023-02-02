@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
+	import FaLock from 'svelte-icons/fa/FaLock.svelte';
 	import {
 		Button,
 		Dropdown,
@@ -10,25 +11,20 @@
 	} from 'flowbite-svelte';
 
 	export let name = '???';
-	// export let value = 'undefined';
-	export let selectedTag: number; 
+	export let values = [{ name: '???', id: 0 }];
+	export let locked = false;
+	export let selectedTag: number;
 
 	const bgcolor = 'bg-slate-600';
-
-	export let values = [
-		{ name: 'Old OCS', id: 0 },
-		{ name: 'New OCS', id: 1 },
-		{ name: 'Old ECS', id: 2 },
-		{ name: 'New ECS', id: 3 }
-	];
+	
 	const dispatch = createEventDispatcher();
 
-	$: selection = displayedName(selectedTag); 
+	$: selection = displayedName(selectedTag);
 
 	function displayedName(tag: number): string {
-		let value = values.find(o => o.id === tag);
-		console.log("Found name " + (value == undefined ? "???" : value.name));
-		return value == undefined ? "???" : value.name; 
+		let value = values.find((o) => o.id === tag);
+		console.log('Found name ' + (value == undefined ? '???' : value.name));
+		return value == undefined ? '???' : value.name;
 	}
 
 	const handleClick = (e: MouseEvent) => {
@@ -43,7 +39,12 @@
 <div class="py-0.5 px-0">
 	<div class="w-full flex text-xl space-x-1 justify-between items-center">
 		<div class="border-0 bg-blue-400/20 w-full h-12 flex flex-col justify-center">
-			<div class="p-4 text-xl text-blue-200">{name}</div>
+			<div class="p-4 text-xl text-blue-200 flex items-center">
+				{#if locked}
+				<div class="border-0 mr-3 h-6"><FaLock /></div>
+				{/if}
+				<div class="border-0">{name}</div>
+			</div>
 		</div>
 		<div class="border-0 bg-blue-400/20 h-12">
 			<Button color="" class="!text-xl !text-blue-200"

@@ -15,6 +15,7 @@
 	import { proxy } from '$lib/stores';
 	import { amiga } from '$lib/stores';
 
+	let power: boolean; 
 	let cpuRevision: number;
 	let cpuSpeed: number;
 	let agnusRevision: number;
@@ -26,6 +27,7 @@
 	});
 
 	function update() {
+		power = $amiga.poweredOn; 
 		cpuRevision = $amiga.getConfig($proxy.OPT_CPU_REVISION);
 		cpuSpeed = $amiga.getConfig($proxy.OPT_CPU_OVERCLOCKING);
 		agnusRevision = $amiga.getConfig($proxy.OPT_AGNUS_REVISION);
@@ -102,6 +104,7 @@
 				on:select={agnusRevAction}
 				selectedTag={agnusRevision}
 				name="Agnus Revision"
+				locked={power}
 				values={[
 					{ name: 'Early OCS', id: $proxy.AGNUS_OCS_OLD },
 					{ name: 'OCS', id: $proxy.AGNUS_OCS },
@@ -113,6 +116,7 @@
 				on:select={deniseRevAction}
 				selectedTag={deniseRevision}
 				name="Denise Revision"
+				locked={power}
 				values={[
 					{ name: 'OCS', id: $proxy.DENISE_OCS },
 					{ name: 'ECS', id: $proxy.DENISE_ECS }
@@ -122,6 +126,7 @@
 				on:select={rtcModelAction}
 				selectedTag={rtcModel}
 				name="Real-time Clock"
+				locked={power}
 				values={[
 					{ name: 'NONE', id: $proxy.RTC_NONE },
 					{ name: 'OKI', id: $proxy.RTC_OKI },
