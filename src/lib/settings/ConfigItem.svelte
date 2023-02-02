@@ -13,13 +13,14 @@
 	export let name = '???';
 	export let values = [{ name: '???', id: 0 }];
 	export let locked = false;
-	export let selectedTag: number;
+	export let selection: number;
 
 	const bgcolor = 'bg-slate-600';
-	
+	let dropdownOpen = false;
+
 	const dispatch = createEventDispatcher();
 
-	$: selection = displayedName(selectedTag);
+	$: selection = displayedName(selection);
 
 	function displayedName(tag: number): string {
 		let value = values.find((o) => o.id === tag);
@@ -29,6 +30,7 @@
 
 	const handleClick = (e: MouseEvent) => {
 		e.preventDefault();
+		dropdownOpen = false;
 		console.log('Click: id = ' + e.target!.id);
 		dispatch('select', {
 			text: e.target!.id
@@ -50,7 +52,7 @@
 			<Button color="" class="!text-xl !text-blue-200"
 				><Chevron><div class="w-64">{selection}</div></Chevron></Button
 			>
-			<Dropdown frameClass="!{bgcolor}">
+			<Dropdown frameClass="!{bgcolor}" bind:open={dropdownOpen}>
 				{#each values as { name, id }, i}
 					<DropdownItem
 						on:click={handleClick}

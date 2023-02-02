@@ -15,7 +15,7 @@
 	import { proxy } from '$lib/stores';
 	import { amiga } from '$lib/stores';
 
-	let power: boolean; 
+	let power: boolean;
 	let cpuRevision: number;
 	let cpuSpeed: number;
 	let agnusRevision: number;
@@ -27,7 +27,7 @@
 	});
 
 	function update() {
-		power = $amiga.poweredOn; 
+		power = $amiga.poweredOn;
 		cpuRevision = $amiga.getConfig($proxy.OPT_CPU_REVISION);
 		cpuSpeed = $amiga.getConfig($proxy.OPT_CPU_OVERCLOCKING);
 		agnusRevision = $amiga.getConfig($proxy.OPT_AGNUS_REVISION);
@@ -75,9 +75,9 @@
 		</div>
 		<ConfigSection name="CPU">
 			<ConfigItem
-				on:select={cpuRevAction}
-				selectedTag={cpuRevision}
 				name="CPU"
+				selection={cpuRevision}
+				on:select={cpuRevAction}
 				values={[
 					{ name: '68000', id: $proxy.CPU_68000 },
 					{ name: '68010', id: $proxy.CPU_68010 },
@@ -85,9 +85,9 @@
 				]}
 			/>
 			<ConfigItem
-				on:select={cpuSpeedAction}
-				selectedTag={cpuSpeed}
 				name="Frequency"
+				selection={cpuSpeed}
+				on:select={cpuSpeedAction}
 				values={[
 					{ name: '7 Mhz', id: 0 },
 					{ name: '14 Mhz', id: 2 },
@@ -101,9 +101,9 @@
 		</ConfigSection>
 		<ConfigSection name="Custom Chipset">
 			<ConfigItem
-				on:select={agnusRevAction}
-				selectedTag={agnusRevision}
 				name="Agnus Revision"
+				selection={agnusRevision}
+				on:select={agnusRevAction}
 				locked={power}
 				values={[
 					{ name: 'Early OCS', id: $proxy.AGNUS_OCS_OLD },
@@ -113,25 +113,25 @@
 				]}
 			/>
 			<ConfigItem
-				on:select={deniseRevAction}
-				selectedTag={deniseRevision}
 				name="Denise Revision"
-				locked={power}
+				selection={deniseRevision}
+				on:select={deniseRevAction}
 				values={[
 					{ name: 'OCS', id: $proxy.DENISE_OCS },
 					{ name: 'ECS', id: $proxy.DENISE_ECS }
 				]}
+				locked={power}
 			/>
 			<ConfigItem
-				on:select={rtcModelAction}
-				selectedTag={rtcModel}
 				name="Real-time Clock"
-				locked={power}
+				selection={rtcModel}
+				on:select={rtcModelAction}
 				values={[
 					{ name: 'NONE', id: $proxy.RTC_NONE },
 					{ name: 'OKI', id: $proxy.RTC_OKI },
 					{ name: 'RICOH', id: $proxy.RTC_RICOH }
 				]}
+				locked={power}
 			/>
 		</ConfigSection>
 
