@@ -10,7 +10,8 @@
 	} from 'flowbite-svelte';
 
 	export let name = '???';
-	export let value = 'undefined';
+	// export let value = 'undefined';
+	export let selectedTag: number; 
 
 	const bgcolor = 'bg-slate-600';
 
@@ -22,10 +23,17 @@
 	];
 	const dispatch = createEventDispatcher();
 
-	const handleClick = (e: PointerEvent) => {
+	$: selection = displayedName(selectedTag); 
+
+	function displayedName(tag: number): string {
+		let value = values.find(o => o.id === tag);
+		console.log("Found name " + (value == undefined ? "???" : value.name));
+		return value == undefined ? "???" : value.name; 
+	}
+
+	const handleClick = (e: MouseEvent) => {
 		e.preventDefault();
-		console.log('Click');
-		console.log('ID = ' + e.target!.id);
+		console.log('Click: id = ' + e.target!.id);
 		dispatch('select', {
 			text: e.target!.id
 		});
@@ -39,14 +47,14 @@
 		</div>
 		<div class="border-0 bg-blue-400/20 h-12">
 			<Button color="" class="!text-xl !text-blue-200"
-				><Chevron><div class="w-64">{value}</div></Chevron></Button
+				><Chevron><div class="w-64">{selection}</div></Chevron></Button
 			>
 			<Dropdown frameClass="!{bgcolor}">
 				{#each values as { name, id }, i}
-					{id}<DropdownItem
+					<DropdownItem
 						on:click={handleClick}
 						defaultClass="font-medium py-2 px-4 text-xl text-blue-200 {bgcolor} hover:bg-slate-500"
-						><div class="" {id}>{name}</div></DropdownItem
+						><div class="" id={id.toString()}>{name}</div></DropdownItem
 					>
 				{/each}
 			</Dropdown>

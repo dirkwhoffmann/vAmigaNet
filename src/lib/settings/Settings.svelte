@@ -5,15 +5,57 @@
 		DropdownItem,
 		DropdownDivider,
 		DropdownHeader,
-		Chevron
+		Chevron,
+		A
 	} from 'flowbite-svelte';
+	import { onMount } from 'svelte';
 	import ConfigCategory from '$lib/settings/ConfigCategory.svelte';
 	import ConfigSection from './ConfigSection.svelte';
 	import ConfigItem from '$lib/settings/ConfigItem.svelte';
 	import { proxy } from '$lib/stores';
+	import { amiga } from '$lib/stores';
 
-	function cpuAction(event) {
-		console.log('CPU: ' + event.detail.text);
+	let cpuRevision: number;
+	let cpuSpeed: number;
+	let agnusRevision: number;
+	let deniseRevision: number;
+	let rtcModel: number;
+
+	onMount(() => {
+		update();
+	});
+
+	function update() {
+		cpuRevision = $amiga.getConfig($proxy.OPT_CPU_REVISION);
+		cpuSpeed = $amiga.getConfig($proxy.OPT_CPU_OVERCLOCKING);
+		agnusRevision = $amiga.getConfig($proxy.OPT_AGNUS_REVISION);
+		deniseRevision = $amiga.getConfig($proxy.OPT_DENISE_REVISION);
+		rtcModel = $amiga.getConfig($proxy.OPT_RTC_MODEL);
+	}
+
+	function cpuRevAction(event) {
+		$amiga.configure($proxy.OPT_CPU_REVISION, event.detail.text);
+		update();
+	}
+
+	function cpuSpeedAction(event) {
+		$amiga.configure($proxy.OPT_CPU_OVERCLOCKING, event.detail.text);
+		update();
+	}
+
+	function agnusRevAction(event) {
+		$amiga.configure($proxy.OPT_AGNUS_REVISION, event.detail.text);
+		update();
+	}
+
+	function deniseRevAction(event) {
+		$amiga.configure($proxy.OPT_DENISE_REVISION, event.detail.text);
+		update();
+	}
+
+	function rtcModelAction(event) {
+		$amiga.configure($proxy.OPT_RTC_MODEL, event.detail.text);
+		update();
 	}
 </script>
 
@@ -30,7 +72,9 @@
 			</div>
 		</div>
 		<ConfigSection name="CPU">
-			<ConfigItem on:select={cpuAction}
+			<ConfigItem
+				on:select={cpuRevAction}
+				selectedTag={cpuRevision}
 				name="CPU"
 				values={[
 					{ name: '68000', id: $proxy.CPU_68000 },
@@ -39,37 +83,54 @@
 				]}
 			/>
 			<ConfigItem
+				on:select={cpuSpeedAction}
+				selectedTag={cpuSpeed}
 				name="Frequency"
 				values={[
 					{ name: '7 Mhz', id: 0 },
-					{ name: '14 Mhz', id: 1 },
-					{ name: '21 Mhz', id: 2 },
-					{ name: '28 Mhz', id: 3 },
-					{ name: '35 Mhz', id: 4 },
-					{ name: '42 Mhz', id: 5 },
-					{ name: '84 Mhz', id: 6 },
+					{ name: '14 Mhz', id: 2 },
+					{ name: '21 Mhz', id: 3 },
+					{ name: '28 Mhz', id: 4 },
+					{ name: '35 Mhz', id: 5 },
+					{ name: '42 Mhz', id: 6 },
+					{ name: '84 Mhz', id: 12 }
 				]}
 			/>
 		</ConfigSection>
 		<ConfigSection name="Custom Chipset">
 			<ConfigItem
+				on:select={agnusRevAction}
+				selectedTag={agnusRevision}
 				name="Agnus Revision"
 				values={[
-					{ name: 'Early OCS', id: 0 },
-					{ name: 'OCS', id: 1 },
-					{ name: 'ECS (1MB)', id: 2 },
-					{ name: 'ECS (2MB)', id: 3 }
+					{ name: 'Early OCS', id: $proxy.AGNUS_OCS_OLD },
+					{ name: 'OCS', id: $proxy.AGNUS_OCS },
+					{ name: 'ECS (1MB)', id: $proxy.AGNUS_ECS_1MB },
+					{ name: 'ECS (2MB)', id: $proxy.AGNUS_ECS_2MB }
 				]}
 			/>
 			<ConfigItem
+				on:select={deniseRevAction}
+				selectedTag={deniseRevision}
 				name="Denise Revision"
 				values={[
-					{ name: 'OCS', id: 0 },
-					{ name: 'ECS', id: 1 }
+					{ name: 'OCS', id: $proxy.DENISE_OCS },
+					{ name: 'ECS', id: $proxy.DENISE_ECS }
 				]}
 			/>
-			<ConfigItem name="Real-Time Clock" />
+			<ConfigItem
+				on:select={rtcModelAction}
+				selectedTag={rtcModel}
+				name="Real-time Clock"
+				values={[
+					{ name: 'NONE', id: $proxy.RTC_NONE },
+					{ name: 'OKI', id: $proxy.RTC_OKI },
+					{ name: 'RICOH', id: $proxy.RTC_RICOH }
+				]}
+			/>
 		</ConfigSection>
+
+		<!--
 		<ConfigSection name="Memory">
 			<ConfigItem name="Chip RAM" />
 			<ConfigItem name="Slow RAM" />
@@ -81,5 +142,6 @@
 			<ConfigItem name="Emulate Slow RAM Mirror" />
 			<ConfigItem name="Emulate Slow RAM Bus Delays" />
 		</ConfigSection>
+		-->
 	</div>
 </div>
