@@ -20,7 +20,7 @@
 
 	const dispatch = createEventDispatcher();
 
-	$: selection = displayedName(selection);
+	$: displayName = displayedName(selection);
 
 	function displayedName(tag: number): string {
 		let value = values.find((o) => o.id === tag);
@@ -50,7 +50,7 @@
 		</div>
 		<div class="border-0 bg-blue-400/20 h-12">
 			<Button color="" class="!text-xl !text-blue-200"
-				><Chevron><div class="w-64">{selection}</div></Chevron></Button
+				><Chevron><div class="w-64">{displayName}</div></Chevron></Button
 			>
 			<Dropdown frameClass="!{bgcolor}" bind:open={dropdownOpen}>
 				{#each values as { name, id }, i}
