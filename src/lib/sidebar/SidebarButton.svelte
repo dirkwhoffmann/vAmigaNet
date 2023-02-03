@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-    export let icon = '';
-	export let id = '';
+	export let item = { id: '', icon: '' };
 	export let alt = 'Icon';
     export let enabled = true;
 	export let highlighted = false;
@@ -23,9 +22,9 @@
 	<button
 		type="button"
 		class="border-0 p-1 w-10 rounded-lg text-white active:bg-white {bgcolor} {hoverStyle} {opacity}"
-		{id}
+		id={item.id}
 		on:click={click}
 	>
-		<img class="" {id} src={icon} {alt} />
+		<img class="" id={item.id} src={item.icon} {alt} />
 	</button>
 </div>

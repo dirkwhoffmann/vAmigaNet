@@ -26,19 +26,18 @@
 	<div>
 		<div class="border-0">
 			<SidebarButton
-				id={item.id}
 				on:select={select}
 				highlighted={expanded}
-				icon={item.icon}
+				{item}
 			/>
 		</div>
 	</div>
 	{#if expanded}
 		<div transition:fade={{ duration: 200 }}>
 			<div class="border-0 flex space-x-1 mx-1">
-                {#each subitems as { id, icon }, i}
+                {#each subitems as item}
                 <div class="border-0">
-					<SidebarButton on:select={select} {id} {icon} />
+					<SidebarButton on:select={select} {item} />
 				</div>
                 {/each}
 			</div>

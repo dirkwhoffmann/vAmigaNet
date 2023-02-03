@@ -30,13 +30,17 @@
 		dispatch('select', { sender: sel });
 	}
 
+	const vamiga = { id: 'vamiga', icon: 'icons/vamigaIcon.png' };
 	const control = { id: 'control', icon: 'icons/controlIcon.png' };
 	const controlItems = [
 		{ id: 'pause', icon: 'icons/pauseIcon.png' },
 		{ id: 'reset', icon: 'icons/resetIcon.png' },
 		{ id: 'power', icon: 'icons/powerIcon.png' }
 	];
+	const settings = { id: 'settings', icon: 'icons/settingsIcon.png' };
+	const shell = { id: 'shell', icon: 'icons/retroShellIcon.png' };
 	const layout = { id: 'layout', icon: 'icons/layoutIcon.png' };
+	const monitor = { id: 'monitor', icon: 'icons/monitorIcon.png' };
 	const layoutItems = [
 		{ id: 'aspect', icon: 'icons/layoutAspectIcon.png' },
 		{ id: 'fit', icon: 'icons/layoutFitIcon.png' },
@@ -52,13 +56,13 @@
 	/>
 {/if}
 <div class="z-50 absolute top-0 left-0 p-2 flex flex-col space-y-1">
-	<div><SidebarButton id="vamiga" on:select={expand} {opacity} icon="icons/vamigaIcon.png" /></div>
+	<div><SidebarButton on:select={expand} {opacity} item={vamiga} /></div>
 	{#if expanded}
 		<div class="z-50 relative space-y-1" transition:fade={{ duration }}>
 			<SidebarSection on:select={select} expanded={sel=='control'} item={control} subitems={controlItems} />
-            <SidebarButton id="settings" on:select={select} icon="icons/settingsIcon.png" />
-			<SidebarButton id="shell" on:select={select} icon="icons/retroShellIcon.png" />
-			<SidebarButton id="monitor" on:select={select} icon="icons/monitorIcon.png" />
+            <SidebarButton on:select={select} item={settings} />
+			<SidebarButton on:select={select} item={shell} />
+			<SidebarButton on:select={select} item={monitor} />
             <SidebarSection on:select={select} expanded={sel=='layout'} item={layout} subitems={layoutItems} />
 		</div>
 	{/if}
