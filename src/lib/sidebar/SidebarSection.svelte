@@ -27,7 +27,7 @@
 		<div class="border-0">
 			<SidebarButton
 				id={item.id}
-				on:select={expand}
+				on:select={select}
 				highlighted={expanded}
 				icon={item.icon}
 			/>

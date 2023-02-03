@@ -26,8 +26,8 @@
 
 	function select(e: Event) {
 		e.preventDefault();
-		sel = sel == e.detail.sender ? '' : e.detail.sender;
-		console.log('sel = ' + sel);
+		sel = e.detail.sender;
+		console.log(sel + ' selected');
 		dispatch('select', { sender: sel });
 	}
 
@@ -56,11 +56,11 @@
 	<div><SidebarButton id="vamiga" on:select={expand} {opacity} icon="icons/vamigaIcon.png" /></div>
 	{#if expanded}
 		<div class="z-50 relative space-y-1" transition:fade={{ duration }}>
-			<SidebarSection on:select={select} item={control} subitems={controlItems} />
-            <div><SidebarButton id="settings" on:select={select} icon="icons/settingsIcon.png" /></div>
-			<div><SidebarButton id="shell" on:select={select} icon="icons/retroShellIcon.png" /></div>
-			<div><SidebarButton id="monitor" on:select={select} icon="icons/monitorIcon.png" /></div>
-            <SidebarSection on:select={select} item={layout} subitems={layoutItems} />
+			<SidebarSection on:select={select} expanded={sel=='control'} item={control} subitems={controlItems} />
+            <SidebarButton id="settings" on:select={select} icon="icons/settingsIcon.png" />
+			<SidebarButton id="shell" on:select={select} icon="icons/retroShellIcon.png" />
+			<SidebarButton id="monitor" on:select={select} icon="icons/monitorIcon.png" />
+            <SidebarSection on:select={select} expanded={sel=='layout'} item={layout} subitems={layoutItems} />
 		</div>
 	{/if}
 </div>

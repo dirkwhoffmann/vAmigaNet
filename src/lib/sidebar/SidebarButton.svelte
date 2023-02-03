@@ -21,6 +21,7 @@
 	}
 </script>
 
+<div>
 <button
 	type="button"
 	class="border-0 p-1 w-10 rounded-lg {bgcolor} text-white hover:bg-gray-100 hover:scale-100 {opacity}"
@@ -31,3 +32,4 @@
 >
 	<img class="" {id} src={icon} {alt} />
 </button>
+</div>
