@@ -1,18 +1,16 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	// export let disabled = false;
-	// export let bgcolor = 'bg-gray-300';
-	export let hasIcon = false;
-	export let active = false;
-	export let icon = '';
+    export let icon = '';
 	export let id = '';
 	export let alt = 'Icon';
-	export let opacity = '';
+    export let enabled = true;
 	export let highlighted = false;
+	export let opacity = '';
 
-    const dispatch = createEventDispatcher();
+	const dispatch = createEventDispatcher();
 
-	$: bgcolor = highlighted ? 'bg-gray-100' : 'bg-gray-300';
+	$: bgcolor = enabled ? (highlighted ? 'bg-gray-100' : 'bg-gray-300') : 'bg-gray-500';
+	$: hoverStyle = enabled ? 'hover:bg-gray-100 hover:scale-100' : '';
 
 	function click(e: Event) {
 		e.preventDefault();
@@ -22,14 +20,12 @@
 </script>
 
 <div>
-<button
-	type="button"
-	class="border-0 p-1 w-10 rounded-lg {bgcolor} text-white hover:bg-gray-100 hover:scale-100 {opacity}"
-	class:hasIcon
-	{id}
-	on:click={click}
-	class:active
->
-	<img class="" {id} src={icon} {alt} />
-</button>
+	<button
+		type="button"
+		class="border-0 p-1 w-10 rounded-lg text-white active:bg-white {bgcolor} {hoverStyle} {opacity}"
+		{id}
+		on:click={click}
+	>
+		<img class="" {id} src={icon} {alt} />
+	</button>
 </div>

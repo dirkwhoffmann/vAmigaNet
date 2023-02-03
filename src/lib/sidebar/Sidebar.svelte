@@ -25,7 +25,7 @@
 
 	function select(e: Event) {
 		e.preventDefault();
-		sel = e.detail.sender;
+		sel = e.detail.sender == sel ? '' : e.detail.sender;
 		console.log(sel + ' selected');
 		dispatch('select', { sender: sel });
 	}
