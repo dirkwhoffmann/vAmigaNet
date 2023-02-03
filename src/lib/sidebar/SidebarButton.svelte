@@ -7,11 +7,12 @@
 	export let icon = '';
 	export let id = '';
 	export let alt = 'Icon';
+    export let opacity = '';
 </script>
 
 <button
 	type="button"
-	class="border-0 p-1 w-10 rounded-lg {bgcolor} text-white hover:bg-gray-100 hover:scale-100"
+	class="border-0 p-1 w-10 rounded-lg {bgcolor} text-white hover:bg-gray-100 hover:scale-100 {opacity}"
 	class:hasIcon
 	{id}
 	{title}

@@ -8,13 +8,20 @@
 	let expanded = false;
 	let sel = '';
 	let duration = 200;
+	let opacity = 'opacity-20';
 
 	const dispatch = createEventDispatcher();
 
 	function expand() {
 		sel = '';
 		console.log('expand = ' + expanded);
-		expanded = !expanded;
+        if (expanded) {
+            expanded = false; 
+            opacity = 'opacity-20';
+        } else {
+            expanded = true; 
+            opacity = 'opacity-100';
+        }
 	}
 
 	function select(e: Event) {
@@ -32,7 +39,7 @@
 	/>
 {/if}
 <div class="z-50 absolute top-0 left-0 p-2 flex flex-col space-y-1">
-	<div><SidebarButton id="vamiga" on:click={expand} icon="icons/vamigaIcon.png" /></div>
+    <div><SidebarButton id="vamiga" on:click={expand} {opacity} icon="icons/vamigaIcon.png" /></div>
 	{#if expanded}
 		<div class="z-50 relative space-y-1" transition:fade={{ duration }}>
 			<SidebarItem icon="icons/settingsIcon.png" expanded={sel == 'control'}>
@@ -54,7 +61,7 @@
 			<div><SidebarButton id="settings" on:click={select} icon="icons/settingsIcon.png" /></div>
 			<div><SidebarButton id="shell" on:click={select} icon="icons/retroShellIcon.png" /></div>
 			<div><SidebarButton id="monitor" on:click={select} icon="icons/monitorIcon.png" /></div>
-            <SidebarItem icon="icons/settingsIcon.png" expanded={sel == 'layout'}>
+			<SidebarItem icon="icons/settingsIcon.png" expanded={sel == 'layout'}>
 				<div class="border-0">
 					<SidebarButton id="layout" on:click={select} icon="icons/layoutIcon.png" />
 				</div>
