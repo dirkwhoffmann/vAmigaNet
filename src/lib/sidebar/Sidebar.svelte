@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import SidebarItem from '$lib/sidebar/SidebarItem.svelte';
 	import SidebarButton from '$lib/sidebar/SidebarButton.svelte';
 	import SidebarSection from '$lib/sidebar/SidebarSection.svelte';
 	import { fly, fade, slide, scale } from 'svelte/transition';
