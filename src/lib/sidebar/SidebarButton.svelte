@@ -11,7 +11,7 @@
 
 <button
 	type="button"
-	class="p-2 w-10 rounded-lg {bgcolor} p-1 text-white hover:bg-gray-100 hover:scale-100"
+	class="border-0 p-1 w-10 rounded-lg {bgcolor} text-white hover:bg-gray-100 hover:scale-100"
 	class:hasIcon
 	{id}
 	{title}
@@ -20,5 +20,4 @@
 	class:active
 >
 	<img class="" {id} src={icon} {alt} />
-	<slot />
 </button>

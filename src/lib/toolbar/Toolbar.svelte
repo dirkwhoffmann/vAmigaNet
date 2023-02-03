@@ -6,6 +6,7 @@
 	import { running } from '$lib/stores';
 
 	export let bgcolor = 'bg-gray-300';
+
 	let tbcolor1 = 'bg-gray-500/50';
 	let tbcolor2 = 'transparent';
 	let show = true;

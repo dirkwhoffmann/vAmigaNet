@@ -5,7 +5,7 @@
 	export let disabled = false;
 	export let alt = 'Sidebar Item';
 	export let icon = '';
-    export let id = '';
+	export let id = '';
 	export let expanded = false;
 
 	function expand() {
@@ -15,10 +15,11 @@
 </script>
 
 <div class="flex">
-	<slot />
+	<div>
+		<slot />
+	</div>
 	{#if expanded}
-		<div transition:fade={{ duration: 200 }} class="flex">
-			<!--<div transition:slide={{x: -150}} class="flex">-->
+		<div transition:fade={{ duration: 200 }}>
 			<slot name="subitems" />
 		</div>
 	{/if}
