@@ -2,7 +2,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import SidebarButton from '$lib/sidebar/SidebarButton.svelte';
 	import SidebarSection from '$lib/sidebar/SidebarSection.svelte';
-	import { fly, fade, slide, scale } from 'svelte/transition';
+	import { fade } from 'svelte/transition';
 
 	let expanded = false;
 	let sel = '';
