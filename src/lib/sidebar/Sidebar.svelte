@@ -32,12 +32,12 @@
 	/>
 {/if}
 <div class="z-50 absolute top-0 left-0 p-2 flex flex-col space-y-1">
-	<div><SidebarButton id="vamiga" on:click={expand} icon="va-icon.png" /></div>
+	<div><SidebarButton id="vamiga" on:click={expand} icon="icons/vamigaIcon.png" /></div>
 	{#if expanded}
 		<div class="z-50 relative space-y-1" transition:fade={{ duration }}>
 			<SidebarItem icon="icons/settingsIcon.png" expanded={sel == 'control'}>
 				<div class="border-0">
-					<SidebarButton id="control" on:click={select} icon="icons/pauseIcon.png" />
+					<SidebarButton id="control" on:click={select} icon="icons/controlIcon.png" />
 				</div>
 				<div slot="subitems" class="border-0 flex space-x-1 mx-1">
 					<div class="border-0">
@@ -54,6 +54,22 @@
 			<div><SidebarButton id="settings" on:click={select} icon="icons/settingsIcon.png" /></div>
 			<div><SidebarButton id="shell" on:click={select} icon="icons/retroShellIcon.png" /></div>
 			<div><SidebarButton id="monitor" on:click={select} icon="icons/monitorIcon.png" /></div>
+            <SidebarItem icon="icons/settingsIcon.png" expanded={sel == 'layout'}>
+				<div class="border-0">
+					<SidebarButton id="layout" on:click={select} icon="icons/layoutIcon.png" />
+				</div>
+				<div slot="subitems" class="border-0 flex space-x-1 mx-1">
+					<div class="border-0">
+						<SidebarButton id="aspect" on:click={select} icon="icons/layoutAspectIcon.png" />
+					</div>
+					<div class="border-0">
+						<SidebarButton id="fit" on:click={select} icon="icons/layoutFitIcon.png" />
+					</div>
+					<div class="border-0">
+						<SidebarButton id="full" on:click={select} icon="icons/layoutFullIcon.png" />
+					</div>
+				</div>
+			</SidebarItem>
 		</div>
 	{/if}
 </div>
