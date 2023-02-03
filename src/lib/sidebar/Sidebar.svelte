@@ -2,7 +2,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import SidebarItem from '$lib/sidebar/SidebarItem.svelte';
 	import SidebarButton from '$lib/sidebar/SidebarButton.svelte';
-	import { Sidebar } from 'flowbite-svelte';
+	import SidebarSection from '$lib/sidebar/SidebarSection.svelte';
 	import { fly, fade, slide, scale } from 'svelte/transition';
 
 	let expanded = false;
@@ -15,21 +15,35 @@
 	function expand() {
 		sel = '';
 		console.log('expand = ' + expanded);
-        if (expanded) {
-            expanded = false; 
-            opacity = 'opacity-20';
-        } else {
-            expanded = true; 
-            opacity = 'opacity-100';
-        }
+		if (expanded) {
+			expanded = false;
+			opacity = 'opacity-20';
+		} else {
+			expanded = true;
+			opacity = 'opacity-100';
+		}
 	}
 
 	function select(e: Event) {
 		e.preventDefault();
-		sel = sel == e.target!.id ? '' : e.target!.id;
+		sel = sel == e.detail.sender ? '' : e.detail.sender;
 		console.log('sel = ' + sel);
 		dispatch('select', { sender: sel });
 	}
+
+	const control = { id: 'control', icon: 'icons/controlIcon.png' };
+	const controlItems = [
+		{ id: 'pause', icon: 'icons/pauseIcon.png' },
+		{ id: 'reset', icon: 'icons/resetIcon.png' },
+		{ id: 'power', icon: 'icons/powerIcon.png' }
+	];
+	const layout = { id: 'layout', icon: 'icons/layoutIcon.png' };
+	const layoutItems = [
+		{ id: 'aspect', icon: 'icons/layoutAspectIcon.png' },
+		{ id: 'fit', icon: 'icons/layoutFitIcon.png' },
+		{ id: 'full', icon: 'icons/layoutFullIcon.png' }
+	];
+
 </script>
 
 {#if expanded}
@@ -39,44 +53,14 @@
 	/>
 {/if}
 <div class="z-50 absolute top-0 left-0 p-2 flex flex-col space-y-1">
-    <div><SidebarButton id="vamiga" on:click={expand} {opacity} icon="icons/vamigaIcon.png" /></div>
+	<div><SidebarButton id="vamiga" on:select={expand} {opacity} icon="icons/vamigaIcon.png" /></div>
 	{#if expanded}
 		<div class="z-50 relative space-y-1" transition:fade={{ duration }}>
-			<SidebarItem icon="icons/settingsIcon.png" expanded={sel == 'control'}>
-				<div class="border-0">
-					<SidebarButton id="control" on:click={select} icon="icons/controlIcon.png" />
-				</div>
-				<div slot="subitems" class="border-0 flex space-x-1 mx-1">
-					<div class="border-0">
-						<SidebarButton id="pause" on:click={select} icon="icons/pauseIcon.png" />
-					</div>
-					<div class="border-0">
-						<SidebarButton id="reset" on:click={select} icon="icons/resetIcon.png" />
-					</div>
-					<div class="border-0">
-						<SidebarButton id="power" on:click={select} icon="icons/powerIcon.png" />
-					</div>
-				</div>
-			</SidebarItem>
-			<div><SidebarButton id="settings" on:click={select} icon="icons/settingsIcon.png" /></div>
-			<div><SidebarButton id="shell" on:click={select} icon="icons/retroShellIcon.png" /></div>
-			<div><SidebarButton id="monitor" on:click={select} icon="icons/monitorIcon.png" /></div>
-			<SidebarItem icon="icons/settingsIcon.png" expanded={sel == 'layout'}>
-				<div class="border-0">
-					<SidebarButton id="layout" on:click={select} icon="icons/layoutIcon.png" />
-				</div>
-				<div slot="subitems" class="border-0 flex space-x-1 mx-1">
-					<div class="border-0">
-						<SidebarButton id="aspect" on:click={select} icon="icons/layoutAspectIcon.png" />
-					</div>
-					<div class="border-0">
-						<SidebarButton id="fit" on:click={select} icon="icons/layoutFitIcon.png" />
-					</div>
-					<div class="border-0">
-						<SidebarButton id="full" on:click={select} icon="icons/layoutFullIcon.png" />
-					</div>
-				</div>
-			</SidebarItem>
+			<SidebarSection on:select={select} item={control} subitems={controlItems} />
+            <div><SidebarButton id="settings" on:select={select} icon="icons/settingsIcon.png" /></div>
+			<div><SidebarButton id="shell" on:select={select} icon="icons/retroShellIcon.png" /></div>
+			<div><SidebarButton id="monitor" on:select={select} icon="icons/monitorIcon.png" /></div>
+            <SidebarSection on:select={select} item={layout} subitems={layoutItems} />
 		</div>
 	{/if}
 </div>

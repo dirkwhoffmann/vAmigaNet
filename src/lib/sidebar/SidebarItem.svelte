@@ -2,10 +2,6 @@
 	import SidebarButton from '$lib/sidebar/SidebarButton.svelte';
 	import { fade, fly, scale, slide } from 'svelte/transition';
 
-	export let disabled = false;
-	export let alt = 'Sidebar Item';
-	export let icon = '';
-	export let id = '';
 	export let expanded = false;
 
 	function expand() {
