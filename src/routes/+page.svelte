@@ -13,6 +13,7 @@
 	// import FaInfoCircle from 'svelte-icons/fa/FaInfoCircle.svelte';
 	import '@splidejs/svelte-splide/css';
 	import { poweredOn } from '$lib/stores';
+	import Sidebar from '$lib/sidebar/Sidebar.svelte';
 
 	let show = false;
 	let guru = true;
@@ -49,7 +50,10 @@
 		goto('https://dirkwhoffmann.github.io/vAmiga');
 	}
 
-	let hideInfoWindow = false;
+	function sidebarAction(event) {
+		console.log("Sidebar: " + event.detail.sender);
+	}
+
 </script>
 
 <body class="h-screen bg-black text-white scroll-smooth overflow-y-scroll">
@@ -135,4 +139,5 @@
 			</div>
 		</div>
 	</div>
+	<Sidebar on:select={sidebarAction}></Sidebar>
 </body>
