@@ -92,7 +92,7 @@
 		MsgSrvReceive,
 		MsgSrvSend
 	} from '$lib/stores';
-	import { poweredOn, running } from '$lib/stores';
+	import { initialized, poweredOn, running } from '$lib/stores';
 
 	export let audioContext: AudioContext | null = null;
 
@@ -172,7 +172,7 @@
 			console.log('CATCHED' + exception);
 			// console.error($amiga.getExceptionMessage(exception));
 		}
-		goto('/emulator');
+		// goto('/emulator');
 	}
 
 	function reportException() {
@@ -220,6 +220,8 @@
 		$denise = new $proxy.DeniseProxy();
 		$memory = new $proxy.MemoryProxy();
 		$retroShell = new $proxy.RetroShellProxy();
+
+		$initialized = true; 
 
 		// Initiate the launch procedure
 		startUp();

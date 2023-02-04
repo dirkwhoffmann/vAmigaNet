@@ -11,6 +11,7 @@ export const memory: any = writable();
 export const retroShell: any = writable();
 
 // State
+export const initialized = writable(false);
 export const poweredOn = writable(false);
 export const running = writable(false);
 

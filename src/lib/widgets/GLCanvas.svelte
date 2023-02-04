@@ -41,7 +41,11 @@
 	let mainShaderProgram: WebGLProgram;
 	let sampler: WebGLUniformLocation;
 
-	const vertexShaderSource0 = `
+	// 
+	// Merge shader
+	// 
+
+	const vsMerge = `
     	attribute vec4 aVertexPosition;
     	varying highp vec2 vTextureCoord;
     	void main() {
@@ -50,17 +54,7 @@
     	}
    	`;
 
-	const vertexShaderSource = `
-    	attribute vec4 aVertexPosition;
-    	attribute vec2 aTextureCoord;
-    	varying highp vec2 vTextureCoord;
-    	void main() {
-    		gl_Position = aVertexPosition;
-    		vTextureCoord = aTextureCoord;
-    	}
-   	`;
-
-	const mergeShaderSource = `		
+	const fsMerge = `		
 		precision mediump float;
 
 		varying highp vec2 vTextureCoord;
@@ -89,7 +83,21 @@
 		}
    `;
 
-	const mainShaderSource = `		
+   //
+   // Main shader
+   // 
+
+   const vsMain = `
+    	attribute vec4 aVertexPosition;
+    	attribute vec2 aTextureCoord;
+    	varying highp vec2 vTextureCoord;
+    	void main() {
+    		gl_Position = aVertexPosition;
+    		vTextureCoord = aTextureCoord;
+    	}
+   	`;
+
+	const fsMain = `		
 		precision mediump float;
     
 		varying highp vec2 vTextureCoord;
@@ -136,14 +144,14 @@
 		gl.clear(gl.COLOR_BUFFER_BIT);
 
 		// Create the merge shader
-		mergeShaderProgram = compileProgram(vertexShaderSource0, mergeShaderSource);
+		mergeShaderProgram = compileProgram(vsMerge, fsMerge);
 		lfWeight = gl.getUniformLocation(mergeShaderProgram, 'u_lweight')!;
 		sfWeight = gl.getUniformLocation(mergeShaderProgram, 'u_sweight')!;
 		lfSampler = gl.getUniformLocation(mergeShaderProgram, 'u_lfSampler')!;
 		sfSampler = gl.getUniformLocation(mergeShaderProgram, 'u_sfSampler')!;
 
 		// Create the main shader
-		mainShaderProgram = compileProgram(vertexShaderSource, mainShaderSource);
+		mainShaderProgram = compileProgram(vsMain, fsMain);
 		sampler = gl.getUniformLocation(mainShaderProgram, 'sampler')!;
 		gl.uniform1i(sampler, 0);
 
@@ -151,7 +159,6 @@
 		const vCoords = new Float32Array([-1.0, 1.0, 1.0, 1.0, -1.0, -1.0, 1.0, -1.0]);
 		vBuffer = createBuffer(vCoords);
 		setAttribute(mainShaderProgram, 'aVertexPosition');
-		setAttribute(mergeShaderProgram, 'aVertexPosition0');
 
 		// Setup the texture coordinate buffer
 		const tCoords = new Float32Array([0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0]);

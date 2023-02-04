@@ -18,10 +18,11 @@
 		$proxy.audioContext.resume();
 	}
 	async function runMe() {
-		if (!$poweredOn) {
+        console.log("runMe");
+        if (!$poweredOn) {
 			await $proxy.runShowcase(demos[0]);
 		}
-		goto('/emulator');
+		// goto('/emulator');
 	}
 
 	function gotoGitHub() {
