@@ -7,7 +7,7 @@
 	import MyButton from '$lib/widgets/MyButton.svelte';
 	import FaAngleLeft from 'svelte-icons/fa/FaAngleLeft.svelte';
 	import '@splidejs/svelte-splide/css';
-	import { demos, games, tools } from './database';
+	import { demos, games, tools } from '$lib/database';
 	import { amiga, proxy } from '$lib/stores';
 	import Logo from '$lib/widgets/Logo.svelte';
 
