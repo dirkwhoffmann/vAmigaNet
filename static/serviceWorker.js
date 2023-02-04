@@ -11,7 +11,7 @@ self.addEventListener('activate', evt => {
 
 self.addEventListener('fetch', function(event){
     event.respondWith(async function () {
-        console.log('serviceWorker: requested url '+event.request.url);
+        // console.log('serviceWorker: requested url '+event.request.url);
         let sw_request=event.request;
 
         var networkResponse = await fetch(sw_request, {cache: "no-cache"});
@@ -21,11 +21,11 @@ self.addEventListener('fetch', function(event){
             try {
               if(networkResponse.status == 200)
               {
-                console.log(`serviceWorker: status=200 for fetched resource: ${event.request.url}`)
+                // console.log(`serviceWorker: status=200 for fetched resource: ${event.request.url}`)
               }
               else
               {
-                console.error(`serviceWorker: status=${networkResponse.status} for fetched resource: ${event.request.url}`)
+                // console.error(`serviceWorker: status=${networkResponse.status} for fetched resource: ${event.request.url}`)
               }
             }
             catch(e) { console.error(`exception during fetch ${e}`); }

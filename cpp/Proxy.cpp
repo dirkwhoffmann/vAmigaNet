@@ -30,6 +30,7 @@ EMSCRIPTEN_BINDINGS(EnumProxy)
 {
     class_<EnumProxy>("EnumProxy")
         .constructor<>()
+        .function("ErrorCodeKey", &EnumProxy::ErrorCodeKey)
         .function("MsgTypeKey", &EnumProxy::MsgTypeKey)
         .function("RetroShellKey", &EnumProxy::RetroShellKey);
 }

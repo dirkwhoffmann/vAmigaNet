@@ -223,6 +223,9 @@
 
 		// Initiate the launch procedure
 		startUp();
+
+		// Emulated an error (REMOVE ASAP)
+		// $amiga.configure($proxy.OPT_CHIP_RAM, 42);
 	}
 
 	function processMsg(id: number, d1: number, d2: number, d3: number, d4: number) {

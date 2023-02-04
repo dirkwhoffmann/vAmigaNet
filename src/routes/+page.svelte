@@ -1,6 +1,10 @@
+<!--
+<svelte:window on:error|capture={e => handleError(e.error)}
+               on:unhandledrejection|capture={e => handleError(e.reason)} />
+-->
 <script lang="ts">
 	import '../app.css';
-	import { proxy, amiga } from '$lib/stores';
+	import { proxy, amiga, what, errno } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
@@ -10,25 +14,48 @@
 	import FaGithub from 'svelte-icons/fa/FaGithub.svelte';
 	import GoGear from 'svelte-icons/go/GoGear.svelte';
 	import DiGrails from 'svelte-icons/di/DiGrails.svelte';
-	import GoLaw from 'svelte-icons/go/GoLaw.svelte'
+	import GoLaw from 'svelte-icons/go/GoLaw.svelte';
 	import FaBookOpen from 'svelte-icons/fa/FaBookOpen.svelte';
 	import '@splidejs/svelte-splide/css';
 	import { poweredOn } from '$lib/stores';
 	import Sidebar from '$lib/sidebar/Sidebar.svelte';
 
 	let show = false;
+	/*
 	let guru = true;
 	setInterval(() => {
 		guru = !guru;
 	}, 800);
 	$: borderColor = guru ? 'border-red-800' : 'border-transparent';
+	*/
 
 	let buttonText = 'Run Demo';
+
+	function handleError(error) {
+		console.log('handleERROR ', error);
+		return true;
+	}
+
+	const log = document.querySelector('.event-log-contents');
 
 	onMount(() => {
 		console.log('+page: onMount()');
 		buttonText = $poweredOn ? 'Continue' : 'Run Demo';
 		show = true;
+
+		window.addEventListener('error', (event) => {
+			event.preventDefault();
+			$what = $amiga.what();
+			$errno = $amiga.errorCode();
+			console.log("Unhandled error catched");
+		});
+
+		window.addEventListener('unhandledrejection', (event) => {
+			event.preventDefault();
+			$what = $amiga.what();
+			$errno = $amiga.errorCode();
+			console.log("Unhandled rejection catched");
+		});
 	});
 
 	function understood() {
@@ -88,7 +115,7 @@
 			<div
 				class="relative flex justify-center border-none align-middle bg-gray-900/50 space-x-8 border-4 border-red-500"
 			>
-			<!--
+				<!--
 				<MainPageLink href="#configure">
 					<div slot="icon"><GoGear /></div>
 					<div slot="description">Configure</div>
@@ -104,6 +131,7 @@
 				</MainPageLink>
 			</div>
 		</div>
+		<!--
 		<div
 			id="configure"
 			class="relative border-[20px] {borderColor} h-96 flex justify-center bg-gray-900/50"
@@ -123,6 +151,7 @@
 				</div>
 			</div>
 		</div>
+		-->
 	</div>
 	<Sidebar on:select={sidebarAction} />
 </body>

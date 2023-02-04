@@ -35,6 +35,7 @@ struct EnumProxy
 {
     EnumProxy(){};
 
+    string ErrorCodeKey(int value) { printf("ErrorCodeKey\n"); return ErrorCodeEnum::key(value); }
     string MsgTypeKey(int value) { return MsgTypeEnum::key(value); }
     string RetroShellKey(int value) { return RetroShellKeyEnum::key(value); }
 };

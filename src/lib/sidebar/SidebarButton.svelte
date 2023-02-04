@@ -2,7 +2,7 @@
 	import { createEventDispatcher } from 'svelte';
 	export let item = { id: '', icon: '' };
 	export let alt = 'Icon';
-    export let enabled = true;
+	export let enabled = true;
 	export let highlighted = false;
 	export let opacity = '';
 
@@ -13,7 +13,6 @@
 
 	function click(e: Event) {
 		e.preventDefault();
-		console.log('click!');
 		dispatch('select', { sender: e.target!.id });
 	}
 </script>

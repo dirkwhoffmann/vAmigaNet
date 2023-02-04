@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { proxy } from '$lib/stores';
+	import { proxy, what } from '$lib/stores';
 	import Proxy from '$lib/Proxy.svelte';
+	import Guru from '$lib/Guru.svelte';
 
 	let loadWasm = false;
 
@@ -25,4 +26,7 @@
 		<script src="vAmiga.js"></script>
 	{/if}
 </svelte:head>
+<Guru />
+<div class="relative">
 <slot />
+</div>
