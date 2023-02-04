@@ -10,7 +10,8 @@
 	import FaGithub from 'svelte-icons/fa/FaGithub.svelte';
 	import GoGear from 'svelte-icons/go/GoGear.svelte';
 	import DiGrails from 'svelte-icons/di/DiGrails.svelte';
-	// import FaInfoCircle from 'svelte-icons/fa/FaInfoCircle.svelte';
+	import GoLaw from 'svelte-icons/go/GoLaw.svelte'
+	import FaBookOpen from 'svelte-icons/fa/FaBookOpen.svelte';
 	import '@splidejs/svelte-splide/css';
 	import { poweredOn } from '$lib/stores';
 	import Sidebar from '$lib/sidebar/Sidebar.svelte';
@@ -51,28 +52,12 @@
 	}
 
 	function sidebarAction(event) {
-		console.log("Sidebar: " + event.detail.sender);
+		console.log('Sidebar: ' + event.detail.sender);
 	}
-
 </script>
 
 <body class="h-screen bg-black text-white scroll-smooth overflow-y-scroll">
 	<title>vAmiga Online</title>
-	<!--
-	<MovableWindow bind:hide={hideInfoWindow} x={30} y={500}>
-		<div slot="title">Info</div>
-		<div slot="body">
-			<div class="mb-8">
-				Welcome to vAmigaOnline...
-				<br>
-				have fun exploring the world of the Amiga...
-			</div>
-		</div>
-		<div slot="buttons">
-			<button class=" p-2 bg-blue-500 rounded-lg text-white" on:click={()=>hideInfoWindow=true}>close me</button>
-		</div>
-	</MovableWindow>
--->
 	<div id="top" transition:fade class="bg-cover bg-transparent">
 		<div class="flex flex-col h-screen">
 			{#key show}
@@ -103,19 +88,19 @@
 			<div
 				class="relative flex justify-center border-none align-middle bg-gray-900/50 space-x-8 border-4 border-red-500"
 			>
+			<!--
 				<MainPageLink href="#configure">
 					<div slot="icon"><GoGear /></div>
 					<div slot="description">Configure</div>
 				</MainPageLink>
-				<!--
-				<MainPageLink href="#about">
-					<div slot="icon"><FaInfoCircle /></div>
-					<div slot="description">Learn more</div>
-				</MainPageLink>
-				-->
+			-->
 				<MainPageLink href="showcases">
 					<div slot="icon"><DiGrails /></div>
-					<div slot="description">Showcase</div>
+					<div slot="description">Showcases</div>
+				</MainPageLink>
+				<MainPageLink href="#about">
+					<div slot="icon"><GoLaw /></div>
+					<div slot="description">Impressum</div>
 				</MainPageLink>
 			</div>
 		</div>
@@ -139,5 +124,5 @@
 			</div>
 		</div>
 	</div>
-	<Sidebar on:select={sidebarAction}></Sidebar>
+	<Sidebar on:select={sidebarAction} />
 </body>
