@@ -1,3 +1,5 @@
+<svelte:options accessors={true}/>
+
 <script lang="ts">
 	import { onMount } from 'svelte';
     import { amiga } from '$lib/stores';
@@ -12,7 +14,7 @@
 	let h = 0;
 
     	// The currently visible area
-	let textureRect = new TextureRect();
+	export let textureRect = new TextureRect();
 
 onMount(() => {
     console.log('onMount()');

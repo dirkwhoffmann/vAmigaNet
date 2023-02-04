@@ -20,7 +20,8 @@
 	let showShell = false;
 	let buttonText = 'Run Demo';
 
-	const log = document.querySelector('.event-log-contents');
+	// Component references
+	let emulator: Emulator;
 
 	onMount(() => {
 		console.log('+page: onMount()');
@@ -32,18 +33,55 @@
 	});
 
 	function handleUncatchedError(event) {
-		console.log('Unhandled error catched');
-		/*
-		if ($amiga != undefined) {
-			event.preventDefault();
-			$what = $amiga.what();
-			$errno = $amiga.errorCode();
-		}
-		*/
+		console.log('Unhandled error catched', event);
+		event.preventDefault();
+		$what = $amiga.what();
+		$errno = $amiga.errorCode();
 	}
 
 	function sidebarAction(event) {
-		console.log('Sidebar: ' + event.detail.sender);
+
+		const sender = event.detail.sender; 
+
+		console.log('Sidebar: ', sender);
+
+		switch (event.detail.sender) {
+
+			case 'shell':
+				showShell = !showShell;
+				break;
+			case 'settings':
+				showSettings = !showSettings;
+				break;
+			case 'monitor':
+				if ($amiga.getConfig($proxy.OPT_DMA_DEBUG_ENABLE)) {
+					console.log("Callig zoom in");
+					emulator.textureRect.zoomIn();
+					console.log("Exiting DMA debugger");
+					$amiga.configure($proxy.OPT_DMA_DEBUG_ENABLE, 0);
+				} else {
+					console.log("Callig zoom out");
+					emulator.textureRect.zoomOut();
+					console.log("Entering DMA debugger");
+					$amiga.configure($proxy.OPT_DMA_DEBUG_ENABLE, 1);
+				}
+				break;
+			case 'pause':
+				$amiga.stopAndGo();
+				break;
+			case 'power':
+				if ($amiga.poweredOn()) {
+					$amiga.powerOff();
+				} else {
+					$amiga.run();
+				}
+				break;
+			case 'reset':
+				$amiga.hardReset();
+				break;
+			default:
+				console.log('Unhandled sender: ' + sender);
+		}
 	}
 </script>
 
@@ -57,7 +95,7 @@
 				</div>
 			{:else}
 				<div transition:fade class="bg-cover bg-transparent">
-					<Emulator show={mounted} />
+					<Emulator bind:this={emulator} show={mounted} />
 				</div>
 			{/if}
 			<Sidebar on:select={sidebarAction} />

@@ -27,7 +27,7 @@
 		e.preventDefault();
 		sel = e.detail.sender == sel ? '' : e.detail.sender;
 		console.log(sel + ' selected');
-		dispatch('select', { sender: sel });
+		dispatch('select', { sender: e.detail.sender });
 	}
 
 	const vamiga = { id: 'vamiga', icon: 'icons/vamigaIcon.png' };
