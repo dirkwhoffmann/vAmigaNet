@@ -4,7 +4,7 @@
 	import SidebarSection from '$lib/sidebar/SidebarSection.svelte';
 	import { fade } from 'svelte/transition';
 
-	let expanded = false;
+	export let expanded = false;
 	let sel = '';
 	let duration = 200;
 	let opacity = 'opacity-20';
@@ -46,7 +46,6 @@
 		{ id: 'fit', icon: 'icons/layoutFitIcon.png' },
 		{ id: 'full', icon: 'icons/layoutFullIcon.png' }
 	];
-
 </script>
 
 {#if expanded}
@@ -56,14 +55,25 @@
 	/>
 {/if}
 <div class="z-50 absolute top-0 left-0 p-2 flex flex-col space-y-1">
-	<div><SidebarButton on:select={expand} {opacity} item={vamiga} /></div>
+	<!-- <div><SidebarButton on:select={expand} {opacity} item={vamiga} /></div>
 	{#if expanded}
-		<div class="z-50 relative space-y-1" transition:fade={{ duration }}>
-			<SidebarSection on:select={select} expanded={sel=='control'} item={control} subitems={controlItems} />
-            <SidebarButton on:select={select} item={settings} />
-			<SidebarButton on:select={select} item={shell} />
-			<SidebarButton on:select={select} item={monitor} />
-            <SidebarSection on:select={select} expanded={sel=='layout'} item={layout} subitems={layoutItems} />
-		</div>
-	{/if}
+	-->
+	<div class="z-50 relative space-y-1" transition:fade={{ duration }}>
+		<SidebarSection
+			on:select={select}
+			expanded={sel == 'control'}
+			item={control}
+			subitems={controlItems}
+		/>
+		<SidebarButton on:select={select} item={settings} />
+		<SidebarButton on:select={select} item={shell} />
+		<SidebarButton on:select={select} item={monitor} />
+		<SidebarSection
+			on:select={select}
+			expanded={sel == 'layout'}
+			item={layout}
+			subitems={layoutItems}
+		/>
+	</div>
+	<!--{/if}-->
 </div>

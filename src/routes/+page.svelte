@@ -15,6 +15,7 @@
 	let mounted = false;
 	let showSettings = false;
 	let showShell = false;
+	let showSidebar = false;
 	let buttonText = 'Run Demo';
 
 	// Component references
@@ -38,7 +39,6 @@
 
 	function sidebarAction(event) {
 		const sender = event.detail.sender;
-
 		console.log('Sidebar: ', sender);
 
 		switch (event.detail.sender) {
@@ -78,6 +78,11 @@
 				console.log('Unhandled sender: ' + sender);
 		}
 	}
+
+	function toggleSidebar(e: Event) {
+		e.preventDefault();
+		showSidebar = !showSidebar;
+	}
 </script>
 
 <body class="h-screen bg-black text-white scroll-smooth overflow-y-scroll">
@@ -96,7 +101,9 @@
 			{#if showSettings}
 				<Settings />
 			{/if}
-			<Sidebar on:select={sidebarAction} />
+			{#if showSidebar}
+				<Sidebar on:select={sidebarAction} expanded={showSidebar} />
+			{/if}
 		</div>
 
 		<!--
@@ -115,6 +122,13 @@
 				<div transition:fade><RetroShell /></div>
 			{/if}
 		-->
-		<div class="relative h-8 green-3 bg-red-500">Bottom bar</div>
+		<div class="relative flex h-6">
+			<div class="flex w-14 bg-gradient-to-t from-gray-300 to-gray-400 justify-center">
+				<button type="button" class="" id="sidebarButton" on:click={toggleSidebar}>
+					<img class="h-6 border-0" src="icons/vamigaIcon.png" alt="vAmiga Icon" />
+				</button>
+			</div>
+			<div class="ml-0.5 bg-gradient-to-t from-gray-300 to-gray-400 grow" />
+		</div>
 	</MainScreen>
 </body>
