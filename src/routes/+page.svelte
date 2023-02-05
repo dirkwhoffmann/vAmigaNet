@@ -9,6 +9,7 @@
 	import DragAndDrop from './emulator/DragAndDrop.svelte';
 	import Emulator from '$lib/Emulator.svelte';
 	import Settings from '$lib/settings/Settings.svelte';
+	import StatusBar from '$lib/StatusBar.svelte';
 	import RetroShell from '$lib/RetroShell.svelte';
 	import MainScreen from '$lib/MainScreen.svelte';
 
@@ -79,8 +80,10 @@
 		}
 	}
 
-	function toggleSidebar(e: Event) {
-		e.preventDefault();
+	function push(event: Event) {
+		const sender = event.detail.sender;
+		console.log('Status bar: ', sender);
+
 		showSidebar = !showSidebar;
 	}
 </script>
@@ -88,6 +91,7 @@
 <body class="h-screen bg-black text-white scroll-smooth overflow-y-scroll">
 	<title>vAmiga Online</title>
 	<MainScreen>
+		<StatusBar on:push={push} />
 		<div class="relative grow">
 			{#if !$poweredOn}
 				<TitleScreen />
@@ -102,33 +106,8 @@
 				<Settings />
 			{/if}
 			{#if showSidebar}
-				<Sidebar on:select={sidebarAction} expanded={showSidebar} />
+				<Sidebar on:select={sidebarAction} />
 			{/if}
-		</div>
-
-		<!--
-			{#if !$poweredOn}
-				<div id="top" transition:fade><TitleScreen show={mounted} /></div>
-			{:else}
-				<div transition:fade>
-					<Emulator bind:this={emulator} show={mounted} />
-				</div>
-			{/if}
-
-			{#if showSettings}
-				<div transition:fade><Settings /></div>
-			{/if}
-			{#if showShell}
-				<div transition:fade><RetroShell /></div>
-			{/if}
-		-->
-		<div class="relative flex h-6">
-			<div class="flex w-14 bg-gradient-to-t from-gray-300 to-gray-400 justify-center">
-				<button type="button" class="" id="sidebarButton" on:click={toggleSidebar}>
-					<img class="h-6 border-0" src="icons/vamigaIcon.png" alt="vAmiga Icon" />
-				</button>
-			</div>
-			<div class="ml-0.5 bg-gradient-to-t from-gray-300 to-gray-400 grow" />
 		</div>
 	</MainScreen>
 </body>

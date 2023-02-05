@@ -11,18 +11,6 @@
 
 	const dispatch = createEventDispatcher();
 
-	function expand() {
-		sel = '';
-		console.log('expand = ' + expanded);
-		if (expanded) {
-			expanded = false;
-			opacity = 'opacity-20';
-		} else {
-			expanded = true;
-			opacity = 'opacity-100';
-		}
-	}
-
 	function select(e: Event) {
 		e.preventDefault();
 		sel = e.detail.sender == sel ? '' : e.detail.sender;
@@ -48,17 +36,9 @@
 	];
 </script>
 
-{#if expanded}
-	<div
-		class="absolute top-0 left-0 h-full bg-gray-500/40 flex flex-col w-14"
-		transition:fade={{ duration }}
-	/>
-{/if}
-<div class="z-50 absolute top-0 left-0 p-2 flex flex-col space-y-1">
-	<!-- <div><SidebarButton on:select={expand} {opacity} item={vamiga} /></div>
-	{#if expanded}
-	-->
-	<div class="z-50 relative space-y-1" transition:fade={{ duration }}>
+<div transition:fade={{ duration }}>
+	<div class="absolute top-0 left-0 h-full bg-gray-500/40 flex flex-col w-14" />
+	<div class="absolute top-0 left-0 p-2 flex flex-col space-y-1">
 		<SidebarSection
 			on:select={select}
 			expanded={sel == 'control'}
@@ -75,5 +55,4 @@
 			subitems={layoutItems}
 		/>
 	</div>
-	<!--{/if}-->
 </div>
