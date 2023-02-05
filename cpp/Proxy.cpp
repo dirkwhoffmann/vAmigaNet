@@ -369,6 +369,16 @@ EMSCRIPTEN_BINDINGS(Keys)
     constant("AGNUS_ECS_1MB", (int)AGNUS_ECS_1MB);
     constant("AGNUS_ECS_2MB", (int)AGNUS_ECS_2MB);
 
+    // BankMap
+    constant("BANK_MAP_A500", (int)BANK_MAP_A500);
+    constant("BANK_MAP_A1000", (int)BANK_MAP_A1000);
+    constant("BANK_MAP_A2000A", (int)BANK_MAP_A2000A);
+    constant("BANK_MAP_A2000B", (int)BANK_MAP_A2000B);
+
+    // CIARevision
+    constant("CIA_MOS_8520_DIP", (int)CIA_MOS_8520_DIP);
+    constant("CIA_MOS_8520_PLCC", (int)CIA_MOS_8520_PLCC);
+
     // CPURevision
     constant("CPU_68000", (int)CPU_68000);
     constant("CPU_68010", (int)CPU_68010);
@@ -377,6 +387,15 @@ EMSCRIPTEN_BINDINGS(Keys)
     // DeniseRevision
     constant("DENISE_OCS", (int)DENISE_OCS);
     constant("DENISE_ECS", (int)DENISE_ECS);
+
+    // DriveMechanics
+    constant("MECHANICS_NONE", (int)MECHANICS_NONE);
+    constant("MECHANICS_A1010", (int)MECHANICS_A1010);
+
+    // FloppyDriveType
+    constant("DRIVE_DD_35", (int)DRIVE_DD_35);
+    constant("DRIVE_HD_35", (int)DRIVE_HD_35);
+    constant("DRIVE_DD_525", (int)DRIVE_DD_525);
 
     // MsgType
     constant("MSG_NONE", (int)MSG_NONE);
@@ -543,10 +562,25 @@ EMSCRIPTEN_BINDINGS(Keys)
     constant("OPT_SRV_AUTORUN", (int)OPT_SRV_AUTORUN);
     constant("OPT_SRV_VERBOSE", (int)OPT_SRV_VERBOSE);
 
+    // RamInitPattern
+    constant("RAM_INIT_ALL_ZEROES", (int)RAM_INIT_ALL_ZEROES);
+    constant("RAM_INIT_ALL_ONES", (int)RAM_INIT_ALL_ONES);
+    constant("RAM_INIT_RANDOMIZED", (int)RAM_INIT_RANDOMIZED);
+
     // RTCRevision
     constant("RTC_NONE", (int)RTC_NONE);
     constant("RTC_OKI", (int)RTC_OKI);
     constant("RTC_RICOH", (int)RTC_RICOH);
+
+    // SerialPortDevice
+    constant("SPD_NONE", (int)SPD_NONE);
+    constant("SPD_NULLMODEM", (int)SPD_NULLMODEM);
+    constant("SPD_LOOPBACK", (int)SPD_LOOPBACK);
+
+    // UnmappedMemory 
+    constant("UNMAPPED_FLOATING", (int)UNMAPPED_FLOATING);
+    constant("UNMAPPED_ALL_ZEROES", (int)UNMAPPED_ALL_ZEROES);
+    constant("UNMAPPED_ALL_ONES", (int)UNMAPPED_ALL_ONES);
 
     // VideoFormat
     constant("VID_PAL", (int)PAL);

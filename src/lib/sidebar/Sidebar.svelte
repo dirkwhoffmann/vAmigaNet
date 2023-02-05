@@ -4,7 +4,7 @@
 	import SidebarSection from '$lib/sidebar/SidebarSection.svelte';
 	import { fade } from 'svelte/transition';
 
-	export let expanded = false;
+	// export let expanded = false;
 	let sel = '';
 	let duration = 200;
 	let opacity = 'opacity-20';

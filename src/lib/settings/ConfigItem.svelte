@@ -24,7 +24,7 @@
 
 	function displayedName(tag: number): string {
 		let value = values.find((o) => o.id === tag);
-		console.log('Found name ' + (value == undefined ? '???' : value.name));
+		// console.log('Found name ' + (value == undefined ? '???' : value.name));
 		return value == undefined ? '???' : value.name;
 	}
 

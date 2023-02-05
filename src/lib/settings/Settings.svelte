@@ -22,6 +22,14 @@
 	let agnusRevision: number;
 	let deniseRevision: number;
 	let rtcModel: number;
+	let chipRam: number;
+	let slowRam: number;
+	let fastRam: number;
+	let bankMap: number;
+	let initPattern: number;
+	let unmapped: number;
+	let slowRamMirror: number;
+	let slowRamDelay: number;
 
 	onMount(() => {
 		update();
@@ -34,6 +42,14 @@
 		agnusRevision = $amiga.getConfig($proxy.OPT_AGNUS_REVISION);
 		deniseRevision = $amiga.getConfig($proxy.OPT_DENISE_REVISION);
 		rtcModel = $amiga.getConfig($proxy.OPT_RTC_MODEL);
+		chipRam = $amiga.getConfig($proxy.OPT_CHIP_RAM);
+		slowRam = $amiga.getConfig($proxy.OPT_SLOW_RAM);
+		fastRam = $amiga.getConfig($proxy.OPT_FAST_RAM);
+		bankMap = $amiga.getConfig($proxy.OPT_BANKMAP);
+		initPattern = $amiga.getConfig($proxy.OPT_RAM_INIT_PATTERN);
+		unmapped = $amiga.getConfig($proxy.OPT_UNMAPPING_TYPE);
+		slowRamMirror = $amiga.getConfig($proxy.OPT_SLOW_RAM_MIRROR);
+		slowRamDelay = $amiga.getConfig($proxy.OPT_SLOW_RAM_DELAY);
 	}
 
 	function cpuRevAction(event) {
@@ -60,21 +76,56 @@
 		$amiga.configure($proxy.OPT_RTC_MODEL, event.detail.text);
 		update();
 	}
+
+	function chipRamAction(event) {
+		$amiga.configure($proxy.OPT_CHIP_RAM, event.detail.text);
+		update();
+	}
+
+	function slowRamAction(event) {
+		$amiga.configure($proxy.OPT_SLOW_RAM, event.detail.text);
+		update();
+	}
+
+	function fastRamAction(event) {
+		$amiga.configure($proxy.OPT_FAST_RAM, event.detail.text);
+		update();
+	}
+
+	function bankMapAction(event) {
+		$amiga.configure($proxy.OPT_BANKMAP, event.detail.text);
+		update();
+	}
+
+	function initPatternAction(event) {
+		$amiga.configure($proxy.OPT_RAM_INIT_PATTERN, event.detail.text);
+		update();
+	}
+
+	function unmappedAction(event) {
+		$amiga.configure($proxy.OPT_UNMAPPING_TYPE, event.detail.text);
+		update();
+	}
+
+	function slowRamMirrorAction(event) {
+		$amiga.configure($proxy.OPT_SLOW_RAM_MIRROR, event.detail.text);
+		update();
+	}
+
+	function slowRamDelayAction(event) {
+		$amiga.configure($proxy.OPT_SLOW_RAM_DELAY, event.detail.text);
+		update();
+	}
+
 </script>
 
 <div class="absolute top-0 left-0 w-full h-full mt-1 flex overflow-scroll" transition:fade>
 	<div class="w-16 mr-1" />
-	<!--<div class="border-2 border-red-500 bg-gray-500/75 grow h-full">Hallo</div>-->
-	<!--
-	<div class="bg-gray-500/75 border-2 border-green-500 w-full h-screen p-2 overflow-scroll">
-	-->
 	<div class="bg-gray-500/75 mt-0 p-4 grow h-full overflow-scroll">
 		<div class="font-sofia-extra">
 			<div class="text-5xl">SETTINGS</div>
 			<div class="float space-x-4 mb-6">
-				<ConfigCategory name="HARDWARE" />
-				<ConfigCategory name="MEMORY" />
-				<ConfigCategory name="PERIPHERALS" />
+				<ConfigCategory name="MACHINE" />
 				<ConfigCategory name="VIDEO" />
 				<ConfigCategory name="AUDIO" />
 			</div>
@@ -140,20 +191,97 @@
 				locked={power}
 			/>
 		</ConfigSection>
-
-		<!--
 		<ConfigSection name="Memory">
-			<ConfigItem name="Chip RAM" />
-			<ConfigItem name="Slow RAM" />
-			<ConfigItem name="Fast RAM" />
-			<ConfigItem name="Memory Layout" />
-			<ConfigItem name="Memory Startup Pattern" />
-			<ConfigItem name="Unmapped Area" />
-			<ConfigItem name="Unmapped Area" />
-			<ConfigItem name="Emulate Slow RAM Mirror" />
-			<ConfigItem name="Emulate Slow RAM Bus Delays" />
+			<ConfigItem
+				name="Chip RAM"
+				selection={chipRam}
+				on:select={chipRamAction}
+				values={[
+					{ name: '256 KB', id: 256 },
+					{ name: '512 KB', id: 512 },
+					{ name: '1024 KB', id: 1024 },
+					{ name: '2048 KB', id: 2048 }
+				]}
+				locked={power}
+			/>
+			<ConfigItem
+				name="Slow RAM"
+				selection={slowRam}
+				on:select={slowRamAction}
+				values={[
+					{ name: '0 KB', id: 0 },
+					{ name: '512 KB', id: 512 },
+					{ name: '1 MB', id: 1024 },
+					{ name: '1.5 MB', id: 1536 }
+				]}
+				locked={power}
+			/>
+			<ConfigItem
+				name="Fast RAM"
+				selection={fastRam}
+				on:select={fastRamAction}
+				values={[
+					{ name: '0 KB', id: 0 },
+					{ name: '64 KB', id: 64 },
+					{ name: '128 KB', id: 128 },
+					{ name: '256 KB', id: 256 },
+					{ name: '512 KB', id: 512 },
+					{ name: '1 MB', id: 1024 },
+					{ name: '2 MB', id: 2048 },
+					{ name: '4 MB', id: 4096 },
+					{ name: '8 MB', id: 8192 }
+				]}
+				locked={power}
+			/>
+			<ConfigItem
+				name="Memory Layout"
+				selection={bankMap}
+				on:select={bankMapAction}
+				values={[
+					{ name: 'Amiga 500', id: $proxy.BANK_MAP_A500 },
+					{ name: 'Amiga 1000', id: $proxy.BANK_MAP_A1000 },
+					{ name: 'Amiga 2000A', id: $proxy.BANK_MAP_A2000A },
+					{ name: 'Amiga 2000B', id: $proxy.BANK_MAP_A2000B }
+				]}
+			/>
+			<ConfigItem
+				name="Memory Startup Pattern"
+				selection={initPattern}
+				on:select={initPatternAction}
+				values={[
+					{ name: 'All Zeroes', id: $proxy.RAM_INIT_ALL_ZEROES },
+					{ name: 'All Ones', id: $proxy.RAM_INIT_ALL_ONES },
+					{ name: 'Random', id: $proxy.RAM_INIT_RANDOMIZED }
+				]}
+			/>
+			<ConfigItem
+				name="Unmapped Memory Area"
+				selection={unmapped}
+				on:select={unmappedAction}
+				values={[
+					{ name: 'Floating', id: $proxy.UNMAPPED_FLOATING },
+					{ name: 'All Zeroes', id: $proxy.UNMAPPED_ALL_ZEROES },
+					{ name: 'All Ones', id: $proxy.UNMAPPED_ALL_ONES }
+				]}
+			/>
+			<ConfigItem
+				name="Emulate Slow RAM Mirror"
+				selection={slowRamMirror}
+				on:select={slowRamMirrorAction}
+				values={[
+					{ name: 'Yes', id: 1 },
+					{ name: 'No', id: 0 }
+				]}
+			/>
+			<ConfigItem
+				name="Emulate Slow RAM Bus Delays"
+				selection={slowRamDelay}
+				on:select={slowRamDelayAction}
+				values={[
+					{ name: 'Yes', id: 1 },
+					{ name: 'No', id: 0 }
+				]}
+			/>
 		</ConfigSection>
-	</div>
-		-->
 	</div>
 </div>
