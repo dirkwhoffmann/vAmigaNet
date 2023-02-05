@@ -1,7 +1,3 @@
-<!--
-<svelte:window on:error|capture={e => handleError(e.error)}
-               on:unhandledrejection|capture={e => handleError(e.reason)} />
--->
 <script lang="ts">
 	import '../app.css';
 	import { initialized, proxy, amiga, poweredOn, what, errno } from '$lib/stores';
@@ -40,13 +36,11 @@
 	}
 
 	function sidebarAction(event) {
-
-		const sender = event.detail.sender; 
+		const sender = event.detail.sender;
 
 		console.log('Sidebar: ', sender);
 
 		switch (event.detail.sender) {
-
 			case 'shell':
 				showShell = !showShell;
 				break;
@@ -55,14 +49,14 @@
 				break;
 			case 'monitor':
 				if ($amiga.getConfig($proxy.OPT_DMA_DEBUG_ENABLE)) {
-					console.log("Callig zoom in");
+					console.log('Callig zoom in');
 					emulator.textureRect.zoomIn();
-					console.log("Exiting DMA debugger");
+					console.log('Exiting DMA debugger');
 					$amiga.configure($proxy.OPT_DMA_DEBUG_ENABLE, 0);
 				} else {
-					console.log("Callig zoom out");
+					console.log('Callig zoom out');
 					emulator.textureRect.zoomOut();
-					console.log("Entering DMA debugger");
+					console.log('Entering DMA debugger');
 					$amiga.configure($proxy.OPT_DMA_DEBUG_ENABLE, 1);
 				}
 				break;
@@ -101,21 +95,10 @@
 			<Sidebar on:select={sidebarAction} />
 
 			{#if showSettings}
-				<div
-					transition:fade
-					class="absolute top-0 left-0 w-full h-full border-none border-red-500 flex-grow overflow-scroll"
-				>
-					<Settings />
-				</div>
+				<div transition:fade><Settings /></div>
 			{/if}
-
 			{#if showShell}
-				<div
-					transition:fade
-					class="absolute top-0 left-0 w-full h-full border-none border-red-500 flex-grow overflow-scroll"
-				>
-					<RetroShell />
-				</div>
+				<div transition:fade><RetroShell /></div>
 			{/if}
 		{/if}
 	</DragAndDrop>

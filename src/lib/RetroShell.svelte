@@ -3,8 +3,8 @@
 	import { MsgCloseConsole, MsgUpdateConsole } from '$lib/stores';
 	import { MsgScriptDone, MsgScriptPause, MsgScriptAbort, MsgScriptWakeup } from '$lib/stores';
 	import { onMount } from 'svelte';
-	
-	let ready = false; 
+
+	let ready = false;
 
 	// Console contents
 	let value = '';
@@ -96,10 +96,15 @@
 	}
 </script>
 
-<textarea
-	bind:this={textarea}
-	readonly
-	style="resize: none; font-variant-ligatures: none;"
-	class="font-azeret text-base outline-0 text-white bg-gray-500/75 w-full h-full p-2"
-	on:keydown={onKeyDown}
-/>
+<div class="absolute top-0 left-0 w-full h-full flex flex-grow overflow-scroll">
+	<div class="w-14 " />
+	<div class="ml-2 w-full h-screen p-0 overflow-scroll">
+		<textarea
+			bind:this={textarea}
+			readonly
+			style="resize: none; font-variant-ligatures: none"
+			class="font-azeret text-base focus:border-transparent focus:ring-0 text-white bg-gray-500/75 w-full h-full p-2"
+			on:keydown={onKeyDown}
+		/>
+	</div>
+</div>
