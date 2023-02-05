@@ -11,11 +11,13 @@
 	}
 </script>
 
-<div class="relative flex {height}">
-	<div class="flex w-14 {bg} justify-center">
-		<button type="button" class="" id="vamigaButton" on:click={click}>
-			<img class="{height} border-0" src="icons/vamigaIcon.png" alt="vAmiga Icon" />
+<div class="z-50 relative flex {height}">
+	<div class="w-16 mr-1 flex justify-center {bg}">
+        
+		<button type="button" class="flex w-16 justify-center" id="vamigaButton" on:click={click}>
+			<img class="{height}" src="icons/vamigaIcon.png" alt="vAmiga Icon" />
 		</button>
+    
 	</div>
-	<div class="ml-0.5 {bg} grow" />
+	<div class="{bg} border-0 border-red-500 grow" />
 </div>

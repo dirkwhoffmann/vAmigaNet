@@ -45,9 +45,11 @@
 		switch (event.detail.sender) {
 			case 'shell':
 				showShell = !showShell;
+				if (showShell) showSettings = false;
 				break;
 			case 'settings':
 				showSettings = !showSettings;
+				if (showSettings) showShell = false;
 				break;
 			case 'monitor':
 				if ($amiga.getConfig($proxy.OPT_DMA_DEBUG_ENABLE)) {

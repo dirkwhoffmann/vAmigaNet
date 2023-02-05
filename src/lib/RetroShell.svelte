@@ -97,9 +97,9 @@
 	}
 </script>
 
-<div class="absolute top-0 left-0 w-full h-full flex flex-grow overflow-scroll" transition:fade>
-	<div class="w-14 " />
-	<div class="ml-2 w-full h-screen p-0 overflow-scroll">
+<div class="absolute top-0 left-0 w-full h-full flex overflow-scroll" transition:fade>
+	<div class="w-16 mr-1"></div>
+	<div class="grow h-full overflow-scroll">
 		<textarea
 			bind:this={textarea}
 			readonly

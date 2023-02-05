@@ -62,10 +62,13 @@
 	}
 </script>
 
-<div class="absolute top-0 left-0 w-full h-full flex flex-grow overflow-scroll" transition:fade>
-	<div class="w-14 "></div>
-	<div class="bg-gray-500/75 ml-2 w-full h-screen p-2 overflow-scroll">
-		<div class="mt-4 p-4">
+<div class="absolute top-0 left-0 h-full w-full flex overflow-scroll" transition:fade>
+	<div class="w-16 mr-1"></div>
+	<!--<div class="border-2 border-red-500 bg-gray-500/75 grow h-full">Hallo</div>-->
+	<!--
+	<div class="bg-gray-500/75 border-2 border-green-500 w-full h-screen p-2 overflow-scroll">
+	-->
+		<div class="bg-gray-500/75 mt-0 p-4 grow h-full overflow-scroll">
 			<div class="font-sofia-extra">
 				<div class="text-5xl">SETTINGS</div>
 				<div class="float space-x-4 mb-6">
@@ -150,7 +153,7 @@
 			<ConfigItem name="Emulate Slow RAM Mirror" />
 			<ConfigItem name="Emulate Slow RAM Bus Delays" />
 		</ConfigSection>
-		-->
-		</div>
 	</div>
-</div>
+		-->
+	</div>
+	</div>

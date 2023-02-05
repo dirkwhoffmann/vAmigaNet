@@ -17,10 +17,10 @@
 	}
 </script>
 
-<div>
+<div class="">
 	<button
 		type="button"
-		class="border-0 p-1 w-10 rounded-lg text-white active:bg-white {bgcolor} {hoverStyle} {opacity}"
+		class="p-1 w-10 rounded-lg text-white active:bg-white {bgcolor} {hoverStyle} {opacity}"
 		id={item.id}
 		on:click={click}
 	>
