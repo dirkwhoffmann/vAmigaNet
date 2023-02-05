@@ -6,7 +6,6 @@
     import GLCanvas from '$lib/widgets/GLCanvas.svelte';
 	import { TextureRect } from '$lib/utils/TextureRect';
     import { fade } from 'svelte/transition';
-	export let show = false;
 
 	// Component references
 	let glCanvas: GLCanvas;
@@ -61,12 +60,10 @@ function render() {
 
 </script>
 
-{#if show}
-<div class="relative grow border-4 h-full flex flex-col justify-center" transition:fade>
+<div class="relative grow h-full flex flex-col justify-center" transition:fade>
 	<div class="flex justify-center">
 		<div class="border-2 border-gray-600" style="height:{2 * h}px; width:{w}px">
 			<GLCanvas bind:this={glCanvas} />
 		</div>
 	</div>
 </div>
-{/if}

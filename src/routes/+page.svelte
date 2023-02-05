@@ -84,17 +84,20 @@
 	<title>vAmiga Online</title>
 	<MainScreen>
 		<div class="relative grow">
-			<TitleScreen show={!$poweredOn} />
-			<Emulator show={$poweredOn} bind:this={emulator} />
-
+			{#if !$poweredOn}
+				<TitleScreen />
+			{/if}
+			{#if $poweredOn}
+				<Emulator bind:this={emulator} />
+			{/if}
 			{#if showShell}
 				<RetroShell />
 			{/if}
 			{#if showSettings}
 				<Settings />
 			{/if}
+			<Sidebar on:select={sidebarAction} />
 		</div>
-		<Sidebar on:select={sidebarAction} />
 
 		<!--
 			{#if !$poweredOn}
@@ -112,6 +115,6 @@
 				<div transition:fade><RetroShell /></div>
 			{/if}
 		-->
-		<div class="h-8 green-3 bg-red-500">Bottom bar</div>
+		<div class="relative h-8 green-3 bg-red-500">Bottom bar</div>
 	</MainScreen>
 </body>

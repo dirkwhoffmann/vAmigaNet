@@ -51,7 +51,7 @@
 
 {#if expanded}
 	<div
-		class="absolute top-0 left-0 h-screen bg-gray-500/40 flex flex-col w-14"
+		class="absolute top-0 left-0 h-full bg-gray-500/40 flex flex-col w-14"
 		transition:fade={{ duration }}
 	/>
 {/if}
