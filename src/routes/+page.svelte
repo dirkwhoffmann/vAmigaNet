@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../app.css';
-	import { initialized, proxy, amiga, poweredOn, what, errno } from '$lib/stores';
+	import { proxy, amiga, poweredOn, what, errno } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import '@splidejs/svelte-splide/css';
@@ -10,6 +10,7 @@
 	import Emulator from '$lib/Emulator.svelte';
 	import Settings from '$lib/settings/Settings.svelte';
 	import RetroShell from '$lib/RetroShell.svelte';
+	import MainScreen from '$lib/MainScreen.svelte';
 
 	let mounted = false;
 	let showSettings = false;
@@ -35,6 +36,7 @@
 		$errno = $amiga.errorCode();
 	}
 
+	/*
 	function sidebarAction(event) {
 		const sender = event.detail.sender;
 
@@ -77,12 +79,18 @@
 				console.log('Unhandled sender: ' + sender);
 		}
 	}
+	*/
+
 </script>
 
 <body class="h-screen bg-black text-white scroll-smooth overflow-y-scroll">
 	<title>vAmiga Online</title>
-	<DragAndDrop>
-		{#if $initialized}
+	<MainScreen>
+		<div class="relative grow bg-blue-500">
+				<TitleScreen show={!$poweredOn} />
+				<Emulator bind:this={emulator} show={$poweredOn} />
+		</div>
+		<!--
 			{#if !$poweredOn}
 				<div id="top" transition:fade><TitleScreen show={mounted} /></div>
 			{:else}
@@ -98,6 +106,7 @@
 			{#if showShell}
 				<div transition:fade><RetroShell /></div>
 			{/if}
-		{/if}
-	</DragAndDrop>
+		-->
+		<div class="h-8 green-3 bg-red-500">Bottom bar</div>
+	</MainScreen>
 </body>

@@ -5,6 +5,7 @@
     import { amiga } from '$lib/stores';
     import GLCanvas from '$lib/widgets/GLCanvas.svelte';
 	import { TextureRect } from '$lib/utils/TextureRect';
+    import { fade } from 'svelte/transition';
 	export let show = false;
 
 	// Component references
@@ -13,23 +14,23 @@
     let w = 0;
 	let h = 0;
 
-    	// The currently visible area
+    // The currently visible area
 	export let textureRect = new TextureRect();
 
 onMount(() => {
-    console.log('onMount()');
-    glCanvas.enableDrawing = true;
+    console.log('Emulator: onMount()');
+    // glCanvas.enableDrawing = true;
     textureRect.zoomIn();
 
     window.requestAnimationFrame(doAnimationFrame);
 });
 
 function doAnimationFrame(now: DOMHighResTimeStamp) {
-    if ($amiga != undefined) {
+    if (glCanvas != undefined) {
         update(now);
         render();
     } else {
-        console.log('Skipping draw: Store not yet initialized');
+        // console.log('Skipping draw: Store not yet initialized');
     }
     window.requestAnimationFrame(doAnimationFrame);
 }
@@ -60,12 +61,12 @@ function render() {
 
 </script>
 
-<div class="border-4 h-screen w-screen flex flex-col justify-center">
-	<!-- Canvas -->
-	<!--<div class="relative w-full h-full">-->
+{#if show}
+<div class="border-4 h-full flex flex-col justify-center" transition:fade>
 	<div class="flex justify-center">
 		<div class="border-2 border-gray-600" style="height:{2 * h}px; width:{w}px">
 			<GLCanvas bind:this={glCanvas} />
 		</div>
 	</div>
 </div>
+{/if}

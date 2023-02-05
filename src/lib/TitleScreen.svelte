@@ -7,7 +7,7 @@
 	import MainPageLink from '$lib/widgets/MainPageLink.svelte';
 	import DiGrails from 'svelte-icons/di/DiGrails.svelte';
 	import GoLaw from 'svelte-icons/go/GoLaw.svelte';
-    import FaBookOpen from 'svelte-icons/fa/FaBookOpen.svelte';
+	import FaBookOpen from 'svelte-icons/fa/FaBookOpen.svelte';
 	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
 
@@ -18,8 +18,8 @@
 		$proxy.audioContext.resume();
 	}
 	async function runMe() {
-        console.log("runMe");
-        if (!$poweredOn) {
+		console.log('runMe');
+		if (!$poweredOn) {
 			await $proxy.runShowcase(demos[0]);
 		}
 		// goto('/emulator');
@@ -30,37 +30,53 @@
 	}
 </script>
 
-<div class="flex flex-col h-screen bg-cover bg-transparent">
-	{#key show}
-		<div in:fade={{ duration: 2000 }} class="absolute blur brightness-[0.9]">
-			<img class="h-screen w-screen object-fill" src="matrix1.jpg" alt="Background" />
+{#if show}
+	<div class="relative h-full flex flex-col border-4 border-green-500" transition:fade>
+		<!-- bg-cover bg-transparent-->
+
+		<div in:fade={{ duration: 2000 }} class="absolute h-full blur brightness-[0.9]">
+			<img class="h-full w-screen object-fill" src="matrix1.jpg" alt="Background" />
 		</div>
-        <div
+
+		<div
 			in:fade
-			class="relative bg-transparent flex flex-grow items-center justify-center border-none align-middle border-4 border-blue-500"
+			class="relative bg-transparent grow flex flex-col items-center justify-center border-4 border-yellow-500"
 		>
-			<div class="rounded flex justify-center">
-				<img class="h-24 p-2 mt-3" src="va-icon.png" alt="vAmiga Icon" />
-				<div class="border-none border-4 p-6">
-					<div class="flex">
-						<div class="font-sofia-extra text-7xl mr-2">vAmiga</div>
-						<div class="font-sofia-extra text-7xl  text-gray-300">Online</div>
-					</div>
-					<div class="font-sofia-semi text-xl text-gray-300 pl-2 pb-10">Version 0.1</div>
-					<div class="flex space-x-5">
-						<MyButton on:click={runDemo} label="Run Demo" />
-						<MyButton on:click={gotoGitHub}><FaGithub /></MyButton>
+			<div class="border-2">
+				<div class="rounded flex justify-center">
+					<img class="h-24 p-2 mt-3" src="va-icon.png" alt="vAmiga Icon" />
+					<div class="border-none border-4 p-6">
+						<div class="flex">
+							<div class="font-sofia-extra text-7xl mr-2">vAmiga</div>
+							<div class="font-sofia-extra text-7xl  text-gray-300">Online</div>
+						</div>
+						<div class="font-sofia-semi text-xl text-gray-300 pl-2 pb-10">Version 0.1</div>
+						<div class="flex space-x-5">
+							<MyButton on:click={runDemo} label="Run Demo" />
+							<MyButton on:click={gotoGitHub}><FaGithub /></MyButton>
+						</div>
 					</div>
 				</div>
 			</div>
+			<div class="relative border-2 w-3/4">
+				<p class="font-josefin text-base text-red-400 text-center">
+					This page is under construction and offers very little functionality, yet. I.e., it is
+					only possible to launch vAmiga with a number of preset demos. You'll find a suitable
+					selection in the Showcases section. The site is intended as a feature preview to gather
+					feedback from the user base. Based on the feedback I will decide to continue the project
+					or to shut it down.
+				</p>
+			</div>
 		</div>
 		<div
-			class="relative flex justify-center border-none align-middle bg-gray-900/50 space-x-8 border-4 border-red-500"
+			class="relative flex justify-center align-middle bg-gray-900/50 space-x-8 border-4 border-red-500"
 		>
-        <MainPageLink href="#learnmore">
-            <div slot="icon"><FaBookOpen /></div>
-            <div slot="description">Learn more</div>
-        </MainPageLink>
+			<!--
+			<MainPageLink href="#learnmore">
+				<div slot="icon"><FaBookOpen /></div>
+				<div slot="description">Learn more</div>
+			</MainPageLink>
+            -->
 			<MainPageLink href="showcases">
 				<div slot="icon"><DiGrails /></div>
 				<div slot="description">Showcases</div>
@@ -70,9 +86,9 @@
 				<div slot="description">Impressum</div>
 			</MainPageLink>
 		</div>
-	{/key}
-</div>
-
+	</div>
+{/if}
+<!-- 
 <div
 	id="learnmore"
 	class="relative border-[20px] border-red-600 h-96 flex justify-center bg-gray-900/50"
@@ -88,3 +104,4 @@
 		</p>
 	</div>
 </div>
+-->

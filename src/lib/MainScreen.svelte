@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { proxy, amiga, memory } from '$lib/stores';
+	import { proxy, amiga, memory, initialized } from '$lib/stores';
 
 	function handleDragEnter(e) {
 		e.preventDefault();
@@ -45,11 +45,13 @@
 	}
 </script>
 
-<div class="h-full w-full"
+<div class="h-screen w-screen flex flex-col flex-grow" 
 	on:dragenter={handleDragEnter}
 	on:dragleave={handleDragLeave}
 	on:dragover={handleDragOver}
 	on:drop={handleDragDrop}
 >
+{#if $initialized}
 	<slot />
+{/if}
 </div>
