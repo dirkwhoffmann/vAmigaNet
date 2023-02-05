@@ -31,7 +31,7 @@
 </script>
 
 {#if show}
-	<div class="relative h-full flex flex-col border-4 border-green-500" transition:fade>
+	<div class="h-full flex flex-col border-4 border-green-500" transition:fade>
 		<!-- bg-cover bg-transparent-->
 
 		<div in:fade={{ duration: 2000 }} class="absolute h-full blur brightness-[0.9]">

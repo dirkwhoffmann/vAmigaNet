@@ -36,7 +36,6 @@
 		$errno = $amiga.errorCode();
 	}
 
-	/*
 	function sidebarAction(event) {
 		const sender = event.detail.sender;
 
@@ -79,17 +78,24 @@
 				console.log('Unhandled sender: ' + sender);
 		}
 	}
-	*/
-
 </script>
 
 <body class="h-screen bg-black text-white scroll-smooth overflow-y-scroll">
 	<title>vAmiga Online</title>
 	<MainScreen>
-		<div class="relative grow bg-blue-500">
-				<TitleScreen show={!$poweredOn} />
-				<Emulator bind:this={emulator} show={$poweredOn} />
+		<div class="relative grow">
+			<TitleScreen show={!$poweredOn} />
+			<Emulator show={$poweredOn} bind:this={emulator} />
+
+			{#if showShell}
+				<RetroShell />
+			{/if}
+			{#if showSettings}
+				<Settings />
+			{/if}
 		</div>
+		<Sidebar on:select={sidebarAction} />
+
 		<!--
 			{#if !$poweredOn}
 				<div id="top" transition:fade><TitleScreen show={mounted} /></div>
@@ -98,7 +104,6 @@
 					<Emulator bind:this={emulator} show={mounted} />
 				</div>
 			{/if}
-			<Sidebar on:select={sidebarAction} />
 
 			{#if showSettings}
 				<div transition:fade><Settings /></div>

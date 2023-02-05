@@ -14,6 +14,7 @@
 	import ConfigItem from '$lib/settings/ConfigItem.svelte';
 	import { proxy } from '$lib/stores';
 	import { amiga } from '$lib/stores';
+	import { fade } from 'svelte/transition';
 
 	let power: boolean;
 	let cpuRevision: number;
@@ -61,7 +62,7 @@
 	}
 </script>
 
-<div class="absolute top-0 left-0 w-full h-full border-none border-red-500 flex flex-grow overflow-scroll">
+<div class="absolute top-0 left-0 w-full h-full flex flex-grow overflow-scroll" transition:fade>
 	<div class="w-14 "></div>
 	<div class="bg-gray-500/75 ml-2 w-full h-screen p-2 overflow-scroll">
 		<div class="mt-4 p-4">

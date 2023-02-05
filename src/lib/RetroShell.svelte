@@ -3,6 +3,7 @@
 	import { MsgCloseConsole, MsgUpdateConsole } from '$lib/stores';
 	import { MsgScriptDone, MsgScriptPause, MsgScriptAbort, MsgScriptWakeup } from '$lib/stores';
 	import { onMount } from 'svelte';
+	import { fade } from 'svelte/transition';
 
 	let ready = false;
 
@@ -96,7 +97,7 @@
 	}
 </script>
 
-<div class="absolute top-0 left-0 w-full h-full flex flex-grow overflow-scroll">
+<div class="absolute top-0 left-0 w-full h-full flex flex-grow overflow-scroll" transition:fade>
 	<div class="w-14 " />
 	<div class="ml-2 w-full h-screen p-0 overflow-scroll">
 		<textarea

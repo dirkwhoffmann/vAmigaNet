@@ -62,7 +62,7 @@ function render() {
 </script>
 
 {#if show}
-<div class="border-4 h-full flex flex-col justify-center" transition:fade>
+<div class="relative grow border-4 h-full flex flex-col justify-center" transition:fade>
 	<div class="flex justify-center">
 		<div class="border-2 border-gray-600" style="height:{2 * h}px; width:{w}px">
 			<GLCanvas bind:this={glCanvas} />
