@@ -97,7 +97,7 @@
 	}
 </script>
 
-<div class="absolute top-0 left-0 w-full h-full flex overflow-scroll" transition:fade>
+<div class="absolute top-0 left-0 w-full h-full mt-1 flex overflow-scroll" transition:fade>
 	<div class="w-16 mr-1"></div>
 	<div class="grow h-full overflow-scroll">
 		<textarea

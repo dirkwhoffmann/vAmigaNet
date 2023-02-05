@@ -19,7 +19,7 @@
 			class="h-24 w-full border-none flex flex-col justify-center text-lg font-azeret text-center"
 		>
 			<p class="p-1">
-				Software failure: Uncaught exception {$errno} ({$enums.ErrorCodeKey($errno)})
+				Software failure. Uncaught exception {$errno} ({$enums.ErrorCodeKey($errno)})
 			</p>
 			<p class="p-1">{$what}</p>
 		</div>
