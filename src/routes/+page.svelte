@@ -84,11 +84,9 @@
 	<DragAndDrop>
 		{#if $initialized}
 			{#if !$poweredOn}
-				<div id="top" transition:fade class="bg-cover bg-transparent">
-					<TitleScreen show={mounted} />
-				</div>
+				<div id="top" transition:fade><TitleScreen show={mounted} /></div>
 			{:else}
-				<div transition:fade class="bg-cover bg-transparent">
+				<div transition:fade>
 					<Emulator bind:this={emulator} show={mounted} />
 				</div>
 			{/if}

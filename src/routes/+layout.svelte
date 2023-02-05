@@ -28,5 +28,5 @@
 </svelte:head>
 <Guru />
 <div class="relative">
-<slot />
+	<slot />
 </div>

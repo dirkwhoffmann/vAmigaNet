@@ -30,12 +30,12 @@
 	}
 </script>
 
-<div class="flex flex-col h-screen">
+<div class="flex flex-col h-screen bg-cover bg-transparent">
 	{#key show}
 		<div in:fade={{ duration: 2000 }} class="absolute blur brightness-[0.9]">
 			<img class="h-screen w-screen object-fill" src="matrix1.jpg" alt="Background" />
 		</div>
-		<div
+        <div
 			in:fade
 			class="relative bg-transparent flex flex-grow items-center justify-center border-none align-middle border-4 border-blue-500"
 		>
