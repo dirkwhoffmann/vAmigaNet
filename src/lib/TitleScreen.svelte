@@ -62,7 +62,7 @@
 				This page is under construction and offers very little functionality, yet. I.e., it is only
 				possible to launch vAmiga with a number of preset demos. You'll find a suitable selection in
 				the Showcases section. The site is intended as a feature preview to gather feedback from the
-				user base. Based on the feedback I will decide to continue the project or to shut it down.
+				user base.
 			</p>
 		</div>
 	</div>

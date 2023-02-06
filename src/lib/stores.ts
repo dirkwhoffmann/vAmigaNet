@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 
-// The 'Module' of the emsdk. It is setup in +layout.svelte onmount()
+// Gateway to the WASM backend
 export const proxy: any = writable();
 
 // Proxies
@@ -11,6 +11,9 @@ export const memory: any = writable();
 export const retroShell: any = writable();
 
 // GUI state
+export const canvasWidth = writable(0);
+export const canvasHeight = writable(0);
+export const layout = writable('fit');
 export const showSidebar = writable(false);
 export const showShell = writable(false);
 export const showSettings = writable(false);

@@ -1,8 +1,9 @@
 <script lang="ts">
 	import '../app.css';
-	import { proxy, amiga } from '$lib/stores';
+	import { initialized, proxy, amiga } from '$lib/stores';
 	import { poweredOn, what, errno } from '$lib/stores';
-	import { showSidebar, showShell, showSettings, debugDma } from '$lib/stores';
+	import { layout, showSidebar, showShell, showSettings } from '$lib/stores';
+	import { canvasWidth, canvasHeight } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import '@splidejs/svelte-splide/css';
@@ -14,12 +15,26 @@
 	import StatusBar from '$lib/StatusBar.svelte';
 	import RetroShell from '$lib/RetroShell.svelte';
 	import MainScreen from '$lib/MainScreen.svelte';
+	import type { AnyNode } from 'postcss';
 
 	let mounted = false;
 	let buttonText = 'Run Demo';
 
 	// Component references
 	let emulator: Emulator;
+	let canvas: Element;
+
+	$: if (canvas != undefined) {
+
+		const resizeObserver = new ResizeObserver((entries) => {
+			const entry = entries.at(0);
+			$canvasWidth = entry!.contentRect.width;
+			$canvasHeight = entry!.contentRect.height;
+		});
+
+		console.log('Creating resizeObserver...');
+		resizeObserver.observe(canvas);
+	}
 
 	onMount(() => {
 		console.log('+page: onMount()');
@@ -52,14 +67,10 @@
 				break;
 			case 'monitor':
 				if ($amiga.getConfig($proxy.OPT_DMA_DEBUG_ENABLE)) {
-					console.log('Callig zoom in');
 					emulator.textureRect.zoomIn();
-					console.log('Exiting DMA debugger');
 					$amiga.configure($proxy.OPT_DMA_DEBUG_ENABLE, 0);
 				} else {
-					console.log('Callig zoom out');
 					emulator.textureRect.zoomOut();
-					console.log('Entering DMA debugger');
 					$amiga.configure($proxy.OPT_DMA_DEBUG_ENABLE, 1);
 				}
 				break;
@@ -75,6 +86,15 @@
 				break;
 			case 'reset':
 				$amiga.hardReset();
+				break;
+			case 'fit':
+				$layout = 'fit';
+				break;
+			case 'aspect':
+				$layout = 'aspect';
+				break;
+			case 'full':
+				$layout = 'full';
 				break;
 			default:
 				console.log('Unhandled sender: ' + sender);
@@ -93,7 +113,7 @@
 	<title>vAmiga Online</title>
 	<MainScreen>
 		<StatusBar on:push={push} />
-		<div class="relative grow">
+		<div bind:this={canvas} class="box relative grow border-2 border-green-300">
 			{#if !$poweredOn}
 				<TitleScreen />
 			{/if}

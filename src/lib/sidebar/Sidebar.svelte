@@ -46,9 +46,9 @@
 			item={control}
 			subitems={controlItems}
 		/>
-		<SidebarButton on:select={select} item={settings} highlighted={$showSettings} toggle={true} />
-		<SidebarButton on:select={select} item={shell} highlighted={$showShell} toggle={true} />
-		<SidebarButton on:select={select} item={monitor} highlighted={$debugDma} toggle={true} />
+		<SidebarButton on:select={select} item={settings} highlighted={$showSettings} />
+		<SidebarButton on:select={select} item={shell} highlighted={$showShell} />
+		<SidebarButton on:select={select} item={monitor} highlighted={$debugDma} />
 		<SidebarSection
 			on:select={select}
 			expanded={sel == 'layout'}
