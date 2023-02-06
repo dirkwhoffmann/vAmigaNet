@@ -20,7 +20,7 @@
 	$: w = $layout == 'full' ? $canvasWidth : $layout == 'aspect' ? (h * 4) / 3 : x2 - x1 + 2;
 	$: h = $layout == 'full' ? $canvasHeight : $layout == 'aspect' ? $canvasHeight : 2 * (y2 - y1 + 2);
 
-    $: console.log('Size: ', $canvasWidth, ' x ', $canvasHeight);
+    // $: console.log('Size: ', $canvasWidth, ' x ', $canvasHeight);
     $: console.log('wh: ', w, ' x ', h);
 
 	// The currently visible area
@@ -75,7 +75,7 @@
 	<div class="relative grow h-full flex flex-col justify-center" transition:fade>
 		<div class="flex justify-center h-full">
 			<div class="border-2 border-gray-600" style="height:{h}px; width:{w}px">
-				<GLCanvas bind:this={glCanvas} />
+                <GLCanvas bind:this={glCanvas} />
 			</div>
 			<!--
                 {#if $layout == 'aspect'}

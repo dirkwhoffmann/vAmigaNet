@@ -10,9 +10,13 @@ export const denise: any = writable();
 export const memory: any = writable();
 export const retroShell: any = writable();
 
-// GUI state
+// Layout
 export const canvasWidth = writable(0);
 export const canvasHeight = writable(0);
+export const aspectWidth = writable(0);
+export const aspectHeight = writable(0);
+
+// GUI state
 export const layout = writable('fit');
 export const showSidebar = writable(false);
 export const showShell = writable(false);

@@ -3,7 +3,7 @@
 	import { initialized, proxy, amiga } from '$lib/stores';
 	import { poweredOn, what, errno } from '$lib/stores';
 	import { layout, showSidebar, showShell, showSettings } from '$lib/stores';
-	import { canvasWidth, canvasHeight } from '$lib/stores';
+	import { canvasWidth, canvasHeight, aspectWidth, aspectHeight } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import '@splidejs/svelte-splide/css';
@@ -24,8 +24,8 @@
 	let emulator: Emulator;
 	let canvas: Element;
 
+	/*
 	$: if (canvas != undefined) {
-
 		const resizeObserver = new ResizeObserver((entries) => {
 			const entry = entries.at(0);
 			$canvasWidth = entry!.contentRect.width;
@@ -35,15 +35,48 @@
 		console.log('Creating resizeObserver...');
 		resizeObserver.observe(canvas);
 	}
+	*/
+
+	// Timeout for debouncing the resize event
+	let timeout: NodeJS.Timeout;
 
 	onMount(() => {
 		console.log('+page: onMount()');
 		buttonText = $poweredOn ? 'Continue' : 'Run Demo';
 		mounted = true;
 
+		window.addEventListener('resize', function () {
+			clearTimeout(timeout);
+			timeout = setTimeout(handleResizeEvent, 250);
+		});
 		window.addEventListener('error', handleUncatchedError);
 		window.addEventListener('unhandledrejection', handleUncatchedError);
 	});
+
+	function resize() {
+		if (canvas != undefined) {
+			$canvasWidth = canvas.scrollWidth .clientWidth;
+			$canvasHeight = canvas.clientHeight;
+
+			// Compute 4:3 box
+			$aspectWidth = $canvasWidth; 
+			$aspectHeight = $aspectWidth * 3/4;
+			if ($aspectHeight > $canvasHeight) {
+				$aspectHeight = $canvasHeight;
+				$aspectWidth = $aspectHeight * 4/3;
+			}
+			console.log('dimensions: ', $canvasWidth, ', ', $canvasHeight);
+		}
+	}
+
+	function handleResizeEvent() {
+		if (canvas != undefined) {
+			$canvasWidth = canvas.clientWidth;
+			$canvasHeight = canvas.clientHeight;
+
+			console.log('dimensions: ', $canvasWidth, ', ', $canvasHeight);
+		}
+	}
 
 	function handleUncatchedError(event) {
 		console.log('Unhandled error catched', event);
@@ -113,7 +146,7 @@
 	<title>vAmiga Online</title>
 	<MainScreen>
 		<StatusBar on:push={push} />
-		<div bind:this={canvas} class="box relative grow border-2 border-green-300">
+		<div bind:this={canvas} class="box relative grow border-2 border-green-300 overflow-scroll">
 			{#if !$poweredOn}
 				<TitleScreen />
 			{/if}
