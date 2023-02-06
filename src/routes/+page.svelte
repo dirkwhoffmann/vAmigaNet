@@ -97,9 +97,7 @@
 			{#if !$poweredOn}
 				<TitleScreen />
 			{/if}
-			{#if $poweredOn}
-				<Emulator bind:this={emulator} />
-			{/if}
+			<Emulator bind:this={emulator} />
 			{#if $showShell}
 				<RetroShell />
 			{/if}

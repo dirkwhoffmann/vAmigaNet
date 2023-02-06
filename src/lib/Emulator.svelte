@@ -2,7 +2,7 @@
 
 <script lang="ts">
 	import { onMount } from 'svelte';
-    import { amiga } from '$lib/stores';
+    import { amiga, poweredOn } from '$lib/stores';
     import GLCanvas from '$lib/widgets/GLCanvas.svelte';
 	import { TextureRect } from '$lib/utils/TextureRect';
     import { fade } from 'svelte/transition';
@@ -60,6 +60,7 @@ function render() {
 
 </script>
 
+{#if $poweredOn}
 <div class="relative grow h-full flex flex-col justify-center" transition:fade>
 	<div class="flex justify-center">
 		<div class="border-2 border-gray-600" style="height:{2 * h}px; width:{w}px">
@@ -67,3 +68,4 @@ function render() {
 		</div>
 	</div>
 </div>
+{/if}

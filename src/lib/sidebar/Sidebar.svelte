@@ -3,6 +3,7 @@
 	import SidebarButton from '$lib/sidebar/SidebarButton.svelte';
 	import SidebarSection from '$lib/sidebar/SidebarSection.svelte';
 	import { fade } from 'svelte/transition';
+	import { showSidebar, showShell, showSettings, debugDma } from '$lib/stores';
 
 	// export let expanded = false;
 	let sel = '';
@@ -45,9 +46,9 @@
 			item={control}
 			subitems={controlItems}
 		/>
-		<SidebarButton on:select={select} item={settings} toggle={true} />
-		<SidebarButton on:select={select} item={shell} toggle={true} />
-		<SidebarButton on:select={select} item={monitor} toggle={true} />
+		<SidebarButton on:select={select} item={settings} highlighted={$showSettings} toggle={true} />
+		<SidebarButton on:select={select} item={shell} highlighted={$showShell} toggle={true} />
+		<SidebarButton on:select={select} item={monitor} highlighted={$debugDma} toggle={true} />
 		<SidebarSection
 			on:select={select}
 			expanded={sel == 'layout'}
