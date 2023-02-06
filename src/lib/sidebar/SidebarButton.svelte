@@ -3,17 +3,20 @@
 	export let item = { id: '', icon: '' };
 	export let alt = 'Icon';
 	export let enabled = true;
-	export let highlighted = false;
 	export let opacity = '';
+	export let toggle = false; 
 
+	let state = false; 
 	const dispatch = createEventDispatcher();
 
-	$: bgcolor = enabled ? (highlighted ? 'bg-gray-100' : 'bg-gray-300') : 'bg-gray-500';
-	$: hoverStyle = enabled ? 'hover:bg-gray-100 hover:scale-100' : '';
+	$: bgcolor = enabled ? (state ? 'bg-blue-300' : 'bg-gray-300') : 'bg-gray-500';
+	$: hoverStyle = enabled ? 'hover:bg-blue-300 hover:scale-100' : '';
 
 	function click(e: Event) {
 		e.preventDefault();
-		dispatch('select', { sender: e.target!.id });
+		state = toggle ? !state : true; 
+		console.log("toggle = ", toggle);
+		dispatch('select', { sender: e.target!.id, state: state });
 	}
 </script>
 

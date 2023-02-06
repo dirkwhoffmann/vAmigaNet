@@ -14,8 +14,8 @@
 	function select(e: Event) {
 		e.preventDefault();
 		sel = e.detail.sender == sel ? '' : e.detail.sender;
-		console.log(sel + ' selected');
-		dispatch('select', { sender: e.detail.sender });
+		console.log('sender: ', e.detail.sender, ' state: ', e.detail.state);
+		dispatch('select', { sender: e.detail.sender, state: e.detail.state });
 	}
 
 	const vamiga = { id: 'vamiga', icon: 'icons/vamigaIcon.png' };
@@ -27,8 +27,8 @@
 	];
 	const settings = { id: 'settings', icon: 'icons/settingsIcon.png' };
 	const shell = { id: 'shell', icon: 'icons/retroShellIcon.png' };
-	const layout = { id: 'layout', icon: 'icons/layoutIcon.png' };
 	const monitor = { id: 'monitor', icon: 'icons/monitorIcon.png' };
+	const layout = { id: 'layout', icon: 'icons/layoutIcon.png' };
 	const layoutItems = [
 		{ id: 'aspect', icon: 'icons/layoutAspectIcon.png' },
 		{ id: 'fit', icon: 'icons/layoutFitIcon.png' },
@@ -45,9 +45,9 @@
 			item={control}
 			subitems={controlItems}
 		/>
-		<SidebarButton on:select={select} item={settings} />
-		<SidebarButton on:select={select} item={shell} />
-		<SidebarButton on:select={select} item={monitor} />
+		<SidebarButton on:select={select} item={settings} toggle={true} />
+		<SidebarButton on:select={select} item={shell} toggle={true} />
+		<SidebarButton on:select={select} item={monitor} toggle={true} />
 		<SidebarSection
 			on:select={select}
 			expanded={sel == 'layout'}

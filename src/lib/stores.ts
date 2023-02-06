@@ -10,10 +10,16 @@ export const denise: any = writable();
 export const memory: any = writable();
 export const retroShell: any = writable();
 
-// State
+// GUI state
+export const showSidebar = writable(false);
+export const showShell = writable(false);
+export const showSettings = writable(false);
+
+// Emulator state
 export const initialized = writable(false);
 export const poweredOn = writable(false);
 export const running = writable(false);
+export const debugDma = writable(false);
 
 // Error state
 export const errno = writable(0);

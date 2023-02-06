@@ -1,12 +1,14 @@
 <script lang="ts">
 	import '../app.css';
-	import { proxy, amiga, poweredOn, what, errno } from '$lib/stores';
+	import { proxy, amiga } from '$lib/stores';
+	import { poweredOn, what, errno } from '$lib/stores';
+	import { showSidebar, showShell, showSettings, debugDma } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import '@splidejs/svelte-splide/css';
 	import Sidebar from '$lib/sidebar/Sidebar.svelte';
 	import TitleScreen from '$lib/TitleScreen.svelte';
-	import DragAndDrop from './emulator/DragAndDrop.svelte';
+	import DragAndDrop from '$lib/DragAndDrop.svelte';
 	import Emulator from '$lib/Emulator.svelte';
 	import Settings from '$lib/settings/Settings.svelte';
 	import StatusBar from '$lib/StatusBar.svelte';
@@ -14,9 +16,6 @@
 	import MainScreen from '$lib/MainScreen.svelte';
 
 	let mounted = false;
-	let showSettings = false;
-	let showShell = false;
-	let showSidebar = false;
 	let buttonText = 'Run Demo';
 
 	// Component references
@@ -44,12 +43,12 @@
 
 		switch (event.detail.sender) {
 			case 'shell':
-				showShell = !showShell;
-				if (showShell) showSettings = false;
+				$showShell = !$showShell;
+				if ($showShell) $showSettings = false;
 				break;
 			case 'settings':
-				showSettings = !showSettings;
-				if (showSettings) showShell = false;
+				$showSettings = !$showSettings;
+				if ($showSettings) $showShell = false;
 				break;
 			case 'monitor':
 				if ($amiga.getConfig($proxy.OPT_DMA_DEBUG_ENABLE)) {
@@ -86,7 +85,7 @@
 		const sender = event.detail.sender;
 		console.log('Status bar: ', sender);
 
-		showSidebar = !showSidebar;
+		$showSidebar = !$showSidebar;
 	}
 </script>
 
@@ -101,13 +100,13 @@
 			{#if $poweredOn}
 				<Emulator bind:this={emulator} />
 			{/if}
-			{#if showShell}
+			{#if $showShell}
 				<RetroShell />
 			{/if}
-			{#if showSettings}
+			{#if $showSettings}
 				<Settings />
 			{/if}
-			{#if showSidebar}
+			{#if $showSidebar}
 				<Sidebar on:select={sidebarAction} />
 			{/if}
 		</div>

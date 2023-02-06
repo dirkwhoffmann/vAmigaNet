@@ -90,9 +90,10 @@
 		MsgDmaDebugOff,
 		MsgSrvState,
 		MsgSrvReceive,
-		MsgSrvSend
+		MsgSrvSend,
 	} from '$lib/stores';
 	import { initialized, poweredOn, running } from '$lib/stores';
+	import { debugDma } from '$lib/stores';
 
 	export let audioContext: AudioContext | null = null;
 
@@ -545,10 +546,12 @@
 
 			case $proxy.MSG_DMA_DEBUG_ON:
 				$MsgDmaDebugOn++;
+				$debugDma = true;
 				break;
 
 			case $proxy.MSG_DMA_DEBUG_OFF:
 				$MsgDmaDebugOff++;
+				$debugDma = false;
 				break;
 
 			case $proxy.MSG_SRV_STATE:
