@@ -38,22 +38,23 @@
 </script>
 
 <div transition:fade={{ duration }}>
-	<div class="absolute top-0 left-0 h-full bg-gray-500/40 flex flex-col w-16" />
-	<div class="absolute top-0 left-0 bg-white w-10 mt-3 flex flex-col space-y-1 justify-center">
-		<SidebarSection
-			on:select={select}
-			expanded={sel == 'control'}
-			item={control}
-			subitems={controlItems}
-		/>
-		<SidebarButton on:select={select} item={settings} highlighted={$showSettings} />
-		<SidebarButton on:select={select} item={shell} highlighted={$showShell} />
-		<SidebarButton on:select={select} item={monitor} highlighted={$debugDma} />
-		<SidebarSection
-			on:select={select}
-			expanded={sel == 'layout'}
-			item={layout}
-			subitems={layoutItems}
-		/>
+	<div class="absolute top-0 left-0 h-full bg-gray-500/40 flex flex-col w-16 items-center">
+		<div class="w-10 mt-2 flex flex-col space-y-1">
+			<SidebarSection
+				on:select={select}
+				expanded={sel == 'control'}
+				item={control}
+				subitems={controlItems}
+			/>
+			<SidebarButton on:select={select} item={settings} highlighted={$showSettings} />
+			<SidebarButton on:select={select} item={shell} highlighted={$showShell} />
+			<SidebarButton on:select={select} item={monitor} highlighted={$debugDma} />
+			<SidebarSection
+				on:select={select}
+				expanded={sel == 'layout'}
+				item={layout}
+				subitems={layoutItems}
+			/>
+		</div>
 	</div>
 </div>
