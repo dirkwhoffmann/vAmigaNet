@@ -38,8 +38,8 @@
 </script>
 
 <div transition:fade={{ duration }}>
-	<div class="absolute top-0 left-0 h-full mt-1 bg-gray-500/40 flex flex-col w-16" />
-	<div class="absolute top-0 left-0 w-16 mt-3 ml-3.5 flex flex-col space-y-1">
+	<div class="absolute top-0 left-0 h-full bg-gray-500/40 flex flex-col w-16" />
+	<div class="absolute top-0 left-0 bg-white w-10 mt-3 flex flex-col space-y-1 justify-center">
 		<SidebarSection
 			on:select={select}
 			expanded={sel == 'control'}

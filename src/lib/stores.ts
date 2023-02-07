@@ -17,7 +17,7 @@ export const aspectWidth = writable(0);
 export const aspectHeight = writable(0);
 
 // GUI state
-export const layout = writable('fit');
+export const layout = writable('full');
 export const showSidebar = writable(false);
 export const showShell = writable(false);
 export const showSettings = writable(false);

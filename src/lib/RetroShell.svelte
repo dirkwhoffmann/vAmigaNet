@@ -97,14 +97,14 @@
 	}
 </script>
 
-<div class="absolute top-0 left-0 w-full h-full mt-1 flex overflow-scroll" transition:fade>
+<div class="absolute top-0 left-0 w-full h-full flex overflow-scroll" transition:fade>
 	<div class="w-16 mr-1"></div>
-	<div class="grow h-full overflow-scroll">
+	<div class="bg-gray-500/75 grow h-full overflow-scroll">
 		<textarea
 			bind:this={textarea}
 			readonly
 			style="resize: none; font-variant-ligatures: none"
-			class="font-azeret text-base focus:border-transparent focus:ring-0 text-white bg-gray-500/75 w-full h-full p-2"
+			class="font-azeret text-base focus:border-transparent focus:ring-0 text-white bg-transparent w-full h-full p-2"
 			on:keydown={onKeyDown}
 		/>
 	</div>

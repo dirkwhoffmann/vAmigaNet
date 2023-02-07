@@ -119,7 +119,7 @@
 
 </script>
 
-<div class="absolute top-0 left-0 w-full h-full mt-1 flex overflow-scroll" transition:fade>
+<div class="absolute top-0 left-0 w-full h-full flex overflow-scroll" transition:fade>
 	<div class="w-16 mr-1" />
 	<div class="bg-gray-500/75 mt-0 p-4 grow h-full overflow-scroll">
 		<div class="font-sofia-extra">
