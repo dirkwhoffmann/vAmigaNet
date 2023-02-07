@@ -53,9 +53,11 @@
 		window.addEventListener('unhandledrejection', handleUncatchedError);
 	});
 
+	$: if (canvas != undefined) resize();
+
 	function resize() {
 		if (canvas != undefined) {
-			$canvasWidth = canvas.scrollWidth .clientWidth;
+			$canvasWidth = canvas.clientWidth;
 			$canvasHeight = canvas.clientHeight;
 
 			// Compute 4:3 box
@@ -66,17 +68,11 @@
 				$aspectWidth = $aspectHeight * 4/3;
 			}
 			console.log('dimensions: ', $canvasWidth, ', ', $canvasHeight);
-		}
+			console.log('aspect dimensions: ', $aspectWidth, ', ', $aspectHeight);
+		} 
 	}
 
-	function handleResizeEvent() {
-		if (canvas != undefined) {
-			$canvasWidth = canvas.clientWidth;
-			$canvasHeight = canvas.clientHeight;
-
-			console.log('dimensions: ', $canvasWidth, ', ', $canvasHeight);
-		}
-	}
+	function handleResizeEvent() { resize(); }
 
 	function handleUncatchedError(event) {
 		console.log('Unhandled error catched', event);
@@ -146,7 +142,7 @@
 	<title>vAmiga Online</title>
 	<MainScreen>
 		<StatusBar on:push={push} />
-		<div bind:this={canvas} class="box relative grow border-2 border-green-300 overflow-scroll">
+		<div bind:this={canvas} class="box relative grow border-none border-green-300 overflow-scroll">
 			{#if !$poweredOn}
 				<TitleScreen />
 			{/if}

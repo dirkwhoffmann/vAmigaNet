@@ -2,7 +2,8 @@
 
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { layout, amiga, poweredOn, canvasWidth, canvasHeight } from '$lib/stores';
+	import { layout, amiga, poweredOn } from '$lib/stores';
+	import { canvasWidth, canvasHeight, aspectWidth, aspectHeight } from '$lib/stores';
 	import GLCanvas from '$lib/widgets/GLCanvas.svelte';
 	import { TextureRect } from '$lib/utils/TextureRect';
 	import { fade } from 'svelte/transition';
@@ -17,8 +18,8 @@
 	let y2 = 0;
 
 	// Display size
-	$: w = $layout == 'full' ? $canvasWidth : $layout == 'aspect' ? (h * 4) / 3 : x2 - x1 + 2;
-	$: h = $layout == 'full' ? $canvasHeight : $layout == 'aspect' ? $canvasHeight : 2 * (y2 - y1 + 2);
+	$: w = $layout == 'full' ? $canvasWidth : $layout == 'aspect' ? $aspectWidth : x2 - x1 + 2;
+	$: h = $layout == 'full' ? $canvasHeight : $layout == 'aspect' ? $aspectHeight : 2 * (y2 - y1 + 2);
 
     // $: console.log('Size: ', $canvasWidth, ' x ', $canvasHeight);
     $: console.log('wh: ', w, ' x ', h);
@@ -73,7 +74,7 @@
 
 {#if $poweredOn}
 	<div class="relative grow h-full flex flex-col justify-center" transition:fade>
-		<div class="flex justify-center h-full">
+		<div class="flex justify-center h-full items-center">
 			<div class="border-2 border-gray-600" style="height:{h}px; width:{w}px">
                 <GLCanvas bind:this={glCanvas} />
 			</div>
