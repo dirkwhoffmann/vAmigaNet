@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { proxy, amiga, retroShell, poweredOn } from '$lib/stores';
+	import { proxy, amiga, retroShell, poweredOn, showImpressum } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import { demos } from '$lib/database';
 	import MyButton from '$lib/widgets/MyButton.svelte';
@@ -28,6 +28,15 @@
 	function gotoGitHub() {
 		goto('https://dirkwhoffmann.github.io/vAmiga');
 	}
+
+	function openShowcases() {
+		goto('showcases');
+	}
+
+	function openImpressum() {
+		$showImpressum = true;
+	}
+
 </script>
 
 <div class="h-full flex flex-col {debug}" transition:fade>
@@ -75,11 +84,11 @@
 				<div slot="description">Learn more</div>
 			</MainPageLink>
             -->
-		<MainPageLink href="showcases">
+		<MainPageLink href="showcases" on:click={openShowcases}>
 			<div slot="icon"><DiGrails /></div>
 			<div slot="description">Showcases</div>
 		</MainPageLink>
-		<MainPageLink href="#about">
+		<MainPageLink href="#about" on:click={openImpressum}>
 			<div slot="icon"><GoLaw /></div>
 			<div slot="description">Impressum</div>
 		</MainPageLink>

@@ -2,7 +2,7 @@
 	import '../app.css';
 	import { initialized, proxy, amiga } from '$lib/stores';
 	import { poweredOn, what, errno } from '$lib/stores';
-	import { layout, showSidebar, showShell, showSettings } from '$lib/stores';
+	import { layout, showSidebar, showShell, showSettings, showImpressum } from '$lib/stores';
 	import { canvasWidth, canvasHeight, aspectWidth, aspectHeight } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
@@ -15,7 +15,7 @@
 	import StatusBar from '$lib/StatusBar.svelte';
 	import RetroShell from '$lib/RetroShell.svelte';
 	import MainScreen from '$lib/MainScreen.svelte';
-	import type { AnyNode } from 'postcss';
+	import Impressum from '$lib/Impressum.svelte';
 
 	let mounted = false;
 	let buttonText = 'Run Demo';
@@ -61,18 +61,20 @@
 			$canvasHeight = canvas.clientHeight;
 
 			// Compute 4:3 box
-			$aspectWidth = $canvasWidth; 
-			$aspectHeight = $aspectWidth * 3/4;
+			$aspectWidth = $canvasWidth;
+			$aspectHeight = ($aspectWidth * 3) / 4;
 			if ($aspectHeight > $canvasHeight) {
 				$aspectHeight = $canvasHeight;
-				$aspectWidth = $aspectHeight * 4/3;
+				$aspectWidth = ($aspectHeight * 4) / 3;
 			}
 			console.log('dimensions: ', $canvasWidth, ', ', $canvasHeight);
 			console.log('aspect dimensions: ', $aspectWidth, ', ', $aspectHeight);
-		} 
+		}
 	}
 
-	function handleResizeEvent() { resize(); }
+	function handleResizeEvent() {
+		resize();
+	}
 
 	function handleUncatchedError(event) {
 		console.log('Unhandled error catched', event);
@@ -157,5 +159,8 @@
 				<Sidebar on:select={sidebarAction} />
 			{/if}
 		</div>
+		{#if $showImpressum}
+			<Impressum />
+		{/if}
 	</MainScreen>
 </body>
