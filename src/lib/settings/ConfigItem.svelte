@@ -9,13 +9,13 @@
 		DropdownHeader,
 		Chevron
 	} from 'flowbite-svelte';
+	import { Popover, PopoverButton, PopoverPanel } from '@rgossiaux/svelte-headlessui';
 
 	export let name = '???';
 	export let values = [{ name: '???', id: 0 }];
 	export let locked = false;
 	export let selection: number;
 
-	const bgcolor = 'bg-slate-600';
 	let dropdownOpen = false;
 
 	const dispatch = createEventDispatcher();
@@ -43,7 +43,7 @@
 		<div class="border-0 bg-blue-400/20 w-full h-12 flex flex-col justify-center">
 			<div class="p-4 text-xl text-blue-200 flex items-center">
 				{#if locked}
-				<div class="border-0 mr-3 h-6"><FaLock /></div>
+					<div class="border-0 mr-3 h-6"><FaLock /></div>
 				{/if}
 				<div class="border-0">{name}</div>
 			</div>
@@ -52,11 +52,11 @@
 			<Button color="" class="!text-xl !text-blue-200"
 				><Chevron><div class="w-64">{displayName}</div></Chevron></Button
 			>
-			<Dropdown frameClass="!{bgcolor}" bind:open={dropdownOpen}>
+			<Dropdown frameClass="!bg-slate-600" bind:open={dropdownOpen}>
 				{#each values as { name, id }, i}
 					<DropdownItem
 						on:click={handleClick}
-						defaultClass="font-medium py-2 px-4 text-xl text-blue-200 {bgcolor} hover:bg-slate-500"
+						defaultClass="font-medium py-2 px-4 text-xl text-blue-200 bg-slate-600 hover:bg-slate-500"
 						><div class="" id={id.toString()}>{name}</div></DropdownItem
 					>
 				{/each}
