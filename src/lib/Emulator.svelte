@@ -5,6 +5,7 @@
 	import { layout, amiga, poweredOn } from '$lib/stores';
 	import { canvasWidth, canvasHeight, aspectWidth, aspectHeight } from '$lib/stores';
 	import GLCanvas from '$lib/widgets/GLCanvas.svelte';
+	import { AnimatedFloat } from '$lib/utils/AnimatedFloat';
 	import { TextureRect } from '$lib/utils/TextureRect';
 	import { fade } from 'svelte/transition';
 
@@ -17,9 +18,19 @@
 	let x2 = 0;
 	let y2 = 0;
 
-	// Display size
+	// Emulator canvas size
+	let ww = new AnimatedFloat(0);
+	let hh = new AnimatedFloat(0);
+
+	let www = 0;
+	let hhh = 0;
+
+	// Display size (DEPRECATED)
 	$: w = $layout == 'full' ? $canvasWidth : $layout == 'aspect' ? $aspectWidth : x2 - x1 + 2;
 	$: h = $layout == 'full' ? $canvasHeight : $layout == 'aspect' ? $aspectHeight : 2 * (y2 - y1 + 2);
+
+	$: ww.set(w);
+	$: hh.set(h);
 
     // $: console.log('Size: ', $canvasWidth, ' x ', $canvasHeight);
     $: console.log('wh: ', w, ' x ', h);
@@ -61,7 +72,12 @@
 			// w = x2 - x1 + 2;
 			// h = y2 - y1 + 2;
 		}
-
+		if (ww.animates() || hh.animates()) {
+			ww.move();
+			hh.move();
+			www = ww.current;
+			hhh = hh.current;
+		}
 		glCanvas.update(now);
 	}
 
@@ -75,7 +91,7 @@
 {#if $poweredOn}
 	<div class="relative grow h-full flex flex-col justify-center" transition:fade>
 		<div class="flex justify-center h-full items-center">
-			<div class="border-2 border-gray-600" style="height:{h}px; width:{w}px">
+			<div class="border-2 border-gray-600" style="height:{hhh}px; width:{www}px">
                 <GLCanvas bind:this={glCanvas} />
 			</div>
 			<!--

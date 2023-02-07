@@ -6,7 +6,6 @@
 	import { layout, showShell, showSettings, debugDma } from '$lib/stores';
 	import { poweredOn, running } from '$lib/stores';
 
-	// export let expanded = false;
 	let sel = '';
 	let duration = 200;
 	let opacity = 'opacity-20';
