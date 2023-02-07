@@ -4,6 +4,7 @@
 	import SidebarSection from '$lib/sidebar/SidebarSection.svelte';
 	import { fade } from 'svelte/transition';
 	import { layout, showShell, showSettings, debugDma } from '$lib/stores';
+	import { poweredOn, running } from '$lib/stores';
 
 	// export let expanded = false;
 	let sel = '';
@@ -21,7 +22,7 @@
 
 	const vamiga = { id: 'vamiga', icon: 'icons/vamigaIcon.png' };
 	const control = { id: 'control', icon: 'icons/controlIcon.png' };
-	const controlItems = [
+	let controlItems = [
 		{ id: 'pause', icon: 'icons/pauseIcon.png' },
 		{ id: 'reset', icon: 'icons/resetIcon.png' },
 		{ id: 'power', icon: 'icons/powerIcon.png' }
@@ -36,8 +37,28 @@
 		{ id: 'full', icon: 'icons/layoutFullIcon.png' }
 	];
 
-	$: layoutButton.icon = $layout == 'full' ? 'icons/layoutFullIcon.png' : $layout == 'aspect' ? 'icons/layoutAspectIcon.png' : 'icons/layoutFitIcon.png';
+	$: layoutButton.icon =
+		$layout == 'full'
+			? 'icons/layoutFullIcon.png'
+			: $layout == 'aspect'
+			? 'icons/layoutAspectIcon.png'
+			: 'icons/layoutFitIcon.png';
 
+	$: if (!$poweredOn) {
+		controlItems = [{ id: 'power', icon: 'icons/powerIcon.png' }];
+	} else if ($running) {
+		controlItems = [
+			{ id: 'pause', icon: 'icons/pauseIcon.png' },
+			{ id: 'reset', icon: 'icons/resetIcon.png' },
+			{ id: 'power', icon: 'icons/powerIcon.png' }
+		];
+	} else {
+		controlItems = [
+			{ id: 'pause', icon: 'icons/runIcon.png' },
+			{ id: 'reset', icon: 'icons/resetIcon.png' },
+			{ id: 'power', icon: 'icons/powerIcon.png' }
+		];
+	}
 </script>
 
 <div transition:fade={{ duration }}>
