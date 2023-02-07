@@ -49,18 +49,25 @@
 			</div>
 		</div>
 		<div class="border-0 bg-blue-400/20 h-12">
-			<Button color="" class="!text-xl !text-blue-200"
-				><Chevron><div class="w-64">{displayName}</div></Chevron></Button
-			>
-			<Dropdown frameClass="!bg-slate-600" bind:open={dropdownOpen}>
-				{#each values as { name, id }, i}
-					<DropdownItem
-						on:click={handleClick}
-						defaultClass="font-medium py-2 px-4 text-xl text-blue-200 bg-slate-600 hover:bg-slate-500"
-						><div class="" id={id.toString()}>{name}</div></DropdownItem
-					>
-				{/each}
-			</Dropdown>
+			{#if locked}
+				<Button disabled color="" class="!text-xl !text-blue-200 flex"
+					><div class="w-64">{displayName}</div>
+					<div class="w-4 mr-2" /></Button
+				>
+			{:else}
+				<Button color="" class="!text-xl !text-blue-200"
+					><Chevron><div class="w-64">{displayName}</div></Chevron></Button
+				>
+				<Dropdown frameClass="!bg-slate-600" bind:open={dropdownOpen}>
+					{#each values as { name, id }, i}
+						<DropdownItem
+							on:click={handleClick}
+							defaultClass="font-medium py-2 px-4 text-xl text-blue-200 bg-slate-600 hover:bg-slate-500"
+							><div class="" id={id.toString()}>{name}</div></DropdownItem
+						>
+					{/each}
+				</Dropdown>
+			{/if}
 		</div>
 	</div>
 </div>

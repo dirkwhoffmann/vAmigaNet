@@ -12,11 +12,11 @@
 	import ConfigCategory from '$lib/settings/ConfigCategory.svelte';
 	import ConfigSection from './ConfigSection.svelte';
 	import ConfigItem from '$lib/settings/ConfigItem.svelte';
-	import { proxy } from '$lib/stores';
-	import { amiga } from '$lib/stores';
+	import { proxy, amiga } from '$lib/stores';
+	import { poweredOn } from '$lib/stores';
 	import { fade } from 'svelte/transition';
 
-	let power: boolean;
+	// let power: boolean;
 	let cpuRevision: number;
 	let cpuSpeed: number;
 	let agnusRevision: number;
@@ -31,12 +31,14 @@
 	let slowRamMirror: number;
 	let slowRamDelay: number;
 
+    $: power = $poweredOn;
+
 	onMount(() => {
 		update();
 	});
 
 	function update() {
-		power = $amiga.poweredOn;
+		// power = $amiga.poweredOn;
 		cpuRevision = $amiga.getConfig($proxy.OPT_CPU_REVISION);
 		cpuSpeed = $amiga.getConfig($proxy.OPT_CPU_OVERCLOCKING);
 		agnusRevision = $amiga.getConfig($proxy.OPT_AGNUS_REVISION);
@@ -273,4 +275,4 @@
         ]}
     />
 </ConfigSection>
-</div>
+</div>  
