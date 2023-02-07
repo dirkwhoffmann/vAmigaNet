@@ -11,4 +11,4 @@
     export let name = "???";
 </script>
 
-<Button color="transparent" class="!p-0"><div class="text-3xl">{name}</div></Button>
+<Button on:click color="transparent" class="!p-0"><div class="text-3xl">{name}</div></Button>

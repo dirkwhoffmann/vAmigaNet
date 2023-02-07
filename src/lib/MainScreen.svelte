@@ -45,7 +45,7 @@
 	}
 </script>
 
-<div class="h-screen w-screen border-2 border-yellow-200 flex flex-col flex-grow overflow-clip" 
+<div class="h-screen w-screen flex flex-col flex-grow overflow-clip" 
 	on:dragenter={handleDragEnter}
 	on:dragleave={handleDragLeave}
 	on:dragover={handleDragOver}

@@ -66,7 +66,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="relative {debug} w-3/4 mt-5">
+		<div class="relative {debug} w-2/3 mt-5">
 			<p class="font-josefin text-base text-red-400 text-center">
 				This page is under construction and offers very little functionality, yet. I.e., it is only
 				possible to launch vAmiga with a number of preset demos. You'll find a suitable selection in

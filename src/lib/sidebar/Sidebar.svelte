@@ -3,7 +3,7 @@
 	import SidebarButton from '$lib/sidebar/SidebarButton.svelte';
 	import SidebarSection from '$lib/sidebar/SidebarSection.svelte';
 	import { fade } from 'svelte/transition';
-	import { showSidebar, showShell, showSettings, debugDma } from '$lib/stores';
+	import { layout, showShell, showSettings, debugDma } from '$lib/stores';
 
 	// export let expanded = false;
 	let sel = '';
@@ -29,12 +29,15 @@
 	const settings = { id: 'settings', icon: 'icons/settingsIcon.png' };
 	const shell = { id: 'shell', icon: 'icons/retroShellIcon.png' };
 	const monitor = { id: 'monitor', icon: 'icons/monitorIcon.png' };
-	const layout = { id: 'layout', icon: 'icons/layoutIcon.png' };
+	const layoutButton = { id: 'layout', icon: 'icons/layoutIcon.png' };
 	const layoutItems = [
 		{ id: 'aspect', icon: 'icons/layoutAspectIcon.png' },
 		{ id: 'fit', icon: 'icons/layoutFitIcon.png' },
 		{ id: 'full', icon: 'icons/layoutFullIcon.png' }
 	];
+
+	$: layoutButton.icon = $layout == 'full' ? 'icons/layoutFullIcon.png' : $layout == 'aspect' ? 'icons/layoutAspectIcon.png' : 'icons/layoutFitIcon.png';
+
 </script>
 
 <div transition:fade={{ duration }}>
@@ -52,7 +55,7 @@
 			<SidebarSection
 				on:select={select}
 				expanded={sel == 'layout'}
-				item={layout}
+				item={layoutButton}
 				subitems={layoutItems}
 			/>
 		</div>
