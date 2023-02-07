@@ -30,7 +30,7 @@
 	}
 
 	function openShowcases() {
-		goto('showcases');
+		goto('showcases/');
 	}
 
 	function openImpressum() {

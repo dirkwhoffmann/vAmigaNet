@@ -20,6 +20,8 @@
 	let gamesCarousel: Carousel;
 	let toolsCarousel: Carousel;
 
+	let top: Element; 
+
 	onMount(() => {
 		console.log('onMount');
 		update(demos[0]);
@@ -35,7 +37,7 @@
 		gamesCarousel.setActive(item.title);
 		toolsCarousel.setActive(item.title);
 		selected = item;
-		goto('#top');
+		top.scrollIntoView();
 	}
 
 	function handleMessage(event: CustomEvent) {
@@ -67,14 +69,8 @@
 </script>
 
 <body class="h-screen flex flex-col bg-black text-white scroll-smooth overflow-y-scroll">
-	<div id="top" class="">
+	<div bind:this={top} class="">
 		<div class="relative">
-			<!--<img class="absolute top-0 left-0 w-full" src="footage/blank-large.png" alt="Alt" />-->
-			<!--
-			<div class="flex pb-5 z-40">
-				<MyButton on:click={goBack}><FaAngleLeft /></MyButton>
-			</div>
-			-->
 			{#key show}
 				<div in:fade={{ duration: 1000 }}>
 					<div class="grid grid-cols-1">
@@ -82,7 +78,10 @@
 						<img class="z-20 col-start-1 row-start-1" src="footage/blank-large.png" alt="Alt" />
 						<div class="z-30 col-start-1 row-start-1 pt-4 px-6">
 							<div class="font-sofia-extra text-8xl">{selected.title}</div>
-							<div class="font-sofia-semi text-2xl pb-10">{selected.subtitle}</div>
+							<div class="flex pb-10 items-center">
+								<div class="text-xs p-0.5 mr-2 border-2 h-fit rounded-md font-azaret">PAL</div>
+								<div class="font-sofia-semi text-2xl flex">{selected.subtitle}</div>
+							</div>
 							<div class="flex font-josefin text-lg w-2/3 pb-5">{selected.description}</div>
 							<div class="pb-5">
 								<MyButton on:click={runTitle} label="Start" />
