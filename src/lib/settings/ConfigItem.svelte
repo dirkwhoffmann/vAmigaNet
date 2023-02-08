@@ -9,7 +9,6 @@
 		DropdownHeader,
 		Chevron
 	} from 'flowbite-svelte';
-	import { Popover, PopoverButton, PopoverPanel } from '@rgossiaux/svelte-headlessui';
 
 	export let name = '???';
 	export let values = [{ name: '???', id: 0 }];
@@ -31,10 +30,8 @@
 	const handleClick = (e: MouseEvent) => {
 		e.preventDefault();
 		dropdownOpen = false;
-		console.log('Click: id = ' + e.target!.id);
-		dispatch('select', {
-			text: e.target!.id
-		});
+		console.log('Click: id = ' + (e.target as HTMLElement).id);
+		dispatch('select', { text: (e.target as HTMLElement).id });
 	};
 </script>
 
@@ -50,12 +47,12 @@
 		</div>
 		<div class="border-0 bg-blue-400/20 h-12">
 			{#if locked}
-				<Button disabled color="" class="!text-xl !text-blue-200 flex"
+				<Button disabled class="!bg-transparent !text-xl !text-blue-200 flex"
 					><div class="w-64">{displayName}</div>
 					<div class="w-4 mr-2" /></Button
 				>
 			{:else}
-				<Button color="" class="!text-xl !text-blue-200"
+				<Button class="!bg-transparent !text-xl !text-blue-200"
 					><Chevron><div class="w-64">{displayName}</div></Chevron></Button
 				>
 				<Dropdown frameClass="!bg-slate-600" bind:open={dropdownOpen}>
