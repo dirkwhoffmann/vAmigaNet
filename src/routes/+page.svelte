@@ -128,6 +128,11 @@
 		console.log('Status bar: ', sender);
 
 		$showSidebar = !$showSidebar;
+
+		if (!$showSidebar) {
+			$showSettings = false; 
+			$showShell = false; 
+		}
 	}
 </script>
 
