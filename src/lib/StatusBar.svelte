@@ -6,7 +6,7 @@
 
 	function click(e: Event) {
 		e.preventDefault();
-		dispatch('push', { sender: e.target!.id });
+		dispatch('push', { sender: (e.target as HTMLElement).id });
 	}
 </script>
 

@@ -54,67 +54,67 @@
 		slowRamDelay = $amiga.getConfig($proxy.OPT_SLOW_RAM_DELAY);
 	}
 
-	function cpuRevAction(event) {
+	function cpuRevAction(event: CustomEvent<{text:string}>) {
 		$amiga.configure($proxy.OPT_CPU_REVISION, event.detail.text);
 		update();
 	}
 
-	function cpuSpeedAction(event) {
+	function cpuSpeedAction(event: CustomEvent<{text:string}>) {
 		$amiga.configure($proxy.OPT_CPU_OVERCLOCKING, event.detail.text);
 		update();
 	}
 
-	function agnusRevAction(event) {
+	function agnusRevAction(event: CustomEvent<{text:string}>) {
 		$amiga.configure($proxy.OPT_AGNUS_REVISION, event.detail.text);
 		update();
 	}
 
-	function deniseRevAction(event) {
+	function deniseRevAction(event: CustomEvent<{text:string}>) {
 		$amiga.configure($proxy.OPT_DENISE_REVISION, event.detail.text);
 		update();
 	}
 
-	function rtcModelAction(event) {
+	function rtcModelAction(event: CustomEvent<{text:string}>) {
 		$amiga.configure($proxy.OPT_RTC_MODEL, event.detail.text);
 		update();
 	}
 
-	function chipRamAction(event) {
+	function chipRamAction(event: CustomEvent<{text:string}>) {
 		$amiga.configure($proxy.OPT_CHIP_RAM, event.detail.text);
 		update();
 	}
 
-	function slowRamAction(event) {
+	function slowRamAction(event: CustomEvent<{text:string}>) {
 		$amiga.configure($proxy.OPT_SLOW_RAM, event.detail.text);
 		update();
 	}
 
-	function fastRamAction(event) {
+	function fastRamAction(event: CustomEvent<{text:string}>) {
 		$amiga.configure($proxy.OPT_FAST_RAM, event.detail.text);
 		update();
 	}
 
-	function bankMapAction(event) {
+	function bankMapAction(event: CustomEvent<{text:string}>) {
 		$amiga.configure($proxy.OPT_BANKMAP, event.detail.text);
 		update();
 	}
 
-	function initPatternAction(event) {
+	function initPatternAction(event: CustomEvent<{text:string}>) {
 		$amiga.configure($proxy.OPT_RAM_INIT_PATTERN, event.detail.text);
 		update();
 	}
 
-	function unmappedAction(event) {
+	function unmappedAction(event: CustomEvent<{text:string}>) {
 		$amiga.configure($proxy.OPT_UNMAPPING_TYPE, event.detail.text);
 		update();
 	}
 
-	function slowRamMirrorAction(event) {
+	function slowRamMirrorAction(event: CustomEvent<{text:string}>) {
 		$amiga.configure($proxy.OPT_SLOW_RAM_MIRROR, event.detail.text);
 		update();
 	}
 
-	function slowRamDelayAction(event) {
+	function slowRamDelayAction(event: CustomEvent<{text:string}>) {
 		$amiga.configure($proxy.OPT_SLOW_RAM_DELAY, event.detail.text);
 		update();
 	}

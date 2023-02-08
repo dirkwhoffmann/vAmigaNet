@@ -27,11 +27,6 @@
 		update(demos[0]);
 	});
 
-	function goBack() {
-		console.log('goBack()');
-		goto('/');
-	}
-
 	function update(item: DataBaseItem) {
 		demoCarousel.setActive(item.title);
 		gamesCarousel.setActive(item.title);

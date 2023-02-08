@@ -7,7 +7,7 @@
 			console.log('DragEnter: dataTransfer == null');
 			return;
 		}
-		console.log('DragEnter: ' + e.dataTransfer.items[0]);
+		console.log('DragEnter: ' + event.dataTransfer.items[0]);
 	}
 
 	function handleDragOver(event: DragEvent) {

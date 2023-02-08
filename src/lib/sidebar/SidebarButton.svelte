@@ -8,7 +8,7 @@
 	export let highlighted = false; 
 
 	let state = false;
-	const dispatch = createEventDispatcher();
+	const dispatch = createEventDispatcher<{select:{sender:string, state:boolean}}>();
 
 	$: bgcolor = enabled ? (highlighted ? 'bg-blue-300' : 'bg-gray-500') : 'bg-gray-500';
 	$: activeStyle = 'active:bg-blue-300';
@@ -18,7 +18,7 @@
 		e.preventDefault();
 		state = toggle ? !state : true; 
 		console.log("toggle = ", toggle);
-		dispatch('select', { sender: e.target!.id, state: state });
+		dispatch('select', { sender: (e.target as HTMLElement).id, state: state });
 	}
 </script>
 

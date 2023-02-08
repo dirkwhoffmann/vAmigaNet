@@ -12,11 +12,14 @@
 
 	const dispatch = createEventDispatcher();
 
-	function select(e: Event) {
-		e.preventDefault();
-		sel = e.detail.sender == sel ? '' : e.detail.sender;
-		console.log('sender: ', e.detail.sender, ' state: ', e.detail.state);
-		dispatch('select', { sender: e.detail.sender, state: e.detail.state });
+	function select(event: CustomEvent<{sender:string, state:boolean}>) {
+		event.preventDefault();
+
+		const sender = event.detail.sender;
+		const state = event.detail.state;
+		sel = sender == sel ? '' : sender;
+		console.log('sender: ', sender, ' state: ', state);
+		dispatch('select', { sender: sender, state: state });
 	}
 
 	const vamiga = { id: 'vamiga', icon: 'icons/vamigaIcon.png' };

@@ -17,7 +17,7 @@
 
 	let dropdownOpen = false;
 
-	const dispatch = createEventDispatcher();
+	const dispatch = createEventDispatcher<{select:{text:string}}>();
 
 	$: displayName = displayedName(selection);
 
