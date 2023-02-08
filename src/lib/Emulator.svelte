@@ -29,6 +29,11 @@
 	let w = 0;
 	let h = 0;
 
+	// Indicates if the emulator canvas is animating
+	let animating = false;
+
+	$: canvasBorder = animating ? 'border-2 border-gray-600' : '';
+
 	onMount(() => {
 		console.log('Emulator: onMount()');
 		// glCanvas.enableDrawing = true;
@@ -68,7 +73,11 @@
 	}
 
 	function update(now: DOMHighResTimeStamp) {
-		if (textureRect.animates()) {
+		let textureAnimates = textureRect.animates();
+		let canvasAnimates = recw.animates() || rech.animates();
+		animating = textureAnimates || canvasAnimates;
+
+		if (textureAnimates) {
 			textureRect.move();
 			glCanvas.updateTextureRect(
 				textureRect.x1.current,
@@ -87,12 +96,13 @@
 				h = rech.current = rech.target = 2 * (y2 - y1 + 2);
 			}
 		}
-		if (recw.animates() || rech.animates()) {
+		if (canvasAnimates) {
 			recw.move();
 			rech.move();
 			w = recw.current;
 			h = rech.current;
 		}
+
 		glCanvas.update(now);
 	}
 
@@ -104,20 +114,9 @@
 {#if $poweredOn}
 	<div class="relative grow h-full flex flex-col justify-center" transition:fade>
 		<div class="flex justify-center h-full items-center">
-			<div class="border-2 border-gray-600" style="height:{h}px; width:{w}px">
+			<div class="{canvasBorder}" style="height:{h}px; width:{w}px">
 				<GLCanvas bind:this={glCanvas} />
 			</div>
-			<!--
-                {#if $layout == 'aspect'}
-            <div class="border-2 border-red-600 {aspect}">
-                <GLCanvas bind:this={glCanvas} />
-            </div>
-			{/if}
-			{#if $layout == 'full'}
-            <div class="border-2 border-red-600 {aspect}">
-                <GLCanvas bind:this={glCanvas} />
-            </div>
-            -->
 		</div>
 	</div>
 {/if}
