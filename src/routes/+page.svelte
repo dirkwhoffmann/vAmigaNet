@@ -67,14 +67,14 @@
 		resize();
 	}
 
-	function handleUncatchedError(event) {
+	function handleUncatchedError(event: Event) {
 		console.log('Unhandled error catched', event);
 		event.preventDefault();
 		$what = $amiga.what();
 		$errno = $amiga.errorCode();
 	}
 
-	function sidebarAction(event) {
+	function sidebarAction(event: CustomEvent<{sender:string, state:boolean}>) {
 		const sender = event.detail.sender;
 		console.log('Sidebar: ', sender);
 
@@ -89,10 +89,10 @@
 				break;
 			case 'monitor':
 				if ($amiga.getConfig($proxy.OPT_DMA_DEBUG_ENABLE)) {
-					emulator.textureRect.zoomIn();
+					emulator.textureRect!.zoomIn();
 					$amiga.configure($proxy.OPT_DMA_DEBUG_ENABLE, 0);
 				} else {
-					emulator.textureRect.zoomOut();
+					emulator.textureRect!.zoomOut();
 					$amiga.configure($proxy.OPT_DMA_DEBUG_ENABLE, 1);
 				}
 				break;
@@ -123,7 +123,7 @@
 		}
 	}
 
-	function push(event: Event) {
+	function push(event: CustomEvent<{sender:string}>) {
 		const sender = event.detail.sender;
 		console.log('Status bar: ', sender);
 

@@ -84,11 +84,11 @@
 				<div slot="description">Learn more</div>
 			</MainPageLink>
             -->
-		<MainPageLink href="showcases" on:click={openShowcases}>
+		<MainPageLink on:click={openShowcases}>
 			<div slot="icon"><DiGrails /></div>
 			<div slot="description">Showcases</div>
 		</MainPageLink>
-		<MainPageLink href="#about" on:click={openImpressum}>
+		<MainPageLink on:click={openImpressum}>
 			<div slot="icon"><GoLaw /></div>
 			<div slot="description">Impressum</div>
 		</MainPageLink>

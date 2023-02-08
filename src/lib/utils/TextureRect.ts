@@ -1,17 +1,7 @@
 import { AnimatedFloat } from '$lib/utils/AnimatedFloat';
-import {
-	HBLANK_CNT,
-	VBLANK_CNT,
-	HPOS_CNT_PAL,
-	HPOS_CNT,
-	VPOS_CNT_PAL,
-	VPOS_CNT_NTSC,
-	VPOS_CNT,
-	TPP,
-	HPIXELS,
-	VPIXELS
-} from '$lib/constants';
-import { text } from 'svelte/internal';
+import { HBLANK_CNT, VBLANK_CNT, HPOS_CNT_PAL } from '$lib/constants';
+import { VPOS_CNT_PAL, VPOS_CNT_NTSC } from '$lib/constants';
+import { TPP, HPIXELS, VPIXELS } from '$lib/constants';
 
 export interface Rectangle {
 	x: number;
@@ -45,7 +35,7 @@ export class TextureRect {
 		return { x: 0, y: 0, w: this.texW, h: this.texH };
 	}
 	entireNormalized(): Rectangle {
-		return this.normalize(this.entire);
+		return this.normalize(this.entire());
 	}
 
 	// Returns the largest visibile texture area (excluding HBLANK and VBLANK)

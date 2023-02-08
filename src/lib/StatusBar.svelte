@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 
+	const dispatch = createEventDispatcher<{push:{sender:string}}>();
 	const bg = 'bg-gradient-to-t from-gray-700 to-gray-600';
-	const dispatch = createEventDispatcher();
 
 	function click(e: Event) {
 		e.preventDefault();

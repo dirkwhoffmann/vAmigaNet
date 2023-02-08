@@ -1,7 +1,5 @@
 <script lang="ts">
-	export let href: string;
 
-	function click() { console.log("click"); }
 </script>
 
 <button class="flex flex-col items-center" on:click>

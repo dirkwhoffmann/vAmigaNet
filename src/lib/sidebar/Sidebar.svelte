@@ -10,7 +10,7 @@
 	let duration = 200;
 	let opacity = 'opacity-20';
 
-	const dispatch = createEventDispatcher();
+	const dispatch = createEventDispatcher<{select:{sender:string, state: boolean}}>();
 
 	function select(event: CustomEvent<{sender:string, state:boolean}>) {
 		event.preventDefault();
