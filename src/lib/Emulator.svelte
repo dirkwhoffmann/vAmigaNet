@@ -25,8 +25,9 @@
 	let recw = new AnimatedFloat(0);
 	let rech = new AnimatedFloat(0);
 
-	let www = 0;
-	let hhh = 0;
+	// Triggers for redrawing the emulator canvas
+	let w = 0;
+	let h = 0;
 
 	onMount(() => {
 		console.log('Emulator: onMount()');
@@ -38,7 +39,7 @@
 
 	$: updateRect($layout);
 
-	function updateRect(layout: string) {
+	export function updateRect(layout: string) {
 		console.log('updateRect(', layout, ')');
 		if (layout == 'full') {
 			recw.set($canvasWidth);
@@ -82,15 +83,15 @@
 
 			// In 1:1 mode, use the new texture size as the emulator canvas size to get a smooth effect
 			if ($layout == 'fit') {
-				www = recw.current = recw.target = x2 - x1 + 2;
-				hhh = rech.current = rech.target = 2 * (y2 - y1 + 2);
+				w = recw.current = recw.target = x2 - x1 + 2;
+				h = rech.current = rech.target = 2 * (y2 - y1 + 2);
 			}
 		}
 		if (recw.animates() || rech.animates()) {
 			recw.move();
 			rech.move();
-			www = recw.current;
-			hhh = rech.current;
+			w = recw.current;
+			h = rech.current;
 		}
 		glCanvas.update(now);
 	}
@@ -103,7 +104,7 @@
 {#if $poweredOn}
 	<div class="relative grow h-full flex flex-col justify-center" transition:fade>
 		<div class="flex justify-center h-full items-center">
-			<div class="border-2 border-gray-600" style="height:{hhh}px; width:{www}px">
+			<div class="border-2 border-gray-600" style="height:{h}px; width:{w}px">
 				<GLCanvas bind:this={glCanvas} />
 			</div>
 			<!--

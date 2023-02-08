@@ -24,19 +24,6 @@
 	let emulator: Emulator;
 	let canvas: Element;
 
-	/*
-	$: if (canvas != undefined) {
-		const resizeObserver = new ResizeObserver((entries) => {
-			const entry = entries.at(0);
-			$canvasWidth = entry!.contentRect.width;
-			$canvasHeight = entry!.contentRect.height;
-		});
-
-		console.log('Creating resizeObserver...');
-		resizeObserver.observe(canvas);
-	}
-	*/
-
 	// Timeout for debouncing the resize event
 	let timeout: NodeJS.Timeout;
 
@@ -57,16 +44,20 @@
 
 	function resize() {
 		if (canvas != undefined) {
+
+			// Copy the current size of emulator element
 			$canvasWidth = canvas.clientWidth;
 			$canvasHeight = canvas.clientHeight;
 
-			// Compute 4:3 box
+			// Compute the biggest possible 4:3 box
 			$aspectWidth = $canvasWidth;
 			$aspectHeight = ($aspectWidth * 3) / 4;
 			if ($aspectHeight > $canvasHeight) {
 				$aspectHeight = $canvasHeight;
 				$aspectWidth = ($aspectHeight * 4) / 3;
 			}
+
+			emulator.updateRect($layout);
 			console.log('dimensions: ', $canvasWidth, ', ', $canvasHeight);
 			console.log('aspect dimensions: ', $aspectWidth, ', ', $aspectHeight);
 		}
