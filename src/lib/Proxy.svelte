@@ -1,4 +1,4 @@
-<svelte:options accessors={true}/>
+<svelte:options accessors={true} />
 
 <script lang="ts">
 	import { onMount } from 'svelte';
@@ -90,7 +90,7 @@
 		MsgDmaDebugOff,
 		MsgSrvState,
 		MsgSrvReceive,
-		MsgSrvSend,
+		MsgSrvSend
 	} from '$lib/stores';
 	import { initialized, poweredOn, running } from '$lib/stores';
 	import { debugDma } from '$lib/stores';
@@ -108,46 +108,38 @@
 		if (audioContext != null) {
 			console.log('Audio context already initialized');
 			console.log(`audioContext=${audioContext.state}`);
-			if(audioContext.state==="suspended")
-			{
+			if (audioContext.state === 'suspended') {
 				audioContext.resume();
-			}			
+			}
 			return;
 		}
 		audioContext = new AudioContext();
 		let gainNode = audioContext.createGain();
 		gainNode.gain.value = 0.2;
 		gainNode.connect(audioContext.destination);
-		
-	    console.log("After createGain: " + audioContext.state);
+
 		const sampleRate = audioContext.sampleRate;
-		console.log('Sample rate = ' + sampleRate);
-		console.log('Channels: ', audioContext.destination.channelCount);
 		$amiga.setSampleRate(audioContext.sampleRate);
-		console.log('Adding audio processor...');
 		await audioContext.audioWorklet.addModule('js/audio-processor.js');
-		console.log('Creating audio node...');
 		const audioNode = new AudioWorkletNode(audioContext, 'audio-processor', {
-			outputChannelCount: [2]
+			outputChannelCount: [2],
+			processorOptions: {
+				pointers: [$amiga.leftChannelBuffer(), $amiga.rightChannelBuffer()],
+				buffer: $proxy.HEAPF32.buffer,
+				length: 2048
+			}
 		});
 		audioNode.port.onmessage = (e) => {
 			let offset = e.data as number;
 			$amiga.updateAudio(e.data);
 		};
 		audioNode.connect(audioContext.destination);
-		const buffers = [$amiga.leftChannelBuffer(), $amiga.rightChannelBuffer()];
-		audioNode.port.postMessage({
-			cmd: 'bind',
-			pointers: buffers,
-			buffer: $proxy.HEAPF32.buffer,
-			length: 1024
-		});
-		console.log("State in setup: " + audioContext.state);
-		if(audioContext.state==="suspended")
-		{	console.log(audioContext.state);
+		console.log('State in setup: ' + audioContext.state);
+		if (audioContext.state === 'suspended') {
+			console.log(audioContext.state);
 			audioContext.resume();
-			audioContext.onstatechange = () => console.log("onstatechange: " + audioContext.state);
-		}			
+			audioContext.onstatechange = () => console.log('onstatechange: ' + audioContext.state);
+		}
 		console.log(`audioContext=${audioContext.state}`);
 	}
 
@@ -222,7 +214,7 @@
 		$memory = new $proxy.MemoryProxy();
 		$retroShell = new $proxy.RetroShellProxy();
 
-		$initialized = true; 
+		$initialized = true;
 
 		// Initiate the launch procedure
 		startUp();

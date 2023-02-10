@@ -3,10 +3,18 @@ class AudioProcessor extends AudioWorkletProcessor {
 	bufferLength = 0;
 	offset = 0;
 
-	constructor(...args) {
-    console.log("constructor");
-	  super(...args);
+	constructor(options) {
+		console.log('constructor');
+		super(options);
 		this.port.onmessage = this.messages.bind(this);
+
+		let pointers = options.processorOptions['pointers'];
+		let buffer = options.processorOptions['buffer'];
+		let length = options.processorOptions['length'];
+
+		this.bufferLength = length;
+		this.buffer[0] = new Float32Array(buffer, pointers[0], length);
+		this.buffer[1] = new Float32Array(buffer, pointers[1], length);
 	}
 
 	messages(e) {
@@ -16,15 +24,6 @@ class AudioProcessor extends AudioWorkletProcessor {
 			console.log('SUSPEND');
 		} else if (e.data == 'resume') {
 			console.log('RESUME');
-		} else if (e.data.cmd == 'bind') {
-			console.log('BIND');
-
-			this.bufferLength = e.data.bufferLength;
-			this.buffer[0] = new Float32Array(e.data.buffer, e.data.pointers[0], this.bufferLength);
-			this.buffer[1] = new Float32Array(e.data.buffer, e.data.pointers[1], this.bufferLength);
-
-			console.log('Left channel buffer at ' + e.data.pointers[0]);
-			console.log('Right channel buffer at ' + e.data.pointers[0]);
 		} else {
 			console.log('OTHER');
 		}
