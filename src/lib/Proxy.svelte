@@ -114,11 +114,11 @@
 			return;
 		}
 		audioContext = new AudioContext();
+		audioContext.onstatechange = () => console.log('Audio Context: state = ' + audioContext?.state);
 		let gainNode = audioContext.createGain();
 		gainNode.gain.value = 0.2;
 		gainNode.connect(audioContext.destination);
 
-		const sampleRate = audioContext.sampleRate;
 		$amiga.setSampleRate(audioContext.sampleRate);
 		await audioContext.audioWorklet.addModule('js/audio-processor.js');
 		const audioNode = new AudioWorkletNode(audioContext, 'audio-processor', {
@@ -130,17 +130,13 @@
 			}
 		});
 		audioNode.port.onmessage = (e) => {
-			let offset = e.data as number;
 			$amiga.updateAudio(e.data);
 		};
 		audioNode.connect(audioContext.destination);
-		console.log('State in setup: ' + audioContext.state);
 		if (audioContext.state === 'suspended') {
-			console.log(audioContext.state);
 			audioContext.resume();
-			audioContext.onstatechange = () => console.log('onstatechange: ' + audioContext.state);
 		}
-		console.log(`audioContext=${audioContext.state}`);
+		// console.log(`audioContext: state = ${audioContext.state}`);
 	}
 
 	export async function runShowcase(showcase: DataBaseItem) {
@@ -162,10 +158,9 @@
 			}
 			$amiga.run();
 		} catch (exception) {
-			console.log('CATCHED' + exception);
+			console.log('CATCHED ' + exception);
 			// console.error($amiga.getExceptionMessage(exception));
 		}
-		// goto('/emulator');
 	}
 
 	function reportException() {
