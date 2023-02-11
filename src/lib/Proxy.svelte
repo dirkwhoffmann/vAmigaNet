@@ -93,6 +93,7 @@
 		MsgSrvSend
 	} from '$lib/stores';
 	import { initialized, poweredOn, running } from '$lib/stores';
+	import { dfConnected, dfMotor, dfWriting, dfUnsaved, dfCylinder, dfHasDisk } from '$lib/stores';
 	import { debugDma } from '$lib/stores';
 
 	export let audioContext: AudioContext | null = null;
@@ -397,10 +398,12 @@
 
 			case $proxy.MSG_DRIVE_CONNECT:
 				$MsgDriveConnect++;
+				$dfConnected[d1] = true; 
 				break;
 
 			case $proxy.MSG_DRIVE_DISCONNECT:
 				$MsgDriveDisconnect++;
+				$dfConnected[d1] = false; 
 				break;
 
 			case $proxy.MSG_DRIVE_SELECT:
@@ -413,6 +416,7 @@
 
 			case $proxy.MSG_DRIVE_WRITE:
 				$MsgDriveWrite++;
+				$dfWriting[d1] = d2 == 1;
 				break;
 
 			case $proxy.MSG_DRIVE_LED_ON:
@@ -425,14 +429,18 @@
 
 			case $proxy.MSG_DRIVE_MOTOR_ON:
 				$MsgDriveMotorOn++;
+				$dfMotor[d1] = true;
 				break;
 
 			case $proxy.MSG_DRIVE_MOTOR_OFF:
 				$MsgDriveMotorOff++;
+				$dfMotor[d1] = false;
 				break;
 
 			case $proxy.MSG_DRIVE_STEP:
 				$MsgDriveStep++;
+				console.log("MSG_DRIVE_STEP: ", d1, d2);
+				$dfCylinder[d1] = d2;
 				break;
 
 			case $proxy.MSG_DRIVE_POLL:
@@ -441,18 +449,22 @@
 
 			case $proxy.MSG_DISK_INSERT:
 				$MsgDiskInsert++;
+				$dfHasDisk[d1] = true;
 				break;
 
 			case $proxy.MSG_DISK_EJECT:
 				$MsgDiskEject++;
+				$dfHasDisk[d1] = false;
 				break;
 
 			case $proxy.MSG_DISK_SAVED:
 				$MsgDiskSaved++;
+				$dfUnsaved[d1] = false;
 				break;
 
 			case $proxy.MSG_DISK_UNSAVED:
 				$MsgDiskUnsaved++;
+				$dfUnsaved[d1] = true;
 				break;
 
 			case $proxy.MSG_DISK_PROTECT:

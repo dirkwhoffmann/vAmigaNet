@@ -22,7 +22,6 @@
 		if (!$poweredOn) {
 			await $proxy.runShowcase(demos[0]);
 		}
-		// goto('/emulator');
 	}
 
 	function gotoGitHub() {

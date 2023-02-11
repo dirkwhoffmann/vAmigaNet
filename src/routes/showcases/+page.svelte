@@ -59,7 +59,7 @@
 			$proxy.insert(selected.adf[i], i);
 		}
 		$amiga.run();
-		goto('/emulator');
+		goto('/');
 	}
 </script>
 

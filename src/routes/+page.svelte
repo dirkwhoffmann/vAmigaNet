@@ -12,7 +12,7 @@
 	import DragAndDrop from '$lib/DragAndDrop.svelte';
 	import Emulator from '$lib/Emulator.svelte';
 	import Settings from '$lib/settings/Settings.svelte';
-	import StatusBar from '$lib/StatusBar.svelte';
+	import StatusBar from '$lib/statusbar/StatusBar.svelte';
 	import RetroShell from '$lib/RetroShell.svelte';
 	import MainScreen from '$lib/MainScreen.svelte';
 	import Impressum from '$lib/Impressum.svelte';
