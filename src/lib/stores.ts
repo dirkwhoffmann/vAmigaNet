@@ -29,11 +29,12 @@ export const poweredOn = writable(false);
 export const running = writable(false);
 export const debugDma = writable(false);
 export const dfConnected = writable([false,false,false,false]);
+export const dfHasDisk = writable([false,false,false,false]);
 export const dfMotor = writable([false,false,false,false]);
 export const dfWriting = writable([false,false,false,false]);
 export const dfUnsaved = writable([false,false,false,false]);
+export const dfProtected = writable([false,false,false,false]);
 export const dfCylinder = writable([0,0,0,0]);
-export const dfHasDisk = writable([false,false,false,false]);
 
 // Error state
 export const errno = writable(0);

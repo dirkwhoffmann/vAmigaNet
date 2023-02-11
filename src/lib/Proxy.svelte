@@ -93,7 +93,7 @@
 		MsgSrvSend
 	} from '$lib/stores';
 	import { initialized, poweredOn, running } from '$lib/stores';
-	import { dfConnected, dfMotor, dfWriting, dfUnsaved, dfCylinder, dfHasDisk } from '$lib/stores';
+	import { dfConnected, dfHasDisk, dfMotor, dfWriting, dfUnsaved, dfCylinder, dfProtected } from '$lib/stores';
 	import { debugDma } from '$lib/stores';
 
 	export let audioContext: AudioContext | null = null;
@@ -439,7 +439,6 @@
 
 			case $proxy.MSG_DRIVE_STEP:
 				$MsgDriveStep++;
-				console.log("MSG_DRIVE_STEP: ", d1, d2);
 				$dfCylinder[d1] = d2;
 				break;
 
@@ -469,10 +468,12 @@
 
 			case $proxy.MSG_DISK_PROTECT:
 				$MsgDiskProtect++;
+				$dfProtected[d1] = true;
 				break;
 
 			case $proxy.MSG_DISK_UNPROTECT:
 				$MsgDiskUnprotect++;
+				$dfProtected[d1] = false;
 				break;
 
 			case $proxy.MSG_HDC_CONNECT:

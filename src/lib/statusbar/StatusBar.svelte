@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import DeviceInfo from '$lib/statusbar/DeviceInfo.svelte';
-	import { dfConnected, dfMotor, dfWriting, dfUnsaved, dfCylinder } from '$lib/stores';
+	import { dfConnected, dfHasDisk, dfCylinder, dfMotor, dfWriting, dfUnsaved, dfProtected } from '$lib/stores';
 
 	const dispatch = createEventDispatcher<{ push: { sender: string } }>();
 	const bg = 'bg-gradient-to-t from-gray-700 to-gray-600';
@@ -20,9 +20,16 @@
 	</div>
 	<div class="{bg} border-0 border-red-500 flex grow">
 		{#each Array(4) as _, i}
-		{#if $dfConnected[i]}
-			<DeviceInfo cylinder={$dfCylinder[i]} motor={$dfMotor[i]} writing={$dfWriting[i]} />
-		{/if}
+			{#if $dfConnected[i]}
+				<DeviceInfo
+					disk={$dfHasDisk[i]}
+					cyl={$dfCylinder[i]}
+					motor={$dfMotor[i]}
+					writing={$dfWriting[i]}
+					unsaved={$dfUnsaved[i]}
+					wp={$dfProtected[i]}
+				/>
+			{/if}
 		{/each}
 	</div>
 </div>
