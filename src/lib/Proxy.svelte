@@ -103,8 +103,11 @@
 		dfProtected
 	} from '$lib/stores';
 	import { debugDma } from '$lib/stores';
+	import Audio from '$lib/Audio.svelte';
 
 	export let audioContext: AudioContext | null = null;
+
+	let audio: Audio;
 
 	onMount(() => {
 		console.log('Proxy: onMount()');
@@ -114,6 +117,8 @@
 	});
 
 	export async function setupAudio() {
+		audio.setupAudio();
+		/*
 		if (audioContext != null) {
 			console.log('Audio context already initialized');
 			console.log(`audioContext=${audioContext.state}`);
@@ -147,20 +152,10 @@
 		}
 
 		load_all_sounds();
+		*/
 	}
 
 	/*
-	export function playSound(url: string) {
-		console.log('playSound ' + url);
-
-		const audio = new Audio(url);
-		audio.addEventListener('canplaythrough', (event) => {
-			audio.load();
-			audio.play();
-		});
-	}
-	*/
-
 	let audio_df_insert: AudioBuffer | null = null;
 	let audio_df_eject: AudioBuffer | null = null;
 	let audio_df_step: AudioBuffer | null = null;
@@ -172,22 +167,18 @@
 		if (audio_df_step == null) audio_df_step = await load_sound('sounds/step.mp3');
 		if (audio_hd_step == null) audio_hd_step = await load_sound('sounds/stephd.mp3');
 	}
+	*/
 
-	export function playInsertSound() { playAudioBuffer(audio_df_insert); }
-	export function playEjectSound() { playAudioBuffer(audio_df_eject); }
-	export function playStepSound() { playAudioBuffer(audio_df_step); }
-	export function playClickSound() { playAudioBuffer(audio_hd_step); }
+	export function playInsertSound() { audio.playInsertSound(); }
+	export function playEjectSound() { audio.playEjectSound(); }
+	export function playStepSound() { audio.playStepSound(); }
+	export function playClickSound() { audio.playClickSound(); }
 
+	/*
 	async function playAudioBuffer(audio_buffer: AudioBuffer | null) {
 		if (audio_buffer == null) {
 			return;
 		}
-		/*
-		if (parallel_playing > 2 && audio_buffer == audio_df_step) {
-			//not more than 3 stepper sounds at the same time
-			return;
-		}
-		*/
 		console.log("playAudioBuffer");
 
 		const source = audioContext!.createBufferSource();
@@ -214,7 +205,8 @@
 		let audio_buffer = await audioContext!.decodeAudioData(buffer);
 		return audio_buffer;
 	}
-
+	*/
+	
 	export async function runShowcase(showcase: DataBaseItem) {
 		console.log('Setting up audio...');
 		await setupAudio();
@@ -650,3 +642,5 @@
 		}
 	}
 </script>
+
+<Audio bind:this={audio}></Audio>
