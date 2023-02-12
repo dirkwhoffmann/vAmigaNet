@@ -1,3 +1,7 @@
+<script context="module" lang="ts">
+	export type ActionEvent = { tag: number; value: number };
+</script>
+
 <script lang="ts">
 	import {
 		Button,
@@ -36,10 +40,7 @@
 
 	let category = 'machine';
 
-	onMount(() => {
-
-	});
-
+	onMount(() => {});
 </script>
 
 <div class="absolute top-0 left-0 w-full h-full flex overflow-scroll" transition:fade>
@@ -48,17 +49,17 @@
 		<div class="font-sofia-extra">
 			<div class="text-5xl">SETTINGS</div>
 			<div class="float space-x-4 mb-6">
-				<ConfigCategory name="MACHINE" on:click={()=>category='machine'} />
-				<ConfigCategory name="VIDEO" on:click={()=>category='video'} />
-				<ConfigCategory name="AUDIO" on:click={()=>category='audio'} />
+				<ConfigCategory name="MACHINE" on:click={() => (category = 'machine')} />
+				<ConfigCategory name="VIDEO" on:click={() => (category = 'video')} />
+				<ConfigCategory name="AUDIO" on:click={() => (category = 'audio')} />
 			</div>
 		</div>
 		{#if category == 'machine'}
-		<MachineSettings />
+			<MachineSettings />
 		{:else if category == 'video'}
-		<VideoSettings />
+			<VideoSettings />
 		{:else if category == 'audio'}
-		<AudioSettings />
+			<AudioSettings />
 		{/if}
 	</div>
 </div>

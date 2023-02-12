@@ -1,23 +1,18 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import FaLock from 'svelte-icons/fa/FaLock.svelte';
-	import {
-		Button,
-		Dropdown,
-		DropdownItem,
-		DropdownDivider,
-		DropdownHeader,
-		Chevron
-	} from 'flowbite-svelte';
+	import { Button, Dropdown, DropdownItem, Chevron } from 'flowbite-svelte';
+	import type { ActionEvent } from '$lib/settings/Settings.svelte';
 
 	export let name = '???';
 	export let values = [{ name: '???', id: 0 }];
 	export let locked = false;
 	export let selection: number;
+	export let tag = 0;
 
 	let dropdownOpen = false;
 
-	const dispatch = createEventDispatcher<{select:{text:string}}>();
+	const dispatch = createEventDispatcher<{select:ActionEvent}>();
 
 	$: displayName = displayedName(selection);
 
@@ -27,11 +22,11 @@
 		return value == undefined ? '???' : value.name;
 	}
 
-	const handleClick = (e: MouseEvent) => {
+	const handleClick = (e: MouseEvent, value: number) => {
 		e.preventDefault();
 		dropdownOpen = false;
-		console.log('Click: id = ' + (e.target as HTMLElement).id);
-		dispatch('select', { text: (e.target as HTMLElement).id });
+		console.log('Click: id = ' + value + ' tag = ' + tag);
+		dispatch('select', { tag: tag, value: value });
 	};
 </script>
 
@@ -58,7 +53,7 @@
 				<Dropdown frameClass="!bg-slate-600" bind:open={dropdownOpen}>
 					{#each values as { name, id }, i}
 						<DropdownItem
-							on:click={handleClick}
+							on:click={(e) => handleClick(e, id)}
 							defaultClass="font-medium py-2 px-4 text-xl text-blue-200 bg-slate-600 hover:bg-slate-500"
 							><div class="" id={id.toString()}>{name}</div></DropdownItem
 						>

@@ -16,10 +16,10 @@
 	const red = 'bg-gradient-to-b from-red-700 to-red-500';
 
 	$: diskIcon = wp ? 'icons/disk-protected.png' : 'icons/disk.png';
-	$: driveIcon = 'icons/floppy-drive.png'; 
-	$: src = disk ? diskIcon : driveIcon; 
+	$: driveIcon = 'icons/floppy-drive.png';
+	$: src = disk ? diskIcon : driveIcon;
 	$: bg = motor ? (writing ? red : green) : gray;
-	$: opc = unsaved ? 'opacity-40' : 'opacity-70'; 
+	$: opc = unsaved ? 'opacity-40' : 'opacity-70';
 
 	function click(e: Event) {
 		e.preventDefault();
