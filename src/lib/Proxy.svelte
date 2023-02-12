@@ -93,7 +93,15 @@
 		MsgSrvSend
 	} from '$lib/stores';
 	import { initialized, poweredOn, running } from '$lib/stores';
-	import { dfConnected, dfHasDisk, dfMotor, dfWriting, dfUnsaved, dfCylinder, dfProtected } from '$lib/stores';
+	import {
+		dfConnected,
+		dfHasDisk,
+		dfMotor,
+		dfWriting,
+		dfUnsaved,
+		dfCylinder,
+		dfProtected
+	} from '$lib/stores';
 	import { debugDma } from '$lib/stores';
 
 	export let audioContext: AudioContext | null = null;
@@ -137,7 +145,74 @@
 		if (audioContext.state === 'suspended') {
 			audioContext.resume();
 		}
-		// console.log(`audioContext: state = ${audioContext.state}`);
+
+		load_all_sounds();
+	}
+
+	/*
+	export function playSound(url: string) {
+		console.log('playSound ' + url);
+
+		const audio = new Audio(url);
+		audio.addEventListener('canplaythrough', (event) => {
+			audio.load();
+			audio.play();
+		});
+	}
+	*/
+
+	let audio_df_insert: AudioBuffer | null = null;
+	let audio_df_eject: AudioBuffer | null = null;
+	let audio_df_step: AudioBuffer | null = null;
+	let audio_hd_step: AudioBuffer | null = null;
+	
+	export async function load_all_sounds() {
+		if (audio_df_insert == null) audio_df_insert = await load_sound('sounds/insert.mp3');
+		if (audio_df_eject == null) audio_df_eject = await load_sound('sounds/eject.mp3');
+		if (audio_df_step == null) audio_df_step = await load_sound('sounds/step.mp3');
+		if (audio_hd_step == null) audio_hd_step = await load_sound('sounds/stephd.mp3');
+	}
+
+	export function playInsertSound() { playAudioBuffer(audio_df_insert); }
+	export function playEjectSound() { playAudioBuffer(audio_df_eject); }
+	export function playStepSound() { playAudioBuffer(audio_df_step); }
+	export function playClickSound() { playAudioBuffer(audio_hd_step); }
+
+	async function playAudioBuffer(audio_buffer: AudioBuffer | null) {
+		if (audio_buffer == null) {
+			return;
+		}
+		/*
+		if (parallel_playing > 2 && audio_buffer == audio_df_step) {
+			//not more than 3 stepper sounds at the same time
+			return;
+		}
+		*/
+		console.log("playAudioBuffer");
+
+		const source = audioContext!.createBufferSource();
+		source.buffer = audio_buffer;
+
+		let gain_node = audioContext!.createGain();
+		gain_node.gain.value = 0.2;
+		gain_node.connect(audioContext!.destination);
+
+		source.addEventListener('ended', () => {
+			console.log('Sound ended');
+			// parallel_playing--;
+		});
+
+		source.connect(gain_node);
+		// parallel_playing++;
+		source.start();
+	};
+
+	async function load_sound(url: string) {
+		console.log("load_sound: url = " + url);
+		let response = await fetch(url);
+		let buffer = await response.arrayBuffer();
+		let audio_buffer = await audioContext!.decodeAudioData(buffer);
+		return audio_buffer;
 	}
 
 	export async function runShowcase(showcase: DataBaseItem) {
@@ -398,12 +473,12 @@
 
 			case $proxy.MSG_DRIVE_CONNECT:
 				$MsgDriveConnect++;
-				$dfConnected[d1] = true; 
+				$dfConnected[d1] = true;
 				break;
 
 			case $proxy.MSG_DRIVE_DISCONNECT:
 				$MsgDriveDisconnect++;
-				$dfConnected[d1] = false; 
+				$dfConnected[d1] = false;
 				break;
 
 			case $proxy.MSG_DRIVE_SELECT:
@@ -440,20 +515,24 @@
 			case $proxy.MSG_DRIVE_STEP:
 				$MsgDriveStep++;
 				$dfCylinder[d1] = d2;
+				$proxy.playStepSound();
 				break;
 
 			case $proxy.MSG_DRIVE_POLL:
 				$MsgDrivePoll++;
+				$proxy.playStepSound();
 				break;
 
 			case $proxy.MSG_DISK_INSERT:
 				$MsgDiskInsert++;
 				$dfHasDisk[d1] = true;
+				$proxy.playInsertSound();
 				break;
 
 			case $proxy.MSG_DISK_EJECT:
 				$MsgDiskEject++;
 				$dfHasDisk[d1] = false;
+				$proxy.playEjectSound();
 				break;
 
 			case $proxy.MSG_DISK_SAVED:

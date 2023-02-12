@@ -11,14 +11,13 @@
 	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
 
-    let debug = ''; // 'border-2';
+	let debug = ''; // 'border-2';
 
 	function runDemo() {
 		runMe();
 		$proxy.audioContext.resume();
 	}
 	async function runMe() {
-		console.log('runMe');
 		if (!$poweredOn) {
 			await $proxy.runShowcase(demos[0]);
 		}
@@ -35,7 +34,6 @@
 	function openImpressum() {
 		$showImpressum = true;
 	}
-
 </script>
 
 <div class="h-full flex flex-col {debug}" transition:fade>
@@ -49,7 +47,7 @@
 		in:fade
 		class="relative bg-transparent grow flex flex-col items-center justify-center {debug}"
 	>
-		<div class="{debug}">
+		<div class={debug}>
 			<div class="rounded flex justify-center">
 				<img class="h-24 p-2 mt-3" src="va-icon.png" alt="vAmiga Icon" />
 				<div class="p-6">
@@ -74,9 +72,7 @@
 			</p>
 		</div>
 	</div>
-	<div
-		class="relative flex justify-center align-middle bg-gray-900/50 space-x-8 {debug}"
-	>
+	<div class="relative flex justify-center align-middle bg-gray-900/50 space-x-8 {debug}">
 		<!--
 			<MainPageLink href="#learnmore">
 				<div slot="icon"><FaBookOpen /></div>
