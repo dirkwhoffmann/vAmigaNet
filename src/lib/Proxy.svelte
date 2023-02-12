@@ -2,7 +2,6 @@
 
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { goto } from '$app/navigation';
 	import {
 		proxy,
 		enums,
@@ -105,8 +104,6 @@
 	import { debugDma } from '$lib/stores';
 	import Audio from '$lib/Audio.svelte';
 
-	export let audioContext: AudioContext | null = null;
-
 	let audio: Audio;
 
 	onMount(() => {
@@ -116,100 +113,15 @@
 		$proxy.processMsg = processMsg;
 	});
 
+	/*
 	export async function setupAudio() {
 		audio.setupAudio();
-		/*
-		if (audioContext != null) {
-			console.log('Audio context already initialized');
-			console.log(`audioContext=${audioContext.state}`);
-			if (audioContext.state === 'suspended') {
-				audioContext.resume();
-			}
-			return;
-		}
-		audioContext = new AudioContext();
-		audioContext.onstatechange = () => console.log('Audio Context: state = ' + audioContext?.state);
-		let gainNode = audioContext.createGain();
-		gainNode.gain.value = 0.2;
-		gainNode.connect(audioContext.destination);
-
-		$amiga.setSampleRate(audioContext.sampleRate);
-		await audioContext.audioWorklet.addModule('js/audio-processor.js');
-		const audioNode = new AudioWorkletNode(audioContext, 'audio-processor', {
-			outputChannelCount: [2],
-			processorOptions: {
-				pointers: [$amiga.leftChannelBuffer(), $amiga.rightChannelBuffer()],
-				buffer: $proxy.HEAPF32.buffer,
-				length: 2048
-			}
-		});
-		audioNode.port.onmessage = (e) => {
-			$amiga.updateAudio(e.data);
-		};
-		audioNode.connect(audioContext.destination);
-		if (audioContext.state === 'suspended') {
-			audioContext.resume();
-		}
-
-		load_all_sounds();
-		*/
-	}
-
-	/*
-	let audio_df_insert: AudioBuffer | null = null;
-	let audio_df_eject: AudioBuffer | null = null;
-	let audio_df_step: AudioBuffer | null = null;
-	let audio_hd_step: AudioBuffer | null = null;
-	
-	export async function load_all_sounds() {
-		if (audio_df_insert == null) audio_df_insert = await load_sound('sounds/insert.mp3');
-		if (audio_df_eject == null) audio_df_eject = await load_sound('sounds/eject.mp3');
-		if (audio_df_step == null) audio_df_step = await load_sound('sounds/step.mp3');
-		if (audio_hd_step == null) audio_hd_step = await load_sound('sounds/stephd.mp3');
 	}
 	*/
 
-	export function playInsertSound() { audio.playInsertSound(); }
-	export function playEjectSound() { audio.playEjectSound(); }
-	export function playStepSound() { audio.playStepSound(); }
-	export function playClickSound() { audio.playClickSound(); }
-
-	/*
-	async function playAudioBuffer(audio_buffer: AudioBuffer | null) {
-		if (audio_buffer == null) {
-			return;
-		}
-		console.log("playAudioBuffer");
-
-		const source = audioContext!.createBufferSource();
-		source.buffer = audio_buffer;
-
-		let gain_node = audioContext!.createGain();
-		gain_node.gain.value = 0.2;
-		gain_node.connect(audioContext!.destination);
-
-		source.addEventListener('ended', () => {
-			console.log('Sound ended');
-			// parallel_playing--;
-		});
-
-		source.connect(gain_node);
-		// parallel_playing++;
-		source.start();
-	};
-
-	async function load_sound(url: string) {
-		console.log("load_sound: url = " + url);
-		let response = await fetch(url);
-		let buffer = await response.arrayBuffer();
-		let audio_buffer = await audioContext!.decodeAudioData(buffer);
-		return audio_buffer;
-	}
-	*/
-	
 	export async function runShowcase(showcase: DataBaseItem) {
 		console.log('Setting up audio...');
-		await setupAudio();
+		await audio.setup();
 
 		try {
 			console.log('Running ' + showcase.title + '...');
@@ -507,24 +419,24 @@
 			case $proxy.MSG_DRIVE_STEP:
 				$MsgDriveStep++;
 				$dfCylinder[d1] = d2;
-				$proxy.playStepSound();
+				audio.playStepSound();
 				break;
 
 			case $proxy.MSG_DRIVE_POLL:
 				$MsgDrivePoll++;
-				$proxy.playStepSound();
+				audio.playStepSound();
 				break;
 
 			case $proxy.MSG_DISK_INSERT:
 				$MsgDiskInsert++;
 				$dfHasDisk[d1] = true;
-				$proxy.playInsertSound();
+				audio.playInsertSound();
 				break;
 
 			case $proxy.MSG_DISK_EJECT:
 				$MsgDiskEject++;
 				$dfHasDisk[d1] = false;
-				$proxy.playEjectSound();
+				audio.playEjectSound();
 				break;
 
 			case $proxy.MSG_DISK_SAVED:

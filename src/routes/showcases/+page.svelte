@@ -44,7 +44,7 @@
 
 	async function runTitle() {
 		console.log('Setting up audio...');
-		await $proxy.setupAudio();
+		await $proxy.audio.setup();
 
 		console.log('Running ' + selected.title + '...');
 		$amiga.powerOff();

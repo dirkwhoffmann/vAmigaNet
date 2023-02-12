@@ -8,7 +8,7 @@
 	let stepSound: AudioBuffer | null = null;
 	let clickSound: AudioBuffer | null = null;
 
-    export async function setupAudio() {
+    export async function setup() {
 		if (audioContext != null) {
 			console.log('Audio context already initialized');
             /*
