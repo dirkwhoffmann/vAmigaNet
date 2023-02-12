@@ -28,7 +28,7 @@
 </script>
 
 <BarBox {bg}>
-	<img class="border-0 pr-1 py-1.5 h-full invert {opc}" {src} alt="Floppy icon" />
+	<img class="border-0 pr-1 py-1.5 h-full object-scale-down invert {opc}" {src} alt="Floppy icon" />
 	<div class="border-0 w-6 items-center pl-1 text-left leading-none text-sm text-gray-300">
 		{cyl}
 	</div>

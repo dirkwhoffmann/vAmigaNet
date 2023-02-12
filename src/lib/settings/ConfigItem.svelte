@@ -35,7 +35,7 @@
 		<div class="border-0 bg-blue-400/20 w-full h-12 flex flex-col justify-center">
 			<div class="p-4 text-xl text-blue-200 flex items-center">
 				{#if locked}
-					<div class="border-0 mr-3 h-6"><FaLock /></div>
+					<div class="border-0 mr-3 h-6 w-6"><FaLock /></div>
 				{/if}
 				<div class="border-0">{name}</div>
 			</div>

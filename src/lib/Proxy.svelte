@@ -104,7 +104,7 @@
 	import { debugDma } from '$lib/stores';
 	import Audio from '$lib/Audio.svelte';
 
-	let audio: Audio;
+	export let audio: Audio;
 
 	onMount(() => {
 		console.log('Proxy: onMount()');
@@ -112,12 +112,6 @@
 		// Prepare to receive messages
 		$proxy.processMsg = processMsg;
 	});
-
-	/*
-	export async function setupAudio() {
-		audio.setupAudio();
-	}
-	*/
 
 	export async function runShowcase(showcase: DataBaseItem) {
 		console.log('Setting up audio...');
