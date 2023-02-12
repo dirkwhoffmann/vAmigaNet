@@ -2,6 +2,7 @@
 	import MyButton from '$lib/widgets/MyButton.svelte';
 
 	let isSafari = window.safari !== undefined;
+	let showWarning = false; // isSafari
 
 	function close() {
 		console.log('close');
@@ -9,7 +10,7 @@
 	}
 </script>
 
-{#if isSafari}
+{#if showWarning}
 	<div class="absolute top-0 left-0 h-screen w-screen flex justify-center items-center">
 		<div
 			class="relative w-2/3 flex flex-col py-4 justify-center bg-gray-700 text-gray-300 border-2 border-gray-300 rounded-xl font-josefin"

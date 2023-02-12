@@ -21,7 +21,7 @@
 		audioContext = new AudioContext();
 		audioContext.onstatechange = () => console.log('Audio Context: state = ' + audioContext?.state);
 		let gainNode = audioContext.createGain();
-		gainNode.gain.value = 0.2;
+		gainNode.gain.value = 0.15;
 		gainNode.connect(audioContext.destination);
 
 		$amiga.setSampleRate(audioContext.sampleRate);
