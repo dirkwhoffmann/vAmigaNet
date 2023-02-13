@@ -60,7 +60,6 @@ struct AmigaProxy
     // Managing state
     void hardReset() { amiga->hardReset(); }
     void softReset() { amiga->softReset(); }
-
     bool poweredOn() { return amiga->isPoweredOn(); }
     bool poweredOff() { return amiga->isPoweredOff(); }
     bool isRunning() { return amiga->isRunning(); }
@@ -73,12 +72,13 @@ struct AmigaProxy
     void halt() { amiga->halt(); }
     void stopAndGo() { amiga->stopAndGo(); }
 
+    u32 cpuLoad() { return u32(amiga->getCpuLoad() * 100.0); }
     void setSampleRate(unsigned sample_rate);
     void updateAudio(int offset);
     u32 leftChannelBuffer();
     u32 rightChannelBuffer();
     u32 audioFillLevel(); 
-    
+
     // Juggling disks
     void insertDisk(const string &blob, u32 len, u8 drive);
 

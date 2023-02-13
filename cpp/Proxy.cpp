@@ -106,7 +106,7 @@ void AmigaProxy::setSampleRate(unsigned sample_rate)
 
 u32 AmigaProxy::audioFillLevel() 
 {
-    return (u32)(amiga->paula.muxer.getStats().fillLevel * 100.0);
+    return u32(amiga->paula.muxer.getStats().fillLevel * 100.0);
 }
 
 void AmigaProxy::updateAudio(int offset)
@@ -202,13 +202,15 @@ EMSCRIPTEN_BINDINGS(AmigaProxy)
         .function("halt", &AmigaProxy::halt)
         .function("stopAndGo", &AmigaProxy::stopAndGo)
 
+        .function("cpuLoad", &AmigaProxy::cpuLoad)
+
         .function("insertDisk", &AmigaProxy::insertDisk)
 
         .function("setSampleRate", &AmigaProxy::setSampleRate)
         .function("updateAudio", &AmigaProxy::updateAudio)
         .function("leftChannelBuffer", &AmigaProxy::leftChannelBuffer)
         .function("rightChannelBuffer", &AmigaProxy::rightChannelBuffer)
-        .function("audioFillLevel", &AmigaProxy::rightChannelBuffer)
+        .function("audioFillLevel", &AmigaProxy::audioFillLevel)
         .function("getExceptionMessage", &AmigaProxy::getExceptionMessage);
 }
 

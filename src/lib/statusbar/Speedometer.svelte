@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { cpu, agnus } from '$lib/stores';
+	import { amiga, cpu, agnus } from '$lib/stores';
 	import BarBox from './BarBox.svelte';
 	import { Button, Dropdown, DropdownItem, Chevron } from 'flowbite-svelte';
 
@@ -38,7 +38,7 @@
 
 		let cycle = $cpu.getClock();
 		let emuFrame = $agnus.frameCount();
-		let gpuFrame = animationFrame; 
+		let gpuFrame = animationFrame;
 
 		// Measure clock frequency
 		if (cycle >= latchedCycle) {
@@ -62,14 +62,26 @@
 		}
 
 		if (animationFrame % 25 == 0) {
-            switch (mode) {
-                case 0: value = mhz.toFixed(2) + " MHz"; break;
-                case 1: value = emuFps.toFixed(0) + " Hz"; break; 
-                // case 2: value = "TODO"; break; 
-                case 3: value = gpuFps.toFixed(0) + " Hz"; break; 
-                // case 4: value = "TODO"; break; 
-                default: value = "---";
-            }
+			switch (mode) {
+				case 0:
+					value = mhz.toFixed(2) + ' MHz';
+					break;
+				case 1:
+					value = emuFps.toFixed(0) + ' Hz';
+					break;
+				case 2:
+					value = $amiga.cpuLoad() + '%';
+					break;
+				case 3:
+					value = gpuFps.toFixed(0) + ' Hz';
+					break;
+				case 4:
+					value = $amiga.audioFillLevel() + '%';
+					break;
+				default:
+					value = '---';
+					break;
+			}
 		}
 		// Keep values
 		latchedTimestamp = timestamp;
@@ -113,11 +125,7 @@
 	<Dropdown frameClass="!bg-slate-600">
 		<DropdownItem on:click={(e) => mhzAction(e)} {defaultClass}>Amiga Frequency</DropdownItem>
 		<DropdownItem on:click={(e) => fpsAction(e)} {defaultClass}>Amiga Refresh Rate</DropdownItem>
-		<!--
-		<DropdownItem on:click={(e) => cpuAction(e)} {defaultClass}>
-            Host GPU Load
-        </DropdownItem>
-        -->
+		<DropdownItem on:click={(e) => cpuAction(e)} {defaultClass}>Host CPU Load</DropdownItem>
 		<DropdownItem on:click={(e) => gpuAction(e)} {defaultClass}>Host GPU Refresh Rate</DropdownItem>
 		<DropdownItem on:click={(e) => audAction(e)} {defaultClass}
 			>Audio Buffer Fill Level</DropdownItem
