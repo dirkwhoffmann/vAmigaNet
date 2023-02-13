@@ -39,7 +39,7 @@
 		// glCanvas.enableDrawing = true;
 		textureRect.zoomIn();
 
-		window.requestAnimationFrame(doAnimationFrame);
+		// window.requestAnimationFrame(doAnimationFrame);
 	});
 
 	$: updateRect($layout);
@@ -62,14 +62,13 @@
 		}
 	}
 
-	function doAnimationFrame(now: DOMHighResTimeStamp) {
+	export function doAnimationFrame(animationFrame: number, now: DOMHighResTimeStamp) {
 		if (glCanvas != undefined) {
 			update(now);
 			render();
 		} else {
 			// console.log('Skipping draw: Store not yet initialized');
 		}
-		window.requestAnimationFrame(doAnimationFrame);
 	}
 
 	function update(now: DOMHighResTimeStamp) {

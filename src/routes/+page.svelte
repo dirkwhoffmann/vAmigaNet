@@ -21,9 +21,13 @@
 	let mounted = false;
 	let buttonText = 'Run Demo';
 
+	// Animation frame counter
+	let animationFrame = 0;
+
 	// Component references
 	let emulator: Emulator;
 	let canvas: Element;
+	let statusBar: StatusBar;
 
 	// Timeout for debouncing the resize event
 	let timeout: NodeJS.Timeout;
@@ -43,9 +47,27 @@
 
 	$: if (canvas != undefined) resize();
 
+	$: if ($initialized) {
+		// Start render loop
+		window.requestAnimationFrame(doAnimationFrame);
+	}
+
+	function doAnimationFrame(now: DOMHighResTimeStamp) {
+
+		animationFrame++; 
+
+		if (emulator) {
+			emulator.doAnimationFrame(animationFrame, now);
+		}
+		if (statusBar) {
+			statusBar.update(animationFrame, now);
+		}
+
+		window.requestAnimationFrame(doAnimationFrame);
+	}
+
 	function resize() {
 		if (canvas != undefined) {
-
 			// Copy the current size of emulator element
 			$canvasWidth = canvas.clientWidth;
 			$canvasHeight = canvas.clientHeight;
@@ -75,7 +97,7 @@
 		$errno = $amiga.errorCode();
 	}
 
-	function sidebarAction(event: CustomEvent<{sender:string, state:boolean}>) {
+	function sidebarAction(event: CustomEvent<{ sender: string; state: boolean }>) {
 		const sender = event.detail.sender;
 		console.log('Sidebar: ', sender);
 
@@ -124,15 +146,15 @@
 		}
 	}
 
-	function push(event: CustomEvent<{sender:string}>) {
+	function push(event: CustomEvent<{ sender: string }>) {
 		const sender = event.detail.sender;
 		console.log('Status bar: ', sender);
 
 		$showSidebar = !$showSidebar;
 
 		if (!$showSidebar) {
-			$showSettings = false; 
-			$showShell = false; 
+			$showSettings = false;
+			$showShell = false;
 		}
 	}
 </script>
@@ -140,7 +162,7 @@
 <body class="h-screen bg-black text-white scroll-smooth overflow-y-scroll">
 	<title>vAmiga Online</title>
 	<MainScreen>
-		<StatusBar on:push={push} />
+		<StatusBar bind:this={statusBar} on:push={push} />
 		<div bind:this={canvas} class="box relative grow border-none border-green-300 overflow-scroll">
 			{#if !$poweredOn}
 				<TitleScreen />

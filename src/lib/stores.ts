@@ -6,6 +6,8 @@ export const proxy: any = writable();
 // Proxies
 export const enums: any = writable();
 export const amiga: any = writable();
+export const cpu: any = writable();
+export const agnus: any = writable();
 export const denise: any = writable();
 export const memory: any = writable();
 export const retroShell: any = writable();

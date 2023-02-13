@@ -6,6 +6,8 @@
 		proxy,
 		enums,
 		amiga,
+		cpu,
+		agnus,
 		denise,
 		memory,
 		retroShell,
@@ -179,6 +181,8 @@
 
 		$enums = new $proxy.EnumProxy();
 		$amiga = new $proxy.AmigaProxy();
+		$cpu = new $proxy.CPUProxy();
+		$agnus = new $proxy.AgnusProxy();
 		$denise = new $proxy.DeniseProxy();
 		$memory = new $proxy.MemoryProxy();
 		$retroShell = new $proxy.RetroShellProxy();
