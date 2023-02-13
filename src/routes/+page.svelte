@@ -53,8 +53,7 @@
 	}
 
 	function doAnimationFrame(now: DOMHighResTimeStamp) {
-
-		animationFrame++; 
+		animationFrame++;
 
 		if (emulator) {
 			emulator.doAnimationFrame(animationFrame, now);
@@ -159,28 +158,33 @@
 	}
 </script>
 
-<body class="h-screen bg-black text-white scroll-smooth overflow-y-scroll">
-	<title>vAmiga Online</title>
-	<MainScreen>
-		<StatusBar bind:this={statusBar} on:push={push} />
-		<div bind:this={canvas} class="box relative grow border-none border-green-300 overflow-scroll">
-			{#if !$poweredOn}
-				<TitleScreen />
+<body>
+	<div class="h-screen bg-black text-white scroll-smooth overflow-y-scroll">
+		<title>vAmiga Online</title>
+		<MainScreen>
+			<StatusBar bind:this={statusBar} on:push={push} />
+			<div
+				bind:this={canvas}
+				class="box relative grow border-none border-green-300 overflow-scroll"
+			>
+				{#if !$poweredOn}
+					<TitleScreen />
+				{/if}
+				<Emulator bind:this={emulator} />
+				{#if $showShell}
+					<RetroShell />
+				{/if}
+				{#if $showSettings}
+					<Settings />
+				{/if}
+				{#if $showSidebar}
+					<Sidebar on:select={sidebarAction} />
+				{/if}
+			</div>
+			<BrowserCheck />
+			{#if $showImpressum}
+				<Impressum />
 			{/if}
-			<Emulator bind:this={emulator} />
-			{#if $showShell}
-				<RetroShell />
-			{/if}
-			{#if $showSettings}
-				<Settings />
-			{/if}
-			{#if $showSidebar}
-				<Sidebar on:select={sidebarAction} />
-			{/if}
-		</div>
-		<BrowserCheck />
-		{#if $showImpressum}
-			<Impressum />
-		{/if}
-	</MainScreen>
+		</MainScreen>
+	</div>
 </body>
