@@ -77,12 +77,27 @@ struct AmigaProxy
     void updateAudio(int offset);
     u32 leftChannelBuffer();
     u32 rightChannelBuffer();
-
+    u32 audioFillLevel(); 
+    
     // Juggling disks
     void insertDisk(const string &blob, u32 len, u8 drive);
 
     // Experimental (didn't manage to get it working)
     string getExceptionMessage(intptr_t exceptionPtr);
+};
+
+struct CPUProxy
+{
+    CPUProxy();
+
+    u32 getClock() const;
+};
+
+struct AgnusProxy
+{
+    AgnusProxy();
+
+    u32 frameCount() const;
 };
 
 struct DeniseProxy

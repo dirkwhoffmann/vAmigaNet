@@ -3,6 +3,7 @@
 	import FaLock from 'svelte-icons/fa/FaLock.svelte';
 	import { Button, Dropdown, DropdownItem, Chevron } from 'flowbite-svelte';
 	import type { ActionEvent } from '$lib/settings/Settings.svelte';
+	import { Range, Label } from 'flowbite-svelte';
 
 	export let name = '???';
 	export let values = [{ name: '???', id: 0 }];
@@ -11,8 +12,9 @@
 	export let tag = 0;
 
 	let dropdownOpen = false;
+	let stepValue = 2.5;
 
-	const dispatch = createEventDispatcher<{select:ActionEvent}>();
+	const dispatch = createEventDispatcher<{ select: ActionEvent }>();
 
 	$: displayName = displayedName(selection);
 
@@ -51,6 +53,18 @@
 					><Chevron><div class="w-64">{displayName}</div></Chevron></Button
 				>
 				<Dropdown frameClass="!bg-slate-600" bind:open={dropdownOpen}>
+					<!--
+					<DropdownItem defaultClass="font-medium pt-2 pb-0 px-4 text-xl text-blue-200 bg-slate-600">
+						<input
+							type="range"
+							min="-5"
+							max="5"
+							step="1.0"
+							value="0"
+							class="w-full bg-white-500 caret-green-50 accent-red-500 rounded-lg appearance-none"
+						/>
+					</DropdownItem>
+					-->
 					{#each values as { name, id }, i}
 						<DropdownItem
 							on:click={(e) => handleClick(e, id)}

@@ -41,8 +41,6 @@ EMSCRIPTEN_BINDINGS(EnumProxy)
 
 AmigaProxy::AmigaProxy()
 {
-    printf("AmigaProxy()\n");
-
     printf("Constructing Amiga...\n");
     amiga = new Amiga();
 
@@ -104,6 +102,11 @@ int AmigaProxy::getDriveConfig(int option, int id)
 void AmigaProxy::setSampleRate(unsigned sample_rate)
 {
     amiga->host.setSampleRate(sample_rate);
+}
+
+u32 AmigaProxy::audioFillLevel() 
+{
+    return (u32)(amiga->paula.muxer.getStats().fillLevel * 100.0);
 }
 
 void AmigaProxy::updateAudio(int offset)
@@ -168,8 +171,6 @@ void AmigaProxy::insertDisk(const string &blob, u32 len, u8 drive)
 // This didn't work. I received a null pointer all the tome
 string AmigaProxy::getExceptionMessage(intptr_t exceptionPtr)
 {
-    printf("getExceptionMessage: %ld\n", exceptionPtr);
-    // return "Hallo";
     return std::string(reinterpret_cast<VAError *>(exceptionPtr)->what());
 }
 
@@ -207,8 +208,48 @@ EMSCRIPTEN_BINDINGS(AmigaProxy)
         .function("updateAudio", &AmigaProxy::updateAudio)
         .function("leftChannelBuffer", &AmigaProxy::leftChannelBuffer)
         .function("rightChannelBuffer", &AmigaProxy::rightChannelBuffer)
-
+        .function("audioFillLevel", &AmigaProxy::rightChannelBuffer)
         .function("getExceptionMessage", &AmigaProxy::getExceptionMessage);
+}
+
+//
+// CPU proxy
+//
+
+CPUProxy::CPUProxy()
+{
+}
+
+u32 CPUProxy::getClock() const
+{
+    return (u32)amiga->cpu.getCpuClock();
+}
+
+EMSCRIPTEN_BINDINGS(CPUProxy)
+{
+    class_<CPUProxy>("CPUProxy")
+        .constructor<>()
+        .function("getClock", &CPUProxy::getClock);
+}
+
+//
+// Agnus proxy
+//
+
+AgnusProxy::AgnusProxy()
+{
+}
+
+u32 AgnusProxy::frameCount() const
+{
+    return (u32)amiga->agnus.pos.frame;
+}
+
+EMSCRIPTEN_BINDINGS(AgnusProxy)
+{
+    class_<AgnusProxy>("AgnusProxy")
+        .constructor<>()
+        .function("frameCount", &AgnusProxy::frameCount);
 }
 
 //
@@ -217,7 +258,6 @@ EMSCRIPTEN_BINDINGS(AmigaProxy)
 
 DeniseProxy::DeniseProxy()
 {
-    printf("DeniseProxy()\n");
 }
 
 u32 DeniseProxy::noise() const
@@ -253,7 +293,6 @@ EMSCRIPTEN_BINDINGS(DeniseProxy)
 
 MemoryProxy::MemoryProxy()
 {
-    printf("MemoryProxy()\n");
 }
 
 bool MemoryProxy::hasRom() const
@@ -310,7 +349,6 @@ EMSCRIPTEN_BINDINGS(MemoryProxy)
 
 RetroShellProxy::RetroShellProxy()
 {
-    printf("RetroShellProxy()\n");
 }
 
 string RetroShellProxy::getText()
