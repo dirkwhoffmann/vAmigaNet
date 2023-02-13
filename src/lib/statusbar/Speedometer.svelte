@@ -3,6 +3,7 @@
 	import { amiga, cpu, agnus } from '$lib/stores';
 	import BarBox from './BarBox.svelte';
 	import { Button, Dropdown, DropdownItem, Chevron } from 'flowbite-svelte';
+	import { draw } from 'svelte/transition';
 
 	export let acceleration = 1.0;
 	export let mhz = 0.0;
@@ -14,6 +15,7 @@
 	export let latchedGpuFrame = 0.0;
 	export let counter = 0;
 
+	let open = false;
 	let mode = 0;
 	let value = '';
 	$: color = 'text-gray-300'; // (value > 6 && value < 8) ? "text-green-300" : "text-red-300";
@@ -62,27 +64,9 @@
 		}
 
 		if (animationFrame % 25 == 0) {
-			switch (mode) {
-				case 0:
-					value = mhz.toFixed(2) + ' MHz';
-					break;
-				case 1:
-					value = emuFps.toFixed(0) + ' Hz';
-					break;
-				case 2:
-					value = $amiga.cpuLoad() + '%';
-					break;
-				case 3:
-					value = gpuFps.toFixed(0) + ' Hz';
-					break;
-				case 4:
-					value = $amiga.audioFillLevel() + '%';
-					break;
-				default:
-					value = '---';
-					break;
-			}
+			redraw();
 		}
+
 		// Keep values
 		latchedTimestamp = timestamp;
 		latchedCycle = cycle;
@@ -90,29 +74,34 @@
 		latchedGpuFrame = gpuFrame;
 	}
 
-	function mhzAction(e: MouseEvent) {
-		e.preventDefault();
-		mode = 0;
+	function redraw() {
+		switch (mode) {
+			case 0:
+				value = mhz.toFixed(2) + ' MHz';
+				break;
+			case 1:
+				value = emuFps.toFixed(0) + ' Hz';
+				break;
+			case 2:
+				value = $amiga.cpuLoad() + '%';
+				break;
+			case 3:
+				value = gpuFps.toFixed(0) + ' Hz';
+				break;
+			case 4:
+				value = $amiga.audioFillLevel() + '%';
+				break;
+			default:
+				value = '---';
+				break;
+		}
 	}
 
-	function fpsAction(e: MouseEvent) {
+	function action(e: MouseEvent) {
 		e.preventDefault();
-		mode = 1;
-	}
-
-	function cpuAction(e: MouseEvent) {
-		e.preventDefault();
-		mode = 2;
-	}
-
-	function gpuAction(e: MouseEvent) {
-		e.preventDefault();
-		mode = 3;
-	}
-
-	function audAction(e: MouseEvent) {
-		e.preventDefault();
-		mode = 4;
+		mode = Number((e.target as HTMLElement).id);
+		open = false;
+		redraw();
 	}
 
 	const defaultClass =
@@ -122,12 +111,15 @@
 <div class="flex h-8">
 	<div class="h-full w-1 bg-black" />
 	<div class="flex w-20 text-xs h-full justify-center items-center {color}">{value}</div>
-	<Dropdown frameClass="!bg-slate-600">
-		<DropdownItem on:click={(e) => mhzAction(e)} {defaultClass}>Amiga Frequency</DropdownItem>
-		<DropdownItem on:click={(e) => fpsAction(e)} {defaultClass}>Amiga Refresh Rate</DropdownItem>
-		<DropdownItem on:click={(e) => cpuAction(e)} {defaultClass}>Host CPU Load</DropdownItem>
-		<DropdownItem on:click={(e) => gpuAction(e)} {defaultClass}>Host GPU Refresh Rate</DropdownItem>
-		<DropdownItem on:click={(e) => audAction(e)} {defaultClass}
+	<Dropdown frameClass="!bg-slate-600" bind:open>
+		<DropdownItem id="0" on:click={(e) => action(e)} {defaultClass}>Amiga Frequency</DropdownItem>
+		<DropdownItem id="1" on:click={(e) => action(e)} {defaultClass}>Amiga Refresh Rate</DropdownItem
+		>
+		<DropdownItem id="2" on:click={(e) => action(e)} {defaultClass}>Host CPU Load</DropdownItem>
+		<DropdownItem id="3" on:click={(e) => action(e)} {defaultClass}
+			>Host GPU Refresh Rate</DropdownItem
+		>
+		<DropdownItem id="4" on:click={(e) => action(e)} {defaultClass}
 			>Audio Buffer Fill Level</DropdownItem
 		>
 	</Dropdown>
