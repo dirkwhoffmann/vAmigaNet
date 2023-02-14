@@ -67,8 +67,6 @@
 			return;
 		}
 		*/
-		console.log("playAudioBuffer");
-
 		const source = audioContext!.createBufferSource();
 		source.buffer = audio_buffer;
 
@@ -77,7 +75,6 @@
 		gain_node.connect(audioContext!.destination);
 
 		source.addEventListener('ended', () => {
-			console.log('Sound ended');
 			// parallel_playing--;
 		});
 

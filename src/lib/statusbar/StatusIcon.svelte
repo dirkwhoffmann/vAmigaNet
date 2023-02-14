@@ -15,7 +15,7 @@
 	<div class="flex w-8 h-full justify-center items-center">
 		<button type="button" on:click>
             <img
-				class="border-0 p-1 h-full object-scale-down invert opacity-70"
+				class="border-0 p-1.5 h-full object-scale-down invert opacity-70"
 				{src}
 				alt="Status bar icon"
 			/>

@@ -10,12 +10,28 @@
 		dfMotor,
 		dfWriting,
 		dfUnsaved,
-		dfProtected
+		dfProtected,
+		warp,
+		debugMode,
+		halted,
+		muted,
 	} from '$lib/stores';
 	import StatusIcon from './StatusIcon.svelte';
 	import WarpControl from './WarpControl.svelte';
 
 	let speedometer: Speedometer;
+
+	$: muteIcon = $muted || $warp; 
+	$: debugIcon = $debugMode; 
+	$: haltIcon = $halted; 
+
+	$: console.log("muted = ", muted);
+	$: console.log("warp = ", warp);
+	$: console.log("debugMode = ", debugMode);
+	$: console.log("halted = ", halted);
+	$: console.log("muteIcon = ", muteIcon);
+	$: console.log("debugIcon = ", debugIcon);
+	$: console.log("haltIcon = ", haltIcon);
 
 	const dispatch = createEventDispatcher<{ push: { sender: string } }>();
 	const bg = 'bg-gradient-to-t from-gray-700 to-gray-600';
@@ -34,7 +50,12 @@
 
 <div class="z-50 relative flex h-8 mb-1 {bg}">
 	<BarBox>
-		<button type="button" class="flex w-16 h-full justify-center" id="vamigaButton" on:click={click}>
+		<button
+			type="button"
+			class="flex w-16 h-full justify-center"
+			id="vamigaButton"
+			on:click={click}
+		>
 			<img class="h-full" src="icons/vamigaIcon.png" alt="vAmiga Icon" />
 		</button>
 	</BarBox>
@@ -52,6 +73,15 @@
 			{/if}
 		{/each}
 	</div>
+	{#if haltIcon}
+		<StatusIcon src="icons/halt.png" />
+	{/if}
+	{#if debugIcon}
+		<StatusIcon src="icons/debug.png" />
+	{/if}
+	{#if muteIcon}
+		<StatusIcon src="icons/mute.png" />
+	{/if}
 	<WarpControl />
 	<Speedometer bind:this={speedometer} />
 </div>

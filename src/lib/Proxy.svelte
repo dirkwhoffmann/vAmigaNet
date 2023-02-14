@@ -94,7 +94,16 @@
 		MsgSrvReceive,
 		MsgSrvSend
 	} from '$lib/stores';
-	import { initialized, poweredOn, running, warpMode, warp } from '$lib/stores';
+	import {
+		initialized,
+		poweredOn,
+		running,
+		warpMode,
+		warp,
+		muted,
+		halted,
+		debugMode
+	} from '$lib/stores';
 	import {
 		dfConnected,
 		dfHasDisk,
@@ -158,22 +167,21 @@
 	}
 
 	export function updateWarp() {
-
 		if (!$amiga) return;
 
-		let warp = false;
+		let newWarp = false;
 		switch ($warpMode) {
 			case 0:
-				warp = $diskController.isSpinning();
+				newWarp = $diskController.isSpinning();
 				break;
 			case 1:
-				warp = false;
+				newWarp = false;
 				break;
 			case 2:
-				warp = true;
+				newWarp = true;
 				break;
 		}
-		if (warp) {
+		if (newWarp) {
 			$amiga.warpOn();
 		} else {
 			$amiga.warpOff();
@@ -209,7 +217,7 @@
 		$agnus = new $proxy.AgnusProxy();
 		$denise = new $proxy.DeniseProxy();
 		$memory = new $proxy.MemoryProxy();
-		// $diskController = new $proxy.DiskControllerProxy();
+		$diskController = new $proxy.DiskControllerProxy();
 		$retroShell = new $proxy.RetroShellProxy();
 
 		$initialized = true;
@@ -265,6 +273,7 @@
 			case $proxy.MSG_RESET:
 				$MsgReset++;
 				updateWarp();
+				$halted = false;
 				break;
 
 			case $proxy.MSG_HALT:
@@ -287,18 +296,24 @@
 
 			case $proxy.MSG_DEBUG_ON:
 				$MsgDebugOn++;
+				console.log('debug mode on');
+				$debugMode = true;
 				break;
 
 			case $proxy.MSG_DEBUG_OFF:
 				$MsgDebugOff++;
+				console.log('debug mode off');
+				$debugMode = false;
 				break;
 
 			case $proxy.MSG_MUTE_ON:
 				$MsgMuteOn++;
+				$muted = true;
 				break;
 
 			case $proxy.MSG_MUTE_OFF:
 				$MsgMuteOff++;
+				$muted = false;
 				break;
 
 			case $proxy.MSG_POWER_LED_ON:
@@ -375,6 +390,7 @@
 
 			case $proxy.MSG_CPU_HALT:
 				$MsgCpuHalt++;
+				$halted = true;
 				break;
 
 			case $proxy.MSG_COPPERBP_REACHED:

@@ -14,7 +14,7 @@ export const diskController: any = writable();
 export const retroShell: any = writable();
 
 // Settings (move to settings store?!)
-export const warpMode = writable(0);
+export const warpMode = writable(1);
 
 // Layout
 export const canvasWidth = writable(0);
@@ -34,6 +34,9 @@ export const initialized = writable(false);
 export const poweredOn = writable(false);
 export const running = writable(false);
 export const warp = writable(false);
+export const muted = writable(false);
+export const halted = writable(false);
+export const debugMode = writable(false);
 export const debugDma = writable(false);
 export const dfConnected = writable([false,false,false,false]);
 export const dfHasDisk = writable([false,false,false,false]);
