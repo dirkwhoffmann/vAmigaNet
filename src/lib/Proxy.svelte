@@ -10,6 +10,7 @@
 		agnus,
 		denise,
 		memory,
+		diskController,
 		retroShell,
 		MsgNone,
 		MsgRegister,
@@ -93,7 +94,7 @@
 		MsgSrvReceive,
 		MsgSrvSend
 	} from '$lib/stores';
-	import { initialized, poweredOn, running } from '$lib/stores';
+	import { initialized, poweredOn, running, warpMode, warp } from '$lib/stores';
 	import {
 		dfConnected,
 		dfHasDisk,
@@ -156,6 +157,29 @@
 		}
 	}
 
+	export function updateWarp() {
+
+		if (!$amiga) return;
+
+		let warp = false;
+		switch ($warpMode) {
+			case 0:
+				warp = $diskController.isSpinning();
+				break;
+			case 1:
+				warp = false;
+				break;
+			case 2:
+				warp = true;
+				break;
+		}
+		if (warp) {
+			$amiga.warpOn();
+		} else {
+			$amiga.warpOff();
+		}
+	}
+
 	export async function startUp() {
 		console.log('VAmiga: startUp()');
 
@@ -185,6 +209,7 @@
 		$agnus = new $proxy.AgnusProxy();
 		$denise = new $proxy.DeniseProxy();
 		$memory = new $proxy.MemoryProxy();
+		// $diskController = new $proxy.DiskControllerProxy();
 		$retroShell = new $proxy.RetroShellProxy();
 
 		$initialized = true;
@@ -239,6 +264,7 @@
 
 			case $proxy.MSG_RESET:
 				$MsgReset++;
+				updateWarp();
 				break;
 
 			case $proxy.MSG_HALT:
@@ -251,10 +277,12 @@
 
 			case $proxy.MSG_WARP_ON:
 				$MsgWarpOn++;
+				$warp = true;
 				break;
 
 			case $proxy.MSG_WARP_OFF:
 				$MsgWarpOff++;
+				$warp = false;
 				break;
 
 			case $proxy.MSG_DEBUG_ON:
@@ -407,11 +435,13 @@
 			case $proxy.MSG_DRIVE_MOTOR_ON:
 				$MsgDriveMotorOn++;
 				$dfMotor[d1] = true;
+				updateWarp();
 				break;
 
 			case $proxy.MSG_DRIVE_MOTOR_OFF:
 				$MsgDriveMotorOff++;
 				$dfMotor[d1] = false;
+				updateWarp();
 				break;
 
 			case $proxy.MSG_DRIVE_STEP:
@@ -511,6 +541,7 @@
 
 			case $proxy.MSG_SNAPSHOT_RESTORED:
 				$MsgSnapshotRestored++;
+				updateWarp();
 				break;
 
 			case $proxy.MSG_RECORDING_STARTED:
@@ -553,4 +584,4 @@
 	}
 </script>
 
-<Audio bind:this={audio}></Audio>
+<Audio bind:this={audio} />

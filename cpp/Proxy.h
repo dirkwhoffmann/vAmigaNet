@@ -71,6 +71,9 @@ struct AmigaProxy
     void pause() { amiga->pause(); }
     void halt() { amiga->halt(); }
     void stopAndGo() { amiga->stopAndGo(); }
+    void inWarpMode() { amiga->inWarpMode(); }
+    void warpOn() { amiga->warpOn(); }
+    void warpOff() { amiga->warpOff(); }
 
     u32 cpuLoad() { return u32(amiga->getCpuLoad() * 100.0); }
     void setSampleRate(unsigned sample_rate);
@@ -117,6 +120,13 @@ struct MemoryProxy
     bool hasExt() const;
     bool loadRom(const string &blob, u32 len);
     bool loadExt(const string &blob, u32 len);
+};
+
+struct DiskControllerProxy
+{
+    DiskControllerProxy();
+
+    bool isSpinning() const { return amiga->paula.diskController.spinning(); }
 };
 
 struct RetroShellProxy

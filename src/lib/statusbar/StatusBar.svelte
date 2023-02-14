@@ -12,6 +12,8 @@
 		dfUnsaved,
 		dfProtected
 	} from '$lib/stores';
+	import StatusIcon from './StatusIcon.svelte';
+	import WarpControl from './WarpControl.svelte';
 
 	let speedometer: Speedometer;
 
@@ -50,5 +52,6 @@
 			{/if}
 		{/each}
 	</div>
+	<WarpControl />
 	<Speedometer bind:this={speedometer} />
 </div>

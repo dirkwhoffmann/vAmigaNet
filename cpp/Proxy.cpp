@@ -201,6 +201,9 @@ EMSCRIPTEN_BINDINGS(AmigaProxy)
         .function("pause", &AmigaProxy::pause)
         .function("halt", &AmigaProxy::halt)
         .function("stopAndGo", &AmigaProxy::stopAndGo)
+        .function("inWarpMode", &AmigaProxy::inWarpMode)
+        .function("warpOn", &AmigaProxy::warpOn)
+        .function("warpOff", &AmigaProxy::warpOff)
 
         .function("cpuLoad", &AmigaProxy::cpuLoad)
 
@@ -343,6 +346,21 @@ EMSCRIPTEN_BINDINGS(MemoryProxy)
         .function("loadExt", &MemoryProxy::loadExt)
         .property("hasRom", &MemoryProxy::hasRom)
         .property("hasExt", &MemoryProxy::hasExt);
+}
+
+//
+// Disk controller proxy
+//
+
+DiskControllerProxy::DiskControllerProxy()
+{
+}
+
+EMSCRIPTEN_BINDINGS(DiskControllerProxy)
+{
+    class_<DiskControllerProxy>("DiskControllerProxy")
+        .constructor<>()
+        .function("isSpinning", &DiskControllerProxy::isSpinning);
 }
 
 //

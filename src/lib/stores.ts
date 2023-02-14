@@ -10,7 +10,11 @@ export const cpu: any = writable();
 export const agnus: any = writable();
 export const denise: any = writable();
 export const memory: any = writable();
+export const diskController: any = writable();
 export const retroShell: any = writable();
+
+// Settings (move to settings store?!)
+export const warpMode = writable(0);
 
 // Layout
 export const canvasWidth = writable(0);
@@ -29,6 +33,7 @@ export const showImpressum = writable(false);
 export const initialized = writable(false);
 export const poweredOn = writable(false);
 export const running = writable(false);
+export const warp = writable(false);
 export const debugDma = writable(false);
 export const dfConnected = writable([false,false,false,false]);
 export const dfHasDisk = writable([false,false,false,false]);
