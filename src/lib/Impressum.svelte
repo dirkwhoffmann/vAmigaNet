@@ -19,7 +19,7 @@
         <hr class="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700" />
 
 		<!-- Main -->
-		<div class="grow overflow-scroll px-4 border-blue-500">
+		<div class="grow overflow-auto px-4 border-blue-500">
 			<div>
 				<div class="text-3xl font-semibold pb-4 text-white">Kontakt</div>
 				<div>

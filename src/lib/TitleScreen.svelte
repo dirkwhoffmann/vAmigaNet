@@ -52,7 +52,7 @@
 						<div class="font-sofia-extra text-7xl mr-2">vAmiga</div>
 						<div class="font-sofia-extra text-7xl  text-gray-300">Online</div>
 					</div>
-					<div class="font-sofia-semi text-xl text-gray-300 pl-2 pb-10">Version 0.1</div>
+					<div class="font-sofia-semi text-xl text-gray-300 pl-2 pb-10">Version 0.1.1</div>
 					<div class="flex space-x-5">
 						<MyButton on:click={runDemo} label="Run Demo" />
 						<MyButton on:click={gotoGitHub}><FaGithub /></MyButton>

@@ -63,7 +63,7 @@
 	}
 </script>
 
-<body class="h-screen flex flex-col bg-black text-white scroll-smooth overflow-y-scroll">
+<body class="h-screen flex flex-col bg-black text-white scroll-smooth overflow-y-auto">
 	<div bind:this={top} class="">
 		<div class="relative">
 			{#key show}

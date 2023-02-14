@@ -43,9 +43,9 @@
 	onMount(() => {});
 </script>
 
-<div class="absolute top-0 left-0 w-full h-full flex overflow-scroll" transition:fade>
+<div class="absolute top-0 left-0 w-full h-full flex overflow-auto" transition:fade>
 	<div class="w-16 mr-1" />
-	<div class="bg-gray-500/75 mt-0 p-4 grow h-full overflow-scroll">
+	<div class="bg-gray-500/75 mt-0 p-4 grow h-full overflow-auto">
 		<div class="font-sofia-extra">
 			<div class="text-5xl">SETTINGS</div>
 			<div class="float space-x-4 mb-6">

@@ -21,7 +21,7 @@
 
 			<!-- Main -->
 			<div
-				class="grow overflow-scroll px-4 border-blue-500 text-center flex flex-col items-center justify-center"
+				class="grow overflow-auto px-4 border-blue-500 text-center flex flex-col items-center justify-center"
 			>
 				<div>
 					<p>

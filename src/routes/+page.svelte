@@ -159,13 +159,13 @@
 </script>
 
 <body>
-	<div class="h-screen bg-black text-white scroll-smooth overflow-y-scroll">
+	<div class="h-screen bg-black text-white scroll-smooth overflow-y-auto">
 		<title>vAmiga Online</title>
 		<MainScreen>
 			<StatusBar bind:this={statusBar} on:push={push} />
 			<div
 				bind:this={canvas}
-				class="box relative grow border-none border-green-300 overflow-scroll"
+				class="box relative grow border-none border-green-300 overflow-auto"
 			>
 				{#if !$poweredOn}
 					<TitleScreen />
