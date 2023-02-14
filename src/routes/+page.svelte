@@ -91,7 +91,7 @@
 
 	function handleUncatchedError(event: Event) {
 		console.log('Unhandled error catched', event);
-		event.preventDefault();
+		// event.preventDefault();
 		$what = $amiga.what();
 		$errno = $amiga.errorCode();
 	}

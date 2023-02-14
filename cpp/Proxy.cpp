@@ -620,6 +620,14 @@ EMSCRIPTEN_BINDINGS(Keys)
     constant("OPT_SRV_AUTORUN", (int)OPT_SRV_AUTORUN);
     constant("OPT_SRV_VERBOSE", (int)OPT_SRV_VERBOSE);
 
+    // Palette
+    constant("PALETTE_COLOR", (int)PALETTE_COLOR);
+    constant("PALETTE_BLACK_WHITE", (int)PALETTE_BLACK_WHITE);
+    constant("PALETTE_PAPER_WHITE", (int)PALETTE_PAPER_WHITE);
+    constant("PALETTE_GREEN", (int)PALETTE_GREEN);
+    constant("PALETTE_AMBER", (int)PALETTE_AMBER);
+    constant("PALETTE_SEPIA", (int)PALETTE_SEPIA);
+
     // RamInitPattern
     constant("RAM_INIT_ALL_ZEROES", (int)RAM_INIT_ALL_ZEROES);
     constant("RAM_INIT_ALL_ONES", (int)RAM_INIT_ALL_ONES);
