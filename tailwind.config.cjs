@@ -1,8 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 	content: [
-		'./src/**/*.{html,js,svelte,ts}',
-		'./node_modules/flowbite-svelte/**/*.{html,js,svelte,ts}'
+		'./src/**/*.{html,js,svelte,ts}'
 	],
 	theme: {
 		extend: {
@@ -36,6 +35,6 @@ module.exports = {
 			}
 		}
 	},
-	plugins: [require('flowbite/plugin'),require('daisyui')],
+	plugins: [require('daisyui')],
 	darkMode: 'class'
 };

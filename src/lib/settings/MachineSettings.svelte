@@ -1,15 +1,5 @@
 <script lang="ts">
-	import {
-		Button,
-		Dropdown,
-		DropdownItem,
-		DropdownDivider,
-		DropdownHeader,
-		Chevron,
-		A
-	} from 'flowbite-svelte';
 	import { onMount } from 'svelte';
-	import ConfigCategory from '$lib/settings/ConfigCategory.svelte';
 	import ConfigSection from './ConfigSection.svelte';
 	import ConfigItem from '$lib/settings/ConfigItem.svelte';
 	import { proxy, amiga } from '$lib/stores';
