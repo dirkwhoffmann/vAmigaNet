@@ -16,17 +16,20 @@
 	let value = '';
 	$: color = 'text-gray-300'; // (value > 6 && value < 8) ? "text-green-300" : "text-red-300";
 
+	let modes = [
+		'Amiga Frequency',
+		'Amiga Refresh Rate',
+		'Host CPU Load',
+		'Host GPU Refresh Rate',
+		'Audio Buffer Fill Level'
+	];
+	// <div class="w-4">{@html selection == id ? '&#10003' : ''}</div>
 	// const dispatch = createEventDispatcher<{push:{sender:string}}>();
 
 	onMount(() => {
 		console.log('Speedometer: onMount()');
 		latchedTimestamp = Date.now();
 	});
-
-	function click(e: Event) {
-		e.preventDefault();
-		// dispatch('push', { sender: (e.target as HTMLElement).id });
-	}
 
 	export function update(animationFrame: number, now: DOMHighResTimeStamp) {
 		if (animationFrame % 10 != 0) return;
@@ -73,9 +76,8 @@
 	function redraw() {
 		switch (mode) {
 			case 0:
-                acceleration = $amiga.getConfig($proxy.OPT_CPU_OVERCLOCKING);
-                if (acceleration == 0) acceleration = 1;
-                console.log("accel " + acceleration);
+				acceleration = $amiga.getConfig($proxy.OPT_CPU_OVERCLOCKING);
+				if (acceleration == 0) acceleration = 1;
 				value = (mhz * acceleration).toFixed(2) + ' MHz';
 				break;
 			case 1:
@@ -111,23 +113,18 @@
 <div class="flex h-8">
 	<div class="h-full w-1 bg-black" />
 	<div class="dropdown dropdown-end">
-        <button class="flex w-20 text-xs h-full justify-center items-center {color}">{value}</button>
-		<ul class="dropdown-content menu menu-compact rounded p-0 text-sm text-blue-200 bg-slate-600 w-48">
-			<li class="">
-				<button on:click={(e) => action(e, 0)}>Amiga Frequency</button>
-			</li>
-			<li class="">
-				<button on:click={(e) => action(e, 1)}>Amiga Refresh Rate</button>
-			</li>
-			<li class="">
-				<button on:click={(e) => action(e, 2)}>Host CPU Load</button>
-			</li>
-			<li class="">
-				<button on:click={(e) => action(e, 3)}>Host GPU Refresh Rate</button>
-			</li>
-			<li class="">
-				<button on:click={(e) => action(e, 4)}>Audio Buffer Fill Level</button>
-			</li>
+		<button class="flex w-20 text-xs h-full justify-center items-center {color}">{value}</button>
+		<ul
+			class="dropdown-content menu menu-compact rounded p-0 text-sm text-blue-200 bg-slate-600 w-64"
+		>
+			{#each modes as name, i}
+				<li class="">
+					<button on:click={(e) => action(e, i)}>
+						<div class="w-4">{@html mode == i ? '&#10003' : ''}</div>
+						{name}</button
+					>
+				</li>
+			{/each}
 		</ul>
 	</div>
 </div>

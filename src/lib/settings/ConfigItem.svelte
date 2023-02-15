@@ -85,7 +85,7 @@
 							{#each values as { name, id }, i}
 								<li class="" id={id.toString()}>
 									<button on:click={(e) => handleClick(e, id)}
-										><div class="w-4">{@html displayName == name ? '&#10003' : ''}</div>
+										><div class="w-4">{@html selection == id ? '&#10003' : ''}</div>
 										{name}</button
 									>
 								</li>
