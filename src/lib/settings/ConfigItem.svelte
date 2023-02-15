@@ -4,6 +4,7 @@
 	import { Button, Dropdown, DropdownItem, Chevron } from 'flowbite-svelte';
 	import type { ActionEvent } from '$lib/settings/Settings.svelte';
 	import { Range, Label } from 'flowbite-svelte';
+	import { fade } from 'svelte/transition';
 
 	export let name = '???';
 	export let values = [{ name: '???', id: 0 }];
@@ -49,22 +50,29 @@
 					<div class="w-4 mr-2" /></Button
 				>
 			{:else}
+				<!--
 				<Button class="!bg-transparent !text-xl !text-blue-200"
 					><Chevron><div class="w-64">{displayName}</div></Chevron></Button
 				>
+				-->
+				<div class="dropdown dropdown-end">
+					<button
+						class="btn w-[18rem] border-0 rounded-none text-xl font-normal text-blue-200 hover:bg-slate-600 bg-transparent "
+						>{displayName}</button
+					>
+					<ul class="dropdown-content menu p-2 text-xl text-blue-200 bg-slate-600 w-[18rem]">
+						{#each values as { name, id }, i}
+							<li class="" id={id.toString()}>
+								<button on:click={(e) => handleClick(e, id)}
+									><div class="w-4">{@html (displayName == name ? '&#10003' : '')}</div>{name}</button
+								>
+							</li>
+						{/each}
+						<!-- <li><a>Item 2</a></li>-->
+					</ul>
+				</div>
+				<!--
 				<Dropdown frameClass="!bg-slate-600" bind:open={dropdownOpen}>
-					<!--
-					<DropdownItem defaultClass="font-medium pt-2 pb-0 px-4 text-xl text-blue-200 bg-slate-600">
-						<input
-							type="range"
-							min="-5"
-							max="5"
-							step="1.0"
-							value="0"
-							class="w-full bg-white-500 caret-green-50 accent-red-500 rounded-lg appearance-none"
-						/>
-					</DropdownItem>
-					-->
 					{#each values as { name, id }, i}
 						<DropdownItem
 							on:click={(e) => handleClick(e, id)}
@@ -73,6 +81,7 @@
 						>
 					{/each}
 				</Dropdown>
+				-->
 			{/if}
 		</div>
 	</div>
