@@ -8,8 +8,11 @@
 
 	export let name = '???';
 	export let values = [{ name: '???', id: 0 }];
+	export let min = 0;
+	export let max = 0;
+	export let continous = true;
 	export let locked = false;
-	export let selection: number;
+	export let selection = 0;
 	export let tag = 0;
 
 	let dropdownOpen = false;
@@ -20,6 +23,8 @@
 	$: displayName = displayedName(selection);
 
 	function displayedName(tag: number): string {
+		if (min != max) return tag.toString();
+
 		let value = values.find((o) => o.id === tag);
 		// console.log('Found name ' + (value == undefined ? '???' : value.name));
 		return value == undefined ? '???' : value.name;
@@ -31,6 +36,12 @@
 		console.log('Click: id = ' + value + ' tag = ' + tag);
 		dispatch('select', { tag: tag, value: value });
 	};
+
+	const sliderAction = (e: Event) => {
+		e.preventDefault();
+		dispatch('select', { tag: tag, value: e.target!.value });
+	};
+
 </script>
 
 <div class="py-0.5 px-0">
@@ -57,31 +68,35 @@
 				-->
 				<div class="dropdown dropdown-end">
 					<button
-						class="btn w-[18rem] border-0 rounded-none text-xl font-normal text-blue-200 hover:bg-slate-600 bg-transparent "
+						class="btn w-[18rem] border-0 rounded-none text-xl font-normal text-blue-200 hover:bg-slate-600 bg-transparent"
 						>{displayName}</button
 					>
-					<ul class="dropdown-content menu p-2 text-xl text-blue-200 bg-slate-600 w-[18rem]">
-						{#each values as { name, id }, i}
-							<li class="" id={id.toString()}>
-								<button on:click={(e) => handleClick(e, id)}
-									><div class="w-4">{@html (displayName == name ? '&#10003' : '')}</div>{name}</button
-								>
-							</li>
-						{/each}
-						<!-- <li><a>Item 2</a></li>-->
-					</ul>
+					{#if min != max}
+						<ul class="dropdown-content menu w-[18rem]">
+							<input
+								type="range"
+								style="--range-shdw: none"
+								on:input={(e) => sliderAction(e)}
+								on:click={(e) => console.log('Click')}
+								min=0
+								max=100
+								value={selection}
+								class="range h-12 px-4 rounded-none bg-blue-200"
+							/>
+						</ul>
+					{:else}
+						<ul class="dropdown-content menu p-2 text-xl text-blue-200 bg-slate-600 w-[18rem]">
+							{#each values as { name, id }, i}
+								<li class="" id={id.toString()}>
+									<button on:click={(e) => handleClick(e, id)}
+										><div class="w-4">{@html displayName == name ? '&#10003' : ''}</div>
+										{name}</button
+									>
+								</li>
+							{/each}
+						</ul>
+					{/if}
 				</div>
-				<!--
-				<Dropdown frameClass="!bg-slate-600" bind:open={dropdownOpen}>
-					{#each values as { name, id }, i}
-						<DropdownItem
-							on:click={(e) => handleClick(e, id)}
-							defaultClass="font-medium py-2 px-4 text-xl text-blue-200 bg-slate-600 hover:bg-slate-500"
-							><div class="" id={id.toString()}>{name}</div></DropdownItem
-						>
-					{/each}
-				</Dropdown>
-				-->
 			{/if}
 		</div>
 	</div>
