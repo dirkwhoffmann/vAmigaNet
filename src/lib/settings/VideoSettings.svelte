@@ -1,13 +1,15 @@
 <script lang="ts">
-    
-    import { onMount } from 'svelte';
-    import { proxy, amiga } from '$lib/stores';
+	import { onMount } from 'svelte';
+	import { proxy, amiga } from '$lib/stores';
 	import type { ActionEvent } from '$lib/settings/Settings.svelte';
 	import { fade } from 'svelte/transition';
 	import ConfigSection from './ConfigSection.svelte';
 	import ConfigItem from '$lib/settings/ConfigItem.svelte';
 
-    let palette: number;
+	let palette: number;
+	let brightness: number;
+	let contrast: number;
+	let saturation: number;
 
 	onMount(() => {
 		update();
@@ -15,10 +17,33 @@
 
 	function update() {
 		palette = $amiga.getConfig($proxy.OPT_PALETTE);
+		brightness = $amiga.getConfig($proxy.OPT_BRIGHTNESS);
+		contrast = $amiga.getConfig($proxy.OPT_CONTRAST);
+		saturation = $amiga.getConfig($proxy.OPT_SATURATION);
 	}
 
 	function paletteAction(event: CustomEvent<ActionEvent>) {
 		$amiga.configure($proxy.OPT_PALETTE, event.detail.value);
+		update();
+	}
+
+    function videoAction(event: CustomEvent<ActionEvent>) {
+		$amiga.configure(event.detail.tag, event.detail.value);
+		update();
+	}
+
+	function brightnessAction(event: CustomEvent<ActionEvent>) {
+		$amiga.configure($proxy.OPT_BRIGHTNESS, event.detail.value);
+		update();
+	}
+
+	function contrastAction(event: CustomEvent<ActionEvent>) {
+		$amiga.configure($proxy.OPT_CONTRAST, event.detail.value);
+		update();
+	}
+
+	function saturationAction(event: CustomEvent<ActionEvent>) {
+		$amiga.configure($proxy.OPT_SATURATION, event.detail.value);
 		update();
 	}
 </script>
@@ -37,6 +62,30 @@
 				{ name: 'Amber', id: $proxy.PALETTE_AMBER },
 				{ name: 'Sepia', id: $proxy.PALETTE_SEPIA }
 			]}
+		/>
+		<ConfigItem
+			name="Brightness"
+			selection={brightness}
+			on:select={videoAction}
+			tag={$proxy.OPT_BRIGHTNESS}
+			min={0}
+			max={100}
+		/>
+		<ConfigItem
+			name="Contrast"
+			selection={contrast}
+			on:select={videoAction}
+			tag={$proxy.OPT_CONTRAST}
+			min={0}
+			max={100}
+		/>
+		<ConfigItem
+			name="Saturation"
+			selection={saturation}
+			on:select={videoAction}
+			tag={$proxy.OPT_SATURATION}
+			min={0}
+			max={100}
 		/>
 	</ConfigSection>
 </div>
