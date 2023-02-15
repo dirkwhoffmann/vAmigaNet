@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { amiga, cpu, agnus } from '$lib/stores';
+	import { proxy, amiga, cpu, agnus } from '$lib/stores';
 
 	export let acceleration = 1.0;
 	export let mhz = 0.0;
@@ -73,7 +73,10 @@
 	function redraw() {
 		switch (mode) {
 			case 0:
-				value = mhz.toFixed(2) + ' MHz';
+                acceleration = $amiga.getConfig($proxy.OPT_CPU_OVERCLOCKING);
+                if (acceleration == 0) acceleration = 1;
+                console.log("accel " + acceleration);
+				value = (mhz * acceleration).toFixed(2) + ' MHz';
 				break;
 			case 1:
 				value = emuFps.toFixed(0) + ' Hz';

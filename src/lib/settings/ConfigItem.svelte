@@ -3,6 +3,7 @@
 	import FaLock from 'svelte-icons/fa/FaLock.svelte';
 	import type { ActionEvent } from '$lib/settings/Settings.svelte';
 	import { fade } from 'svelte/transition';
+	import Chevron from './Chevron.svelte';
 
 	export let name = '???';
 	export let values = [{ name: '???', id: 0 }];
@@ -63,7 +64,8 @@
 				<div class="dropdown dropdown-end">
 					<button
 						class="btn w-[18rem] border-0 rounded-none text-xl font-normal text-blue-200 hover:bg-slate-600 bg-transparent"
-						>{displayName}</button
+						><Chevron>{displayName}</Chevron>
+						</button
 					>
 					{#if min != max}
 						<ul class="dropdown-content menu w-[18rem]">
