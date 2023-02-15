@@ -1,9 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { amiga, cpu, agnus } from '$lib/stores';
-	import BarBox from './BarBox.svelte';
-	import { Button, Dropdown, DropdownItem, Chevron } from 'flowbite-svelte';
-	import { draw } from 'svelte/transition';
 
 	export let acceleration = 1.0;
 	export let mhz = 0.0;
@@ -13,7 +10,6 @@
 	export let latchedCycle = 0.0;
 	export let latchedEmuFrame = 0.0;
 	export let latchedGpuFrame = 0.0;
-	export let counter = 0;
 
 	let open = false;
 	let mode = 0;
@@ -97,9 +93,10 @@
 		}
 	}
 
-	function action(e: MouseEvent) {
+	function action(e: MouseEvent, id: number) {
 		e.preventDefault();
-		mode = Number((e.target as HTMLElement).id);
+		// mode = Number((e.target as HTMLElement).id);
+		mode = Number(id);
 		open = false;
 		redraw();
 	}
@@ -110,17 +107,24 @@
 
 <div class="flex h-8">
 	<div class="h-full w-1 bg-black" />
-	<div class="flex w-20 text-xs h-full justify-center items-center {color}">{value}</div>
-	<Dropdown frameClass="!bg-slate-600" bind:open>
-		<DropdownItem id="0" on:click={(e) => action(e)} {defaultClass}>Amiga Frequency</DropdownItem>
-		<DropdownItem id="1" on:click={(e) => action(e)} {defaultClass}>Amiga Refresh Rate</DropdownItem
-		>
-		<DropdownItem id="2" on:click={(e) => action(e)} {defaultClass}>Host CPU Load</DropdownItem>
-		<DropdownItem id="3" on:click={(e) => action(e)} {defaultClass}
-			>Host GPU Refresh Rate</DropdownItem
-		>
-		<DropdownItem id="4" on:click={(e) => action(e)} {defaultClass}
-			>Audio Buffer Fill Level</DropdownItem
-		>
-	</Dropdown>
+	<div class="dropdown dropdown-end">
+        <button class="flex w-20 text-xs h-full justify-center items-center {color}">{value}</button>
+		<ul class="dropdown-content menu menu-compact rounded p-0 text-sm text-blue-200 bg-slate-600 w-48">
+			<li class="">
+				<button on:click={(e) => action(e, 0)}>Amiga Frequency</button>
+			</li>
+			<li class="">
+				<button on:click={(e) => action(e, 1)}>Amiga Refresh Rate</button>
+			</li>
+			<li class="">
+				<button on:click={(e) => action(e, 2)}>Host CPU Load</button>
+			</li>
+			<li class="">
+				<button on:click={(e) => action(e, 3)}>Host GPU Refresh Rate</button>
+			</li>
+			<li class="">
+				<button on:click={(e) => action(e, 4)}>Audio Buffer Fill Level</button>
+			</li>
+		</ul>
+	</div>
 </div>

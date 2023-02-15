@@ -3,40 +3,12 @@
 </script>
 
 <script lang="ts">
-	import {
-		Button,
-		Dropdown,
-		DropdownItem,
-		DropdownDivider,
-		DropdownHeader,
-		Chevron,
-		A
-	} from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 	import ConfigCategory from '$lib/settings/ConfigCategory.svelte';
-	import ConfigSection from './ConfigSection.svelte';
-	import ConfigItem from '$lib/settings/ConfigItem.svelte';
-	import { proxy } from '$lib/stores';
-	import { amiga } from '$lib/stores';
 	import { fade } from 'svelte/transition';
 	import MachineSettings from '$lib/settings/MachineSettings.svelte';
 	import VideoSettings from '$lib/settings/VideoSettings.svelte';
 	import AudioSettings from '$lib/settings/AudioSettings.svelte';
-
-	let power: boolean;
-	let cpuRevision: number;
-	let cpuSpeed: number;
-	let agnusRevision: number;
-	let deniseRevision: number;
-	let rtcModel: number;
-	let chipRam: number;
-	let slowRam: number;
-	let fastRam: number;
-	let bankMap: number;
-	let initPattern: number;
-	let unmapped: number;
-	let slowRamMirror: number;
-	let slowRamDelay: number;
 
 	let category = 'machine';
 
