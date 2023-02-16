@@ -47,21 +47,7 @@
 
 									const id = await db.roms.add({
 
-										crc32: 42,
-										title: 'A'
-										/*
-										version: 'B',
-										released: 'C',
-										model: 'D',
-										isAros: false,
-										isDiag: false,
-										isCommodore: false,
-										isHyperion: false,
-										isPatched: false,
-										isUnknown: false
-										*/
-										/*
-										crc32: info.crc32
+										crc32: info.crc32,
 										title: info.title,
 										version: info.version,
 										released: info.released,
@@ -71,16 +57,9 @@
 										isCommodore: info.isCommodore,
 										isHyperion: info.isHyperion,
 										isPatched: info.isPatched,
-										isUnknown: info.isUnknown
-										*/
-									
+										isUnknown: info.isUnknown,
+										extStart: 0									
 									});
-									/*
-									const id = await db.friends.add({
-										name: 'Lars',
-										age: 20
-									});
-									*/
 
 									console.log(`${t} successfully added with id ${id}`);
 								} catch (error) {

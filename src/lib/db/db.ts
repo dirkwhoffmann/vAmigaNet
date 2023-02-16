@@ -10,7 +10,6 @@ export interface RomEntry {
 	id?: number;
 	crc32: number;
 	title: string;
-	/*
     version: string;
     released: string;
     model: string;
@@ -19,8 +18,8 @@ export interface RomEntry {
     isCommodore: boolean;
     isHyperion: boolean;
     isPatched: boolean;
-    isUnknown: boolean;	
-    */
+    isUnknown: boolean;
+    extStart: number;
 }
 
 export class MySubClassedDexie extends Dexie {
@@ -29,7 +28,7 @@ export class MySubClassedDexie extends Dexie {
 
 	constructor() {
 		super('myDatabase');
-		this.version(2).stores({
+		this.version(3).stores({
 			friends: '++id, name, age', // Primary key and indexed props
 			roms: '++id, title, crc32'
 		});
