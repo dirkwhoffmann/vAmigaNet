@@ -12,6 +12,8 @@ export interface RomEntry {
     isHyperion: boolean;
     isPatched: boolean;
     isUnknown: boolean;
+    rom: Uint8Array | null;
+    ext: Uint8Array | null;
     extStart: number;
 }
 
@@ -20,7 +22,7 @@ export class MySubClassedDexie extends Dexie {
 
 	constructor() {
 		super('myDatabase');
-		this.version(3).stores({
+		this.version(4).stores({
 			roms: 'crc32, title'
 		});
 	}

@@ -2,11 +2,15 @@
 	import { onMount } from 'svelte';
 	import ConfigSection from './ConfigSection.svelte';
 	import ConfigItem from '$lib/settings/ConfigItem.svelte';
-	import { proxy, amiga } from '$lib/stores';
+	import { proxy, amiga, memory } from '$lib/stores';
 	import { poweredOn } from '$lib/stores';
 	import { fade } from 'svelte/transition';
 	import type { ActionEvent } from '$lib/settings/Settings.svelte';
+	import { browser } from '$app/environment';
+	import { liveQuery } from 'dexie';
+	import { db, type RomEntry } from '$lib/db/db';
 
+	let kickstart: number;
 	let cpuRevision: number;
 	let cpuSpeed: number;
 	let agnusRevision: number;
@@ -25,6 +29,18 @@
 	let df2: number;
 	let df3: number;
 	let hd0: number;
+
+	let roms = liveQuery(() => (browser ? db.roms.toArray() : []));
+	let romValues = [{ name: '', id: 0 }];
+	$: {
+		romValues = [{ name: 'None', id: 0 }];
+		if ($roms) {
+			$roms.forEach((rom) => {
+				romValues.push({ name: rom.title, id: rom.crc32 });
+			});
+		}
+	}
+	$: console.log('romValues = ', romValues);
 
 	$: power = $poweredOn;
 
@@ -47,10 +63,18 @@
 		unmapped = $amiga.getConfig($proxy.OPT_UNMAPPING_TYPE);
 		slowRamMirror = $amiga.getConfig($proxy.OPT_SLOW_RAM_MIRROR);
 		slowRamDelay = $amiga.getConfig($proxy.OPT_SLOW_RAM_DELAY);
-        df0 = $amiga.getDriveConfig($proxy.OPT_DRIVE_CONNECT, 0);
-        df1 = $amiga.getDriveConfig($proxy.OPT_DRIVE_CONNECT, 1);
-        df2 = $amiga.getDriveConfig($proxy.OPT_DRIVE_CONNECT, 2);
-        df3 = $amiga.getDriveConfig($proxy.OPT_DRIVE_CONNECT, 3);
+		df0 = $amiga.getDriveConfig($proxy.OPT_DRIVE_CONNECT, 0);
+		df1 = $amiga.getDriveConfig($proxy.OPT_DRIVE_CONNECT, 1);
+		df2 = $amiga.getDriveConfig($proxy.OPT_DRIVE_CONNECT, 2);
+		df3 = $amiga.getDriveConfig($proxy.OPT_DRIVE_CONNECT, 3);
+		kickstart = $memory.romFingerprint();
+		console.log("kickstart CRC = ", kickstart);
+	}
+
+	function kickstartAction(event: CustomEvent<ActionEvent>) {
+		// $amiga.configure($proxy.OPT_CPU_REVISION, event.detail.value);
+		console.log('kickstartAction');
+		update();
 	}
 
 	function cpuRevAction(event: CustomEvent<ActionEvent>) {
@@ -120,20 +144,28 @@
 
 	function dfAction(event: CustomEvent<ActionEvent>) {
 		console.log('dfAction: ' + event.detail.tag + ', ' + event.detail.value);
-        if (event.detail.value) {
-            for (let i = 1; i <= event.detail.tag; i++) {
-                $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, i, 1);
-            }
-        } else {
-            for (let i = event.detail.tag; i <= 4; i++) {
-                $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, i, 0);
-            }
-        }
-        update();
+		if (event.detail.value) {
+			for (let i = 1; i <= event.detail.tag; i++) {
+				$amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, i, 1);
+			}
+		} else {
+			for (let i = event.detail.tag; i <= 4; i++) {
+				$amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, i, 0);
+			}
+		}
+		update();
 	}
 </script>
 
 <div transition:fade>
+	<ConfigSection name="Roms">
+		<ConfigItem
+			name="Kickstart"
+			selection={kickstart}
+			on:select={kickstartAction}
+			values={romValues}
+		/>
+	</ConfigSection>
 	<ConfigSection name="CPU">
 		<ConfigItem
 			name="CPU"
@@ -293,11 +325,9 @@
 			tag={0}
 			selection={df0}
 			on:select={dfAction}
-			values={[
-				{ name: 'Internal Drive', id: 1 }
-			]}
+			values={[{ name: 'Internal Drive', id: 1 }]}
 		/>
-    	<ConfigItem
+		<ConfigItem
 			name="DF1"
 			tag={1}
 			selection={df1}

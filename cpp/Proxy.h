@@ -141,6 +141,8 @@ struct MemoryProxy
     bool hasExt() const;
     bool loadRom(const string &blob, u32 len);
     bool loadExt(const string &blob, u32 len);
+
+    u32 romFingerprint() const;
 };
 
 struct DiskControllerProxy

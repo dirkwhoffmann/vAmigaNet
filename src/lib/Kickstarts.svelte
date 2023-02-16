@@ -1,13 +1,25 @@
 <script lang="ts">
 	import MyButton from './widgets/MyButton.svelte';
 	import { liveQuery } from 'dexie';
-	import { db } from '$lib/db/db';
+	import { db, type RomEntry } from '$lib/db/db';
 	import { browser } from '$app/environment';
 	import FaTrash from 'svelte-icons/fa/FaTrash.svelte';
 
 	let roms = liveQuery(() => (browser ? db.roms.toArray() : []));
 
 	let show = true;
+
+	function imageUrl(rom: RomEntry) {
+		return rom.isHyperion
+			? 'rom-hyperion.png'
+			: rom.isAros
+			? 'rom-aros.png'
+			: rom.isDiag
+			? 'rom-diag.png'
+			: rom.isCommodore
+			? 'rom-commodore.png'
+			: ' rom-unknown.png';
+	}
 
 	function close() {
 		console.log('close');
@@ -45,7 +57,7 @@
 											<div class="object-scale-down">
 												<img
 													class="rotate-90 h-24 object-scale-down px-2"
-													src="icons/rom-commodore.png"
+													src={'icons/' + imageUrl(rom)}
 													alt="Rom Chip Icon"
 												/>
 											</div>

@@ -42,11 +42,9 @@
 
 							if (info.crc32) {
 								try {
-									
 									const t = info.title;
 
 									const id = await db.roms.add({
-
 										crc32: info.crc32,
 										title: info.title,
 										version: info.version,
@@ -58,7 +56,9 @@
 										isHyperion: info.isHyperion,
 										isPatched: info.isPatched,
 										isUnknown: info.isUnknown,
-										extStart: 0									
+										rom: uint8View,
+										ext: null,
+										extStart: 0
 									});
 
 									console.log(`${t} successfully added with id ${id}`);

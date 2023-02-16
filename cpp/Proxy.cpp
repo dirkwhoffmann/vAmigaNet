@@ -390,6 +390,11 @@ bool MemoryProxy::loadExt(const string &blob, u32 len)
     }
 }
 
+u32 MemoryProxy::romFingerprint() const
+{
+    return amiga->mem.romFingerprint();
+}
+
 EMSCRIPTEN_BINDINGS(MemoryProxy)
 {
     class_<MemoryProxy>("MemoryProxy")
@@ -398,7 +403,8 @@ EMSCRIPTEN_BINDINGS(MemoryProxy)
         .function("loadRom", &MemoryProxy::loadRom)
         .function("loadExt", &MemoryProxy::loadExt)
         .property("hasRom", &MemoryProxy::hasRom)
-        .property("hasExt", &MemoryProxy::hasExt);
+        .property("hasExt", &MemoryProxy::hasExt)
+        .function("romFingerprint", &MemoryProxy::romFingerprint);
 }
 
 //
