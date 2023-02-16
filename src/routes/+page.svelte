@@ -9,7 +9,6 @@
 	import '@splidejs/svelte-splide/css';
 	import Sidebar from '$lib/sidebar/Sidebar.svelte';
 	import TitleScreen from '$lib/TitleScreen.svelte';
-	import DragAndDrop from '$lib/DragAndDrop.svelte';
 	import Emulator from '$lib/Emulator.svelte';
 	import Settings from '$lib/settings/Settings.svelte';
 	import StatusBar from '$lib/statusbar/StatusBar.svelte';
@@ -17,6 +16,7 @@
 	import MainScreen from '$lib/MainScreen.svelte';
 	import Impressum from '$lib/Impressum.svelte';
 	import BrowserCheck from '$lib/BrowserCheck.svelte';
+	import Kickstarts from '$lib/Kickstarts.svelte';
 
 	let mounted = false;
 	let buttonText = 'Run Demo';
@@ -182,6 +182,7 @@
 				{/if}
 			</div>
 			<BrowserCheck />
+			<Kickstarts />
 			{#if $showImpressum}
 				<Impressum />
 			{/if}

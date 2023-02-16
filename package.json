@@ -43,6 +43,7 @@
 	"dependencies": {
 		"@splidejs/svelte-splide": "^0.2.9",
 		"@sveltejs/adapter-static": "^1.0.5",
-		"daisyui": "^2.50.1"
+		"daisyui": "^2.50.1",
+		"dexie": "^3.2.3"
 	}
 }
