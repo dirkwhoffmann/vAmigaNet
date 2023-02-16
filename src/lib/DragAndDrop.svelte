@@ -17,6 +17,7 @@
 	async function handleDragDrop(event) {
 		event.preventDefault();
 
+		console.log("handleDragDrop");
 		if (event.dataTransfer.items) {
             if (event.dataTransfer.items.length == 1) {
                 let item = event.dataTransfer.items[0];
@@ -26,8 +27,13 @@
 					try {
 						let blob = await file.arrayBuffer();
 						let uint8View = new Uint8Array(blob);
+						/*
 						console.log('Calling $amiga.insertDisk');
 						$amiga.insertDisk(uint8View, blob.byteLength, 0);
+						*/
+						let info = $memory.analyzeRom(uint8View, blob.byteLength);
+						console.log("ROM analyzed");
+						console.log("info = ", info);
 					} catch (exc) {
 						$proxy.reportException();
 					}

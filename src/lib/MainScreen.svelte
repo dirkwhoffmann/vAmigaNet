@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { proxy, amiga, memory, initialized } from '$lib/stores';
+	import { db } from '$lib/db/db';
 
 	function handleDragEnter(event: DragEvent) {
 		event.preventDefault();
@@ -21,6 +22,7 @@
 	async function handleDragDrop(event: DragEvent) {
 		event.preventDefault();
 
+		console.log('handleDragDrop');
 		if (event.dataTransfer && event.dataTransfer.items) {
 			if (event.dataTransfer.items.length == 1) {
 				let item = event.dataTransfer.items[0];
@@ -31,8 +33,60 @@
 						try {
 							let blob = await file.arrayBuffer();
 							let uint8View = new Uint8Array(blob);
-							console.log('Calling $amiga.insertDisk');
-							$amiga.insertDisk(uint8View, blob.byteLength, 0);
+							/*
+						console.log('Calling $amiga.insertDisk');
+						$amiga.insertDisk(uint8View, blob.byteLength, 0);
+						*/
+							let info = $memory.analyzeRom(uint8View, blob.byteLength);
+							console.log('ROM analyzed: ', info);
+
+							if (info.crc32) {
+								try {
+									
+									const t = info.title;
+
+									const id = await db.roms.add({
+
+										crc32: 42,
+										title: 'A'
+										/*
+										version: 'B',
+										released: 'C',
+										model: 'D',
+										isAros: false,
+										isDiag: false,
+										isCommodore: false,
+										isHyperion: false,
+										isPatched: false,
+										isUnknown: false
+										*/
+										/*
+										crc32: info.crc32
+										title: info.title,
+										version: info.version,
+										released: info.released,
+										model: info.model,
+										isAros: info.isAros,
+										isDiag: info.isDiag,
+										isCommodore: info.isCommodore,
+										isHyperion: info.isHyperion,
+										isPatched: info.isPatched,
+										isUnknown: info.isUnknown
+										*/
+									
+									});
+									/*
+									const id = await db.friends.add({
+										name: 'Lars',
+										age: 20
+									});
+									*/
+
+									console.log(`${t} successfully added with id ${id}`);
+								} catch (error) {
+									console.log(`Failed to add Kickstart`, error);
+								}
+							}
 						} catch (exc) {
 							$proxy.reportException();
 						}

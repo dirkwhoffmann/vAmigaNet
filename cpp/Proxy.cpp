@@ -1,4 +1,5 @@
 #include "Proxy.h"
+#include "RomFile.h"
 #include <cstdlib>
 #include <stdio.h>
 #include <exception>
@@ -20,6 +21,19 @@ EMSCRIPTEN_BINDINGS(Structures)
         .field("data", &TextureWrapper::data)
         .field("currLof", &TextureWrapper::currLof)
         .field("prevLof", &TextureWrapper::prevLof);
+
+    value_object<RomInfo>("RomInfo")
+        .field("crc32", &RomInfo::crc32)
+        .field("title", &RomInfo::title)
+        .field("version", &RomInfo::version)
+        .field("released", &RomInfo::released)
+        .field("model", &RomInfo::model)
+        .field("isAros", &RomInfo::isAros)
+        .field("isDiag", &RomInfo::isDiag)
+        .field("isCommodore", &RomInfo::isCommodore)
+        .field("isHyperion", &RomInfo::isHyperion)
+        .field("isPatched", &RomInfo::isPatched)
+        .field("isUnknown", &RomInfo::isUnknown);
 }
 
 //
@@ -104,7 +118,7 @@ void AmigaProxy::setSampleRate(unsigned sample_rate)
     amiga->host.setSampleRate(sample_rate);
 }
 
-u32 AmigaProxy::audioFillLevel() 
+u32 AmigaProxy::audioFillLevel()
 {
     return u32(amiga->paula.muxer.getStats().fillLevel * 100.0);
 }
@@ -300,6 +314,44 @@ MemoryProxy::MemoryProxy()
 {
 }
 
+RomInfo
+MemoryProxy::analyzeRom(const string &blob, u32 len)
+{
+    RomInfo info{};
+
+    printf("analyzeRom(strlen %zu)\n", blob.length());
+    try
+    {
+        std::stringstream stream;
+        stream.write((const char *)blob.data(), len);
+
+        if (RomFile::isCompatible(stream))
+        {
+            RomFile rom{(u8 *)blob.data(), (isize)len};
+            u32 crc32 = util::crc32(rom.data.ptr, rom.data.size);
+            RomIdentifier id = RomFile::identifier(crc32);
+
+            info.crc32 = crc32;
+            info.title = RomFile::title(id);
+            info.version = RomFile::version(id);
+            info.released = RomFile::released(id);
+            info.model = RomFile::model(id);
+            info.isAros = RomFile::isArosRom(id);
+            info.isDiag = RomFile::isDiagRom(id);
+            info.isCommodore = RomFile::isCommodoreRom(id);
+            info.isHyperion = RomFile::isHyperionRom(id);
+            info.isPatched = RomFile::isPatchedRom(id);
+            info.isUnknown = ROM_UNKNOWN == id;
+        }
+        return info;
+    }
+    catch (VAError &err)
+    {
+        save(err);
+        throw;
+    }
+}
+
 bool MemoryProxy::hasRom() const
 {
     return amiga->mem.hasRom();
@@ -342,6 +394,7 @@ EMSCRIPTEN_BINDINGS(MemoryProxy)
 {
     class_<MemoryProxy>("MemoryProxy")
         .constructor<>()
+        .function("analyzeRom", &MemoryProxy::analyzeRom)
         .function("loadRom", &MemoryProxy::loadRom)
         .function("loadExt", &MemoryProxy::loadExt)
         .property("hasRom", &MemoryProxy::hasRom)
@@ -643,7 +696,7 @@ EMSCRIPTEN_BINDINGS(Keys)
     constant("SPD_NULLMODEM", (int)SPD_NULLMODEM);
     constant("SPD_LOOPBACK", (int)SPD_LOOPBACK);
 
-    // UnmappedMemory 
+    // UnmappedMemory
     constant("UNMAPPED_FLOATING", (int)UNMAPPED_FLOATING);
     constant("UNMAPPED_ALL_ZEROES", (int)UNMAPPED_ALL_ZEROES);
     constant("UNMAPPED_ALL_ONES", (int)UNMAPPED_ALL_ONES);

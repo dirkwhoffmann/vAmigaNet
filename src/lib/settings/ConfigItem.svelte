@@ -9,7 +9,7 @@
 	export let values = [{ name: '???', id: 0 }];
 	export let min = 0;
 	export let max = 0;
-	export let continous = true;
+	// export let continous = true;
 	export let locked = false;
 	export let selection = 0;
 	export let tag = 0;

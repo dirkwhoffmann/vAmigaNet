@@ -12,6 +12,21 @@ using namespace vamiga;
 
 typedef struct
 {
+    u32 crc32;
+    string title;
+    string version;
+    string released;
+    string model;
+    bool isAros;
+    bool isDiag;
+    bool isCommodore;
+    bool isHyperion;
+    bool isPatched;
+    bool isUnknown;
+} RomInfo;
+
+typedef struct
+{
     u32 frameNr;
     u32 data;
     bool currLof;
@@ -35,7 +50,11 @@ struct EnumProxy
 {
     EnumProxy(){};
 
-    string ErrorCodeKey(int value) { printf("ErrorCodeKey\n"); return ErrorCodeEnum::key(value); }
+    string ErrorCodeKey(int value)
+    {
+        printf("ErrorCodeKey\n");
+        return ErrorCodeEnum::key(value);
+    }
     string MsgTypeKey(int value) { return MsgTypeEnum::key(value); }
     string RetroShellKey(int value) { return RetroShellKeyEnum::key(value); }
 };
@@ -44,8 +63,8 @@ struct AmigaProxy
 {
     AmigaProxy();
 
-   Buffer<float> leftChannel;
-   Buffer<float> rightChannel;
+    Buffer<float> leftChannel;
+    Buffer<float> rightChannel;
 
     // Handling exceptions
     int errorCode() { return ::errorCode; }
@@ -80,7 +99,7 @@ struct AmigaProxy
     void updateAudio(int offset);
     u32 leftChannelBuffer();
     u32 rightChannelBuffer();
-    u32 audioFillLevel(); 
+    u32 audioFillLevel();
 
     // Juggling disks
     void insertDisk(const string &blob, u32 len, u8 drive);
@@ -115,6 +134,8 @@ struct DeniseProxy
 struct MemoryProxy
 {
     MemoryProxy();
+
+    RomInfo analyzeRom(const string &blob, u32 len);
 
     bool hasRom() const;
     bool hasExt() const;
