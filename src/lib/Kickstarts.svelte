@@ -38,7 +38,7 @@
 				<table class="table table-compact table-zebra w-full">
 					<tbody class="border-2">
 						{#if $roms}
-							{#each $roms as rom (rom.id)}
+							{#each $roms as rom}
 								<tr>
 									<td>
 										<div class="flex items-center space-x-3">
@@ -51,7 +51,7 @@
 											</div>
 											<div>
 												<div class="font-bold text-xl">{rom.title} {rom.version} ({rom.model})</div>
-												<div class="opacity-50">CRC {rom.crc}</div>
+												<div class="opacity-50">CRC {rom.crc32}</div>
 											</div>
 										</div>
 									</td>
