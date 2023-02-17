@@ -223,6 +223,9 @@
 
 		console.log('OPT_AGNUS_REVISION = ', $amiga.getConfig($proxy.OPT_AGNUS_REVISION));
 
+		// Trigger exception (for testing)
+		$amiga.configure($proxy.OPT_AGNUS_REVISION, 42);
+
 	}
 
 	export function onRuntimeInitialized() {

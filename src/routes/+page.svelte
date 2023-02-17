@@ -41,6 +41,7 @@
 			clearTimeout(timeout);
 			timeout = setTimeout(handleResizeEvent, 250);
 		});
+
 		window.addEventListener('error', handleUncatchedError);
 		window.addEventListener('unhandledrejection', handleUncatchedError);
 	});
@@ -90,10 +91,11 @@
 	}
 
 	function handleUncatchedError(event: Event) {
-		console.log('handleUncatchedError: ', event);
-		// event.preventDefault();
-		$what = $amiga.what();
-		$errno = $amiga.errorCode();
+		if (event.reason instanceof WebAssembly.Exception) {
+			// event.preventDefault();
+			$what = $amiga.what();
+			$errno = $amiga.errorCode();
+		}
 	}
 
 	function sidebarAction(event: CustomEvent<{ sender: string; state: boolean }>) {
