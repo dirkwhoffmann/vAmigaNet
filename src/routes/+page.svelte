@@ -119,17 +119,32 @@
 				}
 				break;
 			case 'pause':
-				$amiga.stopAndGo();
+				try {
+					$amiga.stopAndGo();
+				} catch (exc) {
+					console.log(exc);
+					$proxy.reportException();
+				}
 				break;
 			case 'power':
-				if ($amiga.poweredOn()) {
-					$amiga.powerOff();
-				} else {
-					$amiga.run();
+				try {
+					if ($amiga.poweredOn()) {
+						$amiga.powerOff();
+					} else {
+						$amiga.run();
+					}
+				} catch (exc) {
+					console.log(exc);
+					$proxy.reportException();
 				}
 				break;
 			case 'reset':
-				$amiga.hardReset();
+				try {
+					$amiga.hardReset();
+				} catch (exc) {
+					console.log(exc);
+					$proxy.reportException();
+				}
 				break;
 			case 'fit':
 				$layout = 'fit';
@@ -163,10 +178,7 @@
 		<title>vAmiga Online</title>
 		<MainScreen>
 			<StatusBar bind:this={statusBar} on:push={push} />
-			<div
-				bind:this={canvas}
-				class="box relative grow border-none border-green-300 overflow-auto"
-			>
+			<div bind:this={canvas} class="box relative grow border-none border-green-300 overflow-auto">
 				{#if !$poweredOn}
 					<TitleScreen />
 				{/if}

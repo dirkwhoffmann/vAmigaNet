@@ -11,6 +11,7 @@
 	import { db, type RomEntry } from '$lib/db/db';
 
 	let kickstart: number;
+	let kickName = '';
 	let cpuRevision: number;
 	let cpuSpeed: number;
 	let agnusRevision: number;
@@ -30,10 +31,11 @@
 	let df3: number;
 	let hd0: number;
 
+
 	let roms = liveQuery(() => (browser ? db.roms.toArray() : []));
 	let romValues = [{ name: '', id: 0 }];
 	$: {
-		console.log('Computing romValues ******');
+		console.log('****** Computing romValues ******');
 		romValues = [{ name: 'None', id: 0 }];
 		if ($roms) {
 			$roms.forEach((rom: RomEntry) => {
@@ -71,6 +73,8 @@
 		df3 = $amiga.getDriveConfig($proxy.OPT_DRIVE_CONNECT, 3);
 		kickstart = $memory.romFingerprint();
 		console.log('kickstart CRC = ', kickstart);
+
+		for (const v of romValues) { if (v.id == kickstart) kickName = v.name; }
 	}
 
 	//
@@ -81,23 +85,29 @@
 		// $amiga.configure($proxy.OPT_CPU_REVISION, event.detail.value);
 		console.log('kickstartAction: ', event.detail.value);
 
-		try {
-			const item = await db.roms.get(event.detail.value);
-			console.log('Item fetched: ', item?.title);
-			$memory.loadRom(item!.rom, item!.rom!.length);
-
-			if (item!.ext) {
-				$memory.loadRom(item!.ext, item!.ext!.length);
-			} else {
-				$memory.deleteExt();
-				console.log('Deleted Ext Rom');
+		if (event.detail.value == 0) {
+			$memory.deleteRom();
+			$memory.deleteExt();
+		} else {
+			try {
+				const item = await db.roms.get(event.detail.value);
+				console.log('Item fetched: ', item?.title);
+				if (item!.rom) {
+					$memory.loadRom(item!.rom, item!.rom!.length);
+				} else {
+					console.log('######Deleting ROM');
+					$memory.deleteRom();
+				}
+				if (item!.ext) {
+					$memory.loadExt(item!.ext, item!.ext!.length);
+				} else {
+					$memory.deleteExt();
+				}
+				console.log('Rom added', item?.title);
+			} catch (error) {
+				console.log(`kickstartAction: Failed to add ROM`, error);
 			}
-			console.log('Rom added', item?.title);
-
-		} catch (error) {
-			console.log(`kickstartAction: Failed to add ROM`, error);
 		}
-
 		update();
 	}
 
@@ -188,6 +198,7 @@
 			selection={kickstart}
 			on:select={kickstartAction}
 			values={romValues}
+			displayAs={kickName}
 		/>
 	</ConfigSection>
 	<ConfigSection name="CPU">

@@ -149,7 +149,7 @@
 		}
 	}
 
-	function reportException() {
+	export function reportException() {
 		console.error('Exception ' + $amiga.errorCode() + ': ' + $amiga.what());
 	}
 
@@ -191,6 +191,7 @@
 	export async function startUp() {
 		console.log('VAmiga: startUp()');
 
+		/*
 		try {
 			// Load AROS ROM
 			let response = await fetch('roms/aros-svn55696-rom.bin');
@@ -206,6 +207,7 @@
 		} catch (exc) {
 			reportException();
 		}
+		*/
 	}
 
 	export function onRuntimeInitialized() {
@@ -540,10 +542,12 @@
 				break;
 
 			case $proxy.MSG_SER_IN:
+				// console.log("SER_IN: ", String.fromCharCode(d1 & 0xFF));
 				$MsgSerIn++;
 				break;
 
 			case $proxy.MSG_SER_OUT:
+				// console.log("SER_OUT: ", String.fromCharCode(d1 & 0xFF));
 				$MsgSerOut++;
 				break;
 

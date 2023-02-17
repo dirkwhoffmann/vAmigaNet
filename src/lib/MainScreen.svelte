@@ -33,10 +33,15 @@
 						try {
 							let blob = await file.arrayBuffer();
 							let uint8View = new Uint8Array(blob);
-							/*
-						console.log('Calling $amiga.insertDisk');
-						$amiga.insertDisk(uint8View, blob.byteLength, 0);
-						*/
+
+							try {
+								console.log('Calling $amiga.insertDisk');
+								$amiga.insertDisk(uint8View, blob.byteLength, 0);
+								return;
+							} catch(exc) {
+								console.log("No disk");
+							}
+
 							let info = $memory.analyzeRom(uint8View, blob.byteLength);
 							console.log('ROM analyzed: ', info);
 

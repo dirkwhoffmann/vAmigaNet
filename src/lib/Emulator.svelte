@@ -63,7 +63,13 @@
 	}
 
 	export function doAnimationFrame(animationFrame: number, now: DOMHighResTimeStamp) {
-		if (glCanvas != undefined) {
+
+		if (animationFrame % 50 == 0) {
+			console.log(":: Frame " + animationFrame);
+			if (!glCanvas) console.log("NO GLCANVAS");
+		}
+
+		if ($poweredOn) {
 			update(now);
 			render();
 		} else {

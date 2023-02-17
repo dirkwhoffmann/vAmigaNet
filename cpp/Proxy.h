@@ -84,10 +84,10 @@ struct AmigaProxy
     bool isRunning() { return amiga->isRunning(); }
     bool isPaused() { return amiga->isPaused(); }
     // - (void)isReady:(ExceptionWrapper *)ex;
-    void powerOn() { amiga->powerOn(); }
-    void powerOff() { amiga->powerOff(); }
-    void run() { amiga->run(); }
-    void pause() { amiga->pause(); }
+    void powerOn();
+    void powerOff();
+    void run();
+    void pause();
     void halt() { amiga->halt(); }
     void stopAndGo() { amiga->stopAndGo(); }
     void inWarpMode() { amiga->inWarpMode(); }
@@ -142,7 +142,7 @@ struct MemoryProxy
 
     bool loadRom(const string &blob, u32 len);
     bool loadExt(const string &blob, u32 len);
-    
+
     void deleteRom();
     void deleteWom();
     void deleteExt();

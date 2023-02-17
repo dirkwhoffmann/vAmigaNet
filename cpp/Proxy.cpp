@@ -113,6 +113,58 @@ int AmigaProxy::getDriveConfig(int option, int id)
     return (int)amiga->getConfigItem(option, id);
 }
 
+void AmigaProxy::powerOn()
+{
+    try
+    {
+        amiga->powerOn();
+    }
+    catch (VAError &err)
+    {
+        save(err);
+        throw;
+    }
+}
+
+void AmigaProxy::powerOff()
+{
+    try
+    {
+        amiga->powerOff();
+    }
+    catch (VAError &err)
+    {
+        save(err);
+        throw;
+    }
+}
+
+void AmigaProxy::run()
+{
+    try
+    {
+        amiga->run();
+    }
+    catch (VAError &err)
+    {
+        save(err);
+        throw;
+    }
+}
+
+void AmigaProxy::pause()
+{
+    try
+    {
+        amiga->pause();
+    }
+    catch (VAError &err)
+    {
+        save(err);
+        throw;
+    }
+}
+
 void AmigaProxy::setSampleRate(unsigned sample_rate)
 {
     amiga->host.setSampleRate(sample_rate);

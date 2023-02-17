@@ -5,7 +5,8 @@
 	import { fade } from 'svelte/transition';
 	import Chevron from './Chevron.svelte';
 
-	export let name = '???';
+	export let name = '';
+	export let displayAs = '';
 	export let values = [{ name: '???', id: 0 }];
 	export let min = 0;
 	export let max = 0;
@@ -22,8 +23,9 @@
 	$: displayName = displayedName(selection);
 
 	function displayedName(tag: number): string {
-		if (min != max) return tag.toString();
 
+		if (displayAs != '') return displayAs; 
+		if (min != max) return tag.toString();
 		for (const value of values) {
 			if (value.id == tag) return value.name;
 		}
