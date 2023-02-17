@@ -191,23 +191,11 @@
 	export async function startUp() {
 		console.log('VAmiga: startUp()');
 
-		/*
-		try {
-			// Load AROS ROM
-			let response = await fetch('roms/aros-svn55696-rom.bin');
-			let blob = await response.arrayBuffer();
-			let uint8View = new Uint8Array(blob);
-			$memory.loadRom(uint8View, blob.byteLength);
+		// Apply some default settings
+		$amiga.configure($proxy.OPT_AGNUS_REVISION, $proxy.AGNUS_ECS_2MB);
 
-			// Load AROS extension ROM
-			response = await fetch('roms/aros-svn55696-ext.bin');
-			blob = await response.arrayBuffer();
-			uint8View = new Uint8Array(blob);
-			$memory.loadExt(uint8View, blob.byteLength);
-		} catch (exc) {
-			reportException();
-		}
-		*/
+		console.log('OPT_AGNUS_REVISION = ', $amiga.getConfig($proxy.OPT_AGNUS_REVISION));
+
 	}
 
 	export function onRuntimeInitialized() {
