@@ -390,6 +390,21 @@ bool MemoryProxy::loadExt(const string &blob, u32 len)
     }
 }
 
+void MemoryProxy::deleteRom()
+{
+    amiga->mem.deleteRom();
+}
+
+void MemoryProxy::deleteWom()
+{
+    amiga->mem.deleteWom();
+}
+
+void MemoryProxy::deleteExt()
+{
+    amiga->mem.deleteExt();
+}
+
 u32 MemoryProxy::romFingerprint() const
 {
     return amiga->mem.romFingerprint();
@@ -404,6 +419,9 @@ EMSCRIPTEN_BINDINGS(MemoryProxy)
         .function("loadExt", &MemoryProxy::loadExt)
         .property("hasRom", &MemoryProxy::hasRom)
         .property("hasExt", &MemoryProxy::hasExt)
+        .function("deleteRom", &MemoryProxy::deleteRom)
+        .function("deleteWom", &MemoryProxy::deleteWom)
+        .function("deleteExt", &MemoryProxy::deleteExt)
         .function("romFingerprint", &MemoryProxy::romFingerprint);
 }
 

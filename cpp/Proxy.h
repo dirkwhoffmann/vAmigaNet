@@ -139,8 +139,13 @@ struct MemoryProxy
 
     bool hasRom() const;
     bool hasExt() const;
+
     bool loadRom(const string &blob, u32 len);
     bool loadExt(const string &blob, u32 len);
+    
+    void deleteRom();
+    void deleteWom();
+    void deleteExt();
 
     u32 romFingerprint() const;
 };

@@ -33,14 +33,14 @@
 	let roms = liveQuery(() => (browser ? db.roms.toArray() : []));
 	let romValues = [{ name: '', id: 0 }];
 	$: {
-		console.log("Computing romValues ******");
+		console.log('Computing romValues ******');
 		romValues = [{ name: 'None', id: 0 }];
 		if ($roms) {
 			$roms.forEach((rom: RomEntry) => {
 				romValues.push({ name: rom.title, id: rom.crc32 });
 			});
 		}
- 		update();
+		update();
 	}
 	$: console.log('romValues = ', romValues);
 
@@ -70,12 +70,34 @@
 		df2 = $amiga.getDriveConfig($proxy.OPT_DRIVE_CONNECT, 2);
 		df3 = $amiga.getDriveConfig($proxy.OPT_DRIVE_CONNECT, 3);
 		kickstart = $memory.romFingerprint();
-		console.log("kickstart CRC = ", kickstart);
+		console.log('kickstart CRC = ', kickstart);
 	}
 
-	function kickstartAction(event: CustomEvent<ActionEvent>) {
+	//
+	// Action functions
+	//
+
+	async function kickstartAction(event: CustomEvent<ActionEvent>) {
 		// $amiga.configure($proxy.OPT_CPU_REVISION, event.detail.value);
-		console.log('kickstartAction');
+		console.log('kickstartAction: ', event.detail.value);
+
+		try {
+			const item = await db.roms.get(event.detail.value);
+			console.log('Item fetched: ', item?.title);
+			$memory.loadRom(item!.rom, item!.rom!.length);
+
+			if (item!.ext) {
+				$memory.loadRom(item!.ext, item!.ext!.length);
+			} else {
+				$memory.deleteExt();
+				console.log('Deleted Ext Rom');
+			}
+			console.log('Rom added', item?.title);
+
+		} catch (error) {
+			console.log(`kickstartAction: Failed to add ROM`, error);
+		}
+
 		update();
 	}
 
