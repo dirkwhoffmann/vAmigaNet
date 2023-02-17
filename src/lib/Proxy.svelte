@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import {
 		proxy,
+		audio,
 		enums,
 		amiga,
 		cpu,
@@ -114,9 +115,6 @@
 		dfProtected
 	} from '$lib/stores';
 	import { debugDma } from '$lib/stores';
-	import Audio from '$lib/Audio.svelte';
-
-	export let audio: Audio;
 
 	onMount(() => {
 		console.log('Proxy: onMount()');
@@ -127,7 +125,7 @@
 
 	export async function runShowcase(showcase: DataBaseItem) {
 		console.log('Setting up audio...');
-		await audio.setup();
+		await $audio.setup();
 
 		try {
 			console.log('Running ' + showcase.title + '...');
@@ -453,24 +451,24 @@
 			case $proxy.MSG_DRIVE_STEP:
 				$MsgDriveStep++;
 				$dfCylinder[d1] = d2;
-				audio.playStepSound();
+				$audio.playStepSound();
 				break;
 
 			case $proxy.MSG_DRIVE_POLL:
 				$MsgDrivePoll++;
-				audio.playStepSound();
+				$audio.playStepSound();
 				break;
 
 			case $proxy.MSG_DISK_INSERT:
 				$MsgDiskInsert++;
 				$dfHasDisk[d1] = true;
-				audio.playInsertSound();
+				$audio.playInsertSound();
 				break;
 
 			case $proxy.MSG_DISK_EJECT:
 				$MsgDiskEject++;
 				$dfHasDisk[d1] = false;
-				audio.playEjectSound();
+				$audio.playEjectSound();
 				break;
 
 			case $proxy.MSG_DISK_SAVED:
@@ -591,5 +589,3 @@
 		}
 	}
 </script>
-
-<Audio bind:this={audio} />

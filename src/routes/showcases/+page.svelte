@@ -8,7 +8,7 @@
 	import FaAngleLeft from 'svelte-icons/fa/FaAngleLeft.svelte';
 	import '@splidejs/svelte-splide/css';
 	import { demos, games, tools } from '$lib/database';
-	import { amiga, proxy } from '$lib/stores';
+	import { proxy, audio, amiga } from '$lib/stores';
 	import Logo from '$lib/widgets/Logo.svelte';
 
 	let show = 0;
@@ -44,7 +44,7 @@
 
 	async function runTitle() {
 		console.log('Setting up audio...');
-		await $proxy.audio.setup();
+		await $audio.setup();
 
 		console.log('Running ' + selected.title + '...');
 		$amiga.powerOff();

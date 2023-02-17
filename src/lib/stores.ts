@@ -13,6 +13,9 @@ export const memory: any = writable();
 export const diskController: any = writable();
 export const retroShell: any = writable();
 
+// Global components
+export const audio: any = writable();
+
 // Settings (move to settings store?!)
 export const warpMode = writable(1);
 

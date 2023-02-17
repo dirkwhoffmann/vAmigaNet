@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { proxy, what } from '$lib/stores';
+	import { proxy, audio } from '$lib/stores';
 	import Proxy from '$lib/Proxy.svelte';
+	import Audio from '$lib/Audio.svelte';
 	import Guru from '$lib/Guru.svelte';
 
 	let loadWasm = false;
@@ -19,6 +20,7 @@
 
 <svelte:head>
 	<Proxy bind:this={$proxy} />
+	<Audio bind:this={$audio} />
 	{#if loadWasm}
 		<script>
 			console.log('Loading vAmiga.js');
