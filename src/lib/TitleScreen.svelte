@@ -13,11 +13,7 @@
 
 	let debug = ''; // 'border-2';
 
-	function runDemo() {
-		runMe();
-		$proxy.audioContext.resume();
-	}
-	async function runMe() {
+	async function runDemo() {
 		if (!$poweredOn) {
 			await $proxy.runShowcase(demos[0]);
 		}

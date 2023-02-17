@@ -115,6 +115,7 @@
 		dfProtected
 	} from '$lib/stores';
 	import { debugDma } from '$lib/stores';
+	import { db, type RomEntry } from '$lib/db/db';
 
 	onMount(() => {
 		console.log('Proxy: onMount()');
@@ -130,6 +131,8 @@
 		try {
 			console.log('Running ' + showcase.title + '...');
 			$amiga.powerOff();
+			console.log('Installing AROS');
+			$proxy.installAros();
 			console.log('Configuring CHIP: ' + showcase.memory[0]);
 			$amiga.configure($proxy.OPT_CHIP_RAM, showcase.memory[0]);
 			console.log('Configuring SLOW: ' + showcase.memory[1]);
@@ -162,6 +165,35 @@
 		} catch (exc) {
 			reportException();
 		}
+	}
+
+	export async function installRom(crc32: number) {
+
+		if (crc32 == 0) {
+			$memory.deleteRom();
+			$memory.deleteExt();
+		} else {
+			try {
+				const item = await db.roms.get(crc32);
+				if (item?.rom) {
+					$memory.loadRom(item!.rom, item!.rom!.length);
+				} else {
+					$memory.deleteRom();
+				}
+				if (item?.ext) {
+					$memory.loadExt(item!.ext, item!.ext!.length);
+				} else {
+					$memory.deleteExt();
+				}
+				console.log('Rom added', item?.title);
+			} catch (error) {
+				console.log(`installRom failed: `, error);
+			}
+		}
+	}
+
+	export async function installAros() {
+		installRom(1062194186);
 	}
 
 	export function updateWarp() {
