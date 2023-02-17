@@ -33,12 +33,14 @@
 	let roms = liveQuery(() => (browser ? db.roms.toArray() : []));
 	let romValues = [{ name: '', id: 0 }];
 	$: {
+		console.log("Computing romValues ******");
 		romValues = [{ name: 'None', id: 0 }];
 		if ($roms) {
-			$roms.forEach((rom) => {
+			$roms.forEach((rom: RomEntry) => {
 				romValues.push({ name: rom.title, id: rom.crc32 });
 			});
 		}
+ 		update();
 	}
 	$: console.log('romValues = ', romValues);
 

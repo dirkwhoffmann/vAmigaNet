@@ -4,10 +4,69 @@
 	import { db, type RomEntry } from '$lib/db/db';
 	import { browser } from '$app/environment';
 	import FaTrash from 'svelte-icons/fa/FaTrash.svelte';
+	import { memory, initialized } from '$lib/stores';
 
 	let roms = liveQuery(() => (browser ? db.roms.toArray() : []));
 
 	let show = true;
+
+	async function addRomToDatabase(rom: Uint8Array, ext: Uint8Array | null = null, extStart = 0) {
+		console.log('addRomToDatabase: Adding buffer of size ', rom.length);
+		let info = $memory.analyzeRom(rom, rom.length);
+		if (info.crc32) {
+			try {
+				const t = info.title;
+
+				const id = await db.roms.add({
+					crc32: info.crc32,
+					title: info.title,
+					version: info.version,
+					released: info.released,
+					model: info.model,
+					isAros: info.isAros,
+					isDiag: info.isDiag,
+					isCommodore: info.isCommodore,
+					isHyperion: info.isHyperion,
+					isPatched: info.isPatched,
+					isUnknown: info.isUnknown,
+					rom: rom,
+					ext: ext,
+					extStart: extStart
+				});
+				console.log(`${t} successfully added with id ${id}`);
+			} catch (error) {
+				console.log(`Failed to add Kickstart`, error);
+			}
+		}
+	}
+
+	async function installDefaultRoms() {
+
+		console.log("installDefaultRoms");
+
+		try {
+			// Add AROS
+			let response = await fetch('roms/aros-svn55696-rom.bin');
+			let blob = await response.arrayBuffer();
+			let arosRom = new Uint8Array(blob);
+			response = await fetch('roms/aros-svn55696-ext.bin');
+			blob = await response.arrayBuffer();
+			let arosExt = new Uint8Array(blob);
+
+			addRomToDatabase(arosRom, arosExt);
+
+			// Add DiagROM
+			response = await fetch('roms/diagrom-121.bin');
+			blob = await response.arrayBuffer();
+			let diagRom = new Uint8Array(blob);
+
+			addRomToDatabase(diagRom);
+		} catch (exc) {
+			console.error('Cannot install default Roms');
+		}
+	}
+
+	$: if ($initialized) { installDefaultRoms(); }
 
 	function imageUrl(rom: RomEntry) {
 		return rom.isHyperion

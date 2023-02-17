@@ -24,9 +24,10 @@
 	function displayedName(tag: number): string {
 		if (min != max) return tag.toString();
 
-		let value = values.find((o) => o.id === tag);
-		// console.log('Found name ' + (value == undefined ? '???' : value.name));
-		return value == undefined ? '???' : value.name;
+		for (const value of values) {
+			if (value.id == tag) return value.name;
+		}
+		return '???';
 	}
 
 	const handleClick = (e: MouseEvent, value: number) => {

@@ -22,7 +22,7 @@ export class MySubClassedDexie extends Dexie {
 
 	constructor() {
 		super('myDatabase');
-		this.version(4).stores({
+		this.version(1).stores({
 			roms: 'crc32, title'
 		});
 	}
