@@ -41,8 +41,7 @@
 	}
 
 	async function installDefaultRoms() {
-
-		console.log("installDefaultRoms");
+		console.log('installDefaultRoms');
 
 		try {
 			// Add AROS
@@ -66,7 +65,9 @@
 		}
 	}
 
-	$: if ($initialized) { installDefaultRoms(); }
+	$: if ($initialized) {
+		installDefaultRoms();
+	}
 
 	function imageUrl(rom: RomEntry) {
 		return rom.isHyperion
@@ -93,6 +94,8 @@
 			console.log(`Failed to delete Kickstart`, error);
 		}
 	}
+
+	const debug = ''; // 'border-2';
 </script>
 
 {#if show}
@@ -105,31 +108,33 @@
 			<hr class="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700" />
 
 			<!-- Main -->
-			<div class="overflow-x-auto h-96 border-2 overflow-auto">
+			<div class="overflow-x-auto h-96 border-0 overflow-x-hidden overflow-y-auto">
 				<table class="table table-compact table-zebra w-full">
-					<tbody class="border-2">
+					<tbody class={debug}>
 						{#if $roms}
 							{#each $roms as rom}
-								<tr>
+								<tr class="border-0">
 									<td>
-										<div class="flex items-center space-x-3">
-											<div class="object-scale-down">
+										<div class="flex h-[5.5rem] p-1">
+											<div class="{debug} h-full w-[4rem] m-2">
 												<img
-													class="rotate-90 h-24 object-scale-down px-2"
+													class="h-full w-full"
 													src={'icons/' + imageUrl(rom)}
 													alt="Rom Chip Icon"
 												/>
 											</div>
-											<div>
-												<div class="font-bold text-xl">{rom.title} {rom.version} ({rom.model})</div>
-												<div class="opacity-50">CRC {rom.crc32}</div>
+											<div class="{debug} h-full m-2 flex flex-col grow overflow-hidden">
+												<div class="font-bold text-base">{rom.title}</div>
+												<div class="opacity-50">{rom.version}</div>
+												<div class="opacity-50">{rom.model}</div>
+												<!-- <div class="opacity-50">CRC {rom.crc32}</div>-->
+											</div>
+											<div class="{debug} h-full w-4 m-2 flex items-center">
+												<button class="w-full" on:click={(e) => deleteAction(e, rom.id)}
+													><FaTrash /></button
+												>
 											</div>
 										</div>
-									</td>
-									<td>
-										<button class="h-6 w-6 mx-2" on:click={(e) => deleteAction(e, rom.id)}
-											><FaTrash /></button
-										>
 									</td>
 								</tr>
 							{/each}
