@@ -2,6 +2,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import FaLock from 'svelte-icons/fa/FaLock.svelte';
 	import GoInfo from 'svelte-icons/go/GoInfo.svelte';
+	import GiPadlock from 'svelte-icons/gi/GiPadlock.svelte'
 	import type { ActionEvent } from '$lib/settings/Settings.svelte';
 	import { fade } from 'svelte/transition';
 	import Chevron from './Chevron.svelte';
@@ -13,7 +14,7 @@
 	export let max = 0;
 	// export let continous = true;
 	export let locked = false;
-	export let info = false; 
+	export let info = false;
 	export let selection = 0;
 	export let tag = 0;
 
@@ -58,14 +59,23 @@
 	<div class="w-full flex text-xl space-x-1 justify-between items-center">
 		<div class="border-0 bg-blue-400/20 w-full h-12 flex grow overflow-hidden">
 			<div class="w-full border-0 text-xl {opac} text-blue-200 flex items-center justify-between">
-				<div class="border-0 mx-2 flex grow overflow-hidden whitespace-nowrap">{name}</div>
-				<div class="flex mr-2 border-0 items-center">
+				<div class="border-0 mx-2 flex grow overflow-hidden whitespace-nowrap">{name}
+				</div>
+				<!--
+				<div class="flex mr-2 border-0 items-center {opac}">
 					<button class="h-6 w-6 mr-1 {locked ? '' : 'hidden'}"><FaLock /></button>
 					<button class="h-7 w-7 {info ? '' : 'hidden'}" on:click={infoAction}><GoInfo /></button>
 				</div>
+				-->
 			</div>
 		</div>
-		<div class="border-0 bg-blue-400/20 h-12">
+		<div class="border-0 bg-blue-400/20 w-20 h-12 flex items-center justify-center {locked ? '' : 'hidden'}">
+			<button class="h-7 w-7 text-blue-200 {opac}"><GiPadlock /></button>
+		</div>
+		<div class="border-0 bg-blue-400/20 w-20 h-12 flex items-center justify-center {info ? '' : 'hidden'}">
+			<button class="h-7 w-7 text-blue-200 {opac}" on:click={infoAction}><GoInfo /></button>
+		</div>
+			<div class="border-0 bg-blue-400/20 h-12">
 			{#if locked}
 				<button
 					class="btn w-[18rem] border-0 rounded-none text-xl font-normal opacity-50 text-blue-200 hover:bg-slate-600 bg-transparent"

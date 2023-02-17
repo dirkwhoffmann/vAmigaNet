@@ -175,6 +175,7 @@
 			values={romValues}
 			info={true}
 			displayAs={kickName}
+			locked={power}
 		/>
 	</ConfigSection>
 	<ConfigSection name="CPU">
