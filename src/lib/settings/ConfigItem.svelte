@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import FaLock from 'svelte-icons/fa/FaLock.svelte';
+	import GoInfo from 'svelte-icons/go/GoInfo.svelte';
 	import type { ActionEvent } from '$lib/settings/Settings.svelte';
 	import { fade } from 'svelte/transition';
 	import Chevron from './Chevron.svelte';
@@ -12,6 +13,7 @@
 	export let max = 0;
 	// export let continous = true;
 	export let locked = false;
+	export let info = false; 
 	export let selection = 0;
 	export let tag = 0;
 
@@ -20,11 +22,12 @@
 
 	const dispatch = createEventDispatcher<{ select: ActionEvent }>();
 
+	$: opac = locked ? 'opacity-50' : '';
+
 	$: displayName = displayedName(selection);
 
 	function displayedName(tag: number): string {
-
-		if (displayAs != '') return displayAs; 
+		if (displayAs != '') return displayAs;
 		if (min != max) return tag.toString();
 		for (const value of values) {
 			if (value.id == tag) return value.name;
@@ -39,6 +42,12 @@
 		dispatch('select', { tag: tag, value: value });
 	};
 
+	const infoAction = (e: Event) => {
+		e.preventDefault();
+		console.log('infoAction');
+		dispatch('info', { tag: tag, value: e.target!.value });
+	};
+
 	const sliderAction = (e: Event) => {
 		e.preventDefault();
 		dispatch('select', { tag: tag, value: e.target!.value });
@@ -47,14 +56,13 @@
 
 <div class="py-0.5 px-0">
 	<div class="w-full flex text-xl space-x-1 justify-between items-center">
-		<div class="border-0 bg-blue-400/20 w-full h-12 flex flex-col justify-center">
-			<div class="p-4 text-xl text-blue-200 flex items-center">
-				{#if locked}
-					<div class="border-0 mr-3 h-6 w-6 opacity-50"><FaLock /></div>
-					<div class="border-0 opacity-50">{name}</div>
-				{:else}
-					<div class="border-0">{name}</div>
-				{/if}
+		<div class="border-0 bg-blue-400/20 w-full h-12 flex grow overflow-hidden">
+			<div class="w-full border-0 text-xl {opac} text-blue-200 flex items-center justify-between">
+				<div class="border-0 mx-2 flex grow overflow-hidden whitespace-nowrap">{name}</div>
+				<div class="flex mr-2 border-0 items-center">
+					<button class="h-6 w-6 mr-1 {locked ? '' : 'hidden'}"><FaLock /></button>
+					<button class="h-7 w-7 {info ? '' : 'hidden'}" on:click={infoAction}><GoInfo /></button>
+				</div>
 			</div>
 		</div>
 		<div class="border-0 bg-blue-400/20 h-12">
@@ -68,8 +76,7 @@
 					<button
 						class="btn w-[18rem] border-0 rounded-none text-xl font-normal text-blue-200 hover:bg-slate-600 bg-transparent"
 						><Chevron>{displayName}</Chevron>
-						</button
-					>
+					</button>
 					{#if min != max}
 						<ul class="dropdown-content menu w-[18rem]">
 							<input

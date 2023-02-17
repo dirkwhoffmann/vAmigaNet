@@ -173,6 +173,7 @@
 			selection={kickstart}
 			on:select={kickstartAction}
 			values={romValues}
+			info={true}
 			displayAs={kickName}
 		/>
 	</ConfigSection>

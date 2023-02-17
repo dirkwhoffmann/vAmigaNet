@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { proxy, amiga, retroShell, poweredOn, showImpressum } from '$lib/stores';
+	import { proxy, audio, amiga, retroShell, poweredOn, showImpressum } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import { demos } from '$lib/database';
 	import MyButton from '$lib/widgets/MyButton.svelte';
@@ -14,6 +14,7 @@
 	let debug = ''; // 'border-2';
 
 	async function runDemo() {
+		await $audio.setup();
 		if (!$poweredOn) {
 			await $proxy.runShowcase(demos[0]);
 		}
@@ -23,7 +24,8 @@
 		goto('https://dirkwhoffmann.github.io/vAmiga');
 	}
 
-	function openShowcases() {
+	async function openShowcases() {
+		await $audio.setup();
 		goto('showcases/');
 	}
 

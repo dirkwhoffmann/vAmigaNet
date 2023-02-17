@@ -43,9 +43,6 @@
 	}
 
 	async function runTitle() {
-		console.log('Setting up audio...');
-		await $audio.setup();
-
 		console.log('Running ' + selected.title + '...');
 		$amiga.powerOff();
 		console.log('Configuring CHIP: ' + selected.memory[0]);

@@ -10,13 +10,8 @@
 	let playCnt = 0;
 
 	export async function setup() {
-		if (audioContext != null) {
-			console.log('Audio context already initialized');
-			/*
-            if (audioContext.state === 'suspended') {
-				audioContext.resume();
-			}
-            */
+		if (audioContext) {
+			console.log('Audio context already initialized: ', audioContext.state);
 			return;
 		}
 		audioContext = new AudioContext();

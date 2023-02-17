@@ -125,9 +125,6 @@
 	});
 
 	export async function runShowcase(showcase: DataBaseItem) {
-		console.log('Setting up audio...');
-		await $audio.setup();
-
 		try {
 			console.log('Running ' + showcase.title + '...');
 			$amiga.powerOff();
