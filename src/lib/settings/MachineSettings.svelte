@@ -9,6 +9,7 @@
 	import { browser } from '$app/environment';
 	import { liveQuery } from 'dexie';
 	import { db, type RomEntry } from '$lib/db/db';
+	import RomViewer from '$lib/RomViewer.svelte';
 
 	let kickstart: number;
 	let kickName = '';
@@ -31,6 +32,7 @@
 	let df3: number;
 	let hd0: number;
 
+	let showKickstartInfo = false;
 
 	let roms = liveQuery(() => (browser ? db.roms.toArray() : []));
 	let romValues = [{ name: '', id: 0 }];
@@ -74,7 +76,9 @@
 		kickstart = $memory.romFingerprint();
 		console.log('kickstart CRC = ', kickstart);
 
-		for (const v of romValues) { if (v.id == kickstart) kickName = v.name; }
+		for (const v of romValues) {
+			if (v.id == kickstart) kickName = v.name;
+		}
 	}
 
 	//
@@ -84,6 +88,11 @@
 	async function kickstartAction(event: CustomEvent<ActionEvent>) {
 		$proxy.installRom(event.detail.value);
 		update();
+	}
+
+	function kickstartInfoAction(event: CustomEvent<ActionEvent>) {
+		console.log('kickstartInfoAction');
+		showKickstartInfo = true;
 	}
 
 	function cpuRevAction(event: CustomEvent<ActionEvent>) {
@@ -166,12 +175,19 @@
 	}
 </script>
 
+<div class="modal" class:modal-open={showKickstartInfo}>
+	<div class="modal-box">
+		<RomViewer bind:show={showKickstartInfo} />
+	</div>
+</div>
+
 <div transition:fade>
 	<ConfigSection name="Roms">
 		<ConfigItem
 			name="Kickstart"
 			selection={kickstart}
 			on:select={kickstartAction}
+			on:info={kickstartInfoAction}
 			values={romValues}
 			info={true}
 			displayAs={kickName}

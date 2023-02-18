@@ -16,7 +16,6 @@
 	import MainScreen from '$lib/MainScreen.svelte';
 	import Impressum from '$lib/Impressum.svelte';
 	import BrowserCheck from '$lib/BrowserCheck.svelte';
-	import Kickstarts from '$lib/Kickstarts.svelte';
 
 	let mounted = false;
 	let buttonText = 'Run Demo';
@@ -196,7 +195,6 @@
 				{/if}
 			</div>
 			<BrowserCheck />
-			<Kickstarts />
 			{#if $showImpressum}
 				<Impressum />
 			{/if}

@@ -8,7 +8,7 @@
 
 	let roms = liveQuery(() => (browser ? db.roms.toArray() : []));
 
-	let show = true;
+	export let show = true;
 
 	async function addRomToDatabase(rom: Uint8Array, ext: Uint8Array | null = null, extStart = 0) {
 		console.log('addRomToDatabase: Adding buffer of size ', rom.length);
@@ -96,74 +96,46 @@
 	}
 
 	const debug = ''; // 'border-2';
-	
-	let isModalOpen = false;
 </script>
 
-{#if show}
-<input type="checkbox" id="my-modal" class="modal-toggle" />
-<div class="modal">
-  <div class="modal-box">
-    <h3 class="font-bold text-lg">Congratulations random Internet user!</h3>
-    <p class="py-4">You've been selected for a chance to get one year of subscription to use Wikipedia for free!</p>
-    <div class="modal-action">
-      <label for="my-modal" class="btn">Yay!</label>
-    </div>
-  </div>
+<!-- Header -->
+<div class="w-full text-center text-3xl font-semibold text-white">Databas experiments</div>
+<hr class="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700" />
+
+<!-- Main -->
+<div class="overflow-x-auto h-96 border-0 overflow-x-hidden overflow-y-auto">
+	<table class="table table-compact table-zebra w-full">
+		<tbody class={debug}>
+			{#if $roms}
+				{#each $roms as rom}
+					<tr class="border-0">
+						<td>
+							<div class="flex h-[5.5rem] p-1">
+								<div class="{debug} h-full w-[4rem] m-2">
+									<img class="h-full w-full" src={'icons/' + imageUrl(rom)} alt="Rom Chip Icon" />
+								</div>
+								<div class="{debug} h-full m-2 flex flex-col grow overflow-hidden">
+									<div class="font-bold text-base">{rom.title}</div>
+									<div class="opacity-50">{rom.version}</div>
+									<div class="opacity-50">{rom.model}</div>
+									<!-- <div class="opacity-50">CRC {rom.crc32}</div>-->
+								</div>
+								<div class="{debug} h-full w-4 m-2 flex items-center">
+									<button class="w-full" on:click={(e) => deleteAction(e, rom.id)}
+										><FaTrash /></button
+									>
+								</div>
+							</div>
+						</td>
+					</tr>
+				{/each}
+			{/if}
+		</tbody>
+	</table>
 </div>
 
-	<div class="absolute top-0 left-0 h-screen w-screen flex justify-center items-center">
-		<div
-			class="relative w-2/3 flex flex-col py-4 justify-center bg-gray-700 text-gray-300 border-2 border-gray-300 rounded-xl font-josefin"
-		>
-		<label for="my-modal" class="btn">open modal</label>
-
-
-			<!-- Header -->
-			<div class="w-full text-center text-3xl font-semibold text-white">Databas experiments</div>
-			<hr class="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700" />
-
-			<!-- Main -->
-			<div class="overflow-x-auto h-96 border-0 overflow-x-hidden overflow-y-auto">
-				<table class="table table-compact table-zebra w-full">
-					<tbody class={debug}>
-						{#if $roms}
-							{#each $roms as rom}
-								<tr class="border-0">
-									<td>
-										<div class="flex h-[5.5rem] p-1">
-											<div class="{debug} h-full w-[4rem] m-2">
-												<img
-													class="h-full w-full"
-													src={'icons/' + imageUrl(rom)}
-													alt="Rom Chip Icon"
-												/>
-											</div>
-											<div class="{debug} h-full m-2 flex flex-col grow overflow-hidden">
-												<div class="font-bold text-base">{rom.title}</div>
-												<div class="opacity-50">{rom.version}</div>
-												<div class="opacity-50">{rom.model}</div>
-												<!-- <div class="opacity-50">CRC {rom.crc32}</div>-->
-											</div>
-											<div class="{debug} h-full w-4 m-2 flex items-center">
-												<button class="w-full" on:click={(e) => deleteAction(e, rom.id)}
-													><FaTrash /></button
-												>
-											</div>
-										</div>
-									</td>
-								</tr>
-							{/each}
-						{/if}
-					</tbody>
-				</table>
-			</div>
-
-			<!-- Footer -->
-			<hr class="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700" />
-			<div class="w-full flex justify-center">
-				<MyButton on:click={close} label="Close" />
-			</div>
-		</div>
-	</div>
-{/if}
+<!-- Footer -->
+<hr class="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700" />
+<div class="w-full flex justify-center">
+	<MyButton on:click={close} label="Close" />
+</div>

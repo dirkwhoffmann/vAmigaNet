@@ -24,6 +24,10 @@
 		goto('https://dirkwhoffmann.github.io/vAmiga');
 	}
 
+	function setTheme(theme: string) {
+		document.querySelector('html')?.setAttribute('data-theme', theme);
+	}
+
 	async function openShowcases() {
 		await $audio.setup();
 		goto('showcases/');
@@ -52,14 +56,14 @@
 					</div>
 					<div class="font-sofia-semi text-xl text-gray-300 pl-2 pb-10">Version 0.1.2</div>
 					<div class="flex space-x-5">
-						<MyButton on:click={runDemo} label="Run Demo" />
-						<MyButton on:click={gotoGitHub}><FaGithub /></MyButton>
+						<button class="btn btn-primary" on:click={runDemo}>Run Demo</button>
+						<button class="btn btn-primary p-1.5" on:click={gotoGitHub}><FaGithub /></button>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="relative {debug} w-2/3 mt-5">
-			<p class="font-josefin text-base text-red-400 text-center">
+			<p class="font-josefin text-base text-error text-center">
 				This page is under construction and offers very little functionality, yet. I.e., it is only
 				possible to launch vAmiga with a number of preset demos. You'll find a suitable selection in
 				the Showcases section. The site is intended as a feature preview to gather feedback from the
