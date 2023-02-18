@@ -1,9 +1,12 @@
 <script lang="ts">
 	import MyButton from './widgets/MyButton.svelte';
+	import { fade } from 'svelte/transition';
 	import { liveQuery } from 'dexie';
 	import { db, type RomEntry } from '$lib/db/db';
 	import { browser } from '$app/environment';
 	import FaTrash from 'svelte-icons/fa/FaTrash.svelte';
+	import FaWindowClose from 'svelte-icons/fa/FaWindowClose.svelte';
+	import IoMdClose from 'svelte-icons/io/IoMdClose.svelte';
 	import { memory, initialized } from '$lib/stores';
 
 	let roms = liveQuery(() => (browser ? db.roms.toArray() : []));
@@ -65,6 +68,14 @@
 		}
 	}
 
+    function version(rom: RomEntry) {
+        if (rom.isUnknown) {
+            return "CRC " + rom.crc32.toString();
+        } else {
+            return rom.version;
+        }
+    }
+
 	$: if ($initialized) {
 		installDefaultRoms();
 	}
@@ -78,7 +89,7 @@
 			? 'rom-diag.png'
 			: rom.isCommodore
 			? 'rom-commodore.png'
-			: ' rom-unknown.png';
+			: 'rom-unknown.png';
 	}
 
 	function close() {
@@ -87,8 +98,8 @@
 	}
 
 	async function deleteAction(e: MouseEvent, id: number) {
-        console.log("deleteAction: ", id);
-        try {
+		console.log('deleteAction: ', id);
+		try {
 			await db.roms.delete(id);
 			console.log(`{id} successfully deleted`);
 		} catch (error) {
@@ -96,57 +107,68 @@
 		}
 	}
 
-	const debug =''; // 'border-2';
+	const debug = ''; //'border-2';
+	let activeTab = 0;
 </script>
 
-<div class="{debug} flex flex-col h-96">
-	<div class="drawer drawer-end {debug} h-full">
-		<input id="my-drawer" type="checkbox" class="drawer-toggle" />
-		<div class="drawer-content">
-			<!-- Page content here -->
-            <article class="prose">
-            <h3>Kickstart ROMs</h3>
-			<p>
-				To run the emulator, a Kickstart ROM is required. The original Amiga ROMs are the
-				intellectual property of Cloanto and must be provided by the user. If you are in possession
-				of a legal Kickstart ROM, you can add the ROM image via drag and drop. Once a ROM image has
-				been dragged in and is recognized by the emulator, it will become available in the Machine
-				settings.
-			</p>
-            <h3>AROS</h3>
-			<p>
-				If you don’t have an original Kickstart at hand, you may choose to install the AROS ROM. The
-				Amiga Research Operating System ROM is an open-source Kickstart variant which is freely
-				redistributable. Unfortunately, not all Amiga programs are compatible with AROS, which is
-				why I strongly recommend using original ROMs.
-			</p>
-            </article>
+<div class="{debug} flex flex-col">
+	<div class="flex items-center space-x-2">
+		<div class="{debug} tabs tabs-boxed flex grow">
+			<button class="tab" class:tab-active={activeTab == 0} on:click={() => (activeTab = 0)}
+				>About</button
+			>
+			<button class="tab" class:tab-active={activeTab == 1} on:click={() => (activeTab = 1)}
+				>Installed Roms</button
+			>
+			<div class="flex grow justify-end">
+				<button class="btn btn-sm btn-primary flex p-0" on:click={close}><IoMdClose /></button>
+			</div>
 		</div>
-		<div class="drawer-side">
-			<label for="my-drawer" class="drawer-overlay" />
-
-			<table class="table table-compact table-zebra w-full">
+	</div>
+	<div class="h-96 my-4 overflow-auto {debug}">
+		{#if activeTab == 0}
+			<article in:fade class="mx-1 prose {debug}">
+				<h3>Kickstart</h3>
+				<p>
+					To run the emulator, a Kickstart ROM is required. The original Amiga ROMs are the
+					intellectual property intellectual property of Cloanto and cannot be freely distributed.
+					If you are in are in possession of a legal Kickstart ROM, you can add the ROM image to
+					vAmiga Online by drag & drop. and drop it. Once a ROM image has been dragged in, the
+					emulator analyzes the file. If a supported image has been detected, it becomes accessible
+					in the machine settings.
+				</p>
+				<h3>AROS</h3>
+				<p>
+					If you don’t have an original Kickstart at hand, you may choose to install the Amiga
+					Research Operating System ROM (AROS). AROS is an open-source Kickstart variant which is
+					freely redistributable. Unfortunately, not all Amiga programs are compatible with AROS,
+					which is why I strongly recommend using original ROMs.
+				</p>
+			</article>
+		{:else}
+			<table in:fade class="table table-compact table-zebra w-full">
 				<tbody class={debug}>
 					{#if $roms}
 						{#each $roms as rom}
-							<tr class="border-0">
+							<tr class="h-8 {debug} border-purple-400">
 								<td>
-									<div class="flex h-[5.5rem] p-1">
-										<div class="{debug} h-full w-[4rem] m-2">
+									<div class="flex h-[5.5rem] p-1 space-x-2">
+										<div class="{debug} h-full w-[4rem]">
 											<img
 												class="h-full w-full"
 												src={'icons/' + imageUrl(rom)}
 												alt="Rom Chip Icon"
 											/>
 										</div>
-										<div class="{debug} h-full m-2 flex flex-col grow overflow-hidden">
-											<div class="font-bold text-base">{rom.title}</div>
-											<div class="opacity-50">{rom.version}</div>
-											<div class="opacity-50">{rom.model}</div>
+										<div class="{debug} h-full flex flex-col grow overflow-hidden">
+											<div class="font-bold text-base text-primary-500">{rom.title}</div>
+											<div class="opacity-50 text-primary-500">{version(rom)}</div>
+											<div class="opacity-50 text-primary-500">{rom.model}</div>
 										</div>
-										<div class="{debug} h-full w-4 m-2 flex items-center">
-											<button class="w-full" on:click={(e) => deleteAction(e, rom.crc32)}
-												><FaTrash /></button
+										<div class="{debug} h-full w-4 flex items-center">
+											<button
+												class="text-primary-500 w-full"
+												on:click={(e) => deleteAction(e, rom.crc32)}><FaTrash /></button
 											>
 										</div>
 									</div>
@@ -156,10 +178,6 @@
 					{/if}
 				</tbody>
 			</table>
-		</div>
+		{/if}
 	</div>
-</div>
-<div class="w-full flex justify-between mt-6">
-	<label for="my-drawer" class="btn btn-primary drawer-button w-32">Library...</label>
-	<button class="btn btn-primary w-32" on:click={close}>Close</button>
 </div>
