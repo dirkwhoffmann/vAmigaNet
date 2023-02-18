@@ -7,11 +7,15 @@
 	import MainPageLink from '$lib/widgets/MainPageLink.svelte';
 	import DiGrails from 'svelte-icons/di/DiGrails.svelte';
 	import GoLaw from 'svelte-icons/go/GoLaw.svelte';
+	import DiDatabase from 'svelte-icons/di/DiDatabase.svelte';
+	import FaMicrochip from 'svelte-icons/fa/FaMicrochip.svelte';
 	import FaBookOpen from 'svelte-icons/fa/FaBookOpen.svelte';
 	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
+	import RomViewer from '$lib/RomViewer.svelte';
 
 	let debug = ''; // 'border-2';
+	let showRomViewer = false;
 
 	async function runDemo() {
 		await $audio.setup();
@@ -33,10 +37,20 @@
 		goto('showcases/');
 	}
 
+	async function openRoms() {
+		showRomViewer = true;
+	}
+
 	function openImpressum() {
 		$showImpressum = true;
 	}
 </script>
+
+<div class="modal" class:modal-open={showRomViewer}>
+	<div class="modal-box">
+		<RomViewer bind:show={showRomViewer} />
+	</div>
+</div>
 
 <div class="h-full flex flex-col {debug}" transition:fade>
 	<div in:fade={{ duration: 2000 }} class="absolute h-full blur brightness-[0.9]">
@@ -78,6 +92,10 @@
 				<div slot="description">Learn more</div>
 			</MainPageLink>
             -->
+		<MainPageLink on:click={openRoms}>
+			<div slot="icon" class="p-1.5"><FaMicrochip /></div>
+			<div slot="description">Kickstart</div>
+		</MainPageLink>
 		<MainPageLink on:click={openShowcases}>
 			<div slot="icon"><DiGrails /></div>
 			<div slot="description">Showcases</div>

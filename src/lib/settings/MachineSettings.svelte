@@ -32,8 +32,6 @@
 	let df3: number;
 	let hd0: number;
 
-	let showKickstartInfo = false;
-
 	let roms = liveQuery(() => (browser ? db.roms.toArray() : []));
 	let romValues = [{ name: '', id: 0 }];
 	$: {
@@ -88,11 +86,6 @@
 	async function kickstartAction(event: CustomEvent<ActionEvent>) {
 		$proxy.installRom(event.detail.value);
 		update();
-	}
-
-	function kickstartInfoAction(event: CustomEvent<ActionEvent>) {
-		console.log('kickstartInfoAction');
-		showKickstartInfo = true;
 	}
 
 	function cpuRevAction(event: CustomEvent<ActionEvent>) {
@@ -175,21 +168,13 @@
 	}
 </script>
 
-<div class="modal" class:modal-open={showKickstartInfo}>
-	<div class="modal-box">
-		<RomViewer bind:show={showKickstartInfo} />
-	</div>
-</div>
-
 <div transition:fade>
 	<ConfigSection name="Roms">
 		<ConfigItem
 			name="Kickstart"
 			selection={kickstart}
 			on:select={kickstartAction}
-			on:info={kickstartInfoAction}
 			values={romValues}
-			info={true}
 			displayAs={kickName}
 			locked={power}
 		/>
