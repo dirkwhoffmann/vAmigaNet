@@ -87,7 +87,8 @@
 	}
 
 	async function deleteAction(e: MouseEvent, id: number) {
-		try {
+        console.log("deleteAction: ", id);
+        try {
 			await db.roms.delete(id);
 			console.log(`{id} successfully deleted`);
 		} catch (error) {
@@ -95,47 +96,70 @@
 		}
 	}
 
-	const debug = ''; // 'border-2';
+	const debug =''; // 'border-2';
 </script>
 
-<!-- Header -->
-<div class="w-full text-center text-3xl font-semibold text-white">Databas experiments</div>
-<hr class="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700" />
+<div class="{debug} flex flex-col h-96">
+	<div class="drawer drawer-end {debug} h-full">
+		<input id="my-drawer" type="checkbox" class="drawer-toggle" />
+		<div class="drawer-content">
+			<!-- Page content here -->
+            <article class="prose">
+            <h3>Kickstart ROMs</h3>
+			<p>
+				To run the emulator, a Kickstart ROM is required. The original Amiga ROMs are the
+				intellectual property of Cloanto and must be provided by the user. If you are in possession
+				of a legal Kickstart ROM, you can add the ROM image via drag and drop. Once a ROM image has
+				been dragged in and is recognized by the emulator, it will become available in the Machine
+				settings.
+			</p>
+            <h3>AROS</h3>
+			<p>
+				If you don’t have an original Kickstart at hand, you may choose to install the AROS ROM. The
+				Amiga Research Operating System ROM is an open-source Kickstart variant which is freely
+				redistributable. Unfortunately, not all Amiga programs are compatible with AROS, which is
+				why I strongly recommend using original ROMs.
+			</p>
+            </article>
+		</div>
+		<div class="drawer-side">
+			<label for="my-drawer" class="drawer-overlay" />
 
-<!-- Main -->
-<div class="overflow-x-auto h-96 border-0 overflow-x-hidden overflow-y-auto">
-	<table class="table table-compact table-zebra w-full">
-		<tbody class={debug}>
-			{#if $roms}
-				{#each $roms as rom}
-					<tr class="border-0">
-						<td>
-							<div class="flex h-[5.5rem] p-1">
-								<div class="{debug} h-full w-[4rem] m-2">
-									<img class="h-full w-full" src={'icons/' + imageUrl(rom)} alt="Rom Chip Icon" />
-								</div>
-								<div class="{debug} h-full m-2 flex flex-col grow overflow-hidden">
-									<div class="font-bold text-base">{rom.title}</div>
-									<div class="opacity-50">{rom.version}</div>
-									<div class="opacity-50">{rom.model}</div>
-									<!-- <div class="opacity-50">CRC {rom.crc32}</div>-->
-								</div>
-								<div class="{debug} h-full w-4 m-2 flex items-center">
-									<button class="w-full" on:click={(e) => deleteAction(e, rom.id)}
-										><FaTrash /></button
-									>
-								</div>
-							</div>
-						</td>
-					</tr>
-				{/each}
-			{/if}
-		</tbody>
-	</table>
+			<table class="table table-compact table-zebra w-full">
+				<tbody class={debug}>
+					{#if $roms}
+						{#each $roms as rom}
+							<tr class="border-0">
+								<td>
+									<div class="flex h-[5.5rem] p-1">
+										<div class="{debug} h-full w-[4rem] m-2">
+											<img
+												class="h-full w-full"
+												src={'icons/' + imageUrl(rom)}
+												alt="Rom Chip Icon"
+											/>
+										</div>
+										<div class="{debug} h-full m-2 flex flex-col grow overflow-hidden">
+											<div class="font-bold text-base">{rom.title}</div>
+											<div class="opacity-50">{rom.version}</div>
+											<div class="opacity-50">{rom.model}</div>
+										</div>
+										<div class="{debug} h-full w-4 m-2 flex items-center">
+											<button class="w-full" on:click={(e) => deleteAction(e, rom.crc32)}
+												><FaTrash /></button
+											>
+										</div>
+									</div>
+								</td>
+							</tr>
+						{/each}
+					{/if}
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>
-
-<!-- Footer -->
-<hr class="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700" />
-<div class="w-full flex justify-center">
-	<MyButton on:click={close} label="Close" />
+<div class="w-full flex justify-between mt-6">
+	<label for="my-drawer" class="btn btn-primary drawer-button w-32">Library...</label>
+	<button class="btn btn-primary w-32" on:click={close}>Close</button>
 </div>
