@@ -19,6 +19,7 @@ declare global {
 		description: string;
 		adf: string[];
 		memory: number[];
+		aros: boolean;
 		locked: boolean;
 	}
 

@@ -48,6 +48,7 @@ export const dfWriting = writable([false,false,false,false]);
 export const dfUnsaved = writable([false,false,false,false]);
 export const dfProtected = writable([false,false,false,false]);
 export const dfCylinder = writable([0,0,0,0]);
+export const romcrc = writable(0);
 
 // Error state
 export const errno = writable(0);

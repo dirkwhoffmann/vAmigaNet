@@ -103,7 +103,8 @@
 		warp,
 		muted,
 		halted,
-		debugMode
+		debugMode,
+		romcrc
 	} from '$lib/stores';
 	import {
 		dfConnected,
@@ -125,6 +126,7 @@
 	});
 
 	export async function runShowcase(showcase: DataBaseItem) {
+		await $audio.setup();
 		try {
 			console.log('Running ' + showcase.title + '...');
 			$amiga.powerOff();
@@ -174,6 +176,7 @@
 				const item = await db.roms.get(crc32);
 				if (item?.rom) {
 					$memory.loadRom(item!.rom, item!.rom!.length);
+					$romcrc = crc32;
 				} else {
 					$memory.deleteRom();
 				}

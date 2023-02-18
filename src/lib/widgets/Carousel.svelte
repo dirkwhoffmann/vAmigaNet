@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { liveQuery } from 'dexie';
+	import { db, type RomEntry } from '$lib/db/db';
+	import { browser } from '$app/environment';
 	import { Splide, SplideSlide } from '@splidejs/svelte-splide';
 	import { createEventDispatcher } from 'svelte';
 	import CarouselItem from '$lib/widgets/CarouselItem.svelte';
@@ -16,7 +19,7 @@
 	};
 
 	let cmps: CarouselItem[] = [];
-
+	
 	export function setActive(name: string) {
 
 		console.log('setActive: ' + category);
@@ -47,6 +50,7 @@
 					src="footage/{item.url}-small.jpg"
 					title={item.title}
 					locked={item.locked}
+					aros={item.aros}
 				/>
 			</SplideSlide>
 		{/each}

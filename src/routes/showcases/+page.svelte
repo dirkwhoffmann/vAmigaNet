@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '../../app.css';
+	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
@@ -10,6 +11,10 @@
 	import { demos, games, tools } from '$lib/database';
 	import { proxy, audio, amiga } from '$lib/stores';
 	import Logo from '$lib/widgets/Logo.svelte';
+	import { db, type RomEntry } from '$lib/db/db';
+	import { liveQuery } from 'dexie';
+
+	let roms = liveQuery(() => (browser ? db.roms.toArray() : []));
 
 	let show = 0;
 
@@ -36,7 +41,8 @@
 	}
 
 	function handleMessage(event: CustomEvent) {
-		if (!event.detail.locked) {
+		// if (!event.detail.locked) 
+		{
 			update(event.detail);
 			show += 1;
 		}
