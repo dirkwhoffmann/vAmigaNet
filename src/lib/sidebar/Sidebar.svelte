@@ -63,8 +63,8 @@
 	}
 </script>
 
-<div transition:fade={{ duration }}>
-	<div class="absolute top-0 left-0 h-full bg-gray-500/40 flex flex-col w-16 items-center">
+<div transition:fade={{ duration }} class="">
+	<div class="absolute top-0 left-0 h-full bg-gray-500/40 flex flex-col w-16 items-center z-40">
 		<div class="w-10 mt-2 flex flex-col space-y-1">
 			<SidebarSection
 				on:select={select}

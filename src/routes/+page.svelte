@@ -2,7 +2,7 @@
 	import '../app.css';
 	import { initialized, proxy, amiga } from '$lib/stores';
 	import { poweredOn, what, errno } from '$lib/stores';
-	import { layout, showSidebar, showShell, showSettings, showImpressum } from '$lib/stores';
+	import { layout, showSidebar, showShell, showSettings, showShowcases, showImpressum } from '$lib/stores';
 	import { canvasWidth, canvasHeight, aspectWidth, aspectHeight } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
@@ -10,6 +10,7 @@
 	import Sidebar from '$lib/sidebar/Sidebar.svelte';
 	import TitleScreen from '$lib/TitleScreen.svelte';
 	import Emulator from '$lib/Emulator.svelte';
+	import Showcases from '$lib/Showcases.svelte';
 	import Settings from '$lib/settings/Settings.svelte';
 	import StatusBar from '$lib/statusbar/StatusBar.svelte';
 	import RetroShell from '$lib/RetroShell.svelte';
@@ -172,6 +173,8 @@
 			$showShell = false;
 		}
 	}
+
+	$: console.log("showShowcases: ", $showShowcases);
 </script>
 
 <body>
@@ -180,7 +183,7 @@
 		<MainScreen>
 			<StatusBar bind:this={statusBar} on:push={push} />
 			<div bind:this={canvas} class="box relative grow border-none border-green-300 overflow-auto">
-				{#if !$poweredOn}
+				{#if !$poweredOn && !$showShowcases}
 					<TitleScreen />
 				{/if}
 				<Emulator bind:this={emulator} />
@@ -189,6 +192,9 @@
 				{/if}
 				{#if $showSettings}
 					<Settings />
+				{/if}
+				{#if $showShowcases}
+					<Showcases />
 				{/if}
 				{#if $showSidebar}
 					<Sidebar on:select={sidebarAction} />

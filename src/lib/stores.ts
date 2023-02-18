@@ -30,6 +30,7 @@ export const layout = writable('fit');
 export const showSidebar = writable(false);
 export const showShell = writable(false);
 export const showSettings = writable(false);
+export const showShowcases = writable(false);
 export const showImpressum = writable(false);
 
 // Emulator state

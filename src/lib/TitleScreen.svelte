@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { proxy, audio, amiga, retroShell, poweredOn, showImpressum } from '$lib/stores';
+	import { proxy, audio, amiga, retroShell, poweredOn, showImpressum, showShowcases } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import { demos } from '$lib/database';
 	import MyButton from '$lib/widgets/MyButton.svelte';
@@ -34,7 +34,8 @@
 
 	async function openShowcases() {
 		await $audio.setup();
-		goto('showcases/');
+		$showShowcases = true; 
+		// goto('showcases/');
 	}
 
 	async function openRoms() {
