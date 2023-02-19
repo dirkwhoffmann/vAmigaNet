@@ -2,11 +2,12 @@
 	import { fade } from 'svelte/transition';
 	import IoMdClose from 'svelte-icons/io/IoMdClose.svelte';
 	import { proxy, audio, amiga } from '$lib/stores';
-    
+
 	export let selected: DataBaseItem | null;
 	export let show = true;
 
 	$: src = 'footage/' + (selected?.url ?? '') + '-large.jpg';
+	$: disabled = selected?.locked ?? true;
 
 	function close() {
 		console.log('close');
@@ -14,7 +15,7 @@
 	}
 
 	async function runTitle() {
-        await $audio.setup();
+		await $audio.setup();
 		if (selected) {
 			console.log('Running ' + selected.title + '...');
 			$amiga.powerOff();
@@ -57,9 +58,20 @@
 				</div>
 				<div class="flex font-josefin text-lg w-2/3 pb-5">{selected.description}</div>
 			</div>
-			<div class="mt-4 relative">
-				<button class="btn" on:click={runTitle}>Start</button>
-			</div>
+			{#if disabled}
+				<div class="text-error font-josefin">
+					This item is locked because it requires an original Kickstart to run.
+				</div>
+				<div class="mt-4 relative">
+					<button class="btn btn-disabled bg-gray-500 text-white opacity-20" on:click={runTitle}
+						>Start</button
+					>
+				</div>
+			{:else}
+				<div class="mt-4 relative">
+					<button class="btn" on:click={runTitle}>Start</button>
+				</div>
+			{/if}
 		</div>
 	</div>
 {/if}

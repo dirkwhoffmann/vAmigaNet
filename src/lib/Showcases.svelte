@@ -61,12 +61,12 @@
 </script>
 
 <div class="modal" class:modal-open={showSedcard}>
-	<div class="modal-box w-11/12 max-w-6xl bg-black">
+	<div class="modal-box w-11/12 min-h-[380px] max-w-6xl bg-black">
 		<Sedcard bind:show={showSedcard} {selected} />
 	</div>
 </div>
 
-<div class="grow h-full flex flex-col justify-center overflow-auto" transition:fade>
+<div class="grow h-full flex flex-col justify-center overflow-auto" in:fade>
 
 <!-- <div in:fade class="relative bg-transparent grow flex flex-col items-center justify-center {debug}">-->
 	<!--
