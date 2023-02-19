@@ -152,7 +152,7 @@
 						{#each $roms as rom}
 							<tr class="h-8 {debug} border-purple-400">
 								<td>
-									<div class="flex h-[5.5rem] p-1 space-x-2">
+									<div class="flex h-[5.5rem] p-1 space-x-4">
 										<div class="{debug} h-full w-[4rem]">
 											<img
 												class="h-full w-full"
@@ -161,13 +161,13 @@
 											/>
 										</div>
 										<div class="{debug} h-full flex flex-col grow overflow-hidden">
-											<div class="font-bold text-base text-primary-500">{rom.title}</div>
-											<div class="opacity-50 text-primary-500">{version(rom)}</div>
-											<div class="opacity-50 text-primary-500">{rom.model}</div>
+											<div class="font-bold text-base text-primary">{rom.title}</div>
+											<div class="opacity-50 text-primary">{version(rom)}</div>
+											<div class="opacity-50 text-primary">{rom.model}</div>
 										</div>
 										<div class="{debug} h-full w-4 flex items-center">
 											<button
-												class="text-primary-500 w-full"
+												class="text-primary w-full"
 												on:click={(e) => deleteAction(e, rom.crc32)}><FaTrash /></button
 											>
 										</div>

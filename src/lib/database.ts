@@ -63,7 +63,34 @@ export const demos: DataBaseItem[] = [
         incompatibleRoms: [1062194186],
         aros: false,
 		locked: false
+	},
+    {
+		url: 'kyrios',
+		title: 'Mental Scrollover',
+		subtitle: 'Kyrios',
+		description:
+			'This demo was relased in August 1990. I like this demo personally and used it many time for testing vAmiga.',
+		adf: ['Kyrios.adf'],
+		memory: [1024, 512, 0],
+        requiredRom: null,
+        incompatibleRoms: [1062194186],
+        aros: false,
+		locked: false
+	},
+    {
+		url: '3ddemo',
+		title: '3D Demo II',
+		subtitle: 'Anarchy',
+		description:
+			'This demo was relased in December 1992. It ranked 2nd in the party 1992 Amiga demo competition.',
+		adf: ['3Ddemo2.adf'],
+		memory: [1024, 512, 0],
+        requiredRom: null,
+        incompatibleRoms: [1062194186],
+        aros: false,
+		locked: false
 	}
+
 ];
 
 export const games: DataBaseItem[] = [
@@ -159,6 +186,6 @@ export const tools: DataBaseItem[] = [
         requiredRom: 2231503309,
         incompatibleRoms: [],
         aros: true,
-		locked: false
+		locked: true
 	}
 ];

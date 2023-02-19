@@ -16,7 +16,6 @@
 	import RetroShell from '$lib/RetroShell.svelte';
 	import MainScreen from '$lib/MainScreen.svelte';
 	import Impressum from '$lib/Impressum.svelte';
-	import BrowserCheck from '$lib/BrowserCheck.svelte';
 
 	let mounted = false;
 	let buttonText = 'Run Demo';
@@ -200,7 +199,6 @@
 					<Sidebar on:select={sidebarAction} />
 				{/if}
 			</div>
-			<BrowserCheck />
 			{#if $showImpressum}
 				<Impressum />
 			{/if}

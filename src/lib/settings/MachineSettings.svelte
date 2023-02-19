@@ -75,7 +75,6 @@
 		df2 = $amiga.getDriveConfig($proxy.OPT_DRIVE_CONNECT, 2);
 		df3 = $amiga.getDriveConfig($proxy.OPT_DRIVE_CONNECT, 3);
 		kickstart = $memory.romFingerprint();
-		console.log('kickstart CRC = ', kickstart);
 	}
 
 	//

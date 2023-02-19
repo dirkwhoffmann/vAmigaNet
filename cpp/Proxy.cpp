@@ -371,7 +371,6 @@ MemoryProxy::analyzeRom(const string &blob, u32 len)
 {
     RomInfo info{};
 
-    printf("analyzeRom(strlen %zu)\n", blob.length());
     try
     {
         std::stringstream stream;

@@ -20,24 +20,6 @@
 	async function runTitle() {
         console.log("runTitle");
         $proxy.runShowcase(selected);
-        /*
-        await $audio.setup();
-		if (selected) {
-			console.log('Running ' + selected.title + '...');
-			$amiga.powerOff();
-			console.log('Configuring CHIP: ' + selected.memory[0]);
-			$amiga.configure($proxy.OPT_CHIP_RAM, selected.memory[0]);
-			console.log('Configuring SLOW: ' + selected.memory[1]);
-			$amiga.configure($proxy.OPT_SLOW_RAM, selected.memory[1]);
-			console.log('Configuring FAST: ' + selected.memory[2]);
-			$amiga.configure($proxy.OPT_FAST_RAM, selected.memory[2]);
-			for (let i = 0; i < selected.adf.length; i++) {
-				console.log('Inserting disk ' + i + ': ' + selected.adf[i]);
-				$proxy.insert(selected.adf[i], i);
-			}
-			$amiga.run();
-		}
-        */
 	}
 </script>
 
