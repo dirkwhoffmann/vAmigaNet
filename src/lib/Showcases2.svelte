@@ -6,19 +6,23 @@
 	import { proxy, audio, amiga } from '$lib/stores';
 	import { db, type RomEntry } from '$lib/db/db';
 	import { liveQuery } from 'dexie';
+	import Sedcard from '$lib/Sedcard.svelte';
 
 	let show = 0;
 
-	var selected: DataBaseItem = demos[0];
-	$: src = 'footage/' + selected.url + '-large.jpg';
+	// var selected: DataBaseItem = demos[0];
+	var selected: DataBaseItem | null = null;
+	$: src = 'footage/' + (selected?.url ?? '') + '-large.jpg';
 
 	let demoCarousel: Carousel;
 	let gamesCarousel: Carousel;
 	let toolsCarousel: Carousel;
 
+    let showSedcard = false;
+
 	onMount(() => {
 		console.log('onMount');
-		update(demos[0]);
+		// update(demos[0]);
 	});
 
 	function update(item: DataBaseItem) {
@@ -30,6 +34,7 @@
 
 	function handleMessage(event: CustomEvent) {
 		update(event.detail);
+        showSedcard = true;
 	}
 
 	async function runTitle() {
@@ -51,17 +56,22 @@
 	let tabs = ['Demos', 'Games', 'Tools'];
 	let activeTab = 0;
 	$: console.log('activeTab = ', activeTab);
+	$: console.log('showSedcard = ', showSedcard);
 	const debug = ''; // 'border-2';
 </script>
+
+<div class="modal" class:modal-open={showSedcard}>
+	<div class="modal-box w-11/12 max-w-6xl bg-black">
+		<Sedcard bind:show={showSedcard} {selected} />
+	</div>
+</div>
 
 <div in:fade class="relative bg-transparent grow flex flex-col items-center justify-center {debug}">
 	<div class="flex items-center space-x-2">
 		<div class="{debug} tabs tabs-boxed flex grow">
 			{#each tabs as tab, i}
-				<button
-					class="tab w-24"
-					class:tab-active={activeTab == i}
-					on:click={() => (activeTab = i)}>{tab}</button
+				<button class="tab w-24" class:tab-active={activeTab == i} on:click={() => (activeTab = i)}
+					>{tab}</button
 				>
 			{/each}
 		</div>

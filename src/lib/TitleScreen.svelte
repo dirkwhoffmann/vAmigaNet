@@ -35,10 +35,7 @@
 	}
 
 	async function openShowcases() {
-		await $audio.setup();
-		// $showShowcases = true; 
 		showShowcases = !showShowcases;
-		// goto('showcases/');
 	}
 
 	async function openRoms() {

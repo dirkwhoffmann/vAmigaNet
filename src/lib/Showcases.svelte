@@ -69,6 +69,7 @@
 	let activeTab = 0;
 
     $: console.log("activeTab = ", activeTab);
+
 </script>
 
 <div class="relative grow h-full flex flex-col text-white overflow-y-auto {debug}" transition:fade>

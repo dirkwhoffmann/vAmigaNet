@@ -2,6 +2,7 @@
 	import { liveQuery } from 'dexie';
 	import { db, type RomEntry } from '$lib/db/db';
 	import { browser } from '$app/environment';
+	import { fade } from 'svelte/transition';
 	import { Splide, SplideSlide } from '@splidejs/svelte-splide';
 	import { createEventDispatcher } from 'svelte';
 	import CarouselItem from '$lib/widgets/CarouselItem.svelte';
@@ -31,12 +32,7 @@
 
 </script>
 
-<!--
-<div class="font-sofia-semi text-4xl mx-2 px-5 bg-gradient-to-r from-sky-700 to-transparent">
-	{category}
-</div>
--->
-<div class="p-4">
+<div class="p-4" in:fade>
 	<Splide
 		{options}
 		on:click={(e) => {
