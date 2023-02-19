@@ -66,7 +66,10 @@
 	</div>
 </div>
 
-<div in:fade class="relative bg-transparent grow flex flex-col items-center justify-center {debug}">
+<div class="grow h-full flex flex-col justify-center overflow-auto" transition:fade>
+
+<!-- <div in:fade class="relative bg-transparent grow flex flex-col items-center justify-center {debug}">-->
+	<!--
 	<div class="flex items-center space-x-2">
 		<div class="{debug} tabs tabs-boxed flex grow">
 			{#each tabs as tab, i}
@@ -76,29 +79,28 @@
 			{/each}
 		</div>
 	</div>
-
-	<div class="mt-10 h-64">
-		{#if activeTab == 0}
+-->
+	<div class="relative h-full">
+		<div class="w-hull bg-gray-500/50 text-2xl p-1 font-josefin">Demos</div>
 			<Carousel
 				category="Demos"
 				bind:this={demoCarousel}
 				items={demos}
 				on:message={handleMessage}
 			/>
-		{:else if activeTab == 1}
+			<div class="w-hull bg-gray-500/50 text-2xl p-1 font-josefin">Games</div>
 			<Carousel
 				bind:this={gamesCarousel}
 				category="Games"
 				items={games}
 				on:message={handleMessage}
 			/>
-		{:else if activeTab == 2}
+			<div class="w-hull bg-gray-500/50 text-2xl p-1 font-josefin">Tools</div>
 			<Carousel
 				bind:this={toolsCarousel}
 				category="Tools"
 				items={tools}
 				on:message={handleMessage}
 			/>
-		{/if}
 	</div>
 </div>
