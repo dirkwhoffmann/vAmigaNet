@@ -199,9 +199,11 @@
 					<Sidebar on:select={sidebarAction} />
 				{/if}
 			</div>
+			<!--
 			{#if $showImpressum}
 				<Impressum />
 			{/if}
+			-->
 		</MainScreen>
 	</div>
 </body>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { proxy, audio, amiga, retroShell, poweredOn, showImpressum } from '$lib/stores';
+	import { proxy, audio, amiga, retroShell, poweredOn } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import { demos } from '$lib/database';
 	import MyButton from '$lib/widgets/MyButton.svelte';
@@ -12,12 +12,14 @@
 	import FaBookOpen from 'svelte-icons/fa/FaBookOpen.svelte';
 	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
+	import Impressum2 from '$lib/Impressum2.svelte';
 	import RomViewer from '$lib/RomViewer.svelte';
 	import Showcases from '$lib/Showcases.svelte';
 
 	let debug = ''; // 'border-2';
 	let showRomViewer = false;
 	let showShowcases = false;
+	let showImpressum = false;
 
 	async function runDemo() {
 		await $audio.setup();
@@ -43,13 +45,19 @@
 	}
 
 	function openImpressum() {
-		$showImpressum = true;
+		showImpressum = true;
 	}
 </script>
 
 <div class="modal" class:modal-open={showRomViewer}>
 	<div class="modal-box">
 		<RomViewer bind:show={showRomViewer} />
+	</div>
+</div>
+
+<div class="modal" class:modal-open={showImpressum}>
+	<div class="modal-box">
+		<Impressum2 bind:show={showImpressum} />
 	</div>
 </div>
 
@@ -76,7 +84,7 @@
 							<div class="font-sofia-extra text-7xl mr-2">vAmiga</div>
 							<div class="font-sofia-extra text-7xl  text-gray-300">Online</div>
 						</div>
-						<div class="font-sofia-semi text-xl text-gray-300 pl-2 pb-10">Version 0.1.2</div>
+						<div class="font-sofia-semi text-xl text-gray-300 pl-2 pb-10">Version 0.2</div>
 						<div class="flex space-x-5">
 							<button class="btn btn-primary" on:click={runDemo}>Run Demo</button>
 							<button class="btn btn-primary p-1.5" on:click={gotoGitHub}><FaGithub /></button>
