@@ -221,10 +221,12 @@
 	export async function startUp() {
 		console.log('VAmiga: startUp()');
 
+		// Install AROS
+		$proxy.installAros();
+
 		// Apply some default settings
 		$amiga.configure($proxy.OPT_AGNUS_REVISION, $proxy.AGNUS_ECS_2MB);
 
-		console.log('OPT_AGNUS_REVISION = ', $amiga.getConfig($proxy.OPT_AGNUS_REVISION));
 
 		// Trigger exception (for testing)
 		// $amiga.configure($proxy.OPT_AGNUS_REVISION, 42);

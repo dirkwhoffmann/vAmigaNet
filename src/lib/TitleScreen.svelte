@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { proxy, audio, amiga, retroShell, poweredOn, showImpressum, showShowcases } from '$lib/stores';
+	import { proxy, audio, amiga, retroShell, poweredOn, showImpressum } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import { demos } from '$lib/database';
 	import MyButton from '$lib/widgets/MyButton.svelte';
@@ -13,9 +13,11 @@
 	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
 	import RomViewer from '$lib/RomViewer.svelte';
+	import Showcases2 from '$lib/Showcases2.svelte';
 
 	let debug = ''; // 'border-2';
 	let showRomViewer = false;
+	let showShowcases = false; 
 
 	async function runDemo() {
 		await $audio.setup();
@@ -34,7 +36,8 @@
 
 	async function openShowcases() {
 		await $audio.setup();
-		$showShowcases = true; 
+		// $showShowcases = true; 
+		showShowcases = !showShowcases;
 		// goto('showcases/');
 	}
 
@@ -57,6 +60,9 @@
 	<div in:fade={{ duration: 2000 }} class="absolute h-full blur brightness-[0.9]">
 		<img class="h-full w-screen object-fill" src="matrix1.jpg" alt="Background" />
 	</div>
+	{#if showShowcases}
+	<Showcases2 />
+	{:else}
 	<div
 		in:fade
 		class="relative bg-transparent grow flex flex-col items-center justify-center {debug}"
@@ -86,6 +92,7 @@
 			</p>
 		</div>
 	</div>
+	{/if}
 	<div class="relative flex justify-center align-middle bg-gray-900/50 space-x-8 {debug}">
 		<!--
 			<MainPageLink href="#learnmore">
