@@ -77,7 +77,7 @@
 		</div>
 	</div>
 
-	<div class="mt-10 h-64 border-2">
+	<div class="mt-10 h-64">
 		{#if activeTab == 0}
 			<Carousel
 				category="Demos"
