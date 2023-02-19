@@ -3,13 +3,14 @@
 	import ConfigSection from './ConfigSection.svelte';
 	import ConfigItem from '$lib/settings/ConfigItem.svelte';
 	import { proxy, amiga, memory } from '$lib/stores';
-	import { poweredOn } from '$lib/stores';
+	import { poweredOn, romcrc } from '$lib/stores';
 	import { fade } from 'svelte/transition';
 	import type { ActionEvent } from '$lib/settings/Settings.svelte';
 	import { browser } from '$app/environment';
 	import { liveQuery } from 'dexie';
 	import { db, type RomEntry } from '$lib/db/db';
 	import RomViewer from '$lib/RomViewer.svelte';
+	import { Result } from 'postcss';
 
 	let kickstart: number;
 	let kickName = '';
@@ -33,19 +34,21 @@
 	let hd0: number;
 
 	let roms = liveQuery(() => (browser ? db.roms.toArray() : []));
-	let romValues = [{ name: '', id: 0 }];
-	$: {
-		console.log('****** Computing romValues ******');
-		romValues = [{ name: 'None', id: 0 }];
-		if ($roms) {
-			$roms.forEach((rom: RomEntry) => {
-				romValues.push({ name: rom.title, id: rom.crc32 });
+	$: romValues = stripNames($roms);
+	function stripNames(entries) {
+		console.log('stripRoms', entries);
+		let result = [{ name: 'None', id: 0 }];
+		if (entries) {
+			entries.forEach((rom: RomEntry) => {
+				result.push({ name: rom.title, id: rom.crc32 });
 			});
 		}
-		update();
+		return result;
 	}
-	$: console.log('romValues = ', romValues);
 
+	$: console.log('romcrc = ' + $romcrc);
+	$: console.log('rom db = ' + $roms);
+	$: console.log('romValues = ', romValues);
 	$: power = $poweredOn;
 
 	onMount(() => {
@@ -73,10 +76,6 @@
 		df3 = $amiga.getDriveConfig($proxy.OPT_DRIVE_CONNECT, 3);
 		kickstart = $memory.romFingerprint();
 		console.log('kickstart CRC = ', kickstart);
-
-		for (const v of romValues) {
-			if (v.id == kickstart) kickName = v.name;
-		}
 	}
 
 	//
@@ -170,14 +169,15 @@
 
 <div transition:fade>
 	<ConfigSection name="Roms">
-		<ConfigItem
-			name="Kickstart"
-			selection={kickstart}
-			on:select={kickstartAction}
-			values={romValues}
-			displayAs={kickName}
-			locked={power}
-		/>
+		{#key romValues}
+			<ConfigItem
+				name="Kickstart"
+				selection={$romcrc}
+				on:select={kickstartAction}
+				values={romValues}
+				locked={power}
+			/>
+		{/key}
 	</ConfigSection>
 	<ConfigSection name="CPU">
 		<ConfigItem
