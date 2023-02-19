@@ -34,8 +34,8 @@
 	let hd0: number;
 
 	let roms = liveQuery(() => (browser ? db.roms.toArray() : []));
-	$: romValues = stripNames($roms);
-	function stripNames(entries) {
+	$: romValues = stripNames($roms as RomEntry[]);
+	function stripNames(entries: RomEntry[]) {
 		console.log('stripRoms', entries);
 		let result = [{ name: 'None', id: 0 }];
 		if (entries) {

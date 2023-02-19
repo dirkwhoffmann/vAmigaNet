@@ -174,6 +174,7 @@
 		if (crc32 == 0) {
 			$memory.deleteRom();
 			$memory.deleteExt();
+			$romcrc = crc32;
 		} else {
 			try {
 				const item = await db.roms.get(crc32);
