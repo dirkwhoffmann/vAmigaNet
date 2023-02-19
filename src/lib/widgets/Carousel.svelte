@@ -31,9 +31,11 @@
 
 </script>
 
+<!--
 <div class="font-sofia-semi text-4xl mx-2 px-5 bg-gradient-to-r from-sky-700 to-transparent">
 	{category}
 </div>
+-->
 <div class="p-4">
 	<Splide
 		{options}
