@@ -1,13 +1,16 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
 	import IoMdClose from 'svelte-icons/io/IoMdClose.svelte';
-	import { proxy, audio, amiga } from '$lib/stores';
+	import { proxy, audio, amiga, romcrc } from '$lib/stores';
 
 	export let selected: DataBaseItem | null;
 	export let show = true;
-
+    
 	$: src = 'footage/' + (selected?.url ?? '') + '-large.jpg';
-	$: disabled = selected?.locked ?? true;
+	$: hasAros = $romcrc == 1062194186;
+    $: yetUnsupported = selected?.locked ?? true;
+    $: incompatibleRom = !selected?.aros && hasAros; 
+    $: disabled = yetUnsupported || incompatibleRom;
 
 	function close() {
 		console.log('close');
@@ -15,7 +18,10 @@
 	}
 
 	async function runTitle() {
-		await $audio.setup();
+        console.log("runTitle");
+        $proxy.runShowcase(selected);
+        /*
+        await $audio.setup();
 		if (selected) {
 			console.log('Running ' + selected.title + '...');
 			$amiga.powerOff();
@@ -31,6 +37,7 @@
 			}
 			$amiga.run();
 		}
+        */
 	}
 </script>
 
@@ -60,7 +67,11 @@
 			</div>
 			{#if disabled}
 				<div class="text-error font-josefin">
-					This item is locked because it requires an original Kickstart to run.
+                    {#if incompatibleRom}
+                        This item is locked because it requires an original Kickstart to run.
+                    {:else}
+                        This item is locked because it requires yet unsupported input devices.
+                    {/if}
 				</div>
 				<div class="mt-4 relative">
 					<button class="btn btn-disabled bg-gray-500 text-white opacity-20" on:click={runTitle}

@@ -3,12 +3,15 @@
 	import { fade } from 'svelte/transition';
 	import Carousel from '$lib/widgets/Carousel.svelte';
 	import { demos, games, tools } from '$lib/database';
-	import { proxy, audio, amiga } from '$lib/stores';
+	import { proxy, audio, amiga, romcrc } from '$lib/stores';
 	import { db, type RomEntry } from '$lib/db/db';
 	import { liveQuery } from 'dexie';
 	import Sedcard from '$lib/Sedcard.svelte';
+	import Audio from './Audio.svelte';
 
 	let show = 0;
+
+	$: aros = $romcrc == 1062194186;
 
 	// var selected: DataBaseItem = demos[0];
 	var selected: DataBaseItem | null = null;
@@ -35,22 +38,6 @@
 	function handleMessage(event: CustomEvent) {
 		update(event.detail);
         showSedcard = true;
-	}
-
-	async function runTitle() {
-		console.log('Running ' + selected.title + '...');
-		$amiga.powerOff();
-		console.log('Configuring CHIP: ' + selected.memory[0]);
-		$amiga.configure($proxy.OPT_CHIP_RAM, selected.memory[0]);
-		console.log('Configuring SLOW: ' + selected.memory[1]);
-		$amiga.configure($proxy.OPT_SLOW_RAM, selected.memory[1]);
-		console.log('Configuring FAST: ' + selected.memory[2]);
-		$amiga.configure($proxy.OPT_FAST_RAM, selected.memory[2]);
-		for (let i = 0; i < selected.adf.length; i++) {
-			console.log('Inserting disk ' + i + ': ' + selected.adf[i]);
-			$proxy.insert(selected.adf[i], i);
-		}
-		$amiga.run();
 	}
 
 	let tabs = ['Demos', 'Games', 'Tools'];

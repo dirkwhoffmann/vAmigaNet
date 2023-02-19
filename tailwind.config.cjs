@@ -10,7 +10,7 @@ module.exports = {
 				azeret: ['"Azeret Mono"', 'monospace']
 			},
 			backgroundImage: {
-				splashscreen: "url('matrix1.jpg')"
+				splashscreen: "url('matrix.jpg')"
 			},
 			
 			colors: {

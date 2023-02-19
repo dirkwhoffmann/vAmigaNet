@@ -128,10 +128,13 @@
 	export async function runShowcase(showcase: DataBaseItem) {
 		await $audio.setup();
 		try {
-			console.log('Running ' + showcase.title + '...');
+			console.log('Runningg ' + showcase.title + '...');
 			$amiga.powerOff();
-			console.log('Installing AROS');
-			$proxy.installAros();
+			console.log("requiredRom = " + showcase.requiredRom);
+			if (showcase.requiredRom) {
+			console.log('Installing Rom: ' + showcase.requiredRom);
+				$proxy.installRom(showcase.requiredRom);
+			}
 			console.log('Configuring CHIP: ' + showcase.memory[0]);
 			$amiga.configure($proxy.OPT_CHIP_RAM, showcase.memory[0]);
 			console.log('Configuring SLOW: ' + showcase.memory[1]);
@@ -194,6 +197,10 @@
 
 	export async function installAros() {
 		installRom(1062194186);
+	}
+
+	export async function installDiagRom() {
+		installRom(2231503309);
 	}
 
 	export function updateWarp() {

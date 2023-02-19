@@ -19,7 +19,9 @@ declare global {
 		description: string;
 		adf: string[];
 		memory: number[];
-		aros: boolean;
+		requiredRom: number | null;
+		incompatibleRoms: number[];
+		aros: boolean; // Deprecated
 		locked: boolean;
 	}
 
