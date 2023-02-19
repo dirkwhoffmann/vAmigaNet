@@ -1,35 +1,28 @@
 <script lang="ts">
-	// import '../../app.css';
-	import { browser } from '$app/environment';
-	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import Carousel from '$lib/widgets/Carousel.svelte';
-	import MyButton from '$lib/widgets/MyButton.svelte';
-	import FaAngleLeft from 'svelte-icons/fa/FaAngleLeft.svelte';
-	import '@splidejs/svelte-splide/css';
 	import { demos, games, tools } from '$lib/database';
 	import { proxy, audio, amiga } from '$lib/stores';
-	import Logo from '$lib/widgets/Logo.svelte';
 	import { db, type RomEntry } from '$lib/db/db';
 	import { liveQuery } from 'dexie';
-
-	let roms = liveQuery(() => (browser ? db.roms.toArray() : []));
+	import Sedcard from '$lib/Sedcard.svelte';
 
 	let show = 0;
 
-	var selected: DataBaseItem = demos[0];
-	$: src = 'footage/' + selected.url + '-large.jpg';
+	// var selected: DataBaseItem = demos[0];
+	var selected: DataBaseItem | null = null;
+	$: src = 'footage/' + (selected?.url ?? '') + '-large.jpg';
 
 	let demoCarousel: Carousel;
 	let gamesCarousel: Carousel;
 	let toolsCarousel: Carousel;
 
-	let top: Element;
+    let showSedcard = false;
 
 	onMount(() => {
 		console.log('onMount');
-		update(demos[0]);
+		// update(demos[0]);
 	});
 
 	function update(item: DataBaseItem) {
@@ -37,15 +30,11 @@
 		if (activeTab == 1) gamesCarousel.setActive(item.title);
 		if (activeTab == 2) toolsCarousel.setActive(item.title);
 		selected = item;
-		top.scrollIntoView();
 	}
 
 	function handleMessage(event: CustomEvent) {
-		// if (!event.detail.locked)
-		{
-			update(event.detail);
-			show += 1;
-		}
+		update(event.detail);
+        showSedcard = true;
 	}
 
 	async function runTitle() {
@@ -62,82 +51,54 @@
 			$proxy.insert(selected.adf[i], i);
 		}
 		$amiga.run();
-		goto('/');
 	}
 
-	const debug = ''; // 'border-2';
+	let tabs = ['Demos', 'Games', 'Tools'];
 	let activeTab = 0;
-
-    $: console.log("activeTab = ", activeTab);
-
+	$: console.log('activeTab = ', activeTab);
+	$: console.log('showSedcard = ', showSedcard);
+	const debug = ''; // 'border-2';
 </script>
 
-<div class="relative grow h-full flex flex-col text-white overflow-y-auto {debug}" transition:fade>
-	<!--<body class="h-screen flex flex-col bg-black text-white scroll-smooth overflow-y-auto">-->
-	<div bind:this={top} class={debug}>
-		<!--<div class="relative h-full">-->
-		{#key show}
-			<div in:fade={{ duration: 1000 }}>
-				<div class="grid grid-cols-1">
-					<img class="z-10 col-start-1 row-start-1 brightness-90 blur-[2px]" {src} alt="Bg" />
-					<img class="z-20 col-start-1 row-start-1" src="footage/blank-large.png" alt="Alt" />
-					<div class="z-30 col-start-1 row-start-1 pt-4 px-6">
-						<div class="font-sofia-extra text-8xl">{selected.title}</div>
-						<div class="flex pb-10 items-center">
-							<div class="text-xs p-0.5 mr-2 border-2 h-fit rounded-md font-azaret">PAL</div>
-							<div class="font-sofia-semi text-2xl flex">{selected.subtitle}</div>
-						</div>
-						<div class="flex font-josefin text-lg w-2/3 pb-5">{selected.description}</div>
-						<div class="pb-5">
-							<button class="btn btn-primary" on:click={runTitle}>Start</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		{/key}
-		<div class="" />
-		<!--</div>-->
+<div class="modal" class:modal-open={showSedcard}>
+	<div class="modal-box w-11/12 max-w-6xl bg-black">
+		<Sedcard bind:show={showSedcard} {selected} />
 	</div>
-	<div class="{debug} flex justify-center z-50">
-		<div class="{debug} tabs tabs-boxed">
-            <button class="tab" class:tab-active={activeTab == 0} on:click={() => (activeTab = 0)}
-				>Demos</button
-			>
-			<button class="tab" class:tab-active={activeTab == 1} on:click={() => (activeTab = 1)}
-				>Games</button
-			>
-			<button class="tab" class:tab-active={activeTab == 2} on:click={() => (activeTab = 2)}
-				>Tools</button
-			>
+</div>
+
+<div in:fade class="relative bg-transparent grow flex flex-col items-center justify-center {debug}">
+	<div class="flex items-center space-x-2">
+		<div class="{debug} tabs tabs-boxed flex grow">
+			{#each tabs as tab, i}
+				<button class="tab w-24" class:tab-active={activeTab == i} on:click={() => (activeTab = i)}
+					>{tab}</button
+				>
+			{/each}
 		</div>
 	</div>
 
-	<div class="relative border-none border-red-500 -top-10 z-40">
-		<div class="mt-10">
-            {#if activeTab == 0}
-            <Carousel
+	<div class="mt-10 h-64">
+		{#if activeTab == 0}
+			<Carousel
 				category="Demos"
 				bind:this={demoCarousel}
 				items={demos}
 				on:message={handleMessage}
 			/>
-            {:else if activeTab == 1}
+		{:else if activeTab == 1}
 			<Carousel
 				bind:this={gamesCarousel}
 				category="Games"
 				items={games}
 				on:message={handleMessage}
 			/>
-            {:else if activeTab == 2}
+		{:else if activeTab == 2}
 			<Carousel
 				bind:this={toolsCarousel}
 				category="Tools"
 				items={tools}
 				on:message={handleMessage}
 			/>
-            {/if}
-		</div>
+		{/if}
 	</div>
 </div>
-<Logo />
-<!--</body>-->

@@ -13,7 +13,7 @@
 	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
 	import RomViewer from '$lib/RomViewer.svelte';
-	import Showcases2 from '$lib/Showcases2.svelte';
+	import Showcases from '$lib/Showcases.svelte';
 
 	let debug = ''; // 'border-2';
 	let showRomViewer = false;
@@ -58,7 +58,7 @@
 		<img class="h-full w-screen object-fill" src="matrix1.jpg" alt="Background" />
 	</div>
 	{#if showShowcases}
-	<Showcases2 />
+	<Showcases />
 	{:else}
 	<div
 		in:fade
