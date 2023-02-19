@@ -111,9 +111,9 @@ export const tools: DataBaseItem[] = [
 		description:
 			'Sysinfo is a shareware program written completely in Assembler for the Motorola 68k equipped Amiga computers to benchmark system performance. Sysinfo shows which version of system software is present in ROM, which hardware is present, and which operating mode the hardware uses.',
 		adf: ['SysInfo.adf'],
-		memory: [512, 512, 0],
-        aros: false,
-		locked: true
+		memory: [1024, 512, 0],
+        aros: true,
+		locked: false
 	},
 	{
 		url: 'testkit',
@@ -123,8 +123,8 @@ export const tools: DataBaseItem[] = [
 			'The Amiga Test Kit is a software-based solution for testing various components of a Commodore Amiga.',
 		adf: ['AmigaTestKit.adf'],
 		memory: [512, 512, 0],
-        aros: false,
-		locked: true
+        aros: true,
+		locked: false
 	},
 	{
 		url: 'diagrom',
