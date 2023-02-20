@@ -5,13 +5,15 @@
 	import {
 		proxy,
 		audio,
-		enums,
+		agnus,
 		amiga,
 		cpu,
-		agnus,
 		denise,
-		memory,
 		diskController,
+		enums,
+		memory,
+		mouse1,
+		mouse2,
 		retroShell,
 		MsgNone,
 		MsgRegister,
@@ -244,13 +246,15 @@
 	export function onRuntimeInitialized() {
 		console.log('Creating proxies...');
 
-		$enums = new $proxy.EnumProxy();
+		$agnus = new $proxy.AgnusProxy();
 		$amiga = new $proxy.AmigaProxy();
 		$cpu = new $proxy.CPUProxy();
-		$agnus = new $proxy.AgnusProxy();
 		$denise = new $proxy.DeniseProxy();
-		$memory = new $proxy.MemoryProxy();
 		$diskController = new $proxy.DiskControllerProxy();
+		$enums = new $proxy.EnumProxy();
+		$memory = new $proxy.MemoryProxy();
+		$mouse1 = new $proxy.MouseProxy(1);
+		$mouse2 = new $proxy.MouseProxy(2);
 		$retroShell = new $proxy.RetroShellProxy();
 
 		$initialized = true;

@@ -150,6 +150,18 @@ struct MemoryProxy
     u32 romFingerprint() const;
 };
 
+struct MouseProxy
+{
+    int mouse;
+
+    MouseProxy(int mouse);
+
+    bool detectShakeAbs(double x, double y);
+    bool detectShakeRel(double x, double y);
+    void setXY(double x, double y);
+    void setDxDy(double x, double y);
+};
+
 struct DiskControllerProxy
 {
     DiskControllerProxy();

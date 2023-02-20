@@ -477,6 +477,50 @@ EMSCRIPTEN_BINDINGS(MemoryProxy)
 }
 
 //
+// Mouse proxy
+//
+
+MouseProxy::MouseProxy(int mouse)
+{
+    assert(mouse == 1 || mouse == 2);
+    this->mouse = mouse;
+}
+
+bool MouseProxy::detectShakeAbs(double x, double y)
+{
+    ControlPort &port = mouse == 1 ? amiga->controlPort1 : amiga->controlPort2;
+    return port.mouse.detectShakeXY(x, y);
+}
+
+bool MouseProxy::detectShakeRel(double x, double y)
+{
+    ControlPort &port = mouse == 1 ? amiga->controlPort1 : amiga->controlPort2;
+    return port.mouse.detectShakeDxDy(x, y);
+}
+
+void MouseProxy::setXY(double x, double y)
+{
+    ControlPort &port = mouse == 1 ? amiga->controlPort1 : amiga->controlPort2;
+    port.mouse.setXY(x, y);
+}
+
+void MouseProxy::setDxDy(double x, double y)
+{
+    ControlPort &port = mouse == 1 ? amiga->controlPort1 : amiga->controlPort2;
+    port.mouse.setDxDy(x, y);
+}
+
+EMSCRIPTEN_BINDINGS(MouseProxy)
+{
+    class_<MouseProxy>("MouseProxy")
+        .constructor<int>()
+        .function("detectShakeAbs", &MouseProxy::detectShakeAbs)
+        .function("detectShakeRel", &MouseProxy::detectShakeRel)
+        .function("setXY", &MouseProxy::setXY)
+        .function("setDxDy", &MouseProxy::setDxDy);
+}
+
+//
 // Disk controller proxy
 //
 

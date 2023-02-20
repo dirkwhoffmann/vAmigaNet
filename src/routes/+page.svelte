@@ -4,6 +4,7 @@
 	import { poweredOn, what, errno } from '$lib/stores';
 	import { layout, showSidebar, showShell, showSettings, showShowcases, showImpressum } from '$lib/stores';
 	import { canvasWidth, canvasHeight, aspectWidth, aspectHeight } from '$lib/stores';
+	import { port1, port2 } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import '@splidejs/svelte-splide/css';
@@ -153,6 +154,20 @@
 				break;
 			case 'full':
 				$layout = 'full';
+				break;
+			case 'empty1':
+				$port1 = 0;
+				break;
+			case 'mouse1':
+				$port1 = 1;
+				if ($port2 == 1) $port2 = 0;
+				break;
+			case 'empty2':
+				$port2 = 0;
+				break;
+			case 'mouse2':
+				$port2 = 1;
+				if ($port1 == 1) $port1 = 0;
 				break;
 			default:
 				console.log('Unhandled sender: ' + sender);

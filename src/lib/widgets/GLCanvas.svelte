@@ -1,7 +1,7 @@
 <svelte:options accessors={true} />
 
 <script lang="ts">
-	import { proxy, amiga, denise, initialized } from '$lib/stores';
+	import { proxy, amiga, denise, mouse1, mouse2 } from '$lib/stores';
 	import { VPIXELS, HPIXELS, TPP } from '$lib/constants';
 	import { onMount } from 'svelte';
 
@@ -403,6 +403,15 @@
 		updateTextureRect(tx1, ty1, tx2, ty2);
 	});
 
+	let x = 0;
+	let y = 0;
+
+	function handleMousemove(event) {
+		x = event.clientX;
+		y = event.clientY;
+		$mouse1.setXY(x / 2,y / 2);
+	}
 </script>
 
-<canvas bind:this={canvas} style="image-rendering: pixelated" class="w-full h-full" tabindex="-1" />
+<div>x = {x} y = {y}</div>
+<canvas on:mousemove={handleMousemove} bind:this={canvas} style="image-rendering: pixelated" class="w-full h-full" tabindex="-1" />

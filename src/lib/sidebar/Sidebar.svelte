@@ -4,15 +4,15 @@
 	import SidebarSection from '$lib/sidebar/SidebarSection.svelte';
 	import { fade } from 'svelte/transition';
 	import { layout, showShell, showSettings, debugDma } from '$lib/stores';
-	import { poweredOn, running } from '$lib/stores';
+	import { poweredOn, running, port1, port2 } from '$lib/stores';
 
 	let sel = '';
 	let duration = 200;
 	let opacity = 'opacity-20';
 
-	const dispatch = createEventDispatcher<{select:{sender:string, state: boolean}}>();
+	const dispatch = createEventDispatcher<{ select: { sender: string; state: boolean } }>();
 
-	function select(event: CustomEvent<{sender:string, state:boolean}>) {
+	function select(event: CustomEvent<{ sender: string; state: boolean }>) {
 		event.preventDefault();
 
 		const sender = event.detail.sender;
@@ -30,6 +30,16 @@
 		{ id: 'power', icon: 'icons/powerIcon.png' }
 	];
 	const settings = { id: 'settings', icon: 'icons/settingsIcon.png' };
+	const port1Button = { id: 'port1', icon: 'icons/device-none.png' };
+	const port2Button = { id: 'port2', icon: 'icons/device-none.png' };
+	const port1Items = [
+		{ id: 'empty1', icon: 'icons/device-none.png' },
+		{ id: 'mouse1', icon: 'icons/device-mouse.png' }
+	];
+	const port2Items = [
+		{ id: 'empty2', icon: 'icons/device-none.png' },
+		{ id: 'mouse2', icon: 'icons/device-mouse.png' }
+	];
 	const shell = { id: 'shell', icon: 'icons/retroShellIcon.png' };
 	const monitor = { id: 'monitor', icon: 'icons/monitorIcon.png' };
 	const layoutButton = { id: 'layout', icon: 'icons/layoutIcon.png' };
@@ -38,6 +48,9 @@
 		{ id: 'fit', icon: 'icons/layoutFitIcon.png' },
 		{ id: 'full', icon: 'icons/layoutFullIcon.png' }
 	];
+
+	$: port1Button.icon = $port1 == 0 ? 'icons/device-none.png' : 'icons/device-mouse.png';
+	$: port2Button.icon = $port2 == 0 ? 'icons/device-none.png' : 'icons/device-mouse.png';
 
 	$: layoutButton.icon =
 		$layout == 'full'
@@ -71,6 +84,19 @@
 				expanded={sel == 'control'}
 				item={control}
 				subitems={controlItems}
+			/>
+			<SidebarButton on:select={select} item={settings} highlighted={$showSettings} />
+			<SidebarSection
+				on:select={select}
+				expanded={sel == 'port1'}
+				item={port1Button}
+				subitems={port1Items}
+			/>
+			<SidebarSection
+				on:select={select}
+				expanded={sel == 'port2'}
+				item={port2Button}
+				subitems={port2Items}
 			/>
 			<SidebarButton on:select={select} item={settings} highlighted={$showSettings} />
 			<SidebarButton on:select={select} item={shell} highlighted={$showShell} />

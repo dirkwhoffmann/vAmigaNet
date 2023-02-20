@@ -4,13 +4,15 @@ import { writable } from 'svelte/store';
 export const proxy: any = writable();
 
 // Proxies
-export const enums: any = writable();
+export const agnus: any = writable();
 export const amiga: any = writable();
 export const cpu: any = writable();
-export const agnus: any = writable();
 export const denise: any = writable();
-export const memory: any = writable();
 export const diskController: any = writable();
+export const enums: any = writable();
+export const memory: any = writable();
+export const mouse1: any = writable();
+export const mouse2: any = writable();
 export const retroShell: any = writable();
 
 // Global components
@@ -18,6 +20,10 @@ export const audio: any = writable();
 
 // Settings (move to settings store?!)
 export const warpMode = writable(1);
+
+// Control ports (connected devices)
+export const port1 = writable(0);
+export const port2 = writable(0);
 
 // Layout
 export const canvasWidth = writable(0);
