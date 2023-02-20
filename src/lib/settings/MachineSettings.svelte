@@ -167,6 +167,7 @@
 </script>
 
 <div transition:fade>
+	<!--
 	<ConfigSection name="Roms">
 		{#key romValues}
 			<ConfigItem
@@ -178,6 +179,7 @@
 			/>
 		{/key}
 	</ConfigSection>
+	-->
 	<ConfigSection name="CPU">
 		<ConfigItem
 			name="CPU"
