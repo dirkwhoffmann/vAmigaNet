@@ -48,7 +48,7 @@
 </script>
 
 <div class="modal" class:modal-open={showRomViewer}>
-	<div class="modal-box">
+	<div class="modal-box h-2/3 w-2/3 max-w-none">
 		<RomViewer bind:show={showRomViewer} />
 	</div>
 </div>

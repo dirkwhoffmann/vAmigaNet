@@ -7,7 +7,7 @@
 	import FaTrash from 'svelte-icons/fa/FaTrash.svelte';
 	import FaWindowClose from 'svelte-icons/fa/FaWindowClose.svelte';
 	import IoMdClose from 'svelte-icons/io/IoMdClose.svelte';
-	import { memory, initialized } from '$lib/stores';
+	import { proxy, amiga, memory, initialized } from '$lib/stores';
 
 	let roms = liveQuery(() => (browser ? db.roms.toArray() : []));
 
@@ -68,13 +68,13 @@
 		}
 	}
 
-    function version(rom: RomEntry) {
-        if (rom.isUnknown) {
-            return "CRC " + rom.crc32.toString();
-        } else {
-            return rom.version;
-        }
-    }
+	function version(rom: RomEntry) {
+		if (rom.isUnknown) {
+			return 'CRC ' + rom.crc32.toString();
+		} else {
+			return rom.version;
+		}
+	}
 
 	$: if ($initialized) {
 		installDefaultRoms();
@@ -107,52 +107,43 @@
 		}
 	}
 
+	function installAction(e: MouseEvent, crc: number) {
+		console.log('installAction: ', crc);
+		$amiga.powerOff();
+		$proxy.installRom(crc);
+		$amiga.run();
+	}
+
 	const debug = ''; //'border-2';
 	let activeTab = 0;
 </script>
 
-<div class="{debug} flex flex-col">
-	<div class="flex items-center space-x-2">
+<div class="{debug} border-green-500 h-full flex flex-col">
+	<div class="flex items-center space-x-2 mx-2">
 		<div class="{debug} tabs tabs-boxed flex grow">
 			<button class="tab" class:tab-active={activeTab == 0} on:click={() => (activeTab = 0)}
-				>About</button
-			>
-			<button class="tab" class:tab-active={activeTab == 1} on:click={() => (activeTab = 1)}
 				>Installed Roms</button
 			>
+			<button class="tab" class:tab-active={activeTab == 1} on:click={() => (activeTab = 1)}
+				>Legal Situation</button
+			>
 			<div class="flex grow justify-end">
-				<button class="btn btn-sm btn-primary flex p-0" on:click={close}><IoMdClose /></button>
+				<button class="btn btn-sm btn-primary flex w-8 p-0" on:click={close}><IoMdClose /></button>
 			</div>
 		</div>
 	</div>
-	<div class="h-96 my-4 overflow-auto {debug}">
+	<div class="h-96 mt-4 overflow-auto {debug} p-1">
 		{#if activeTab == 0}
-			<article in:fade class="mx-1 prose {debug}">
-				<h3>Kickstart</h3>
-				<p>
-					To run the emulator, a Kickstart ROM is required. The original Amiga ROMs are the
-					intellectual property intellectual property of Cloanto and cannot be freely distributed.
-					If you are in are in possession of a legal Kickstart ROM, you can add the ROM image to
-					vAmiga Online by drag & drop. and drop it. Once a ROM image has been dragged in, the
-					emulator analyzes the file. If a supported image has been detected, it becomes accessible
-					in the machine settings.
-				</p>
-				<h3>AROS</h3>
-				<p>
-					If you don’t have an original Kickstart at hand, you may choose to install the Amiga
-					Research Operating System ROM (AROS). AROS is an open-source Kickstart variant which is
-					freely redistributable. Unfortunately, not all Amiga programs are compatible with AROS,
-					which is why I strongly recommend using original ROMs.
-				</p>
-			</article>
-		{:else}
 			<table in:fade class="table table-compact table-zebra w-full">
 				<tbody class={debug}>
+					<tr class="h-8 {debug} text-center text-primary border-purple-400 font-josefin">
+						Use drag-and-drop to add additional ROM images.
+					</tr>
 					{#if $roms}
 						{#each $roms as rom}
 							<tr class="h-8 {debug} border-purple-400">
-								<td>
-									<div class="flex h-[5.5rem] p-1 space-x-4">
+								<td class="">
+									<div class="flex h-[5.5rem] space-x-4">
 										<div class="{debug} h-full w-[4rem]">
 											<img
 												class="h-full w-full"
@@ -165,9 +156,15 @@
 											<div class="opacity-50 text-primary">{version(rom)}</div>
 											<div class="opacity-50 text-primary">{rom.model}</div>
 										</div>
-										<div class="{debug} h-full w-4 flex items-center">
+										<div class="{debug} h-full flex items-center">
 											<button
-												class="text-primary w-full"
+												class="btn btn-primary btn-outline btn-sm"
+												on:click={(e) => installAction(e, rom.crc32)}>Install</button
+											>
+										</div>
+										<div class="{debug} h-full flex items-center">
+											<button
+												class="btn btn-primary btn-outline btn-sm w-8 p-1.5"
 												on:click={(e) => deleteAction(e, rom.crc32)}><FaTrash /></button
 											>
 										</div>
@@ -178,6 +175,31 @@
 					{/if}
 				</tbody>
 			</table>
+		{:else}
+			<article in:fade class="mx-1 prose {debug}">
+				<h3>Kickstart</h3>
+				<p>
+					To run the emulator, a Kickstart ROM is required. The original Amiga ROMs are the
+					intellectual property of Cloanto™ and cannot be freely distributed. If you own a legal
+					Kickstart ROM, you can add the ROM image to vAmiga Online by drag & drop. When a supported
+					image is detected, it becomes accessible in the ROM database. The ROMs are kept in the
+					browser's memory and will be available during the next browser session.
+				</p>
+				<h3>Encrypted ROMs</h3>
+				<p>
+					If you have purchased an older version of Amiga Forever™, you may be in possession of
+					encrypted ROM files. These files come with a .key file that is needed to decrypt the ROM.
+					Encrypted ROMs are not yet supported by the emulator. They must be decrypted manually
+					before they can be used within vAmiga Online.
+				</p>
+				<h3>AROS</h3>
+				<p>
+					If you don't have the original Kickstart at hand, you may install the Amiga Research
+					Operating System ROM (AROS). AROS is an open source Kickstart variant, which can be freely
+					redistributed. Unfortunately not all Amiga programs are compatible with AROS, which is why
+					I strongly recommend to use original ROMs. 					
+				</p>
+			</article>
 		{/if}
 	</div>
 </div>
