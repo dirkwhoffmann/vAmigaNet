@@ -8,6 +8,7 @@
 	import { AnimatedFloat } from '$lib/utils/AnimatedFloat';
 	import { TextureRect } from '$lib/utils/TextureRect';
 	import { fade } from 'svelte/transition';
+	import { text } from 'svelte/internal';
 
 	// Component references
 	let glCanvas: GLCanvas;
@@ -35,14 +36,20 @@
 	$: canvasBorder = animating ? 'border-2 border-gray-600' : '';
 
 	onMount(() => {
-		console.log('Emulator: onMount()');
-		// glCanvas.enableDrawing = true;
-		textureRect.zoomIn();
-
-		// window.requestAnimationFrame(doAnimationFrame);
+		console.log('****** Emulator: onMount()');		
 	});
 
 	$: updateRect($layout);
+
+	$: console.log("POWERED ON: ", $poweredOn);
+	$: if ($poweredOn) { 
+		glCanvas.updateTextureRect(
+				textureRect.x1.current,
+				textureRect.y1.current,
+				textureRect.x2.current,
+				textureRect.y2.current
+			);
+	}
 
 	export function updateRect(layout: string) {
 		console.log('updateRect(', layout, ')');
@@ -115,6 +122,7 @@
 	function render() {
 		glCanvas.render();
 	}
+	
 </script>
 
 {#if $poweredOn}

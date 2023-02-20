@@ -18,7 +18,6 @@
 	import Impressum from '$lib/Impressum.svelte';
 
 	let mounted = false;
-	let buttonText = 'Run Demo';
 
 	// Animation frame counter
 	let animationFrame = 0;
@@ -33,7 +32,6 @@
 
 	onMount(() => {
 		console.log('+page: onMount()');
-		buttonText = $poweredOn ? 'Continue' : 'Run Demo';
 		mounted = true;
 
 		window.addEventListener('resize', function () {
@@ -199,11 +197,6 @@
 					<Sidebar on:select={sidebarAction} />
 				{/if}
 			</div>
-			<!--
-			{#if $showImpressum}
-				<Impressum />
-			{/if}
-			-->
 		</MainScreen>
 	</div>
 </body>

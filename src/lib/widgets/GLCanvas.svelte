@@ -1,7 +1,7 @@
 <svelte:options accessors={true} />
 
 <script lang="ts">
-	import { proxy, amiga, denise } from '$lib/stores';
+	import { proxy, amiga, denise, initialized } from '$lib/stores';
 	import { VPIXELS, HPIXELS, TPP } from '$lib/constants';
 	import { onMount } from 'svelte';
 
@@ -10,6 +10,8 @@
 
 	// The rendering context of the canvas
 	let gl: WebGL2RenderingContext;
+
+	let textureRect: TextureRect; 
 
 	// Indicates whether the recently drawn frames were long or short frames
 	let currLOF = true;
@@ -116,7 +118,7 @@
    `;
 
 	function initWebGL() {
-		console.log('initWebGL()');
+		console.log('initWebGLL()');
 
 		// General WebGL options
 		const options = {
@@ -175,6 +177,7 @@
 	}
 
 	export function updateTextureRect(x1: number, y1: number, x2: number, y2: number) {
+		console.log("updateTextureRect");
 		const array = new Float32Array([x1, 1.0-y1, x2, 1.0-y1, x1, 1.0-y2, x2, 1.0-y2]);
 		gl.bindBuffer(gl.ARRAY_BUFFER, tBuffer);
 		gl.bufferSubData(gl.ARRAY_BUFFER, 0, array);
@@ -394,6 +397,7 @@
 	onMount(() => {
 		initWebGL();
 	});
+
 </script>
 
 <canvas bind:this={canvas} style="image-rendering: pixelated" class="w-full h-full" tabindex="-1" />

@@ -4,6 +4,7 @@ export class AnimatedFloat {
 	deltaStep = 0.005;
 
 	constructor(value = 0.0) {
+		console.log("CONSTRUCTOR");
 		this.current = value;
 		this.target = value;
 	}
@@ -17,11 +18,13 @@ export class AnimatedFloat {
 	}
 
 	set(value: number, steps = 25) {
+		console.log("Animated Float: set ", value, steps);
 		this.target = value;
 		this.deltaStep = Math.abs(this.target - this.current) / steps;
 	}
 
 	move() {
+		// console.log("move()");
 		if (this.current + this.deltaStep <= this.target) {
 			this.current += this.deltaStep;
 		} else if (this.current - this.deltaStep >= this.target) {

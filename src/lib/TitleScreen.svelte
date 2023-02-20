@@ -21,11 +21,9 @@
 	let showShowcases = false;
 	let showImpressum = false;
 
-	async function runDemo() {
+	async function launch() {
 		await $audio.setup();
-		if (!$poweredOn) {
-			await $proxy.runShowcase(demos[0]);
-		}
+		$amiga.run();
 	}
 
 	function gotoGitHub() {
@@ -86,7 +84,7 @@
 						</div>
 						<div class="font-sofia-semi text-xl text-gray-300 pl-2 pb-10">Version 0.2</div>
 						<div class="flex space-x-5">
-							<button class="btn btn-primary" on:click={runDemo}>Run Demo</button>
+							<button class="btn btn-primary" on:click={launch}>Power On</button>
 							<button class="btn btn-primary p-1.5" on:click={gotoGitHub}><FaGithub /></button>
 						</div>
 					</div>
