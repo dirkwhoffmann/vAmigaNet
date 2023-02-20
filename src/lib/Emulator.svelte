@@ -18,6 +18,10 @@
 	let y1 = 0;
 	let x2 = 0;
 	let y2 = 0;
+	let tx1 = 0;
+	let ty1 = 0;
+	let tx2 = 0;
+	let ty2 = 0;
 
 	// Visible texture area
 	export let textureRect = new TextureRect();
@@ -36,19 +40,21 @@
 	$: canvasBorder = animating ? 'border-2 border-gray-600' : '';
 
 	onMount(() => {
-		console.log('****** Emulator: onMount()');		
+		textureRect.zoomIn();
 	});
 
 	$: updateRect($layout);
 
-	$: console.log("POWERED ON: ", $poweredOn);
-	$: if ($poweredOn) { 
+	$: console.log('POWERED ON: ', $poweredOn);
+	$: if ($poweredOn) {
+		/*
 		glCanvas.updateTextureRect(
 				textureRect.x1.current,
 				textureRect.y1.current,
 				textureRect.x2.current,
 				textureRect.y2.current
 			);
+		*/
 	}
 
 	export function updateRect(layout: string) {
@@ -70,7 +76,6 @@
 	}
 
 	export function doAnimationFrame(animationFrame: number, now: DOMHighResTimeStamp) {
-
 		/*
 		if (animationFrame % 50 == 0) {
 			console.log(":: Frame " + animationFrame);
@@ -92,12 +97,18 @@
 
 		if (textureAnimates) {
 			textureRect.move();
+			/*
 			glCanvas.updateTextureRect(
 				textureRect.x1.current,
 				textureRect.y1.current,
 				textureRect.x2.current,
 				textureRect.y2.current
 			);
+			*/
+			tx1 = textureRect.x1.current;
+			ty1 = textureRect.y1.current;
+			tx2 = textureRect.x2.current;
+			ty2 = textureRect.y2.current;
 			x1 = textureRect.x1.current * textureRect.texW;
 			y1 = textureRect.y1.current * textureRect.texH;
 			x2 = textureRect.x2.current * textureRect.texW;
@@ -122,14 +133,14 @@
 	function render() {
 		glCanvas.render();
 	}
-	
 </script>
 
 {#if $poweredOn}
 	<div class="relative grow h-full flex flex-col justify-center" transition:fade>
 		<div class="flex justify-center h-full items-center">
-			<div class="{canvasBorder}" style="height:{h}px; width:{w}px">
-				<GLCanvas bind:this={glCanvas} />
+			<div class={canvasBorder} style="height:{h}px; width:{w}px">
+				<GLCanvas
+					bind:this={glCanvas} {tx1} {tx2} {ty1} {ty2} />
 			</div>
 		</div>
 	</div>

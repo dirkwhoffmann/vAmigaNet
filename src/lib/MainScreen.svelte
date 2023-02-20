@@ -70,7 +70,7 @@
 
 									console.log(`${t} successfully added with id ${id}`);
 								} catch (error) {
-									console.log(`Failed to add Kickstart`, error);
+									console.log(`Failed to add Kickstart`);
 								}
 							}
 						} catch (exc) {

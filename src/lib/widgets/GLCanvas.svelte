@@ -11,7 +11,11 @@
 	// The rendering context of the canvas
 	let gl: WebGL2RenderingContext;
 
-	let textureRect: TextureRect; 
+	// Texture coordinates 
+	export let tx1: number;
+	export let tx2: number;
+	export let ty1: number;
+	export let ty2: number;
 
 	// Indicates whether the recently drawn frames were long or short frames
 	let currLOF = true;
@@ -176,8 +180,8 @@
 		mergeTexture = createTexture(HPIXELS, 2 * VPIXELS);
 	}
 
-	export function updateTextureRect(x1: number, y1: number, x2: number, y2: number) {
-		console.log("updateTextureRect");
+	$: if (gl) { updateTextureRect(tx1, ty1, tx2, ty2); }
+	function updateTextureRect(x1: number, y1: number, x2: number, y2: number) {
 		const array = new Float32Array([x1, 1.0-y1, x2, 1.0-y1, x1, 1.0-y2, x2, 1.0-y2]);
 		gl.bindBuffer(gl.ARRAY_BUFFER, tBuffer);
 		gl.bufferSubData(gl.ARRAY_BUFFER, 0, array);
@@ -396,6 +400,7 @@
 
 	onMount(() => {
 		initWebGL();
+		updateTextureRect(tx1, ty1, tx2, ty2);
 	});
 
 </script>
