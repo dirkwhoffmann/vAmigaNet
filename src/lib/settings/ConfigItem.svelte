@@ -63,10 +63,10 @@
 			</div>
 		</div>
 		<div class="border-0 bg-primary w-20 h-12 flex items-center justify-center {locked ? '' : 'hidden'}">
-			<button class="h-7 w-7 text-base-content {opac}"><GiPadlock /></button>
+			<button class="h-7 w-7 text-primary-content {opac}"><GiPadlock /></button>
 		</div>
 		<div class="border-0 bg-primary w-20 h-12 flex items-center justify-center {info ? '' : 'hidden'}">
-			<button class="h-7 w-7 text-base-content {opac}" on:click={infoAction}><GoInfo /></button>
+			<button class="h-7 w-7 text-primary-content {opac}" on:click={infoAction}><GoInfo /></button>
 		</div>
 			<div class="border-0 bg-primary h-12">
 			{#if locked}

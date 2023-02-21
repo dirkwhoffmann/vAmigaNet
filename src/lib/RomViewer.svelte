@@ -125,18 +125,18 @@
 				>Installed Roms</button
 			>
 			<button class="tab" class:tab-active={activeTab == 1} on:click={() => (activeTab = 1)}
-				>Legal Situation</button
+				>Legal Information</button
 			>
 			<div class="flex grow justify-end">
 				<button class="btn btn-sm btn-primary flex w-8 p-0" on:click={close}><IoMdClose /></button>
 			</div>
 		</div>
 	</div>
-	<div class="h-96 mt-4 overflow-auto {debug} p-1">
+	<div class="h-96 mt-4 overflow-auto {debug} p-1 text-base-content">
 		{#if activeTab == 0}
 			<table in:fade class="table table-compact table-zebra w-full">
 				<tbody class={debug}>
-					<tr class="h-8 {debug} text-center text-primary border-purple-400 font-josefin">
+					<tr class="h-8 {debug} text-center text-base-content border-purple-400 font-josefin">
 						Use drag-and-drop to add additional ROM images.
 					</tr>
 					{#if $roms}
@@ -144,7 +144,7 @@
 							<tr class="h-8 {debug} border-purple-400">
 								<td class="">
 									<div class="flex h-[5.5rem] space-x-4">
-										<div class="{debug} h-full w-[4rem]">
+										<div class="{debug} h-full w-[4.5rem]">
 											<img
 												class="h-full w-full"
 												src={'icons/' + imageUrl(rom)}
@@ -152,9 +152,9 @@
 											/>
 										</div>
 										<div class="{debug} h-full flex flex-col grow overflow-hidden">
-											<div class="font-bold text-base text-primary">{rom.title}</div>
-											<div class="opacity-50 text-primary">{version(rom)}</div>
-											<div class="opacity-50 text-primary">{rom.model}</div>
+											<div class="font-bold">{rom.title}</div>
+											<div class="opacity-60">{version(rom)}</div>
+											<div class="opacity-60">{rom.model}</div>
 										</div>
 										<div class="{debug} h-full flex items-center">
 											<button

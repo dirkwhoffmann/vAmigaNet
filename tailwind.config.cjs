@@ -12,7 +12,7 @@ module.exports = {
 			backgroundImage: {
 				splashscreen: "url('matrix.jpg')"
 			},
-			
+
 			colors: {
 				// rose
 				// primary: { "50": "#fff1f2", "100": "#ffe4e6", "200": "#fecdd3", "300": "#fda4af", "400": "#fb7185", "500": "#f43f5e", "600": "#e11d48", "700": "#be123c", "800": "#9f1239", "900": "#881337" }
@@ -34,9 +34,25 @@ module.exports = {
 				}
 				*/
 			}
-			
 		}
 	},
-	plugins: [require("@tailwindcss/typography"), require('daisyui')],
+	daisyui: {
+		themes: [
+			{
+				mytheme: {
+					primary: '#95AEE4',
+					secondary: '#2336c4',
+					accent: '#ffffff',
+					neutral: '#131620',
+					'base-100': '#1f2937',
+					info: '#95AEE4',
+					success: '#67E9AA',
+					warning: '#EEEE00',
+					error: '#F14170'
+				}
+			}
+		]
+	},
+	plugins: [require('@tailwindcss/typography'), require('daisyui')],
 	darkMode: 'class'
 };

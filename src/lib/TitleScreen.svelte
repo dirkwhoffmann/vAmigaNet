@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { proxy, audio, amiga, retroShell, poweredOn } from '$lib/stores';
+	import { proxy, audio, amiga, retroShell, poweredOn, showSidebar } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import { demos } from '$lib/database';
 	import MyButton from '$lib/widgets/MyButton.svelte';
@@ -36,6 +36,7 @@
 
 	async function openShowcases() {
 		showShowcases = !showShowcases;
+		$showSidebar = false; 
 	}
 
 	async function openRoms() {
@@ -61,9 +62,9 @@
 
 <div class="h-full flex flex-col {debug}" transition:fade>
 	<div in:fade={{ duration: 2000 }}>
-		<div class="absolute w-full h-full bg-base-100" />
+		<!--<div class="absolute w-full h-full bg-base-100" />-->
 		<div class="absolute h-full blur-sm">
-			<img class="h-full w-screen object-fill opacity-25" src="matrix-bw.jpg" alt="Background" />
+			<img class="h-full w-screen object-fill opacity-100" src="matrix.jpg" alt="Background" />
 		</div>
 	</div>
 	{#if showShowcases}
@@ -76,7 +77,7 @@
 			<div class={debug}>
 				<div class="rounded flex justify-center">
 					<img class="h-24 p-2 mt-3" src="va-icon.png" alt="vAmiga Icon" />
-					<div class="p-6 text-base-content">
+					<div class="p-6 text-accent">
 						<div class="flex">
 							<div class="font-sofia-extra text-7xl mr-2">vAmiga</div>
 							<div class="font-sofia-extra text-7xl opacity-75">Online</div>
