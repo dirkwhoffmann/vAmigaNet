@@ -1,17 +1,18 @@
 <svelte:options accessors={true} />
 
 <script lang="ts">
-	import { proxy, amiga, denise, mouse1, mouse2 } from '$lib/stores';
+	import { proxy, amiga, denise, port1, port2, mouse1, mouse2, MsgShaking } from '$lib/stores';
 	import { VPIXELS, HPIXELS, TPP } from '$lib/constants';
 	import { onMount } from 'svelte';
 
 	// Reference to the canvas element
 	let canvas: HTMLCanvasElement;
+	let wrapper: HTMLCanvasElement;
 
 	// The rendering context of the canvas
 	let gl: WebGL2RenderingContext;
 
-	// Texture coordinates 
+	// Texture coordinates
 	export let tx1: number;
 	export let tx2: number;
 	export let ty1: number;
@@ -23,6 +24,9 @@
 
 	// Frame counter
 	let frameNr = 0;
+
+	// Indicates if the mouse has been captured
+	let isLocked = () => document.pointerLockElement === canvas; 
 
 	// Variable used to emulate interlace flickering
 	let flickerCnt = 0;
@@ -47,9 +51,9 @@
 	let mainShaderProgram: WebGLProgram;
 	let sampler: WebGLUniformLocation;
 
-	// 
+	//
 	// Merge shader
-	// 
+	//
 
 	const vsMerge = `
     	attribute vec4 aVertexPosition;
@@ -89,11 +93,11 @@
 		}
    `;
 
-   //
-   // Main shader
-   // 
+	//
+	// Main shader
+	//
 
-   const vsMain = `
+	const vsMain = `
     	attribute vec4 aVertexPosition;
     	attribute vec2 aTextureCoord;
     	varying highp vec2 vTextureCoord;
@@ -180,9 +184,11 @@
 		mergeTexture = createTexture(HPIXELS, 2 * VPIXELS);
 	}
 
-	$: if (gl) { updateTextureRect(tx1, ty1, tx2, ty2); }
+	$: if (gl) {
+		updateTextureRect(tx1, ty1, tx2, ty2);
+	}
 	function updateTextureRect(x1: number, y1: number, x2: number, y2: number) {
-		const array = new Float32Array([x1, 1.0-y1, x2, 1.0-y1, x1, 1.0-y2, x2, 1.0-y2]);
+		const array = new Float32Array([x1, 1.0 - y1, x2, 1.0 - y1, x1, 1.0 - y2, x2, 1.0 - y2]);
 		gl.bindBuffer(gl.ARRAY_BUFFER, tBuffer);
 		gl.bufferSubData(gl.ARRAY_BUFFER, 0, array);
 	}
@@ -403,15 +409,94 @@
 		updateTextureRect(tx1, ty1, tx2, ty2);
 	});
 
-	let x = 0;
-	let y = 0;
+	//
+	// Mouse
+	//
 
-	function handleMousemove(event) {
-		x = event.clientX;
-		y = event.clientY;
-		$mouse1.setXY(x / 2,y / 2);
+	document.addEventListener('pointerlockchange', lockChangeAlert, false);
+
+	$: if ($MsgShaking) {
+		console.log('MSG_SHAKING received');
+		unlockMouse();
+	}
+
+	function lockChangeAlert() {
+		if (document.pointerLockElement === canvas) {
+			document.addEventListener('mousemove', mouseMove, false);
+		} else {
+			document.removeEventListener('mousemove', mouseMove, false);
+		}
+	}
+
+	async function lockMouse() {
+		if (!isLocked()) {
+			console.log('lockMouse');
+			await canvas.requestPointerLock();
+		}
+	}
+
+	function unlockMouse() {
+		if (isLocked()) {
+			console.log('unlockMouse');
+			document.exitPointerLock();
+		}
+	}
+
+	function mouseMove(event: MouseEvent) {
+		// console.log('mouseMove:', event.movementX, event.movementY);
+
+		const x = event.movementX / 2;
+		const y = event.movementY / 2;
+
+		if ($port1 == 1) {
+			$mouse1.detectShakeRel(x, y);
+			$mouse1.setDxDy(x, y);
+		}
+		if ($port2 == 1) {
+			$mouse2.detectShakeRel(x, y);
+			$mouse2.setDxDy(x, y);
+		}
+	}
+
+	async function mouseDown(event) {
+		console.log('mousedown: ', event.which);
+		lockMouse();
+		switch (event.which) {
+			case 1:
+				$mouse1.trigger($proxy.PRESS_LEFT);
+				break;
+			case 2:
+				$mouse1.trigger($proxy.PRESS_MIDDLE);
+				break;
+			case 3:
+				$mouse1.trigger($proxy.PRESS_RIGHT);
+				break;
+		}
+	}
+
+	function mouseUp(event) {
+		console.log('mouseUp: ', event.which);
+		switch (event.which) {
+			case 1:
+				$mouse1.trigger($proxy.RELEASE_LEFT);
+				break;
+			case 2:
+				$mouse1.trigger($proxy.RELEASE_MIDDLE);
+				break;
+			case 3:
+				$mouse1.trigger($proxy.RELEASE_RIGHT);
+				break;
+		}
 	}
 </script>
 
-<div>x = {x} y = {y}</div>
-<canvas on:mousemove={handleMousemove} bind:this={canvas} style="image-rendering: pixelated" class="w-full h-full" tabindex="-1" />
+<div bind:this={wrapper} class="w-full h-full">
+	<canvas
+		on:mousedown={mouseDown}
+		on:mouseup={mouseUp}
+		bind:this={canvas}
+		style="image-rendering: pixelated"
+		class="w-full h-full"
+		tabindex="-1"
+	/>
+</div>

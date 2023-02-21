@@ -573,6 +573,7 @@
 				break;
 
 			case $proxy.MSG_SHAKING:
+				console.log("MSG_SHAKING");
 				$MsgShaking++;
 				break;
 

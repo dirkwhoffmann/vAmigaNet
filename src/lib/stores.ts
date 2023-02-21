@@ -22,7 +22,7 @@ export const audio: any = writable();
 export const warpMode = writable(1);
 
 // Control ports (connected devices)
-export const port1 = writable(0);
+export const port1 = writable(1);
 export const port2 = writable(0);
 
 // Layout

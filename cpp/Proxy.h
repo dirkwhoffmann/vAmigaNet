@@ -160,6 +160,7 @@ struct MouseProxy
     bool detectShakeRel(double x, double y);
     void setXY(double x, double y);
     void setDxDy(double x, double y);
+    void trigger(int action);
 };
 
 struct DiskControllerProxy

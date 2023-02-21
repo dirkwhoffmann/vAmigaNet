@@ -510,6 +510,12 @@ void MouseProxy::setDxDy(double x, double y)
     port.mouse.setDxDy(x, y);
 }
 
+void MouseProxy::trigger(int action)
+{
+    ControlPort &port = mouse == 1 ? amiga->controlPort1 : amiga->controlPort2;
+    port.mouse.trigger((GamePadAction)action);
+}
+
 EMSCRIPTEN_BINDINGS(MouseProxy)
 {
     class_<MouseProxy>("MouseProxy")
@@ -517,7 +523,8 @@ EMSCRIPTEN_BINDINGS(MouseProxy)
         .function("detectShakeAbs", &MouseProxy::detectShakeAbs)
         .function("detectShakeRel", &MouseProxy::detectShakeRel)
         .function("setXY", &MouseProxy::setXY)
-        .function("setDxDy", &MouseProxy::setDxDy);
+        .function("setDxDy", &MouseProxy::setDxDy)
+        .function("trigger", &MouseProxy::trigger);
 }
 
 //
@@ -626,6 +633,27 @@ EMSCRIPTEN_BINDINGS(Keys)
     constant("DRIVE_DD_35", (int)DRIVE_DD_35);
     constant("DRIVE_HD_35", (int)DRIVE_HD_35);
     constant("DRIVE_DD_525", (int)DRIVE_DD_525);
+
+    // GamePad action
+    constant("PULL_UP", (int)PULL_UP);
+    constant("PULL_DOWN", (int)PULL_DOWN);
+    constant("PULL_LEFT", (int)PULL_LEFT);
+    constant("PULL_RIGHT", (int)PULL_RIGHT);
+    constant("PRESS_FIRE", (int)PRESS_FIRE);
+    constant("PRESS_FIRE2", (int)PRESS_FIRE2);
+    constant("PRESS_FIRE3", (int)PRESS_FIRE3);
+    constant("PRESS_LEFT", (int)PRESS_LEFT);
+    constant("PRESS_MIDDLE", (int)PRESS_MIDDLE);
+    constant("PRESS_RIGHT", (int)PRESS_RIGHT);
+    constant("RELEASE_X", (int)RELEASE_X);
+    constant("RELEASE_Y", (int)RELEASE_Y);
+    constant("RELEASE_XY", (int)RELEASE_XY);
+    constant("RELEASE_FIRE", (int)RELEASE_FIRE);
+    constant("RELEASE_FIRE2", (int)RELEASE_FIRE2);
+    constant("RELEASE_FIRE3", (int)RELEASE_FIRE3);
+    constant("RELEASE_LEFT", (int)RELEASE_LEFT);
+    constant("RELEASE_MIDDLE", (int)RELEASE_MIDDLE);
+    constant("RELEASE_RIGHT", (int)RELEASE_RIGHT);
 
     // MsgType
     constant("MSG_NONE", (int)MSG_NONE);
