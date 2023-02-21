@@ -11,6 +11,7 @@
 		denise,
 		diskController,
 		enums,
+		keyboard,
 		memory,
 		mouse1,
 		mouse2,
@@ -252,6 +253,7 @@
 		$denise = new $proxy.DeniseProxy();
 		$diskController = new $proxy.DiskControllerProxy();
 		$enums = new $proxy.EnumProxy();
+		$keyboard = new $proxy.KeyboardProxy();
 		$memory = new $proxy.MemoryProxy();
 		$mouse1 = new $proxy.MouseProxy(1);
 		$mouse2 = new $proxy.MouseProxy(2);

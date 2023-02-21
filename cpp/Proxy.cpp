@@ -359,6 +359,32 @@ EMSCRIPTEN_BINDINGS(DeniseProxy)
 }
 
 //
+// Keyboard proxy
+// 
+
+KeyboardProxy::KeyboardProxy()
+{
+}
+
+void KeyboardProxy::pressKey(u8 keycode)
+{
+    amiga->keyboard.pressKey(keycode);
+}
+
+void KeyboardProxy::releaseKey(u8 keycode)
+{
+    amiga->keyboard.releaseKey(keycode);
+}
+
+EMSCRIPTEN_BINDINGS(KeyboardProxy)
+{
+    class_<KeyboardProxy>("KeyboardProxy")
+        .constructor<>()
+        .function("pressKey", &KeyboardProxy::pressKey)
+        .function("releaseKey", &KeyboardProxy::releaseKey);
+}
+
+//
 // Memory proxy
 //
 

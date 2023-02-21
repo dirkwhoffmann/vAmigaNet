@@ -10,6 +10,7 @@ export const cpu: any = writable();
 export const denise: any = writable();
 export const diskController: any = writable();
 export const enums: any = writable();
+export const keyboard: any = writable();
 export const memory: any = writable();
 export const mouse1: any = writable();
 export const mouse2: any = writable();

@@ -1,9 +1,11 @@
 <svelte:options accessors={true} />
 
 <script lang="ts">
-	import { proxy, amiga, denise, port1, port2, mouse1, mouse2, MsgShaking } from '$lib/stores';
+	import { proxy, amiga, denise, keyboard } from '$lib/stores';
+	import { port1, port2, mouse1, mouse2, MsgShaking } from '$lib/stores';
 	import { VPIXELS, HPIXELS, TPP } from '$lib/constants';
 	import { onMount } from 'svelte';
+	import { AMIGA_KEYS } from '$lib/constants';
 
 	// Reference to the canvas element
 	let canvas: HTMLCanvasElement;
@@ -26,7 +28,7 @@
 	let frameNr = 0;
 
 	// Indicates if the mouse has been captured
-	let isLocked = () => document.pointerLockElement === canvas; 
+	let isLocked = () => document.pointerLockElement === canvas;
 
 	// Variable used to emulate interlace flickering
 	let flickerCnt = 0;
@@ -410,6 +412,36 @@
 	});
 
 	//
+	// Keyboard
+	//
+
+	function keyDown(e) {
+		console.log('keyDown: ', e);
+
+		if (e.repeat) {
+			return;
+		}
+
+		const code = AMIGA_KEYS[e.code];
+		if (code === undefined) return;
+
+		$keyboard.pressKey(code);
+
+		e.preventDefault();
+		e.stopPropagation();
+	}
+
+	function keyUp(e) {
+		console.log('keyUp: ', e);
+
+		const code = AMIGA_KEYS[e.code];
+		if (code === undefined) return;
+
+		$keyboard.releaseKey(code);
+
+	}
+
+	//
 	// Mouse
 	//
 
@@ -492,6 +524,8 @@
 
 <div bind:this={wrapper} class="w-full h-full">
 	<canvas
+		on:keydown={keyDown}
+		on:keyup={keyUp}
 		on:mousedown={mouseDown}
 		on:mouseup={mouseUp}
 		bind:this={canvas}

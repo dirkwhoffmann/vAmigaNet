@@ -131,6 +131,14 @@ struct DeniseProxy
     u32 noise() const;
 };
 
+struct KeyboardProxy
+{
+    KeyboardProxy();
+
+    void pressKey(u8 keycode);
+    void releaseKey(u8 keycode);
+};
+
 struct MemoryProxy
 {
     MemoryProxy();
