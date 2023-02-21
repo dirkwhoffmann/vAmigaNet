@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import { layout, amiga, poweredOn } from '$lib/stores';
 	import { canvasWidth, canvasHeight, aspectWidth, aspectHeight } from '$lib/stores';
+	import { border } from '$lib/stores';
 	import GLCanvas from '$lib/widgets/GLCanvas.svelte';
 	import { AnimatedFloat } from '$lib/utils/AnimatedFloat';
 	import { TextureRect } from '$lib/utils/TextureRect';
@@ -37,7 +38,7 @@
 	// Indicates if the emulator canvas is animating
 	let animating = false;
 
-	$: canvasBorder = animating ? 'border-2 border-gray-600' : '';
+	$: canvasBorder = $border ? 'border-2 border-primary border-opacity-100' : '';
 
 	onMount(() => {
 		textureRect.zoomIn();

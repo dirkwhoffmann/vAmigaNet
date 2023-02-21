@@ -37,7 +37,7 @@ module.exports = {
 		}
 	},
 	daisyui: {
-		themes: [
+		themes: [ 'light', 'dark', 'coffee',
 			{
 				mytheme: {
 					primary: '#95AEE4',

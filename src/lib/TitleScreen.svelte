@@ -30,9 +30,11 @@
 		goto('https://dirkwhoffmann.github.io/vAmiga');
 	}
 
+	/*
 	function setTheme(theme: string) {
 		document.querySelector('html')?.setAttribute('data-theme', theme);
 	}
+	*/
 
 	async function openShowcases() {
 		await $audio.setup();

@@ -3,6 +3,7 @@
 <script lang="ts">
 	import { proxy, amiga, denise, keyboard } from '$lib/stores';
 	import { port1, port2, mouse1, mouse2, MsgShaking } from '$lib/stores';
+	import { shaking } from '$lib/stores';
 	import { VPIXELS, HPIXELS, TPP } from '$lib/constants';
 	import { onMount } from 'svelte';
 	import { AMIGA_KEYS } from '$lib/constants';
@@ -448,14 +449,19 @@
 
 	$: if ($MsgShaking) {
 		console.log('MSG_SHAKING received');
-		unlockMouse();
+
+		// Release the mouse if configured so
+		if ($shaking) unlockMouse();
 	}
 
 	function lockChangeAlert() {
+
 		if (document.pointerLockElement === canvas) {
+			console.log("addEventListener: mousemove:");
 			document.addEventListener('mousemove', mouseMove, false);
 		} else {
-			document.removeEventListener('mousemove', mouseMove, false);
+			console.log("removeEventListener: mousemove:");
+			document.removeEventListener('mousemove', mouseMove);
 		}
 	}
 
@@ -474,6 +480,7 @@
 	}
 
 	function mouseMove(event: MouseEvent) {
+		
 		// console.log('mouseMove:', event.movementX, event.movementY);
 
 		const x = event.movementX / 2;
@@ -528,6 +535,6 @@
 	on:mouseup={mouseUp}
 	bind:this={canvas}
 	style="image-rendering: pixelated"
-	class="w-full h-full border-2 focus:outline-none focus:ring-0"
+	class="w-full h-full focus:outline-none focus:ring-0"
 	tabindex="-1"
 />

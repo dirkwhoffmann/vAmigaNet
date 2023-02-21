@@ -21,6 +21,10 @@ export const audio: any = writable();
 
 // Settings (move to settings store?!)
 export const warpMode = writable(1);
+export const texSampler = writable(1);
+export const border = writable(0);
+export const theme = writable(0);
+export const shaking = writable(1);
 
 // Control ports (connected devices)
 export const port1 = writable(1);
