@@ -38,7 +38,7 @@
 	}
 </script>
 
-<div transition:fade>
+<div in:fade>
 	<ConfigSection name="Volumes">
 		<ConfigItem
 			name="Left Speaker Volume"

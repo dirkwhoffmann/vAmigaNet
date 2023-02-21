@@ -61,11 +61,10 @@
 
 <div class="h-full flex flex-col {debug}" transition:fade>
 	<div in:fade={{ duration: 2000 }}>
+		<div class="absolute w-full h-full bg-base-100" />
 		<div class="absolute h-full blur-sm">
-			<img class="h-full w-screen object-fill" src="matrix-bw.jpg" alt="Background" />
+			<img class="h-full w-screen object-fill opacity-25" src="matrix-bw.jpg" alt="Background" />
 		</div>
-		<!--<div class="absolute w-full h-full bg-white/50" />-->
-		<div class="absolute w-full h-full bg-neutral/50" />
 	</div>
 	{#if showShowcases}
 		<Showcases />
@@ -77,12 +76,12 @@
 			<div class={debug}>
 				<div class="rounded flex justify-center">
 					<img class="h-24 p-2 mt-3" src="va-icon.png" alt="vAmiga Icon" />
-					<div class="p-6">
+					<div class="p-6 text-base-content">
 						<div class="flex">
 							<div class="font-sofia-extra text-7xl mr-2">vAmiga</div>
-							<div class="font-sofia-extra text-7xl  text-gray-300">Online</div>
+							<div class="font-sofia-extra text-7xl opacity-75">Online</div>
 						</div>
-						<div class="font-sofia-semi text-xl text-gray-300 pl-2 pb-10">Version 0.2</div>
+						<div class="font-sofia-semi text-xl pl-2 pb-10">Version 0.2</div>
 						<div class="flex space-x-5">
 							<button class="btn btn-primary" on:click={launch}>Power On</button>
 							<button class="btn btn-primary p-1.5" on:click={gotoGitHub}><FaGithub /></button>
@@ -91,7 +90,7 @@
 				</div>
 			</div>
 			<div class="relative {debug} w-2/3 mt-5">
-				<p class="font-josefin text-base text-error text-center">
+				<p class="font-josefin text-error text-center">
 					This page is under construction and offers very little functionality, yet. I.e., it is
 					only possible to launch vAmiga with a number of preset demos. You'll find a suitable
 					selection in the Showcases section. The site is intended as a feature preview to gather

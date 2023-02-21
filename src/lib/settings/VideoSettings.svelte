@@ -48,7 +48,7 @@
 	}
 </script>
 
-<div transition:fade>
+<div in:fade>
 	<ConfigSection name="Monitor">
 		<ConfigItem
 			name="Palette"

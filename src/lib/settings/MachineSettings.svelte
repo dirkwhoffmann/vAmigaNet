@@ -166,7 +166,7 @@
 	}
 </script>
 
-<div transition:fade>
+<div in:fade>
 	<!--
 	<ConfigSection name="Roms">
 		{#key romValues}

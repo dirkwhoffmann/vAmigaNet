@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import FaLock from 'svelte-icons/fa/FaLock.svelte';
 	import GoInfo from 'svelte-icons/go/GoInfo.svelte';
 	import GiPadlock from 'svelte-icons/gi/GiPadlock.svelte'
 	import type { ActionEvent } from '$lib/settings/Settings.svelte';
@@ -57,34 +56,28 @@
 
 <div class="py-0.5 px-0">
 	<div class="w-full flex text-xl space-x-1 justify-between items-center">
-		<div class="border-0 bg-blue-400/20 w-full h-12 flex grow overflow-hidden">
-			<div class="w-full border-0 text-xl {opac} text-blue-200 flex items-center justify-between">
+		<div class="border-0 bg-primary w-full h-12 flex grow overflow-hidden">
+			<div class="w-full border-0 text-xl {opac} text-primary-content flex items-center justify-between">
 				<div class="border-0 mx-2 flex grow overflow-hidden whitespace-nowrap">{name}
 				</div>
-				<!--
-				<div class="flex mr-2 border-0 items-center {opac}">
-					<button class="h-6 w-6 mr-1 {locked ? '' : 'hidden'}"><FaLock /></button>
-					<button class="h-7 w-7 {info ? '' : 'hidden'}" on:click={infoAction}><GoInfo /></button>
-				</div>
-				-->
 			</div>
 		</div>
-		<div class="border-0 bg-blue-400/20 w-20 h-12 flex items-center justify-center {locked ? '' : 'hidden'}">
-			<button class="h-7 w-7 text-blue-200 {opac}"><GiPadlock /></button>
+		<div class="border-0 bg-primary w-20 h-12 flex items-center justify-center {locked ? '' : 'hidden'}">
+			<button class="h-7 w-7 text-base-content {opac}"><GiPadlock /></button>
 		</div>
-		<div class="border-0 bg-blue-400/20 w-20 h-12 flex items-center justify-center {info ? '' : 'hidden'}">
-			<button class="h-7 w-7 text-blue-200 {opac}" on:click={infoAction}><GoInfo /></button>
+		<div class="border-0 bg-primary w-20 h-12 flex items-center justify-center {info ? '' : 'hidden'}">
+			<button class="h-7 w-7 text-base-content {opac}" on:click={infoAction}><GoInfo /></button>
 		</div>
-			<div class="border-0 bg-blue-400/20 h-12">
+			<div class="border-0 bg-primary h-12">
 			{#if locked}
 				<button
-					class="btn w-[18rem] border-0 rounded-none text-xl font-normal opacity-50 text-blue-200 hover:bg-slate-600 bg-transparent"
+					class="btn btn-primary w-[18rem] border-0 rounded-none text-xl font-normal opacity-50"
 					>{displayName}</button
 				>
 			{:else}
 				<div class="dropdown dropdown-end">
 					<button
-						class="btn w-[18rem] border-0 rounded-none text-xl font-normal text-blue-200 hover:bg-slate-600 bg-transparent"
+						class="btn btn-primary w-[18rem] border-0 rounded-none text-xl font-normal"
 						><Chevron>{displayName}</Chevron>
 					</button>
 					{#if min != max}
@@ -101,7 +94,7 @@
 							/>
 						</ul>
 					{:else}
-						<ul class="dropdown-content menu p-2 text-xl text-blue-200 bg-slate-600 w-[18rem]">
+						<ul class="dropdown-content menu p-2 text-xl text-base-content bg-base-300 w-[18rem]">
 							{#each values as { name, id }, i}
 								<li class="" id={id.toString()}>
 									<button on:click={(e) => handleClick(e, id)}

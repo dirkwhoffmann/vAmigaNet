@@ -98,7 +98,6 @@
 				item={port2Button}
 				subitems={port2Items}
 			/>
-			<SidebarButton on:select={select} item={settings} highlighted={$showSettings} />
 			<SidebarButton on:select={select} item={shell} highlighted={$showShell} />
 			<SidebarButton on:select={select} item={monitor} highlighted={$debugDma} />
 			<SidebarSection
