@@ -438,7 +438,6 @@
 		if (code === undefined) return;
 
 		$keyboard.releaseKey(code);
-
 	}
 
 	//
@@ -522,15 +521,13 @@
 	}
 </script>
 
-<div bind:this={wrapper} class="w-full h-full">
-	<canvas
-		on:keydown={keyDown}
-		on:keyup={keyUp}
-		on:mousedown={mouseDown}
-		on:mouseup={mouseUp}
-		bind:this={canvas}
-		style="image-rendering: pixelated"
-		class="w-full h-full"
-		tabindex="-1"
-	/>
-</div>
+<canvas
+	on:keydown={keyDown}
+	on:keyup={keyUp}
+	on:mousedown={mouseDown}
+	on:mouseup={mouseUp}
+	bind:this={canvas}
+	style="image-rendering: pixelated"
+	class="w-full h-full border-2 focus:outline-none focus:ring-0"
+	tabindex="-1"
+/>
