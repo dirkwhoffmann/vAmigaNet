@@ -131,7 +131,7 @@
 	export async function runShowcase(showcase: DataBaseItem) {
 		await $audio.setup();
 		try {
-			console.log('Runningg ' + showcase.title + '...');
+			console.log('Running ' + showcase.title + '...');
 			$amiga.powerOff();
 			console.log("requiredRom = " + showcase.requiredRom);
 			if (showcase.requiredRom) {
@@ -507,6 +507,7 @@
 
 			case $proxy.MSG_DRIVE_POLL:
 				$MsgDrivePoll++;
+				$dfCylinder[d1] = d2;
 				$audio.playStepSound();
 				break;
 

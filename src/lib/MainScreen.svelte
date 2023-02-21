@@ -34,7 +34,7 @@
 							let blob = await file.arrayBuffer();
 							let uint8View = new Uint8Array(blob);
 
-							/*
+							// Check if this file is an ADF
 							try {
 								console.log('Calling $amiga.insertDisk');
 								$amiga.insertDisk(uint8View, blob.byteLength, 0);
@@ -42,7 +42,6 @@
 							} catch(exc) {
 								console.log("No disk");
 							}
-							*/
 							
 							let info = $memory.analyzeRom(uint8View, blob.byteLength);
 							console.log('ROM analyzed: ', info);

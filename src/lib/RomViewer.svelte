@@ -107,10 +107,11 @@
 		}
 	}
 
-	function installAction(e: MouseEvent, crc: number) {
+	async function installAction(e: MouseEvent, crc: number) {
 		console.log('installAction: ', crc);
 		$amiga.powerOff();
-		$proxy.installRom(crc);
+		await $proxy.installRom(crc);
+		$amiga.hardReset();
 		$amiga.run();
 	}
 

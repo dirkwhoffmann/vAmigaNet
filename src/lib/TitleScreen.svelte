@@ -35,11 +35,13 @@
 	}
 
 	async function openShowcases() {
+		await $audio.setup();
 		showShowcases = !showShowcases;
 		$showSidebar = false; 
 	}
 
 	async function openRoms() {
+		await $audio.setup();
 		showRomViewer = true;
 	}
 
