@@ -5,7 +5,7 @@
 	import { port1, port2, mouse1, mouse2, MsgShaking } from '$lib/stores';
 	import { shaking } from '$lib/stores';
 	import { VPIXELS, HPIXELS, TPP } from '$lib/constants';
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { AMIGA_KEYS } from '$lib/constants';
 	import { keyset1, keyset2 } from '$lib/stores';
 
@@ -31,7 +31,7 @@
 
 	// Indicates if the mouse has been captured
 	let isLocked = () => document.pointerLockElement === canvas;
-
+	
 	// Indicates if a joystick emulation key is currently pressed
 	let keyUp = false;
 	let keyDown = false;
@@ -415,8 +415,20 @@
 	}
 
 	onMount(() => {
+		console.log("*** onMount()");
+
+		// Add event listeners
+		document.addEventListener('pointerlockchange', lockChangeAlert, false);
+
 		initWebGL();
 		updateTextureRect(tx1, ty1, tx2, ty2);
+	});
+
+	onDestroy(() => {
+		console.log("*** onDestroy()");
+
+		// Remove event listeners
+		document.removeEventListener('pointerlockchange', lockChangeAlert);
 	});
 
 	//
@@ -539,8 +551,6 @@
 	// Mouse
 	//
 
-	document.addEventListener('pointerlockchange', lockChangeAlert, false);
-
 	$: if ($MsgShaking) {
 		console.log('MSG_SHAKING received');
 
@@ -550,11 +560,11 @@
 
 	function lockChangeAlert() {
 		if (document.pointerLockElement === canvas) {
-			console.log('addEventListener: mousemove:');
 			document.addEventListener('mousemove', mouseMove, false);
+			console.log('addEventListener: mousemove:', isLocked());
 		} else {
-			console.log('removeEventListener: mousemove:');
 			document.removeEventListener('mousemove', mouseMove);
+			console.log('removeEventListener: mousemove:', isLocked());
 		}
 	}
 
@@ -573,7 +583,7 @@
 	}
 
 	function mouseMove(event: MouseEvent) {
-		console.log('mouseMove:', $port1, $port2, event.movementX, event.movementY);
+		// console.log('mouseMove:', $port1, $port2, event.movementX, event.movementY);
 
 		const x = event.movementX / 2;
 		const y = event.movementY / 2;
