@@ -5,14 +5,10 @@
 	export let enabled = true;
 	export let opacity = '';
 	export let toggle = false;
-	export let highlighted = false; 
+	export let active = false; 
 
 	let state = false;
 	const dispatch = createEventDispatcher<{select:{sender:string, state:boolean}}>();
-
-	$: bgcolor = enabled ? (highlighted ? 'bg-blue-300' : 'bg-gray-500') : 'bg-gray-500';
-	$: activeStyle = 'active:bg-blue-300';
-	$: hoverStyle = enabled ? 'hover:{blue} hover:scale-100' : '';
 
 	function click(e: Event) {
 		e.preventDefault();
@@ -25,7 +21,7 @@
 <div class="">
 	<button
 		type="button"
-		class="p-1 w-10 rounded-lg text-white {activeStyle} {bgcolor} {hoverStyle} {opacity}"
+		class="btn btn-primary p-1.5 w-12 {active ? 'btn-active' : ''}"
 		id={item.id}
 		on:click={click}
 	>

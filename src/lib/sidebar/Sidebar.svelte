@@ -96,15 +96,15 @@
 </script>
 
 <div transition:fade={{ duration }} class="">
-	<div class="absolute top-0 left-0 h-full bg-gray-500/40 flex flex-col w-16 items-center z-40">
-		<div class="w-10 mt-2 flex flex-col space-y-1">
+	<div class="absolute top-0 left-0 bg-base-100 opacity-75 flex flex-col w-16 items-center z-40">
+		<div class="w-10 flex flex-col space-y-2 mt-1 mb-2">
 			<SidebarSection
 				on:select={select}
 				expanded={sel == 'control'}
 				item={control}
 				subitems={controlItems}
 			/>
-			<SidebarButton on:select={select} item={settings} highlighted={$showSettings} />
+			<SidebarButton on:select={select} item={settings} active={$showSettings} />
 			<SidebarSection
 				on:select={select}
 				expanded={sel == 'port1'}
@@ -117,8 +117,8 @@
 				item={port2Button}
 				subitems={port2Items}
 			/>
-			<SidebarButton on:select={select} item={shell} highlighted={$showShell} />
-			<SidebarButton on:select={select} item={monitor} highlighted={$debugDma} />
+			<SidebarButton on:select={select} item={shell} active={$showShell} />
+			<SidebarButton on:select={select} item={monitor} active={$debugDma} />
 			<SidebarSection
 				on:select={select}
 				expanded={sel == 'layout'}
