@@ -5,12 +5,9 @@
 
 	export let selected: DataBaseItem | null;
 	export let show = true;
-    
+
 	$: src = 'footage/' + (selected?.url ?? '') + '-large.jpg';
-	$: hasAros = $romcrc == 1062194186;
-    $: yetUnsupported = selected?.locked ?? true;
-    $: incompatibleRom = !selected?.aros && hasAros; 
-    $: disabled = yetUnsupported || incompatibleRom;
+	$: disabled = selected?.incompatibleRoms.includes($romcrc);
 
 	function close() {
 		console.log('close');
@@ -18,8 +15,8 @@
 	}
 
 	async function runTitle() {
-        console.log("runTitle");
-        $proxy.runShowcase(selected);
+		console.log('runTitle');
+		$proxy.runShowcase(selected);
 	}
 </script>
 
@@ -49,11 +46,7 @@
 			</div>
 			{#if disabled}
 				<div class="text-error font-josefin">
-                    {#if incompatibleRom}
-                        This item is locked because it requires an original Kickstart to run.
-                    {:else}
-                        This item is locked because it requires yet unsupported input devices.
-                    {/if}
+					This item is locked because it requires an original Kickstart to run.
 				</div>
 				<div class="mt-4 relative">
 					<button class="btn btn-disabled bg-gray-500 text-white opacity-20" on:click={runTitle}

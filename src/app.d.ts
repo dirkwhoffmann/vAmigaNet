@@ -21,8 +21,6 @@ declare global {
 		memory: number[];
 		requiredRom: number | null;
 		incompatibleRoms: number[];
-		aros: boolean; // Deprecated
-		locked: boolean;
 	}
 
 	interface Window {

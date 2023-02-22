@@ -1,19 +1,14 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import Carousel from '$lib/widgets/Carousel.svelte';
 	import { demos, games, tools } from '$lib/database';
-	import { proxy, audio, amiga, romcrc } from '$lib/stores';
-	import { db, type RomEntry } from '$lib/db/db';
-	import { liveQuery } from 'dexie';
+	import { romcrc } from '$lib/stores';
 	import Sedcard from '$lib/Sedcard.svelte';
-	import Audio from './Audio.svelte';
 
 	let show = 0;
 
 	$: aros = $romcrc == 1062194186;
 
-	// var selected: DataBaseItem = demos[0];
 	var selected: DataBaseItem | null = null;
 	$: src = 'footage/' + (selected?.url ?? '') + '-large.jpg';
 
@@ -22,11 +17,6 @@
 	let toolsCarousel: Carousel;
 
     let showSedcard = false;
-
-	onMount(() => {
-		console.log('onMount');
-		// update(demos[0]);
-	});
 
 	function update(item: DataBaseItem) {
 		if (activeTab == 0) demoCarousel.setActive(item.title);
@@ -54,19 +44,6 @@
 </div>
 
 <div class="grow h-full flex flex-col justify-center overflow-auto" in:fade>
-
-<!-- <div in:fade class="relative bg-transparent grow flex flex-col items-center justify-center {debug}">-->
-	<!--
-	<div class="flex items-center space-x-2">
-		<div class="{debug} tabs tabs-boxed flex grow">
-			{#each tabs as tab, i}
-				<button class="tab w-24" class:tab-active={activeTab == i} on:click={() => (activeTab = i)}
-					>{tab}</button
-				>
-			{/each}
-		</div>
-	</div>
--->
 	<div class="relative h-full">
 		<div class="w-hull bg-gray-500/50 text-2xl p-1 font-josefin">Demos</div>
 			<Carousel

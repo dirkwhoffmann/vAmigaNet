@@ -8,9 +8,7 @@ export const demos: DataBaseItem[] = [
 		adf: ['BatmanRises1.adf', 'BatmanRises2.adf'],
 		memory: [1024, 512, 0],
         requiredRom: null,
-        incompatibleRoms: [],
-		aros: true,
-		locked: false
+        incompatibleRoms: []
 	},
 	{
 		url: 'rinkadink',
@@ -21,9 +19,7 @@ export const demos: DataBaseItem[] = [
 		adf: ['RinkADink.adf'],
 		memory: [512, 512, 0],
         requiredRom: null,
-        incompatibleRoms: [],
-        aros: true,
-		locked: false
+        incompatibleRoms: []
 	},
 	{
 		url: 'desertdreams',
@@ -34,9 +30,7 @@ export const demos: DataBaseItem[] = [
 		adf: ['DesertDream1.adf', 'DesertDream2.adf'],
 		memory: [1024, 512, 0],
         requiredRom: null,
-        incompatibleRoms: [],
-        aros: true,
-		locked: false
+        incompatibleRoms: []
 	},
 	{
 		url: 'inebriation',
@@ -47,9 +41,7 @@ export const demos: DataBaseItem[] = [
 		adf: ['AbsoluteInebriation1.adf', 'AbsoluteInebriation2.adf'],
 		memory: [512, 512, 0],
         requiredRom: null,
-        incompatibleRoms: [],
-        aros: true,
-		locked: false
+        incompatibleRoms: []
 	},
 	{
 		url: 'eon',
@@ -60,9 +52,7 @@ export const demos: DataBaseItem[] = [
 		adf: ['Eon1.adf', 'Eon2.adf'],
 		memory: [512, 512, 0],
         requiredRom: null,
-        incompatibleRoms: [1062194186],
-        aros: false,
-		locked: false
+        incompatibleRoms: [1062194186]
 	},
     {
 		url: 'kyrios',
@@ -73,9 +63,7 @@ export const demos: DataBaseItem[] = [
 		adf: ['Kyrios.adf'],
 		memory: [1024, 512, 0],
         requiredRom: null,
-        incompatibleRoms: [1062194186],
-        aros: false,
-		locked: false
+        incompatibleRoms: [1062194186]
 	},
     {
 		url: '3ddemo',
@@ -86,11 +74,8 @@ export const demos: DataBaseItem[] = [
 		adf: ['3Ddemo2.adf'],
 		memory: [1024, 512, 0],
         requiredRom: null,
-        incompatibleRoms: [1062194186],
-        aros: false,
-		locked: false
+        incompatibleRoms: [1062194186]
 	}
-
 ];
 
 export const games: DataBaseItem[] = [
@@ -103,9 +88,7 @@ export const games: DataBaseItem[] = [
 		adf: ['TrapRunner.adf'],
 		memory: [512, 512, 0],
         requiredRom: null,
-        incompatibleRoms: [],
-        aros: true,
-		locked: false
+        incompatibleRoms: []
 	},
 	{
 		url: 'celtic',
@@ -116,9 +99,7 @@ export const games: DataBaseItem[] = [
 		adf: ['CelticHeart.adf'],
 		memory: [512, 512, 0],
         requiredRom: null,
-        incompatibleRoms: [],
-        aros: true,
-		locked: false
+        incompatibleRoms: []
 	},
 	{
 		url: 'paccer',
@@ -129,9 +110,7 @@ export const games: DataBaseItem[] = [
 		adf: ['Paccer.adf'],
 		memory: [512, 512, 0],
         requiredRom: null,
-        incompatibleRoms: [1062194186],
-        aros: false,
-		locked: false
+        incompatibleRoms: [1062194186]
 	},
 	{
 		url: 'defender',
@@ -142,9 +121,7 @@ export const games: DataBaseItem[] = [
 		adf: ['DefenderOfTheCrown1.adf', 'DefenderOfTheCrown2.adf'],
 		memory: [512, 512, 0],
         requiredRom: null,
-        incompatibleRoms: [1062194186],
-        aros: false,
-		locked: false
+        incompatibleRoms: [1062194186]
 	}
 ];
 
@@ -158,9 +135,7 @@ export const tools: DataBaseItem[] = [
 		adf: ['SysInfo.adf'],
 		memory: [1024, 512, 0],
         requiredRom: null,
-        incompatibleRoms: [],
-        aros: true,
-		locked: false
+        incompatibleRoms: []
 	},
 	{
 		url: 'testkit',
@@ -171,9 +146,7 @@ export const tools: DataBaseItem[] = [
 		adf: ['AmigaTestKit.adf'],
 		memory: [512, 512, 0],
         requiredRom: null,
-        incompatibleRoms: [],
-        aros: true,
-		locked: false
+        incompatibleRoms: []
 	},
 	{
 		url: 'diagrom',
@@ -184,8 +157,6 @@ export const tools: DataBaseItem[] = [
 		adf: [],
 		memory: [512, 512, 0],
         requiredRom: 2231503309,
-        incompatibleRoms: [],
-        aros: true,
-		locked: false
+        incompatibleRoms: []
 	}
 ];
