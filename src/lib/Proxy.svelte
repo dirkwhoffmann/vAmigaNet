@@ -219,11 +219,12 @@
 		installRom(2231503309);
 	}
 
-	export function updateWarp() {
+	$: updateWarp($warpMode)
+	export function updateWarp(warpMode: number) {
 		if (!$amiga) return;
 
 		let newWarp = false;
-		switch ($warpMode) {
+		switch (warpMode) {
 			case 0:
 				newWarp = $diskController.isSpinning();
 				break;
@@ -344,7 +345,7 @@
 
 			case $proxy.MSG_RESET:
 				$MsgReset++;
-				updateWarp();
+				updateWarp($warpMode);
 				$halted = false;
 				break;
 
@@ -523,13 +524,13 @@
 			case $proxy.MSG_DRIVE_MOTOR_ON:
 				$MsgDriveMotorOn++;
 				$dfMotor[d1] = true;
-				updateWarp();
+				updateWarp($warpMode);
 				break;
 
 			case $proxy.MSG_DRIVE_MOTOR_OFF:
 				$MsgDriveMotorOff++;
 				$dfMotor[d1] = false;
-				updateWarp();
+				updateWarp($warpMode);
 				break;
 
 			case $proxy.MSG_DRIVE_STEP:
@@ -633,7 +634,7 @@
 
 			case $proxy.MSG_SNAPSHOT_RESTORED:
 				$MsgSnapshotRestored++;
-				updateWarp();
+				updateWarp($warpMode);
 				break;
 
 			case $proxy.MSG_RECORDING_STARTED:

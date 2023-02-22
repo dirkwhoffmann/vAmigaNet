@@ -19,8 +19,6 @@
 	function action(e: MouseEvent) {
 		e.preventDefault();
         $warpMode = ($warpMode + 1) % 3; 
-        $proxy.updateWarp();
-
 	}
 </script>
 

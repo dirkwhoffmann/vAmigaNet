@@ -104,7 +104,7 @@
 			bind:this={textarea}
 			readonly
 			style="resize: none; font-variant-ligatures: none"
-			class="font-azeret text-base focus:border-transparent focus:ring-0 text-white bg-transparent w-full h-full p-2"
+			class="font-azeret text-base focus:border-transparent focus:outline-none focus:ring-0 text-white bg-transparent w-full h-full p-2"
 			on:keydown={onKeyDown}
 		/>
 	</div>
