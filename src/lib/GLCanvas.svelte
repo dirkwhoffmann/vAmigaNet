@@ -35,7 +35,7 @@
 
 	// Indicates if the mouse has been captured
 	let isLocked = () => document.pointerLockElement === canvas;
-	
+
 	// Indicates if a joystick emulation key is currently pressed
 	let keyUp = false;
 	let keyDown = false;
@@ -419,7 +419,7 @@
 	}
 
 	onMount(() => {
-		console.log("*** onMount()");
+		console.log('*** onMount()');
 
 		// Add event listeners
 		document.addEventListener('pointerlockchange', lockChangeAlert, false);
@@ -429,7 +429,7 @@
 	});
 
 	onDestroy(() => {
-		console.log("*** onDestroy()");
+		console.log('*** onDestroy()');
 
 		// Remove event listeners
 		document.removeEventListener('pointerlockchange', lockChangeAlert);
@@ -604,17 +604,22 @@
 
 	async function mouseDown(event) {
 		console.log('mousedown: ', event.which);
-		lockMouse();
-		switch (event.which) {
-			case 1:
-				$mouse1.trigger($proxy.PRESS_LEFT);
-				break;
-			case 2:
-				$mouse1.trigger($proxy.PRESS_MIDDLE);
-				break;
-			case 3:
-				$mouse1.trigger($proxy.PRESS_RIGHT);
-				break;
+
+		if (!isLocked()) {
+			console.log("Locking mouse...");
+			lockMouse();
+		} else {
+			switch (event.which) {
+				case 1:
+					$mouse1.trigger($proxy.PRESS_LEFT);
+					break;
+				case 2:
+					$mouse1.trigger($proxy.PRESS_MIDDLE);
+					break;
+				case 3:
+					$mouse1.trigger($proxy.PRESS_RIGHT);
+					break;
+			}
 		}
 	}
 
