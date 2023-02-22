@@ -141,7 +141,7 @@
 		<div class="flex justify-center h-full items-center">
 			<div class={canvasBorder} style="height:{h}px; width:{w}px">
 				<GLCanvas
-					bind:this={glCanvas} {tx1} {tx2} {ty1} {ty2} />
+					bind:this={glCanvas} {x1} {x2} {y1} {y2} {tx1} {tx2} {ty1} {ty2} />
 			</div>
 		</div>
 	</div>

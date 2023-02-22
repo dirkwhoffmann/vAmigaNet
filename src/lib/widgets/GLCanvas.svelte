@@ -17,6 +17,10 @@
 	let gl: WebGL2RenderingContext;
 
 	// Texture coordinates
+	export let x1 = 0;
+	export let y1 = 0;
+	export let x2 = 0;
+	export let y2 = 0;
 	export let tx1: number;
 	export let tx2: number;
 	export let ty1: number;
@@ -213,8 +217,8 @@
 
 		// Rectify the canvas size if not
 		if (needResize) {
-			canvas.width = displayWidth;
-			canvas.height = displayHeight;
+			canvas.width = x2 - x1;
+			canvas.height = y2 - y1;
 		}
 	}
 
