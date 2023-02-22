@@ -9,7 +9,7 @@
 <div class="flex">
 	<div>
 		<div class="border-0">
-			<SidebarButton on:select highlighted={expanded} {item} />
+			<SidebarButton on:select active={expanded} {item} />
 		</div>
 	</div>
 	{#if expanded}

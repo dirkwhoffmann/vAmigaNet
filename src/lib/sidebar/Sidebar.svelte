@@ -22,13 +22,18 @@
 		dispatch('select', { sender: sender, state: state });
 	}
 
-	const vamiga = { id: 'vamiga', icon: 'icons/vamigaIcon.png' };
+	// const vamiga = { id: 'vamiga', icon: 'icons/vamigaIcon.png' };
+	const power = { id: 'power', icon: 'icons/powerIcon.png' };
+	const pause = { id: 'pause', icon: 'icons/pauseIcon.png' };
+	const reset = { id: 'reset', icon: 'icons/resetIcon.png' };
+	/*
 	const control = { id: 'control', icon: 'icons/controlIcon.png' };
 	let controlItems = [
 		{ id: 'pause', icon: 'icons/pauseIcon.png' },
 		{ id: 'reset', icon: 'icons/resetIcon.png' },
 		{ id: 'power', icon: 'icons/powerIcon.png' }
 	];
+	*/
 	const settings = { id: 'settings', icon: 'icons/settingsIcon.png' };
 	const port1Button = { id: 'port1', icon: 'icons/device-none.png' };
 	const port2Button = { id: 'port2', icon: 'icons/device-none.png' };
@@ -54,20 +59,36 @@
 	];
 
 	$: {
-		switch($port1) {
-			case 1: port1Button.icon = 'icons/device-mouse.png'; break;
-			case 2: port1Button.icon = 'icons/device-keyset-1.png'; break;
-			case 3: port1Button.icon = 'icons/device-keyset-2.png'; break;
-			default: port1Button.icon = 'icons/device-none.png'; break;
+		switch ($port1) {
+			case 1:
+				port1Button.icon = 'icons/device-mouse.png';
+				break;
+			case 2:
+				port1Button.icon = 'icons/device-keyset-1.png';
+				break;
+			case 3:
+				port1Button.icon = 'icons/device-keyset-2.png';
+				break;
+			default:
+				port1Button.icon = 'icons/device-none.png';
+				break;
 		}
 	}
 
 	$: {
-		switch($port2) {
-			case 1: port2Button.icon = 'icons/device-mouse.png'; break;
-			case 2: port2Button.icon = 'icons/device-keyset-1.png'; break;
-			case 3: port2Button.icon = 'icons/device-keyset-2.png'; break;
-			default: port2Button.icon = 'icons/device-none.png'; break;
+		switch ($port2) {
+			case 1:
+				port2Button.icon = 'icons/device-mouse.png';
+				break;
+			case 2:
+				port2Button.icon = 'icons/device-keyset-1.png';
+				break;
+			case 3:
+				port2Button.icon = 'icons/device-keyset-2.png';
+				break;
+			default:
+				port2Button.icon = 'icons/device-none.png';
+				break;
 		}
 	}
 
@@ -78,32 +99,21 @@
 			? 'icons/layoutAspectIcon.png'
 			: 'icons/layoutFitIcon.png';
 
-	$: if (!$poweredOn) {
-		controlItems = [{ id: 'power', icon: 'icons/powerIcon.png' }];
-	} else if ($running) {
-		controlItems = [
-			{ id: 'pause', icon: 'icons/pauseIcon.png' },
-			{ id: 'reset', icon: 'icons/resetIcon.png' },
-			{ id: 'power', icon: 'icons/powerIcon.png' }
-		];
+	$: if ($running) {
+		pause.icon = 'icons/pauseIcon.png';
 	} else {
-		controlItems = [
-			{ id: 'pause', icon: 'icons/runIcon.png' },
-			{ id: 'reset', icon: 'icons/resetIcon.png' },
-			{ id: 'power', icon: 'icons/powerIcon.png' }
-		];
+		pause.icon = 'icons/runIcon.png';
 	}
 </script>
 
 <div transition:fade={{ duration }} class="">
 	<div class="absolute top-0 left-0 bg-base-100 opacity-75 flex flex-col w-16 items-center z-40">
-		<div class="w-10 flex flex-col space-y-2 mt-1 mb-2">
-			<SidebarSection
-				on:select={select}
-				expanded={sel == 'control'}
-				item={control}
-				subitems={controlItems}
-			/>
+		<div class="flex flex-col space-y-2 w-[48px] mt-1.5 mb-2 border-0">
+			<SidebarButton on:select={select} item={power} />
+			{#if $poweredOn}
+				<SidebarButton on:select={select} item={pause} />
+				<SidebarButton on:select={select} item={reset} />
+			{/if}
 			<SidebarButton on:select={select} item={settings} active={$showSettings} />
 			<SidebarSection
 				on:select={select}
