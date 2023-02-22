@@ -105,7 +105,7 @@ export const games: DataBaseItem[] = [
         requiredRom: null,
         incompatibleRoms: [],
         aros: true,
-		locked: true
+		locked: false
 	},
 	{
 		url: 'celtic',
@@ -118,7 +118,7 @@ export const games: DataBaseItem[] = [
         requiredRom: null,
         incompatibleRoms: [],
         aros: true,
-		locked: true
+		locked: false
 	},
 	{
 		url: 'paccer',
@@ -131,7 +131,7 @@ export const games: DataBaseItem[] = [
         requiredRom: null,
         incompatibleRoms: [1062194186],
         aros: false,
-		locked: true
+		locked: false
 	},
 	{
 		url: 'defender',
@@ -144,7 +144,7 @@ export const games: DataBaseItem[] = [
         requiredRom: null,
         incompatibleRoms: [1062194186],
         aros: false,
-		locked: true
+		locked: false
 	}
 ];
 
@@ -160,7 +160,7 @@ export const tools: DataBaseItem[] = [
         requiredRom: null,
         incompatibleRoms: [],
         aros: true,
-		locked: true
+		locked: false
 	},
 	{
 		url: 'testkit',
@@ -173,7 +173,7 @@ export const tools: DataBaseItem[] = [
         requiredRom: null,
         incompatibleRoms: [],
         aros: true,
-		locked: true
+		locked: false
 	},
 	{
 		url: 'diagrom',
@@ -186,6 +186,6 @@ export const tools: DataBaseItem[] = [
         requiredRom: 2231503309,
         incompatibleRoms: [],
         aros: true,
-		locked: true
+		locked: false
 	}
 ];

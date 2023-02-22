@@ -131,6 +131,15 @@ struct DeniseProxy
     u32 noise() const;
 };
 
+struct JoystickProxy
+{
+    int joystick;
+
+    JoystickProxy(int joystick);
+
+    void trigger(int action);
+};
+
 struct KeyboardProxy
 {
     KeyboardProxy();

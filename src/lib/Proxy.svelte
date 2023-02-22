@@ -11,6 +11,8 @@
 		denise,
 		diskController,
 		enums,
+		joystick1,
+		joystick2,
 		keyboard,
 		memory,
 		mouse1,
@@ -118,8 +120,9 @@
 		dfCylinder,
 		dfProtected
 	} from '$lib/stores';
-	import { debugDma } from '$lib/stores';
+	import { debugDma, keyset1, keyset2 } from '$lib/stores';
 	import { db, type RomEntry } from '$lib/db/db';
+	import { AMIGA_KEYS } from './constants';
 
 	onMount(() => {
 		console.log('Proxy: onMount()');
@@ -133,9 +136,9 @@
 		try {
 			console.log('Running ' + showcase.title + '...');
 			$amiga.powerOff();
-			console.log("requiredRom = " + showcase.requiredRom);
+			console.log('requiredRom = ' + showcase.requiredRom);
 			if (showcase.requiredRom) {
-			console.log('Installing Rom: ' + showcase.requiredRom);
+				console.log('Installing Rom: ' + showcase.requiredRom);
 				$proxy.installRom(showcase.requiredRom);
 			}
 			console.log('Configuring CHIP: ' + showcase.memory[0]);
@@ -173,7 +176,6 @@
 	}
 
 	export async function installRom(crc32: number) {
-
 		if (crc32 == 0) {
 			$memory.deleteRom();
 			$memory.deleteExt();
@@ -229,43 +231,56 @@
 		}
 	}
 
-	export async function startUp() {
-		console.log('VAmiga: startUp()');
-
-		// Install AROS
-		$proxy.installAros();
-
-		// Apply some default settings
-		$amiga.configure($proxy.OPT_AGNUS_REVISION, $proxy.AGNUS_ECS_2MB);
-
-
-		// Trigger exception (for testing)
-		// $amiga.configure($proxy.OPT_AGNUS_REVISION, 42);
-
-	}
-
 	export function onRuntimeInitialized() {
 		console.log('Creating proxies...');
-
 		$agnus = new $proxy.AgnusProxy();
 		$amiga = new $proxy.AmigaProxy();
 		$cpu = new $proxy.CPUProxy();
 		$denise = new $proxy.DeniseProxy();
 		$diskController = new $proxy.DiskControllerProxy();
 		$enums = new $proxy.EnumProxy();
+		$joystick1 = new $proxy.JoystickProxy(1);
+		$joystick2 = new $proxy.JoystickProxy(2);
 		$keyboard = new $proxy.KeyboardProxy();
 		$memory = new $proxy.MemoryProxy();
 		$mouse1 = new $proxy.MouseProxy(1);
 		$mouse2 = new $proxy.MouseProxy(2);
 		$retroShell = new $proxy.RetroShellProxy();
 
-		$initialized = true;
+		console.log('Configuring the emulator...');
 
-		// Initiate the launch procedure
-		startUp();
+		// Apply some default settings
+		$amiga.configure($proxy.OPT_AGNUS_REVISION, $proxy.AGNUS_ECS_2MB);
 
-		// Emulated an error (REMOVE ASAP)
-		// $amiga.configure($proxy.OPT_CHIP_RAM, 42);
+		$keyset1 = {
+			ArrowLeft: $proxy.PULL_LEFT,
+			ArrowRight: $proxy.PULL_RIGHT,
+			ArrowUp: $proxy.PULL_UP,
+			ArrowDown: $proxy.PULL_DOWN,
+			ControlRight: $proxy.PRESS_FIRE,
+			Space: $proxy.PRESS_FIRE,
+		};
+
+		$keyset2 = {
+			KeyS: $proxy.PULL_LEFT,
+			KeyD: $proxy.PULL_RIGHT,
+			KeyE: $proxy.PULL_UP,
+			KeyX: $proxy.PULL_DOWN,
+			KeyC: $proxy.RELEASE_FIRE,
+		};
+
+		(async () => {
+			console.log('Installing Roms...');
+
+			// Install AROS
+			$proxy.installAros();
+
+			console.log('Initialization completed');
+			$initialized = true;
+		})();
+
+		// Trigger an exception (for debugging, only)
+		// $amiga.configure($proxy.OPT_AGNUS_REVISION, 42);
 	}
 
 	function processMsg(id: number, d1: number, d2: number, d3: number, d4: number) {
@@ -576,7 +591,7 @@
 				break;
 
 			case $proxy.MSG_SHAKING:
-				console.log("MSG_SHAKING");
+				console.log('MSG_SHAKING');
 				$MsgShaking++;
 				break;
 

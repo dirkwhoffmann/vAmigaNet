@@ -359,8 +359,31 @@ EMSCRIPTEN_BINDINGS(DeniseProxy)
 }
 
 //
+// Joystick proxy
+//
+
+JoystickProxy::JoystickProxy(int joystick)
+{
+    assert(joystick == 1 || joystick == 2);
+    this->joystick = joystick;
+}
+
+void JoystickProxy::trigger(int action)
+{
+    ControlPort &port = joystick == 1 ? amiga->controlPort1 : amiga->controlPort2;
+    port.joystick.trigger(action);
+}
+
+EMSCRIPTEN_BINDINGS(JoystickProxy)
+{
+    class_<JoystickProxy>("JoystickProxy")
+        .constructor<int>()
+        .function("trigger", &JoystickProxy::trigger);
+}
+
+//
 // Keyboard proxy
-// 
+//
 
 KeyboardProxy::KeyboardProxy()
 {

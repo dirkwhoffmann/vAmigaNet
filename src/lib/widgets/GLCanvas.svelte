@@ -1,12 +1,13 @@
 <svelte:options accessors={true} />
 
 <script lang="ts">
-	import { proxy, amiga, denise, keyboard } from '$lib/stores';
+	import { proxy, amiga, denise, keyboard, joystick1, joystick2 } from '$lib/stores';
 	import { port1, port2, mouse1, mouse2, MsgShaking } from '$lib/stores';
 	import { shaking } from '$lib/stores';
 	import { VPIXELS, HPIXELS, TPP } from '$lib/constants';
 	import { onMount } from 'svelte';
 	import { AMIGA_KEYS } from '$lib/constants';
+	import { keyset1, keyset2 } from '$lib/stores';
 
 	// Reference to the canvas element
 	let canvas: HTMLCanvasElement;
@@ -30,6 +31,12 @@
 
 	// Indicates if the mouse has been captured
 	let isLocked = () => document.pointerLockElement === canvas;
+
+	// Indicates if a joystick emulation key is currently pressed
+	let keyUp = false;
+	let keyDown = false;
+	let keyLeft = false;
+	let keyRight = false;
 
 	// Variable used to emulate interlace flickering
 	let flickerCnt = 0;
@@ -416,24 +423,99 @@
 	// Keyboard
 	//
 
-	function keyDown(e) {
-		console.log('keyDown: ', e);
+	// Translates a key press event to a list of gamepad actions
+	function keyDownEvents(keycode: number, keymap: number) {
+		let action: number;
+		action = keymap == 1 ? $keyset1[keycode] : $keyset2[keycode];
+
+		switch (action) {
+			case undefined:
+				return [];
+			case $proxy.PULL_UP:
+				keyUp = true;
+				return [$proxy.PULL_UP];
+			case $proxy.PULL_DOWN:
+				keyDown = true;
+				return [$proxy.PULL_DOWN];
+			case $proxy.PULL_LEFT:
+				keyLeft = true;
+				return [$proxy.PULL_LEFT];
+			case $proxy.PULL_RIGHT:
+				keyRight = true;
+				return [$proxy.PULL_RIGHT];
+			case $proxy.PRESS_FIRE:
+				return [$proxy.PRESS_FIRE];
+			case $proxy.PRESS_FIRE2:
+				return [$proxy.PRESS_FIRE2];
+			case $proxy.PRESS_FIRE3:
+				return [$proxy.PRESS_FIRE3];
+		}
+	}
+
+	// Translates a key release event to a list of gamepad actions
+	function keyUpEvents(keycode: number, keymap: number) {
+		let action: number;
+		action = keymap == 1 ? $keyset1[keycode] : $keyset2[keycode];
+
+		switch (action) {
+			case undefined:
+				return [];
+			case $proxy.PULL_UP:
+				keyUp = false;
+				return keyDown ? [$proxy.PULL_DOWN] : [$proxy.RELEASE_Y];
+			case $proxy.PULL_DOWN:
+				keyDown = false;
+				return keyUp ? [$proxy.PULL_UP] : [$proxy.RELEASE_Y];
+			case $proxy.PULL_LEFT:
+				keyLeft = false;
+				return keyRight ? [$proxy.PULL_RIGHT] : [$proxy.RELEASE_X];
+			case $proxy.PULL_RIGHT:
+				keyRight = false;
+				return keyLeft ? [$proxy.PULL_LEFT] : [$proxy.RELEASE_X];
+			case $proxy.PRESS_FIRE:
+				return [$proxy.RELEASE_FIRE];
+			case $proxy.PRESS_FIRE2:
+				return [$proxy.RELEASE_FIRE2];
+			case $proxy.PRESS_FIRE3:
+				return [$proxy.RELEASE_FIRE3];
+		}
+	}
+
+	function keyDownAction(e) {
+		// console.log('keyDown: ', e);
 
 		if (e.repeat) {
 			return;
 		}
 
+		// Check for joystick emulation keys
+		const events = keyDownEvents(e.code, 1);
+		console.log('Emulation key events: ', events);
+		if (events?.length) {
+			console.log('Emulation key hit');
+			events?.forEach((event) => $joystick2.trigger(event));
+			return; // Only if "connect emulation keys"
+		}
+
 		const code = AMIGA_KEYS[e.code];
-		if (code === undefined) return;
-
-		$keyboard.pressKey(code);
-
-		e.preventDefault();
-		e.stopPropagation();
+		if (code !== undefined) {
+			$keyboard.pressKey(code);
+			e.preventDefault();
+			e.stopPropagation();
+		}
 	}
 
-	function keyUp(e) {
-		console.log('keyUp: ', e);
+	function keyUpAction(e) {
+		// console.log('keyUp: ', e);
+
+		// Check for joystick emulation keys
+		const events = keyUpEvents(e.code, 1);
+		console.log('Emulation key events: ', events);
+		if (events?.length) {
+			console.log('Emulation key hit');
+			events?.forEach((event) => $joystick2.trigger(event));
+			return; // Only if "connect emulation keys"
+		}
 
 		const code = AMIGA_KEYS[e.code];
 		if (code === undefined) return;
@@ -455,12 +537,11 @@
 	}
 
 	function lockChangeAlert() {
-
 		if (document.pointerLockElement === canvas) {
-			console.log("addEventListener: mousemove:");
+			console.log('addEventListener: mousemove:');
 			document.addEventListener('mousemove', mouseMove, false);
 		} else {
-			console.log("removeEventListener: mousemove:");
+			console.log('removeEventListener: mousemove:');
 			document.removeEventListener('mousemove', mouseMove);
 		}
 	}
@@ -480,7 +561,6 @@
 	}
 
 	function mouseMove(event: MouseEvent) {
-		
 		// console.log('mouseMove:', event.movementX, event.movementY);
 
 		const x = event.movementX / 2;
@@ -529,8 +609,8 @@
 </script>
 
 <canvas
-	on:keydown={keyDown}
-	on:keyup={keyUp}
+	on:keydown={keyDownAction}
+	on:keyup={keyUpAction}
 	on:mousedown={mouseDown}
 	on:mouseup={mouseUp}
 	bind:this={canvas}

@@ -34,11 +34,15 @@
 	const port2Button = { id: 'port2', icon: 'icons/device-none.png' };
 	const port1Items = [
 		{ id: 'empty1', icon: 'icons/device-none.png' },
-		{ id: 'mouse1', icon: 'icons/device-mouse.png' }
+		{ id: 'mouse1', icon: 'icons/device-mouse.png' },
+		{ id: 'keyset1', icon: 'icons/device-keyset1.png' },
+		{ id: 'keyset2', icon: 'icons/device-keyset2.png' }
 	];
 	const port2Items = [
 		{ id: 'empty2', icon: 'icons/device-none.png' },
-		{ id: 'mouse2', icon: 'icons/device-mouse.png' }
+		{ id: 'mouse2', icon: 'icons/device-mouse.png' },
+		{ id: 'keyset1', icon: 'icons/device-keyset1.png' },
+		{ id: 'keyset2', icon: 'icons/device-keyset2.png' }
 	];
 	const shell = { id: 'shell', icon: 'icons/retroShellIcon.png' };
 	const monitor = { id: 'monitor', icon: 'icons/monitorIcon.png' };

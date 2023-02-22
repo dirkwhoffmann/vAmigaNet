@@ -10,6 +10,8 @@ export const cpu: any = writable();
 export const denise: any = writable();
 export const diskController: any = writable();
 export const enums: any = writable();
+export const joystick1: any = writable();
+export const joystick2: any = writable();
 export const keyboard: any = writable();
 export const memory: any = writable();
 export const mouse1: any = writable();
@@ -30,6 +32,10 @@ export const shaking = writable(1);
 export const port1 = writable(1);
 export const port2 = writable(0);
 
+// Emulation keysets
+export const keyset1 = writable();
+export const keyset2 = writable();
+
 // Layout
 export const canvasWidth = writable(0);
 export const canvasHeight = writable(0);
@@ -45,6 +51,7 @@ export const showShowcases = writable(false);
 export const showImpressum = writable(false);
 
 // Emulator state
+export const wasmInitialized = writable(false);
 export const initialized = writable(false);
 export const poweredOn = writable(false);
 export const running = writable(false);
