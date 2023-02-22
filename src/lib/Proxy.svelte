@@ -180,25 +180,35 @@
 			$memory.deleteRom();
 			$memory.deleteExt();
 			$romcrc = crc32;
-		} else {
-			try {
-				const item = await db.roms.get(crc32);
-				if (item?.rom) {
-					$memory.loadRom(item!.rom, item!.rom!.length);
-					$romcrc = crc32;
-				} else {
-					$memory.deleteRom();
-				}
-				if (item?.ext) {
-					$memory.loadExt(item!.ext, item!.ext!.length);
-				} else {
-					$memory.deleteExt();
-				}
-				console.log('Rom added', item?.title);
-			} catch (error) {
-				console.log(`installRom failed: `, error);
-			}
+			return true;
 		}
+		try {
+			const item = await db.roms.get(crc32);
+			if (item?.rom) {
+				$memory.loadRom(item!.rom, item!.rom!.length);
+				$romcrc = crc32;
+			} else {
+				$memory.deleteRom();
+			}
+			if (item?.ext) {
+				$memory.loadExt(item!.ext, item!.ext!.length);
+			} else {
+				$memory.deleteExt();
+			}
+			console.log('Rom added', item?.title);
+			return true;
+		} catch (error) {
+			console.log(`installRom failed: `, error);
+			return false;
+		}
+	}
+
+	export async function installRoms(crcs: [number]) {
+		for (const crc of crcs) {
+			const success = await installRom(crc);
+			if (success) return true;
+		}
+		return false;
 	}
 
 	export async function installAros() {
@@ -258,7 +268,7 @@
 			ArrowUp: $proxy.PULL_UP,
 			ArrowDown: $proxy.PULL_DOWN,
 			ControlRight: $proxy.PRESS_FIRE,
-			Space: $proxy.PRESS_FIRE,
+			Space: $proxy.PRESS_FIRE
 		};
 
 		$keyset2 = {
@@ -266,14 +276,22 @@
 			KeyD: $proxy.PULL_RIGHT,
 			KeyE: $proxy.PULL_UP,
 			KeyX: $proxy.PULL_DOWN,
-			KeyC: $proxy.RELEASE_FIRE,
+			KeyC: $proxy.RELEASE_FIRE
 		};
 
 		(async () => {
 			console.log('Installing Roms...');
 
 			// Install AROS
-			$proxy.installAros();
+			const defaultRoms = [
+				3304125791, // Kickstart 1.3
+				2798523958, // Kickstart 1.2
+				3283989056, // Kickstart 2.04
+				1062194186, // Aros
+			];
+
+			$proxy.installRoms(defaultRoms);
+			// $proxy.installAros();
 
 			console.log('Initialization completed');
 			$initialized = true;

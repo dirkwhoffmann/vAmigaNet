@@ -198,7 +198,7 @@ u32 AmigaProxy::rightChannelBuffer()
     return (u32)rightChannel.ptr;
 }
 
-void AmigaProxy::insertDisk(const string &blob, u32 len, u8 drive)
+bool AmigaProxy::insertDisk(const string &blob, u32 len, u8 drive)
 {
     printf("insertDisk(drive: %d)\n", drive);
     try
@@ -210,22 +210,24 @@ void AmigaProxy::insertDisk(const string &blob, u32 len, u8 drive)
         {
             ADFFile adf{(u8 *)blob.data(), (isize)len};
             amiga->df[drive]->swapDisk(std::make_unique<FloppyDisk>(adf));
-            return;
+            return true;
         }
 
         if (EXEFile::isCompatible(stream))
         {
             EXEFile exe{(u8 *)blob.data(), (isize)len};
             amiga->df[drive]->swapDisk(std::make_unique<FloppyDisk>(exe));
-            return;
+            return true;
         }
 
         if (DMSFile::isCompatible(stream))
         {
             DMSFile dms{(u8 *)blob.data(), (isize)len};
             amiga->df[drive]->swapDisk(std::make_unique<FloppyDisk>(dms));
-            return;
+            return true;
         }
+
+        return false;
     }
     catch (VAError &err)
     {

@@ -35,14 +35,14 @@
 	const port1Items = [
 		{ id: 'empty1', icon: 'icons/device-none.png' },
 		{ id: 'mouse1', icon: 'icons/device-mouse.png' },
-		{ id: 'keyset1', icon: 'icons/device-keyset1.png' },
-		{ id: 'keyset2', icon: 'icons/device-keyset2.png' }
+		{ id: 'keyset11', icon: 'icons/device-keyset-1.png' },
+		{ id: 'keyset12', icon: 'icons/device-keyset-2.png' }
 	];
 	const port2Items = [
 		{ id: 'empty2', icon: 'icons/device-none.png' },
 		{ id: 'mouse2', icon: 'icons/device-mouse.png' },
-		{ id: 'keyset1', icon: 'icons/device-keyset1.png' },
-		{ id: 'keyset2', icon: 'icons/device-keyset2.png' }
+		{ id: 'keyset21', icon: 'icons/device-keyset-1.png' },
+		{ id: 'keyset22', icon: 'icons/device-keyset-2.png' }
 	];
 	const shell = { id: 'shell', icon: 'icons/retroShellIcon.png' };
 	const monitor = { id: 'monitor', icon: 'icons/monitorIcon.png' };
@@ -53,8 +53,23 @@
 		{ id: 'full', icon: 'icons/layoutFullIcon.png' }
 	];
 
-	$: port1Button.icon = $port1 == 0 ? 'icons/device-none.png' : 'icons/device-mouse.png';
-	$: port2Button.icon = $port2 == 0 ? 'icons/device-none.png' : 'icons/device-mouse.png';
+	$: {
+		switch($port1) {
+			case 1: port1Button.icon = 'icons/device-mouse.png'; break;
+			case 2: port1Button.icon = 'icons/device-keyset-1.png'; break;
+			case 3: port1Button.icon = 'icons/device-keyset-2.png'; break;
+			default: port1Button.icon = 'icons/device-none.png'; break;
+		}
+	}
+
+	$: {
+		switch($port2) {
+			case 1: port2Button.icon = 'icons/device-mouse.png'; break;
+			case 2: port2Button.icon = 'icons/device-keyset-1.png'; break;
+			case 3: port2Button.icon = 'icons/device-keyset-2.png'; break;
+			default: port2Button.icon = 'icons/device-none.png'; break;
+		}
+	}
 
 	$: layoutButton.icon =
 		$layout == 'full'

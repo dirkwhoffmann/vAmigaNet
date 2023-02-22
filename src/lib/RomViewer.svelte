@@ -11,6 +11,8 @@
 
 	let roms = liveQuery(() => (browser ? db.roms.toArray() : []));
 
+	$: console.log("roms = ", $roms); 
+
 	export let show = true;
 
 	async function addRomToDatabase(rom: Uint8Array, ext: Uint8Array | null = null, extStart = 0) {

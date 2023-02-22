@@ -102,7 +102,7 @@ struct AmigaProxy
     u32 audioFillLevel();
 
     // Juggling disks
-    void insertDisk(const string &blob, u32 len, u8 drive);
+    bool insertDisk(const string &blob, u32 len, u8 drive);
 
     // Experimental (didn't manage to get it working)
     string getExceptionMessage(intptr_t exceptionPtr);

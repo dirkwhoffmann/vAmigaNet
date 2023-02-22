@@ -2,7 +2,14 @@
 	import '../app.css';
 	import { initialized, proxy, amiga } from '$lib/stores';
 	import { poweredOn, what, errno } from '$lib/stores';
-	import { layout, showSidebar, showShell, showSettings, showShowcases, showImpressum } from '$lib/stores';
+	import {
+		layout,
+		showSidebar,
+		showShell,
+		showSettings,
+		showShowcases,
+		showImpressum
+	} from '$lib/stores';
 	import { canvasWidth, canvasHeight, aspectWidth, aspectHeight } from '$lib/stores';
 	import { port1, port2 } from '$lib/stores';
 	import { onMount } from 'svelte';
@@ -162,12 +169,28 @@
 				$port1 = 1;
 				if ($port2 == 1) $port2 = 0;
 				break;
+			case 'keyset11':
+				$port1 = 2;
+				if ($port2 == 2) $port2 = 0;
+				break;
+			case 'keyset12':
+				$port1 = 3;
+				if ($port2 == 3) $port2 = 0;
+				break;
 			case 'empty2':
 				$port2 = 0;
 				break;
 			case 'mouse2':
 				$port2 = 1;
 				if ($port1 == 1) $port1 = 0;
+				break;
+			case 'keyset21':
+				$port2 = 2;
+				if ($port1 == 2) $port1 = 0;
+				break;
+			case 'keyset22':
+				$port2 = 3;
+				if ($port1 == 3) $port1 = 0;
 				break;
 			default:
 				console.log('Unhandled sender: ' + sender);
@@ -186,7 +209,7 @@
 		}
 	}
 
-	$: console.log("showShowcases: ", $showShowcases);
+	$: console.log('showShowcases: ', $showShowcases);
 </script>
 
 <body>

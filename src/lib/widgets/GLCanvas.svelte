@@ -424,9 +424,10 @@
 	//
 
 	// Translates a key press event to a list of gamepad actions
-	function keyDownEvents(keycode: number, keymap: number) {
+	function keyDownEvents(keycode: number, port: number) {
 		let action: number;
-		action = keymap == 1 ? $keyset1[keycode] : $keyset2[keycode];
+		if (port == 1) action = $port1 == 2 ? $keyset1[keycode] : $keyset2[keycode];
+		if (port == 2) action = $port2 == 2 ? $keyset1[keycode] : $keyset2[keycode];
 
 		switch (action) {
 			case undefined:
@@ -453,9 +454,10 @@
 	}
 
 	// Translates a key release event to a list of gamepad actions
-	function keyUpEvents(keycode: number, keymap: number) {
+	function keyUpEvents(keycode: number, port: number) {
 		let action: number;
-		action = keymap == 1 ? $keyset1[keycode] : $keyset2[keycode];
+		if (port == 1) action = $port1 == 2 ? $keyset1[keycode] : $keyset2[keycode];
+		if (port == 2) action = $port2 == 2 ? $keyset1[keycode] : $keyset2[keycode];
 
 		switch (action) {
 			case undefined:
@@ -488,11 +490,16 @@
 			return;
 		}
 
-		// Check for joystick emulation keys
-		const events = keyDownEvents(e.code, 1);
-		console.log('Emulation key events: ', events);
+		// Check for joystick emulation keys on port 1
+		let events = keyDownEvents(e.code, 1);
 		if (events?.length) {
-			console.log('Emulation key hit');
+			events?.forEach((event) => $joystick1.trigger(event));
+			return; // Only if "connect emulation keys"
+		}
+
+		// Check for joystick emulation keys on port 2
+		events = keyDownEvents(e.code, 2);
+		if (events?.length) {
 			events?.forEach((event) => $joystick2.trigger(event));
 			return; // Only if "connect emulation keys"
 		}
@@ -508,11 +515,16 @@
 	function keyUpAction(e) {
 		// console.log('keyUp: ', e);
 
-		// Check for joystick emulation keys
-		const events = keyUpEvents(e.code, 1);
-		console.log('Emulation key events: ', events);
+		// Check for joystick emulation keys on port 1
+		let events = keyUpEvents(e.code, 1);
 		if (events?.length) {
-			console.log('Emulation key hit');
+			events?.forEach((event) => $joystick1.trigger(event));
+			return; // Only if "connect emulation keys"
+		}
+
+		// Check for joystick emulation keys on port 2
+		events = keyUpEvents(e.code, 2);
+		if (events?.length) {
 			events?.forEach((event) => $joystick2.trigger(event));
 			return; // Only if "connect emulation keys"
 		}
@@ -561,7 +573,7 @@
 	}
 
 	function mouseMove(event: MouseEvent) {
-		// console.log('mouseMove:', event.movementX, event.movementY);
+		console.log('mouseMove:', $port1, $port2, event.movementX, event.movementY);
 
 		const x = event.movementX / 2;
 		const y = event.movementY / 2;
