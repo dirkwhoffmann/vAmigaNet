@@ -90,14 +90,14 @@
 								min="0"
 								max="100"
 								value={selection}
-								class="range h-12 px-4 rounded-none bg-blue-200"
+								class="range h-12 px-4 rounded-none"
 							/>
 						</ul>
 					{:else}
-						<ul class="dropdown-content menu p-2 text-xl text-base-content bg-base-300 w-[18rem]">
+						<ul class="dropdown-content menu p-2 text-xl bg-accent w-[18rem]">
 							{#each values as { name, id }, i}
 								<li class="" id={id.toString()}>
-									<button on:click={(e) => handleClick(e, id)}
+									<button class="bg-accent text-accent-content" on:click={(e) => handleClick(e, id)}
 										><div class="w-4">{@html selection == id ? '&#10003' : ''}</div>
 										{name}</button
 									>
