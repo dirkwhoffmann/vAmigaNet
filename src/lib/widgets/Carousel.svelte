@@ -1,7 +1,4 @@
 <script lang="ts">
-	import { liveQuery } from 'dexie';
-	import { db, type RomEntry } from '$lib/db/db';
-	import { browser } from '$app/environment';
 	import { fade } from 'svelte/transition';
 	import { Splide, SplideSlide } from '@splidejs/svelte-splide';
 	import { createEventDispatcher } from 'svelte';

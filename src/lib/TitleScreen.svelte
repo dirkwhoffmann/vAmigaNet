@@ -1,15 +1,11 @@
 <script lang="ts">
-	import { proxy, audio, amiga, retroShell, poweredOn, showSidebar } from '$lib/stores';
-	import { onMount } from 'svelte';
-	import { demos } from '$lib/database';
-	import MyButton from '$lib/widgets/MyButton.svelte';
+	import { Layer } from '$lib/types';
+	import { audio, amiga, layer, showSidebar } from '$lib/stores';
 	import FaGithub from 'svelte-icons/fa/FaGithub.svelte';
 	import MainPageLink from '$lib/widgets/MainPageLink.svelte';
 	import DiGrails from 'svelte-icons/di/DiGrails.svelte';
 	import GoLaw from 'svelte-icons/go/GoLaw.svelte';
-	import DiDatabase from 'svelte-icons/di/DiDatabase.svelte';
 	import FaMicrochip from 'svelte-icons/fa/FaMicrochip.svelte';
-	import FaBookOpen from 'svelte-icons/fa/FaBookOpen.svelte';
 	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
 	import Impressum2 from '$lib/Impressum2.svelte';
@@ -18,7 +14,6 @@
 
 	let debug = ''; // 'border-2';
 	let showRomViewer = false;
-	let showShowcases = false;
 	let showImpressum = false;
 
 	async function launch() {
@@ -38,7 +33,7 @@
 
 	async function openShowcases() {
 		await $audio.setup();
-		showShowcases = !showShowcases;
+		$layer = $layer == Layer.showcases ? Layer.none : Layer.showcases;
 		$showSidebar = false; 
 	}
 
@@ -74,7 +69,7 @@
 			<img class="h-full w-screen object-fill opacity-60" src="matrix.jpg" alt="Background" />
 		</div>
 	</div>
-	{#if showShowcases}
+	{#if $layer == Layer.showcases}
 		<Showcases />
 	{:else}
 		<div

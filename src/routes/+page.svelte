@@ -1,15 +1,9 @@
 <script lang="ts">
 	import '../app.css';
+	import { Layer } from '$lib/types';
 	import { initialized, proxy, amiga } from '$lib/stores';
-	import { poweredOn, what, errno } from '$lib/stores';
-	import {
-		layout,
-		showSidebar,
-		showShell,
-		showSettings,
-		showShowcases,
-		showImpressum
-	} from '$lib/stores';
+	import { layer, poweredOn, what, errno } from '$lib/stores';
+	import { layout, showSidebar } from '$lib/stores';
 	import { canvasWidth, canvasHeight, aspectWidth, aspectHeight } from '$lib/stores';
 	import { port1, port2 } from '$lib/stores';
 	import { onMount } from 'svelte';
@@ -23,7 +17,6 @@
 	import StatusBar from '$lib/statusbar/StatusBar.svelte';
 	import RetroShell from '$lib/RetroShell.svelte';
 	import MainScreen from '$lib/MainScreen.svelte';
-	import Impressum from '$lib/Impressum.svelte';
 
 	let mounted = false;
 
@@ -109,12 +102,10 @@
 
 		switch (event.detail.sender) {
 			case 'shell':
-				$showShell = !$showShell;
-				if ($showShell) $showSettings = false;
+				$layer = $layer == Layer.shell ? Layer.none : Layer.shell;
 				break;
 			case 'settings':
-				$showSettings = !$showSettings;
-				if ($showSettings) $showShell = false;
+				$layer = $layer == Layer.settings ? Layer.none : Layer.settings;
 				break;
 			case 'monitor':
 				if ($amiga.getConfig($proxy.OPT_DMA_DEBUG_ENABLE)) {
@@ -204,12 +195,9 @@
 		$showSidebar = !$showSidebar;
 
 		if (!$showSidebar) {
-			$showSettings = false;
-			$showShell = false;
+			$layer = Layer.none;
 		}
 	}
-
-	$: console.log('showShowcases: ', $showShowcases);
 </script>
 
 <body>
@@ -218,17 +206,17 @@
 		<MainScreen>
 			<StatusBar bind:this={statusBar} on:push={push} />
 			<div bind:this={canvas} class="box relative grow border-none border-green-300 overflow-auto">
-				{#if !$poweredOn && !$showShowcases}
+				{#if !$poweredOn}
 					<TitleScreen />
 				{/if}
 				<Emulator bind:this={emulator} />
-				{#if $showShell}
+				{#if $layer == Layer.shell}
 					<RetroShell />
 				{/if}
-				{#if $showSettings}
+				{#if $layer == Layer.settings}
 					<Settings />
 				{/if}
-				{#if $showShowcases}
+				{#if $layer == Layer.showcases}
 					<Showcases />
 				{/if}
 				{#if $showSidebar}

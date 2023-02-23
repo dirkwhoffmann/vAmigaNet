@@ -1,16 +1,17 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { Layer } from '$lib/types';
 	import { createEventDispatcher } from 'svelte';
 	import SidebarButton from '$lib/sidebar/SidebarButton.svelte';
 	import SidebarSection from '$lib/sidebar/SidebarSection.svelte';
 	import { fade } from 'svelte/transition';
-	import { layout, showShell, showSettings, debugDma, showSidebar } from '$lib/stores';
+	import { layout, layer, debugDma, showSidebar } from '$lib/stores';
 	import { poweredOn, running, port1, port2 } from '$lib/stores';
 	import SidebarPad from '$lib/sidebar/SidebarPad.svelte';
 
 	let sel = '';
 	let duration = 200;
-	let opacity = 'opacity-20';
+	// let opacity = 'opacity-20';
 
 	const dispatch = createEventDispatcher<{ select: { sender: string; state: boolean } }>();
 
@@ -132,7 +133,7 @@
 			/>
 			<SidebarPad />
 
-			<SidebarButton on:select={select} item={shell} active={$showShell} />
+			<SidebarButton on:select={select} item={shell} active={$layer == Layer.shell} />
 			<SidebarButton on:select={select} item={monitor} active={$debugDma} />
 			<SidebarPad />
 
@@ -142,7 +143,7 @@
 				item={layoutButton}
 				subitems={layoutItems}
 			/>
-			<SidebarButton on:select={select} item={settings} active={$showSettings} />
+			<SidebarButton on:select={select} item={settings} active={$layer == Layer.settings} />
 		</div>
 	</div>
 </div>

@@ -7,7 +7,7 @@
 	export let title = '???';
 	export let src = '';
 	export let active = false;
-	export let locked = true;
+	// export let locked = true;
 	export let aros = true;
 
 	$: isLocked = $romcrc == 0 || (!aros && $romcrc == 1062194186);

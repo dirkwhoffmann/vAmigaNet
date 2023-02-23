@@ -3,8 +3,6 @@
 	import { darkTheme } from '$lib/stores';
 	export let item = { id: '', icon: '' };
 	export let alt = 'Icon';
-	export let enabled = true;
-	export let opacity = '';
 	export let toggle = false;
 	export let active = false;
 

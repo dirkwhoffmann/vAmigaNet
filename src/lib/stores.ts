@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import { WarpMode, Theme, RenderMode } from '$lib/types'
+import { Layer, WarpMode, Theme, RenderMode } from '$lib/types'
 
 // Gateway to the WASM backend
 export const proxy: any = writable();
@@ -50,10 +50,11 @@ export const aspectHeight = writable(0);
 // GUI state
 export const layout = writable('fit');
 export const showSidebar = writable(false);
-export const showShell = writable(false);
-export const showSettings = writable(false);
-export const showShowcases = writable(false);
-export const showImpressum = writable(false);
+export const layer = writable(Layer.none);
+// export const showShell = writable(false);     // DEPRECATED. USE layer
+// export const showSettings = writable(false);  // DEPRECATED. USE layer
+// export const showShowcases = writable(false); // DEPRECATED. USE layer
+export const showImpressum = writable(false); // DEPRECATED. USE layer
 
 // Emulator state
 export const wasmInitialized = writable(false);
