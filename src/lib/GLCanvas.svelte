@@ -654,5 +654,3 @@
 	class="w-full h-full focus:outline-none focus:ring-0"
 	tabindex="-1"
 />
-
-<!-- style="image-rendering: pixelated" -->
