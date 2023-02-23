@@ -216,9 +216,6 @@
 				{#if $layer == Layer.settings}
 					<Settings />
 				{/if}
-				{#if $layer == Layer.showcases}
-					<Showcases />
-				{/if}
 				{#if $showSidebar}
 					<Sidebar on:select={sidebarAction} />
 				{/if}

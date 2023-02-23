@@ -92,6 +92,7 @@
 					</div>
 				</div>
 			</div>
+			<!--
 			<div class="relative {debug} w-2/3 mt-5">
 				<p class="font-josefin text-error text-center">
 					This page is under construction and offers very little functionality, yet. I.e., it is
@@ -100,6 +101,7 @@
 					feedback from the user base.
 				</p>
 			</div>
+			-->
 		</div>
 	{/if}
 	<div class="relative flex justify-center align-middle bg-gray-900/50 space-x-8 {debug}">
