@@ -22,11 +22,14 @@ export const retroShell: any = writable();
 // Global components
 export const audio: any = writable();
 
+// Theming
+export const theme = writable(Theme.default);
+export const darkTheme = writable(true);
+
 // Settings (move to settings store?!)
 export const warpMode = writable(WarpMode.auto);
 export const texSampler = writable(1);
 export const border = writable(0);
-export const theme = writable(Theme.light);
 export const shaking = writable(1);
 
 // Control ports (connected devices)

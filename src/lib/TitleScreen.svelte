@@ -71,7 +71,7 @@
 			<div class="h-full w-screen bg-gradient-to-t from-primary to-secondary"></div>
 		</div>
 		<div class="absolute h-full blur-sm">
-			<img class="h-full w-screen object-fill opacity-50" src="matrix-bw.jpg" alt="Background" />
+			<img class="h-full w-screen object-fill opacity-50" src="matrix.jpg" alt="Background" />
 		</div>
 	</div>
 	{#if showShowcases}

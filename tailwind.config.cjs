@@ -37,12 +37,12 @@ module.exports = {
 		}
 	},
 	daisyui: {
-		themes: [ 'light', 'dark', 'coffee',
+		themes: [ 'light', 'dark', 'coffee', 'cupcake', 'forest', 'aqua', 'garden', 'pastel',
 			{
 				mytheme: {
-					primary: '#95AEE4',
+					primary: '#6D80A6',
 					secondary: '#2336c4',
-					accent: '#ffffff',
+					accent: '#ddd6fe',
 					neutral: '#131620',
 					'base-100': '#1f2937',
 					info: '#95AEE4',

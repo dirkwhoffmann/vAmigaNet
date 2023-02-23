@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
+	import { darkTheme } from '$lib/stores';
 	export let item = { id: '', icon: '' };
 	export let alt = 'Icon';
 	export let enabled = true;
@@ -24,5 +25,5 @@
 	id={item.id}
 	on:click={click}
 >
-	<img class="" id={item.id} src={item.icon} {alt} />
+	<img class="{$darkTheme ? 'invert' : ''}" id={item.id} src={item.icon} {alt} />
 </button>

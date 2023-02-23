@@ -2,6 +2,7 @@
 
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { WarpMode } from '$lib/types'
 	import {
 		proxy,
 		audio,

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { warpMode, theme, border, shaking } from '$lib/stores';
+	import { warpMode, theme, darkTheme, border, shaking } from '$lib/stores';
 	import type { ActionEvent } from '$lib/settings/Settings.svelte';
 	import { fade } from 'svelte/transition';
 	import ConfigSection from './ConfigSection.svelte';
@@ -25,10 +25,15 @@
         $theme = event.detail.value;
         let newTheme = '';
         switch ($theme) {
-			case Theme.default: newTheme = 'mytheme'; break;
-			case Theme.light: newTheme = 'light'; break;
-            case Theme.dark: newTheme = 'dark'; break;
-            case Theme.coffee: newTheme = 'coffee'; break;
+			case Theme.default: newTheme = 'mytheme'; $darkTheme = true; break;
+			case Theme.light: newTheme = 'light'; $darkTheme = true; break;
+            case Theme.dark: newTheme = 'dark'; $darkTheme = true; break;
+            case Theme.coffee: newTheme = 'coffee'; $darkTheme = false; break;
+            case Theme.cupcake: newTheme = 'cupcake'; $darkTheme = false; break;
+            case Theme.forest: newTheme = 'forest'; $darkTheme = true; break;
+            case Theme.aqua: newTheme = 'aqua'; $darkTheme = false; break;
+            case Theme.garden: newTheme = 'garden'; $darkTheme = true; break;
+            case Theme.pastel: newTheme = 'pastel'; $darkTheme = false; break;
         }
 		document.querySelector('html')!.setAttribute('data-theme', newTheme);
         update();
@@ -69,7 +74,12 @@
 				{ name: 'Default', id: Theme.default },
 				{ name: 'Light', id: Theme.light },
 				{ name: 'Dark', id: Theme.dark },
-				{ name: 'Coffee', id: Theme.coffee }
+				{ name: 'Coffee', id: Theme.coffee },
+				{ name: 'Cupcake', id: Theme.cupcake },
+				{ name: 'Forest', id: Theme.forest },
+				{ name: 'Aqua', id: Theme.aqua },
+				{ name: 'Garden', id: Theme.garden },
+				{ name: 'Pastel', id: Theme.pastel },
 			]}
 		/>
 		<ConfigItem
