@@ -5,6 +5,7 @@
 	import { fade } from 'svelte/transition';
 	import { layout, showShell, showSettings, debugDma } from '$lib/stores';
 	import { poweredOn, running, port1, port2 } from '$lib/stores';
+	import SidebarPad from '$lib/sidebar/SidebarPad.svelte';
 
 	let sel = '';
 	let duration = 200;
@@ -108,13 +109,14 @@
 
 <div transition:fade={{ duration }} class="">
 	<div class="absolute top-0 left-0 bg-base-100 opacity-75 flex flex-col w-16 items-center z-40">
-		<div class="flex flex-col space-y-2 w-[48px] mt-1.5 mb-2 border-0">
+		<div class="flex flex-col space-y-1.5 w-[48px] mt-1.5 mb-2 border-0">
 			<SidebarButton on:select={select} item={power} />
 			{#if $poweredOn}
 				<SidebarButton on:select={select} item={pause} />
 				<SidebarButton on:select={select} item={reset} />
 			{/if}
-			<SidebarButton on:select={select} item={settings} active={$showSettings} />
+			<SidebarPad />
+
 			<SidebarSection
 				on:select={select}
 				expanded={sel == 'port1'}
@@ -127,14 +129,19 @@
 				item={port2Button}
 				subitems={port2Items}
 			/>
+			<SidebarPad />
+
 			<SidebarButton on:select={select} item={shell} active={$showShell} />
 			<SidebarButton on:select={select} item={monitor} active={$debugDma} />
+			<SidebarPad />
+
 			<SidebarSection
 				on:select={select}
 				expanded={sel == 'layout'}
 				item={layoutButton}
 				subitems={layoutItems}
 			/>
+			<SidebarButton on:select={select} item={settings} active={$showSettings} />
 		</div>
 	</div>
 </div>
