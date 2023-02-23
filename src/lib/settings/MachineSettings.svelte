@@ -9,8 +9,7 @@
 	import { browser } from '$app/environment';
 	import { liveQuery } from 'dexie';
 	import { db, type RomEntry } from '$lib/db/db';
-	import RomViewer from '$lib/RomViewer.svelte';
-	import { Result } from 'postcss';
+	import { Theme } from '$lib/types';
 
 	let kickstart: number;
 	let kickName = '';
@@ -167,19 +166,6 @@
 </script>
 
 <div in:fade>
-	<!--
-	<ConfigSection name="Roms">
-		{#key romValues}
-			<ConfigItem
-				name="Kickstart"
-				selection={$romcrc}
-				on:select={kickstartAction}
-				values={romValues}
-				locked={power}
-			/>
-		{/key}
-	</ConfigSection>
-	-->
 	<ConfigSection name="CPU">
 		<ConfigItem
 			name="CPU"

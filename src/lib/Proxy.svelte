@@ -220,18 +220,18 @@
 	}
 
 	$: updateWarp($warpMode)
-	export function updateWarp(warpMode: number) {
+	export function updateWarp(warpMode: WarpMode) {
 		if (!$amiga) return;
 
 		let newWarp = false;
 		switch (warpMode) {
-			case 0:
+			case WarpMode.auto:
 				newWarp = $diskController.isSpinning();
 				break;
-			case 1:
+			case WarpMode.never:
 				newWarp = false;
 				break;
-			case 2:
+			case WarpMode.always:
 				newWarp = true;
 				break;
 		}

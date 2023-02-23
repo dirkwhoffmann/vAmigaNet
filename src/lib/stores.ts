@@ -1,4 +1,5 @@
 import { writable } from 'svelte/store';
+import { WarpMode, Theme } from '$lib/types'
 
 // Gateway to the WASM backend
 export const proxy: any = writable();
@@ -22,10 +23,10 @@ export const retroShell: any = writable();
 export const audio: any = writable();
 
 // Settings (move to settings store?!)
-export const warpMode = writable(1);
+export const warpMode = writable(WarpMode.auto);
 export const texSampler = writable(1);
 export const border = writable(0);
-export const theme = writable(0);
+export const theme = writable(Theme.light);
 export const shaking = writable(1);
 
 // Control ports (connected devices)

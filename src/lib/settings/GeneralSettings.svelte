@@ -5,6 +5,7 @@
 	import { fade } from 'svelte/transition';
 	import ConfigSection from './ConfigSection.svelte';
 	import ConfigItem from '$lib/settings/ConfigItem.svelte';
+	import { Theme } from '$lib/types';
 
 	onMount(() => {
 		update();
@@ -24,10 +25,11 @@
         $theme = event.detail.value;
         let newTheme = '';
         switch ($theme) {
-            case 0: newTheme = 'mytheme'; break;
-            case 1: newTheme = 'coffee'; break;
+			case Theme.default: newTheme = 'mytheme'; break;
+			case Theme.light: newTheme = 'light'; break;
+            case Theme.dark: newTheme = 'dark'; break;
+            case Theme.coffee: newTheme = 'coffee'; break;
         }
-        console.log("Selecting theme ", newTheme);
 		document.querySelector('html')!.setAttribute('data-theme', newTheme);
         update();
 	}
@@ -64,8 +66,10 @@
 			selection={$theme}
 			on:select={themeAction}
 			values={[
-				{ name: 'Default', id: 0 },
-				{ name: 'Coffee', id: 1 }
+				{ name: 'Default', id: Theme.default },
+				{ name: 'Light', id: Theme.light },
+				{ name: 'Dark', id: Theme.dark },
+				{ name: 'Coffee', id: Theme.coffee }
 			]}
 		/>
 		<ConfigItem

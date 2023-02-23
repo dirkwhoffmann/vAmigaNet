@@ -12,6 +12,7 @@ declare namespace App {
 }
 
 declare global {
+
 	interface DataBaseItem {
 		url: string;
 		title: string;
