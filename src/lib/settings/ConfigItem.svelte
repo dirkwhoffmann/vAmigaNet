@@ -81,16 +81,15 @@
 						><Chevron>{displayName}</Chevron>
 					</button>
 					{#if min != max}
-						<ul class="dropdown-content menu w-[18rem]">
+						<ul class="dropdown-content menu w-[18rem] bg-primary">
 							<input
 								type="range"
-								style="--range-shdw: none"
 								on:input={(e) => sliderAction(e)}
 								on:click={(e) => console.log('Click')}
 								min="0"
 								max="100"
 								value={selection}
-								class="range h-12 px-4 rounded-none"
+								class="range range-accent h-12 px-4 rounded-none"
 							/>
 						</ul>
 					{:else}
