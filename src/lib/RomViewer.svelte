@@ -9,7 +9,7 @@
 	import IoMdClose from 'svelte-icons/io/IoMdClose.svelte';
 	import { proxy, amiga, memory, initialized } from '$lib/stores';
 
-	let roms = liveQuery(() => (browser ? db.roms.toArray() : []));
+	let roms = liveQuery(() => (browser ? db.roms.orderBy('title').toArray() : []));
 
 	$: console.log("roms = ", $roms); 
 

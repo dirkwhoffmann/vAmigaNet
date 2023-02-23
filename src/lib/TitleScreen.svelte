@@ -71,7 +71,7 @@
 			<div class="h-full w-screen bg-gradient-to-t from-primary to-secondary"></div>
 		</div>
 		<div class="absolute h-full blur-sm">
-			<img class="h-full w-screen object-fill opacity-50" src="matrix.jpg" alt="Background" />
+			<img class="h-full w-screen object-fill opacity-60" src="matrix.jpg" alt="Background" />
 		</div>
 	</div>
 	{#if showShowcases}
@@ -84,7 +84,7 @@
 			<div class={debug}>
 				<div class="rounded flex justify-center">
 					<img class="h-24 p-2 mt-3" src="va-icon.png" alt="vAmiga Icon" />
-					<div class="p-6 text-primary-content">
+					<div class="p-6 text-white">
 						<div class="flex">
 							<div class="font-sofia-extra text-7xl mr-2">vAmiga</div>
 							<div class="font-sofia-extra text-7xl opacity-75">Online</div>
