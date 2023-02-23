@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+	import { darkTheme } from '$lib/stores';
 	import BarBox from './BarBox.svelte';
 
 	export let cyl = 0;
@@ -8,8 +8,6 @@
 	export let writing = false;
 	export let unsaved = false;
 	export let wp = false;
-
-	// const dispatch = createEventDispatcher<{push:{sender:string}}>();
 
 	const gray = '';
 	const green = 'bg-gradient-to-b from-green-700 to-green-500';
@@ -20,6 +18,8 @@
 	$: src = disk ? diskIcon : driveIcon;
 	$: bg = motor ? (writing ? red : green) : gray;
 	$: opc = unsaved ? 'opacity-40' : 'opacity-70';
+	$: invert = $darkTheme ? 'invert' : '';
+	$: textcol = $darkTheme ? 'text-gray-300' : 'text-black';
 
 	function click(e: Event) {
 		e.preventDefault();
@@ -28,8 +28,8 @@
 </script>
 
 <BarBox {bg}>
-	<img class="border-0 pr-1 py-1.5 h-full object-scale-down invert {opc}" {src} alt="Floppy icon" />
-	<div class="border-0 w-6 items-center pl-1 text-left leading-none text-sm text-gray-300">
+	<img class="border-0 pr-1 py-1.5 h-full object-scale-down {invert} {opc}" {src} alt="Floppy icon" />
+	<div class="border-0 w-6 items-center pl-1 text-left leading-none text-sm {textcol}">
 		{cyl}
 	</div>
 </BarBox>

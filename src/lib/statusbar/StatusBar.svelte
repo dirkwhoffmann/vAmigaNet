@@ -34,7 +34,8 @@
 	$: console.log("haltIcon = ", haltIcon);
 
 	const dispatch = createEventDispatcher<{ push: { sender: string } }>();
-	const bg = 'bg-gradient-to-t from-gray-700 to-gray-600';
+	// const bg = 'bg-gradient-to-t from-gray-700 to-gray-600';
+	const bg = 'bg-gradient-to-t from-primary to-primary/80';
 
 	export function update(animationFrame: number, now: DOMHighResTimeStamp) {
 		if (speedometer) {

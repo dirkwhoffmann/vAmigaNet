@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { proxy, amiga, cpu, agnus } from '$lib/stores';
+	import { darkTheme } from '$lib/stores';
 
 	export let acceleration = 1.0;
 	export let mhz = 0.0;
@@ -14,8 +15,8 @@
 	let open = false;
 	let mode = 0;
 	let value = '';
-	$: color = 'text-gray-300'; // (value > 6 && value < 8) ? "text-green-300" : "text-red-300";
-
+	$: color = $darkTheme ? 'text-gray-300' : 'text-black';
+	
 	let modes = [
 		'Amiga Frequency',
 		'Amiga Refresh Rate',
