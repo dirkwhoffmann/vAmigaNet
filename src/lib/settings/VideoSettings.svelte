@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { RenderMode } from '$lib/types';
 	import { proxy, amiga } from '$lib/stores';
 	import type { ActionEvent } from '$lib/settings/Settings.svelte';
 	import { fade } from 'svelte/transition';
 	import ConfigSection from './ConfigSection.svelte';
 	import ConfigItem from '$lib/settings/ConfigItem.svelte';
+	import { renderMode } from '$lib/stores';
 
 	let palette: number;
 	let brightness: number;
@@ -32,24 +34,26 @@
 		update();
 	}
 
-	function brightnessAction(event: CustomEvent<ActionEvent>) {
-		$amiga.configure($proxy.OPT_BRIGHTNESS, event.detail.value);
-		update();
-	}
-
-	function contrastAction(event: CustomEvent<ActionEvent>) {
-		$amiga.configure($proxy.OPT_CONTRAST, event.detail.value);
-		update();
-	}
-
-	function saturationAction(event: CustomEvent<ActionEvent>) {
-		$amiga.configure($proxy.OPT_SATURATION, event.detail.value);
+	function renderModeAction(event: CustomEvent<ActionEvent>) {
+		$renderMode = event.detail.value;
 		update();
 	}
 </script>
 
 <div in:fade>
-	<ConfigSection name="Monitor">
+	<ConfigSection name="WebGL">
+		<ConfigItem
+			name="Render Mode"
+			selection={$renderMode}
+			on:select={renderModeAction}
+			values={[
+				{ name: 'Smooth', id: RenderMode.smooth },
+				{ name: 'Pixelated', id: RenderMode.pixelated },
+			]}
+		/>
+	</ConfigSection>
+
+	<ConfigSection name="Colors">
 		<ConfigItem
 			name="Palette"
 			selection={palette}

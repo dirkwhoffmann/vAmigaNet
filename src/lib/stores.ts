@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import { WarpMode, Theme } from '$lib/types'
+import { WarpMode, Theme, RenderMode } from '$lib/types'
 
 // Gateway to the WASM backend
 export const proxy: any = writable();
@@ -27,6 +27,7 @@ export const theme = writable(Theme.default);
 export const darkTheme = writable(true);
 
 // Settings (move to settings store?!)
+export const renderMode = writable(RenderMode.smooth);
 export const warpMode = writable(WarpMode.auto);
 export const texSampler = writable(1);
 export const border = writable(0);

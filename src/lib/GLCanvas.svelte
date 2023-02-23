@@ -3,11 +3,13 @@
 <script lang="ts">
 	import { proxy, amiga, denise, keyboard, joystick1, joystick2 } from '$lib/stores';
 	import { port1, port2, mouse1, mouse2, MsgShaking } from '$lib/stores';
+	import { renderMode } from '$lib/stores';
 	import { shaking } from '$lib/stores';
 	import { VPIXELS, HPIXELS, TPP } from '$lib/constants';
 	import { onMount, onDestroy } from 'svelte';
 	import { AMIGA_KEYS } from '$lib/constants';
 	import { keyset1, keyset2 } from '$lib/stores';
+	import { RenderMode } from './types';
 
 	// Reference to the canvas element
 	let canvas: HTMLCanvasElement;
@@ -65,6 +67,8 @@
 	let mainShaderProgram: WebGLProgram;
 	let sampler: WebGLUniformLocation;
 
+	$: imageRendering =
+		$renderMode == RenderMode.smooth ? 'image-rendering: auto' : 'image-rendering: pixelated';
 	//
 	// Merge shader
 	//
@@ -140,7 +144,7 @@
    `;
 
 	function initWebGL() {
-		console.log('initWebGLL()');
+		console.log('initWebGL()');
 
 		// General WebGL options
 		const options = {
@@ -250,7 +254,7 @@
 		return shader;
 	}
 
-	function createTexture(width: number, height: number) {
+	function createTexture(width: number, height: number, method = 0) {
 		/*
 		let pixels = new Uint8Array(width * height * 4);
 		for (let y = 0; y < height; y++) {
@@ -271,11 +275,12 @@
 		*/
 
 		const texture = gl.createTexture()!;
+		const samplingMethod = method == 0 ? gl.NEAREST : gl.LINEAR;
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, samplingMethod);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, samplingMethod);
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
 
 		return texture;
@@ -606,7 +611,7 @@
 		console.log('mousedown: ', event.which);
 
 		if (!isLocked()) {
-			console.log("Locking mouse...");
+			console.log('Locking mouse...');
 			lockMouse();
 		} else {
 			switch (event.which) {
@@ -645,7 +650,9 @@
 	on:mousedown={mouseDown}
 	on:mouseup={mouseUp}
 	bind:this={canvas}
-	style="image-rendering: pixelated"
+	style={imageRendering}
 	class="w-full h-full focus:outline-none focus:ring-0"
 	tabindex="-1"
 />
+
+<!-- style="image-rendering: pixelated" -->

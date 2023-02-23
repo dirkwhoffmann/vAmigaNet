@@ -1,7 +1,5 @@
 <script lang="ts">
-
-export let bg = '';
-
+	export let bg = '';
 </script>
 
 <div class="flex h-8">
