@@ -5,13 +5,12 @@
 	import type { ActionEvent } from '$lib/settings/Settings.svelte';
 	import { fade } from 'svelte/transition';
 	import Chevron from './Chevron.svelte';
+	import DropDown from '$lib/widgets/DropDown.svelte';
 
 	export let name = '';
-	export let displayAs = '';
 	export let values = [{ name: '???', id: 0 }];
 	export let min = 0;
 	export let max = 0;
-	// export let continous = true;
 	export let locked = false;
 	export let info = false;
 	export let selection = 0;
@@ -26,7 +25,6 @@
 	$: displayName = displayedName(selection);
 
 	function displayedName(tag: number): string {
-		if (displayAs != '') return displayAs;
 		if (min != max) return tag.toString();
 		for (const value of values) {
 			if (value.id == tag) return value.name;
@@ -81,6 +79,8 @@
 			<button class="h-7 w-7 text-primary-content {opac}" on:click={infoAction}><GoInfo /></button>
 		</div>
 		<div class="border-0 bg-primary h-12">
+			<DropDown {values} {locked} {tag} on:select />
+			<!--
 			{#if locked}
 				<button
 					class="btn btn-primary w-[18rem] border-0 rounded-none text-xl font-normal opacity-50"
@@ -117,6 +117,7 @@
 					{/if}
 				</div>
 			{/if}
+			-->
 		</div>
 	</div>
 </div>

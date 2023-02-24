@@ -15,7 +15,7 @@
 	}
 
 	function warpAction(event: CustomEvent<ActionEvent>) {
-        console.log("warpAction");
+        console.log("warpAction", event);
         $warpMode = event.detail.value; 
         update();
 	}
