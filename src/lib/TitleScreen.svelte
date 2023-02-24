@@ -8,7 +8,7 @@
 	import FaMicrochip from 'svelte-icons/fa/FaMicrochip.svelte';
 	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
-	import Impressum2 from '$lib/Impressum.svelte';
+	import Impressum from '$lib/Impressum.svelte';
 	import RomViewer from '$lib/RomViewer.svelte';
 	import Showcases from '$lib/Showcases.svelte';
 
@@ -55,7 +55,7 @@
 
 <div class="modal" class:modal-open={showImpressum}>
 	<div class="modal-box">
-		<Impressum2 bind:show={showImpressum} />
+		<Impressum bind:show={showImpressum} />
 	</div>
 </div>
 

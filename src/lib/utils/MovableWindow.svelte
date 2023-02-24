@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Movable from '$lib/utils/Movable.svelte';
+    import Movable from '$lib/Utils/Movable.svelte';
     export let hide=false;
     export let x=100;
     export let y=250;

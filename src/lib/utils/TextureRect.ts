@@ -1,4 +1,4 @@
-import { AnimatedFloat } from '$lib/utils/AnimatedFloat';
+import { AnimatedFloat } from '$lib/Utils/AnimatedFloat';
 import { HBLANK_CNT, VBLANK_CNT, HPOS_CNT_PAL } from '$lib/constants';
 import { VPOS_CNT_PAL, VPOS_CNT_NTSC } from '$lib/constants';
 import { TPP, HPIXELS, VPIXELS } from '$lib/constants';

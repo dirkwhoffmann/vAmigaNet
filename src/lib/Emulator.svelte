@@ -6,8 +6,8 @@
 	import { canvasWidth, canvasHeight, aspectWidth, aspectHeight } from '$lib/stores';
 	import { border } from '$lib/stores';
 	import GLCanvas from '$lib/GLCanvas.svelte';
-	import { AnimatedFloat } from '$lib/utils/AnimatedFloat';
-	import { TextureRect } from '$lib/utils/TextureRect';
+	import { AnimatedFloat } from '$lib/Utils/AnimatedFloat';
+	import { TextureRect } from '$lib/Utils/TextureRect';
 	import { fade } from 'svelte/transition';
 	import { text } from 'svelte/internal';
 
