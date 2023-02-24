@@ -1,5 +1,5 @@
 <script lang="ts">
-	import MyButton from './widgets/MyButton.svelte';
+	import MyButton from './Widgets/MyButton.svelte';
 	import { fade } from 'svelte/transition';
 	import { liveQuery } from 'dexie';
 	import { db, type RomEntry } from '$lib/db/db';

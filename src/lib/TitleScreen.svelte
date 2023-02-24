@@ -2,13 +2,13 @@
 	import { Layer } from '$lib/types';
 	import { audio, amiga, layer, showSidebar } from '$lib/stores';
 	import FaGithub from 'svelte-icons/fa/FaGithub.svelte';
-	import MainPageLink from '$lib/widgets/MainPageLink.svelte';
+	import MainPageLink from '$lib/Widgets/MainPageLink.svelte';
 	import DiGrails from 'svelte-icons/di/DiGrails.svelte';
 	import GoLaw from 'svelte-icons/go/GoLaw.svelte';
 	import FaMicrochip from 'svelte-icons/fa/FaMicrochip.svelte';
 	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
-	import Impressum2 from '$lib/Impressum2.svelte';
+	import Impressum2 from '$lib/Impressum.svelte';
 	import RomViewer from '$lib/RomViewer.svelte';
 	import Showcases from '$lib/Showcases.svelte';
 

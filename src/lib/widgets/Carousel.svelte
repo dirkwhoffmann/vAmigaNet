@@ -2,7 +2,7 @@
 	import { fade } from 'svelte/transition';
 	import { Splide, SplideSlide } from '@splidejs/svelte-splide';
 	import { createEventDispatcher } from 'svelte';
-	import CarouselItem from '$lib/widgets/CarouselItem.svelte';
+	import CarouselItem from '$lib/Widgets/CarouselItem.svelte';
 
 	export let category = '';
 	export let items: DataBaseItem[] = [];
