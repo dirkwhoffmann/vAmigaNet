@@ -51,10 +51,8 @@ export const aspectHeight = writable(0);
 export const layout = writable('fit');
 export const showSidebar = writable(false);
 export const layer = writable(Layer.none);
-// export const showShell = writable(false);     // DEPRECATED. USE layer
-// export const showSettings = writable(false);  // DEPRECATED. USE layer
-// export const showShowcases = writable(false); // DEPRECATED. USE layer
 export const showImpressum = writable(false); // DEPRECATED. USE layer
+export const activeSlider = writable(0);
 
 // Emulator state
 export const wasmInitialized = writable(false);

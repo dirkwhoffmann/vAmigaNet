@@ -2,7 +2,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import Chevron from '$lib/settings/Chevron.svelte'; // TODO: MOVE TO widgets
 	import type { ActionEvent } from '$lib/settings/Settings.svelte'; // TODO: MOVE TO types.ts
-
+    
 	// General options
 	export let tag = 0;
 	export let locked = false;
