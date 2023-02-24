@@ -51,7 +51,7 @@ export const aspectHeight = writable(0);
 // GUI state
 export const layout = writable('fit');
 export const showSidebar = writable(false);
-export const layer = writable(Layer.none);
+export const layer = writable(Layer.dropzone);
 export const showImpressum = writable(false); // DEPRECATED. USE layer
 export const activeSlider = writable(0);
 

@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import ConfigSection from './ConfigSection.svelte';
-	import ConfigItem from '$lib/settings/ConfigItem.svelte';
+	import ConfigItem from '$lib/Settings/ConfigItem.svelte';
 	import { proxy, amiga, memory } from '$lib/stores';
 	import { poweredOn, romcrc } from '$lib/stores';
 	import { fade } from 'svelte/transition';
-	import type { ActionEvent } from '$lib/settings/Settings.svelte';
+	import type { ActionEvent } from '$lib/Settings/Settings.svelte';
 	import { browser } from '$app/environment';
 	import { liveQuery } from 'dexie';
-	import { db, type RomEntry } from '$lib/db/db';
+	import { db, type RomEntry } from '$lib/Db/db';
 	import { Theme } from '$lib/types';
 
 	let kickstart: number;

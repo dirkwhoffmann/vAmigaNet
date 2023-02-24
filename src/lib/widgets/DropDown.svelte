@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import Chevron from '$lib/settings/Chevron.svelte'; // TODO: MOVE TO widgets
-	import type { ActionEvent } from '$lib/settings/Settings.svelte'; // TODO: MOVE TO types.ts
+	import Chevron from '$lib/Settings/Chevron.svelte'; // TODO: MOVE TO widgets
+	import type { ActionEvent } from '$lib/Settings/Settings.svelte'; // TODO: MOVE TO types.ts
 
 	export let tag = 0;
 	export let values = [{ name: '???', id: 0 }];

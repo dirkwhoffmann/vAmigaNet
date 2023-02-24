@@ -13,10 +13,11 @@
 	import TitleScreen from '$lib/TitleScreen.svelte';
 	import Emulator from '$lib/Emulator.svelte';
 	import Showcases from '$lib/Showcases.svelte';
-	import Settings from '$lib/settings/Settings.svelte';
+	import Settings from '$lib/Settings/Settings.svelte';
 	import StatusBar from '$lib/Statusbar/StatusBar.svelte';
 	import RetroShell from '$lib/RetroShell.svelte';
 	import MainScreen from '$lib/MainScreen.svelte';
+	import DropZone from '$lib/DropZone/DropZone.svelte';
 
 	let mounted = false;
 
@@ -215,6 +216,9 @@
 				{/if}
 				{#if $layer == Layer.settings}
 					<Settings />
+				{/if}
+				{#if $layer == Layer.dropzone}
+					<DropZone />
 				{/if}
 				{#if $showSidebar}
 					<Sidebar on:select={sidebarAction} />

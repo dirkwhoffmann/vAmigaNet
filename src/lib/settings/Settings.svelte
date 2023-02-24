@@ -4,12 +4,12 @@
 
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import ConfigCategory from '$lib/settings/ConfigCategory.svelte';
+	import ConfigCategory from '$lib/Settings/ConfigCategory.svelte';
 	import { fade } from 'svelte/transition';
-	import GeneralSettings from '$lib/settings/GeneralSettings.svelte';
-	import MachineSettings from '$lib/settings/MachineSettings.svelte';
-	import VideoSettings from '$lib/settings/VideoSettings.svelte';
-	import AudioSettings from '$lib/settings/AudioSettings.svelte';
+	import GeneralSettings from '$lib/Settings/GeneralSettings.svelte';
+	import MachineSettings from '$lib/Settings/MachineSettings.svelte';
+	import VideoSettings from '$lib/Settings/VideoSettings.svelte';
+	import AudioSettings from '$lib/Settings/AudioSettings.svelte';
 
 	let category = 'general';
 

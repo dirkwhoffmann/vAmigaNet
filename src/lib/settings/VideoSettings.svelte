@@ -2,10 +2,10 @@
 	import { onMount } from 'svelte';
 	import { RenderMode } from '$lib/types';
 	import { proxy, amiga } from '$lib/stores';
-	import type { ActionEvent } from '$lib/settings/Settings.svelte';
+	import type { ActionEvent } from '$lib/Settings/Settings.svelte';
 	import { fade } from 'svelte/transition';
 	import ConfigSection from './ConfigSection.svelte';
-	import ConfigItem from '$lib/settings/ConfigItem.svelte';
+	import ConfigItem from '$lib/Settings/ConfigItem.svelte';
 	import { renderMode, flickerWeight } from '$lib/stores';
 
 	let palette: number;

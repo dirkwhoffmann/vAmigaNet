@@ -122,7 +122,7 @@
 		dfProtected
 	} from '$lib/stores';
 	import { debugDma, keyset1, keyset2 } from '$lib/stores';
-	import { db, type RomEntry } from '$lib/db/db';
+	import { db, type RomEntry } from '$lib/Db/db';
 	import { AMIGA_KEYS } from './constants';
 
 	onMount(() => {

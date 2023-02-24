@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import type { ActionEvent } from '$lib/settings/Settings.svelte'; // TODO: MOVE TO types.ts
+	import type { ActionEvent } from '$lib/Settings/Settings.svelte'; // TODO: MOVE TO types.ts
     import { activeSlider } from '$lib/stores';
 
 	export let tag = 0;

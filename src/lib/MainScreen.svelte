@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { proxy, amiga, memory, initialized } from '$lib/stores';
-	import { db } from '$lib/db/db';
+	import { db } from '$lib/Db/db';
 
 	function handleDragEnter(event: DragEvent) {
 		event.preventDefault();

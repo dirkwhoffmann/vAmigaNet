@@ -2,7 +2,7 @@
 	import MyButton from './Widgets/MyButton.svelte';
 	import { fade } from 'svelte/transition';
 	import { liveQuery } from 'dexie';
-	import { db, type RomEntry } from '$lib/db/db';
+	import { db, type RomEntry } from '$lib/Db/db';
 	import { browser } from '$app/environment';
 	import FaTrash from 'svelte-icons/fa/FaTrash.svelte';
 	import FaWindowClose from 'svelte-icons/fa/FaWindowClose.svelte';

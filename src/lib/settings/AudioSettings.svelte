@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { proxy, amiga } from '$lib/stores';
-	import type { ActionEvent } from '$lib/settings/Settings.svelte';
+	import type { ActionEvent } from '$lib/Settings/Settings.svelte';
 	import { fade } from 'svelte/transition';
 	import ConfigSection from './ConfigSection.svelte';
-	import ConfigItem from '$lib/settings/ConfigItem.svelte';
+	import ConfigItem from '$lib/Settings/ConfigItem.svelte';
 
 	let volume0: number, volume1: number, volume2: number, volume3: number;
 	let volumeL: number, volumeR: number;

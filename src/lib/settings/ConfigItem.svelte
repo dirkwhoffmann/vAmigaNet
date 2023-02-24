@@ -2,7 +2,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import GoInfo from 'svelte-icons/go/GoInfo.svelte';
 	import GiPadlock from 'svelte-icons/gi/GiPadlock.svelte';
-	import type { ActionEvent } from '$lib/settings/Settings.svelte';
+	import type { ActionEvent } from '$lib/Settings/Settings.svelte';
 	import DropDown from '$lib/Widgets/DropDown.svelte';
 	import Slider from '$lib/Widgets/Slider.svelte';
 
