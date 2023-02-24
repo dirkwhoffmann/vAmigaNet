@@ -6,7 +6,7 @@
 	import { fade } from 'svelte/transition';
 	import ConfigSection from './ConfigSection.svelte';
 	import ConfigItem from '$lib/settings/ConfigItem.svelte';
-	import { renderMode } from '$lib/stores';
+	import { renderMode, flickerWeight } from '$lib/stores';
 
 	let palette: number;
 	let brightness: number;
@@ -37,6 +37,11 @@
 
 	function renderModeAction(event: CustomEvent<ActionEvent>) {
 		$renderMode = event.detail.value;
+		update();
+	}
+
+	function flickerAction(event: CustomEvent<ActionEvent>) {
+		$flickerWeight = event.detail.value;
 		update();
 	}
 </script>
@@ -93,4 +98,15 @@
 			on:select={videoAction}
 		/>
 	</ConfigSection>
+	<ConfigSection name="Interlace">
+		<ConfigItem
+			name="Flicker Weight"
+			min={0}
+			max={100}
+			tag={1000}
+			selectedTag={$flickerWeight}
+			on:select={flickerAction}
+		/>
+	</ConfigSection>
+
 </div>

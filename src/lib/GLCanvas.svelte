@@ -3,7 +3,7 @@
 <script lang="ts">
 	import { proxy, amiga, denise, keyboard, joystick1, joystick2 } from '$lib/stores';
 	import { port1, port2, mouse1, mouse2, MsgShaking } from '$lib/stores';
-	import { renderMode } from '$lib/stores';
+	import { renderMode, flickerWeight } from '$lib/stores';
 	import { shaking } from '$lib/stores';
 	import { VPIXELS, HPIXELS, TPP } from '$lib/constants';
 	import { onMount, onDestroy } from 'svelte';
@@ -392,9 +392,8 @@
 			gl.uniform1i(lfSampler, 1);
 			gl.uniform1i(sfSampler, 0);
 
-			const weight = 0.5; // TODO: USE OPTION PARAMETER
-
-			if (weight) {
+			if ($flickerWeight) {
+				const weight = 1.0 - ($flickerWeight / 100);
 				gl.useProgram(mergeShaderProgram);
 				gl.uniform1f(lfWeight, flickerCnt % 4 >= 2 ? 1.0 : weight);
 				gl.uniform1f(sfWeight, flickerCnt % 4 >= 2 ? weight : 1.0);

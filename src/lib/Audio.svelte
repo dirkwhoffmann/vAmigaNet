@@ -65,9 +65,8 @@
 		if (buffer == null || playCnt >= 3) return;
 
 		// TODO: Take care of pan
-		console.log("volume = ", volume);
 		const gain_node = audioContext!.createGain();
-		gain_node.gain.value = 0.002 * volume;
+		gain_node.gain.value = 0.004 * volume;
 		gain_node.connect(audioContext!.destination);
 
 		const source = audioContext!.createBufferSource();
