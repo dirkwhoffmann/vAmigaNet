@@ -1,14 +1,22 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import { proxy, amiga, retroShell, diskController } from '$lib/stores';
+    import { dfConnected, dfHasDisk } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { darkTheme } from '$lib/stores';
 	import { enhance } from '$app/forms';
+    import FaTimes from 'svelte-icons/fa/FaTimes.svelte'
 
-	export let name = '???';
+    export let id: number;
+	export let name: string;
     export let selected = false;
-    export let enabled = false; 
+    
+    let enabled = $dfConnected[id]; 
+    let hasDisk = $dfHasDisk[id]; 
+    
+    $: opac = selected ? 'opacity-100' : hasDisk ? 'opacity-50' : 'opacity-0';
+    $: bopac = enabled ? 'opacity-100' : 'opacity-50';
 
     const dispatch = createEventDispatcher<{ drive: string }>();
 
@@ -33,13 +41,15 @@
 <div class="p-4 rounded-xl bg-primary/50">
 	<div class="flex flex-col items-center">
 		<div
-			class="h-32 w-32 border-2 rounded-xl p-5"
+			class="h-32 w-32 border-2 rounded-xl p-5 {bopac}"
 			on:mouseenter={mouseEnter}
 			on:mouseleave={mouseLeave}
 			on:mousedown={mouseClick}
 		>
-        {#if selected}
-			<img class={$darkTheme ? 'invert' : ''} src="icons/disk.png" alt="Floppy Disk" transition:fade />
+        {#if !enabled}
+            <div class="w-full h-full opacity-50"><FaTimes /></div>
+        {:else if selected || hasDisk}
+            <img class="{$darkTheme ? 'invert' : ''} {opac}" src="icons/disk.png" alt="Floppy Disk"/>
         {/if}
 		</div>
 		<div class="font-azaret text-primary-content text-xl">{name}</div>
