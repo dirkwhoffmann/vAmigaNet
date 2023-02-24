@@ -8,6 +8,7 @@
 
 	let volume0: number, volume1: number, volume2: number, volume3: number;
 	let volumeL: number, volumeR: number;
+	let volumeStep: number, volumePoll: number, volumeInsert: number, volumeEject: number;
 
 	onMount(() => {
 		update();
@@ -20,69 +21,104 @@
 		volume3 = $amiga.getDriveConfig($proxy.OPT_AUDVOL, 3);
 		volumeL = $amiga.getConfig($proxy.OPT_AUDVOLL);
 		volumeR = $amiga.getConfig($proxy.OPT_AUDVOLR);
-	}
-
-	function volumeLAction(event: CustomEvent<ActionEvent>) {
-		$amiga.configure($proxy.OPT_AUDVOLL, event.detail.value);
-		update();
-	}
-
-	function volumeRAction(event: CustomEvent<ActionEvent>) {
-		$amiga.configure($proxy.OPT_AUDVOLR, event.detail.value);
-		update();
+		volumeStep = $amiga.getDriveConfig($proxy.OPT_STEP_VOLUME, 0);
+		volumePoll = $amiga.getDriveConfig($proxy.OPT_POLL_VOLUME, 0);
+		volumeInsert = $amiga.getDriveConfig($proxy.OPT_INSERT_VOLUME, 0);
+		volumeEject = $amiga.getDriveConfig($proxy.OPT_EJECT_VOLUME, 0);
 	}
 
 	function volumeAction(event: CustomEvent<ActionEvent>) {
+		$amiga.configure(event.detail.tag, event.detail.value);
+		update();
+	}
+
+	function channelVolumeAction(event: CustomEvent<ActionEvent>) {
 		$amiga.configureDrive($proxy.OPT_AUDVOL, event.detail.tag, event.detail.value);
 		update();
 	}
 </script>
 
 <div in:fade>
-	<ConfigSection name="Volumes">
+	<ConfigSection name="Speakers">
 		<ConfigItem
 			name="Left Speaker Volume"
-			selection={volumeL}
-			on:select={volumeLAction}
+			tag={$proxy.OPT_AUDVOLL}
+			selectedTag={volumeL}
+			on:select={volumeAction}
 			min={0}
 			max={100}
 		/>
 		<ConfigItem
 			name="Right Speaker Volume"
-			selection={volumeR}
-			on:select={volumeRAction}
+			tag={$proxy.OPT_AUDVOLR}
+			selectedTag={volumeR}
+			on:select={volumeAction}
 			min={0}
 			max={100}
 		/>
 		<ConfigItem
 			name="Paula Channel 0 Volume"
-			selection={volume0}
-			on:select={volumeAction}
 			tag={0}
+			selectedTag={volume0}
+			on:select={channelVolumeAction}
 			min={0}
 			max={100}
 		/>
 		<ConfigItem
 			name="Paula Channel 1 Volume"
-			selection={volume1}
-			on:select={volumeAction}
 			tag={1}
+			selectedTag={volume1}
+			on:select={channelVolumeAction}
 			min={0}
 			max={100}
 		/>
 		<ConfigItem
 			name="Paula Channel 2 Volume"
-			selection={volume2}
-			on:select={volumeAction}
 			tag={2}
+			selectedTag={volume2}
+			on:select={channelVolumeAction}
 			min={0}
 			max={100}
 		/>
 		<ConfigItem
 			name="Paula Channel 3 Volume"
-			selection={volume3}
-			on:select={volumeAction}
 			tag={3}
+			selectedTag={volume3}
+			on:select={channelVolumeAction}
+			min={0}
+			max={100}
+		/>
+	</ConfigSection>
+	<ConfigSection name="Drive Sounds">
+		<ConfigItem
+			name="Head Step Volume"
+			tag={$proxy.OPT_STEP_VOLUME}
+			selectedTag={volumeStep}
+			on:select={volumeAction}
+			min={0}
+			max={100}
+		/>
+		<ConfigItem
+			name="Poll Disk Volume"
+			tag={$proxy.OPT_POLL_VOLUME}
+			selectedTag={volumePoll}
+			on:select={volumeAction}
+			min={0}
+			max={100}
+		/>
+		<ConfigItem
+			name="Insert Disk Volume"
+			tag={$proxy.OPT_INSERT_VOLUME}
+			selectedTag={volumeInsert}
+			on:select={volumeAction}
+			min={0}
+			max={100}
+		/>
+		<ConfigItem
+			name="Eject Disk Volume"
+			tag={$proxy.OPT_EJECT_VOLUME}
+			selectedTag={volumeEject}
+			on:select={volumeAction}
 			min={0}
 			max={100}
 		/>

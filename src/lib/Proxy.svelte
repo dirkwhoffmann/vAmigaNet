@@ -537,25 +537,25 @@
 			case $proxy.MSG_DRIVE_STEP:
 				$MsgDriveStep++;
 				$dfCylinder[d1] = d2;
-				$audio.playStepSound();
+				$audio.playStepSound(d3, d4);
 				break;
 
 			case $proxy.MSG_DRIVE_POLL:
 				$MsgDrivePoll++;
 				$dfCylinder[d1] = d2;
-				$audio.playStepSound();
+				$audio.playStepSound(d3, d4);
 				break;
 
 			case $proxy.MSG_DISK_INSERT:
 				$MsgDiskInsert++;
 				$dfHasDisk[d1] = true;
-				$audio.playInsertSound();
+				$audio.playInsertSound(d3, d4);
 				break;
 
 			case $proxy.MSG_DISK_EJECT:
 				$MsgDiskEject++;
 				$dfHasDisk[d1] = false;
-				$audio.playEjectSound();
+				$audio.playEjectSound(d3, d4);
 				break;
 
 			case $proxy.MSG_DISK_SAVED:

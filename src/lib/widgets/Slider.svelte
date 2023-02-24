@@ -9,9 +9,6 @@
 	export let min = 0;
 	export let max = 0;
 
-	let isFocused = false;
-	$: console.log('isFocused = ', isFocused);
-
 	const dispatch = createEventDispatcher<{ select: ActionEvent }>();
 
 	const sliderAction = (e: Event) => {
@@ -33,7 +30,6 @@
 			type="range"
 			on:input={(e) => sliderAction(e)}
 			on:click={() => console.log('Click')}
-			on:blur={() => (isFocused = false)}
             on:mouseup={() => console.log('mouseup')}
 			{min}
 			{max}
@@ -43,7 +39,6 @@
 	</ul>
 {:else}
 	<button
-		on:focus={() => (isFocused = true)}
         on:click={() => $activeSlider = tag} 
 		class="btn btn-primary w-[18rem] border-0 rounded-none text-xl font-normal"
 		>{selectedTag.toString()}

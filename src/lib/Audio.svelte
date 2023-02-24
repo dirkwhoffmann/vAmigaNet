@@ -48,24 +48,26 @@
 		if (clickSound == null) clickSound = await loadSound('sounds/stephd.mp3');
 	}
 
-	export function playInsertSound() {
-		playAudioBuffer(insertSound);
+	export function playInsertSound(volume: number, pan: number) {
+		playAudioBuffer(insertSound, volume, pan);
 	}
-	export function playEjectSound() {
-		playAudioBuffer(ejectSound);
+	export function playEjectSound(volume: number, pan: number) {
+		playAudioBuffer(ejectSound, volume, pan);
 	}
-	export function playStepSound() {
-		playAudioBuffer(stepSound);
+	export function playStepSound(volume: number, pan: number) {
+		playAudioBuffer(stepSound, volume, pan);
 	}
-	export function playClickSound() {
-		playAudioBuffer(clickSound);
+	export function playClickSound(volume: number, pan: number) {
+		playAudioBuffer(clickSound, volume, pan);
 	}
 
-	async function playAudioBuffer(buffer: AudioBuffer | null) {
+	async function playAudioBuffer(buffer: AudioBuffer | null, volume : number, pan : number) {
 		if (buffer == null || playCnt >= 3) return;
 
+		// TODO: Take care of pan
+		console.log("volume = ", volume);
 		const gain_node = audioContext!.createGain();
-		gain_node.gain.value = 0.2;
+		gain_node.gain.value = 0.002 * volume;
 		gain_node.connect(audioContext!.destination);
 
 		const source = audioContext!.createBufferSource();

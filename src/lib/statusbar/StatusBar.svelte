@@ -15,6 +15,7 @@
 		debugMode,
 		halted,
 		muted,
+		audio
 	} from '$lib/stores';
 	import StatusIcon from './StatusIcon.svelte';
 	import WarpControl from './WarpControl.svelte';
@@ -25,16 +26,7 @@
 	$: debugIcon = $debugMode; 
 	$: haltIcon = $halted; 
 
-	$: console.log("muted = ", muted);
-	$: console.log("warp = ", warp);
-	$: console.log("debugMode = ", debugMode);
-	$: console.log("halted = ", halted);
-	$: console.log("muteIcon = ", muteIcon);
-	$: console.log("debugIcon = ", debugIcon);
-	$: console.log("haltIcon = ", haltIcon);
-
 	const dispatch = createEventDispatcher<{ push: { sender: string } }>();
-	// const bg = 'bg-gradient-to-t from-gray-700 to-gray-600';
 	const bg = 'bg-gradient-to-t from-primary to-primary/80';
 
 	export function update(animationFrame: number, now: DOMHighResTimeStamp) {
@@ -43,8 +35,9 @@
 		}
 	}
 
-	function click(e: Event) {
+	function toggleSidebar(e: Event) {
 		e.preventDefault();
+		$audio.setup();
 		dispatch('push', { sender: (e.target as HTMLElement).id });
 	}
 </script>
@@ -55,7 +48,7 @@
 			type="button"
 			class="flex w-16 h-full justify-center"
 			id="vamigaButton"
-			on:click={click}
+			on:click={toggleSidebar}
 		>
 			<img class="h-full" src="icons/vamigaIcon.png" alt="vAmiga Icon" />
 		</button>

@@ -11,7 +11,6 @@
 
 	let sel = '';
 	let duration = 200;
-	// let opacity = 'opacity-20';
 
 	const dispatch = createEventDispatcher<{ select: { sender: string; state: boolean } }>();
 
@@ -25,18 +24,9 @@
 		dispatch('select', { sender: sender, state: state });
 	}
 
-	// const vamiga = { id: 'vamiga', icon: 'icons/vamigaIcon.png' };
 	const power = { id: 'power', icon: 'icons/powerIcon.png' };
 	const pause = { id: 'pause', icon: 'icons/pauseIcon.png' };
 	const reset = { id: 'reset', icon: 'icons/resetIcon.png' };
-	/*
-	const control = { id: 'control', icon: 'icons/controlIcon.png' };
-	let controlItems = [
-		{ id: 'pause', icon: 'icons/pauseIcon.png' },
-		{ id: 'reset', icon: 'icons/resetIcon.png' },
-		{ id: 'power', icon: 'icons/powerIcon.png' }
-	];
-	*/
 	const settings = { id: 'settings', icon: 'icons/settingsIcon.png' };
 	const port1Button = { id: 'port1', icon: 'icons/device-none.png' };
 	const port2Button = { id: 'port2', icon: 'icons/device-none.png' };
