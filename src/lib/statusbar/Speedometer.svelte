@@ -116,7 +116,7 @@
 	<div class="dropdown dropdown-end">
 		<button class="flex w-20 text-xs h-full justify-center items-center {color}">{value}</button>
 		<ul
-			class="dropdown-content menu menu-compact rounded p-0 text-sm text-blue-200 bg-slate-600 w-64"
+			class="dropdown-content bg-accent text-accent-content menu menu-compact rounded p-0 text-sm w-64"
 		>
 			{#each modes as name, i}
 				<li class="">
