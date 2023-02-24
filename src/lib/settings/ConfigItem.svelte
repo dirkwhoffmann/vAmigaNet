@@ -6,6 +6,7 @@
 	import { fade } from 'svelte/transition';
 	import Chevron from './Chevron.svelte';
 	import DropDown from '$lib/widgets/DropDown.svelte';
+	import Slider from '$lib/widgets/Slider.svelte';
 
 	export let name = '';
 	export let values = [{ name: '???', id: 0 }];
@@ -79,7 +80,11 @@
 			<button class="h-7 w-7 text-primary-content {opac}" on:click={infoAction}><GoInfo /></button>
 		</div>
 		<div class="border-0 bg-primary h-12">
-			<DropDown {values} {locked} {tag} on:select />
+			{#if min == max}
+				<DropDown {values} {locked} {tag} {min} {max} on:select />
+			{:else}
+				<Slider {locked} {tag} {min} {max} on:select />
+			{/if}
 			<!--
 			{#if locked}
 				<button
