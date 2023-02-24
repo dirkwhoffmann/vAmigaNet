@@ -169,18 +169,16 @@
 	<ConfigSection name="CPU">
 		<ConfigItem
 			name="CPU"
-			selection={cpuRevision}
-			on:select={cpuRevAction}
 			values={[
 				{ name: '68000', id: $proxy.CPU_68000 },
 				{ name: '68010', id: $proxy.CPU_68010 },
 				{ name: '68EC020', id: $proxy.CPU_68EC020 }
 			]}
+			selectedTag={cpuRevision}
+			on:select={cpuRevAction}
 		/>
 		<ConfigItem
 			name="Frequency"
-			selection={cpuSpeed}
-			on:select={cpuSpeedAction}
 			values={[
 				{ name: '7 Mhz', id: 0 },
 				{ name: '14 Mhz', id: 2 },
@@ -190,72 +188,72 @@
 				{ name: '42 Mhz', id: 6 },
 				{ name: '84 Mhz', id: 12 }
 			]}
+			selectedTag={cpuSpeed}
+			on:select={cpuSpeedAction}
 		/>
 	</ConfigSection>
 	<ConfigSection name="Custom Chipset">
 		<ConfigItem
 			name="Agnus Revision"
-			selection={agnusRevision}
-			on:select={agnusRevAction}
-			locked={power}
 			values={[
 				{ name: 'Early OCS', id: $proxy.AGNUS_OCS_OLD },
 				{ name: 'OCS', id: $proxy.AGNUS_OCS },
 				{ name: 'ECS (1MB)', id: $proxy.AGNUS_ECS_1MB },
 				{ name: 'ECS (2MB)', id: $proxy.AGNUS_ECS_2MB }
 			]}
+			selectedTag={agnusRevision}
+			on:select={agnusRevAction}
+			locked={power}
 		/>
 		<ConfigItem
 			name="Denise Revision"
-			selection={deniseRevision}
-			on:select={deniseRevAction}
 			values={[
 				{ name: 'OCS', id: $proxy.DENISE_OCS },
 				{ name: 'ECS', id: $proxy.DENISE_ECS }
 			]}
+			selectedTag={deniseRevision}
+			on:select={deniseRevAction}
 			locked={power}
 		/>
 		<ConfigItem
 			name="Real-time Clock"
-			selection={rtcModel}
-			on:select={rtcModelAction}
 			values={[
 				{ name: 'NONE', id: $proxy.RTC_NONE },
 				{ name: 'OKI', id: $proxy.RTC_OKI },
 				{ name: 'RICOH', id: $proxy.RTC_RICOH }
 			]}
+			selectedTag={rtcModel}
+			on:select={rtcModelAction}
 			locked={power}
 		/>
 	</ConfigSection>
 	<ConfigSection name="Memory">
 		<ConfigItem
 			name="Chip RAM"
-			selection={chipRam}
-			on:select={chipRamAction}
 			values={[
 				{ name: '256 KB', id: 256 },
 				{ name: '512 KB', id: 512 },
 				{ name: '1024 KB', id: 1024 },
 				{ name: '2048 KB', id: 2048 }
 			]}
+			selectedTag={chipRam}
+			on:select={chipRamAction}
 			locked={power}
 		/>
 		<ConfigItem
 			name="Slow RAM"
-			selection={slowRam}
-			on:select={slowRamAction}
 			values={[
 				{ name: '0 KB', id: 0 },
 				{ name: '512 KB', id: 512 },
 				{ name: '1 MB', id: 1024 },
 				{ name: '1.5 MB', id: 1536 }
 			]}
+			selectedTag={slowRam}
+			on:select={slowRamAction}
 			locked={power}
 		/>
 		<ConfigItem
 			name="Fast RAM"
-			selection={fastRam}
-			on:select={fastRamAction}
 			values={[
 				{ name: '0 KB', id: 0 },
 				{ name: '64 KB', id: 64 },
@@ -267,97 +265,99 @@
 				{ name: '4 MB', id: 4096 },
 				{ name: '8 MB', id: 8192 }
 			]}
+			selectedTag={fastRam}
+			on:select={fastRamAction}
 			locked={power}
 		/>
 		<ConfigItem
 			name="Memory Layout"
-			selection={bankMap}
-			on:select={bankMapAction}
 			values={[
 				{ name: 'Amiga 500', id: $proxy.BANK_MAP_A500 },
 				{ name: 'Amiga 1000', id: $proxy.BANK_MAP_A1000 },
 				{ name: 'Amiga 2000A', id: $proxy.BANK_MAP_A2000A },
 				{ name: 'Amiga 2000B', id: $proxy.BANK_MAP_A2000B }
 			]}
+			selectedTag={bankMap}
+			on:select={bankMapAction}
 		/>
 		<ConfigItem
 			name="Memory Startup Pattern"
-			selection={initPattern}
-			on:select={initPatternAction}
 			values={[
 				{ name: 'All Zeroes', id: $proxy.RAM_INIT_ALL_ZEROES },
 				{ name: 'All Ones', id: $proxy.RAM_INIT_ALL_ONES },
 				{ name: 'Random', id: $proxy.RAM_INIT_RANDOMIZED }
 			]}
+			selectedTag={initPattern}
+			on:select={initPatternAction}
 		/>
 		<ConfigItem
 			name="Unmapped Memory Area"
-			selection={unmapped}
-			on:select={unmappedAction}
 			values={[
 				{ name: 'Floating', id: $proxy.UNMAPPED_FLOATING },
 				{ name: 'All Zeroes', id: $proxy.UNMAPPED_ALL_ZEROES },
 				{ name: 'All Ones', id: $proxy.UNMAPPED_ALL_ONES }
 			]}
+			selectedTag={unmapped}
+			on:select={unmappedAction}
 		/>
 		<ConfigItem
 			name="Emulate Slow RAM Mirror"
-			selection={slowRamMirror}
-			on:select={slowRamMirrorAction}
 			values={[
 				{ name: 'Yes', id: 1 },
 				{ name: 'No', id: 0 }
 			]}
+			selectedTag={slowRamMirror}
+			on:select={slowRamMirrorAction}
 		/>
 		<ConfigItem
 			name="Emulate Slow RAM Bus Delays"
-			selection={slowRamDelay}
-			on:select={slowRamDelayAction}
 			values={[
 				{ name: 'Yes', id: 1 },
 				{ name: 'No', id: 0 }
 			]}
+			selectedTag={slowRamDelay}
+			on:select={slowRamDelayAction}
 		/>
 	</ConfigSection>
 	<ConfigSection name="Floppy Drives">
 		<ConfigItem
 			name="DF0"
-			tag={0}
-			selection={df0}
-			on:select={dfAction}
 			values={[{ name: 'Internal Drive', id: 1 }]}
+			tag={0}
+			selectedTag={df0}
+			on:select={dfAction}
 		/>
 		<ConfigItem
 			name="DF1"
-			tag={1}
-			selection={df1}
-			on:select={dfAction}
 			values={[
 				{ name: 'None', id: 0 },
 				{ name: 'A1010', id: 1 }
 			]}
+			tag={1}
+			selectedTag={df1}
+			on:select={dfAction}
 			locked={power}
 		/>
 		<ConfigItem
 			name="DF2"
-			tag={2}
-			selection={df2}
-			on:select={dfAction}
 			values={[
 				{ name: 'None', id: 0 },
 				{ name: 'A1010', id: 1 }
 			]}
+			tag={2}
+			selectedTag={df2}
+			on:select={dfAction}
 			locked={power || df1 == 0}
 		/>
 		<ConfigItem
 			name="DF3"
-			tag={3}
-			selection={df3}
-			on:select={dfAction}
 			values={[
 				{ name: 'None', id: 0 },
 				{ name: 'A1010', id: 1 }
 			]}
+			tag={3}
+			selectedTag={df3}
+			on:select={dfAction}
 			locked={power || df2 == 0}
 		/>
 	</ConfigSection>

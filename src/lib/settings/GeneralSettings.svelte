@@ -56,7 +56,7 @@
 	<ConfigSection name="Warp mode">
 		<ConfigItem
 			name="Enable warp mode"
-			selection={$warpMode}
+			selectedTag={$warpMode}
 			on:select={warpAction}
 			values={[
 				{ name: 'During Disk Accesses', id: 0 },
@@ -68,7 +68,7 @@
 	<ConfigSection name="Appearance">
 		<ConfigItem
 			name="Color theme"
-			selection={$theme}
+			selectedTag={$theme}
 			on:select={themeAction}
 			values={[
 				{ name: 'Default', id: Theme.default },
@@ -84,7 +84,7 @@
 		/>
 		<ConfigItem
 			name="Draw Canvas Border"
-			selection={$border}
+			selectedTag={$border}
 			on:select={borderAction}
 			values={[
 				{ name: 'Yes', id: 1 },
@@ -95,7 +95,7 @@
 	<ConfigSection name="Peripherals">
 		<ConfigItem
 			name="Release Mouse by Shaking"
-			selection={$shaking}
+			selectedTag={$shaking}
 			on:select={shakingAction}
 			values={[
 				{ name: 'Yes', id: 1 },

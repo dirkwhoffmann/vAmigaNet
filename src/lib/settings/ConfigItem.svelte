@@ -3,8 +3,6 @@
 	import GoInfo from 'svelte-icons/go/GoInfo.svelte';
 	import GiPadlock from 'svelte-icons/gi/GiPadlock.svelte';
 	import type { ActionEvent } from '$lib/settings/Settings.svelte';
-	import { fade } from 'svelte/transition';
-	import Chevron from './Chevron.svelte';
 	import DropDown from '$lib/widgets/DropDown.svelte';
 	import Slider from '$lib/widgets/Slider.svelte';
 
@@ -14,37 +12,12 @@
 	export let max = 0;
 	export let locked = false;
 	export let info = false;
-	export let selection = 0;
 	export let tag = 0;
-
-	let stepValue = 2.5;
+	export let selectedTag = 0;
 
 	const dispatch = createEventDispatcher<{ select: ActionEvent }>();
 
 	$: opac = locked ? 'opacity-50' : '';
-
-	$: displayName = displayedName(selection);
-
-	function displayedName(tag: number): string {
-		if (min != max) return tag.toString();
-		for (const value of values) {
-			if (value.id == tag) return value.name;
-		}
-		return '???';
-	}
-
-	const handleClick = (e: MouseEvent, value: number) => {
-		e.preventDefault();
-		const elem = document.activeElement;
-
-		// Hack to close the dropdown when an item was selected
-		if (elem) {
-			elem?.blur();
-		}
-
-		console.log('Click: id = ' + value + ' tag = ' + tag);
-		dispatch('select', { tag: tag, value: value });
-	};
 
 	const infoAction = (e: Event) => {
 		e.preventDefault();
@@ -52,10 +25,6 @@
 		dispatch('info', { tag: tag, value: e.target!.value });
 	};
 
-	const sliderAction = (e: Event) => {
-		e.preventDefault();
-		dispatch('select', { tag: tag, value: e.target!.value });
-	};
 </script>
 
 <div class="py-0.5 px-0">
@@ -81,48 +50,10 @@
 		</div>
 		<div class="border-0 bg-primary h-12">
 			{#if min == max}
-				<DropDown {values} {locked} {tag} {min} {max} on:select />
+				<DropDown {values} {locked} {tag} {selectedTag} on:select />
 			{:else}
-				<Slider {locked} {tag} {min} {max} on:select />
+				<Slider {min} {max} {locked} {tag} {selectedTag} on:select />
 			{/if}
-			<!--
-			{#if locked}
-				<button
-					class="btn btn-primary w-[18rem] border-0 rounded-none text-xl font-normal opacity-50"
-					>{displayName}</button
-				>
-			{:else}
-				<div class="dropdown dropdown-end">
-					<button class="btn btn-primary w-[18rem] border-0 rounded-none text-xl font-normal"
-						><Chevron>{displayName}</Chevron>
-					</button>
-					{#if min != max}
-						<ul class="dropdown-content menu w-[18rem] bg-primary">
-							<input
-								type="range"
-								on:input={(e) => sliderAction(e)}
-								on:click={(e) => console.log('Click')}
-								min="0"
-								max="100"
-								value={selection}
-								class="range range-accent h-12 px-4 rounded-none"
-							/>
-						</ul>
-					{:else}
-						<ul class="dropdown-content menu p-2 text-xl bg-accent w-[18rem]">
-							{#each values as { name, id }, i}
-								<li class="" id={id.toString()}>
-									<button class="bg-accent text-accent-content" on:click={(e) => handleClick(e, id)}
-										><div class="w-4">{@html selection == id ? '&#10003' : ''}</div>
-										{name}</button
-									>
-								</li>
-							{/each}
-						</ul>
-					{/if}
-				</div>
-			{/if}
-			-->
 		</div>
 	</div>
 </div>
