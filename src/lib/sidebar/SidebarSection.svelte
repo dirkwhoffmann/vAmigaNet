@@ -1,5 +1,5 @@
 <script lang="ts">
-	import SidebarButton from '$lib/sidebar/SidebarButton.svelte';
+	import SidebarButton from '$lib/Sidebar/SidebarButton.svelte';
 	import { fade } from 'svelte/transition';
 	export let expanded = false;
 	export let item = { id: '', icon: '' };

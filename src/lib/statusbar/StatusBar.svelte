@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import DeviceInfo from '$lib/statusbar/DeviceInfo.svelte';
-	import Speedometer from '$lib/statusbar/Speedometer.svelte';
-	import BarBox from '$lib/statusbar/BarBox.svelte';
+	import DeviceInfo from '$lib/Statusbar/DeviceInfo.svelte';
+	import Speedometer from '$lib/Statusbar/Speedometer.svelte';
+	import BarBox from '$lib/Statusbar/BarBox.svelte';
 	import {
 		dfConnected,
 		dfHasDisk,

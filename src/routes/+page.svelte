@@ -9,12 +9,12 @@
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import '@splidejs/svelte-splide/css';
-	import Sidebar from '$lib/sidebar/Sidebar.svelte';
+	import Sidebar from '$lib/Sidebar/Sidebar.svelte';
 	import TitleScreen from '$lib/TitleScreen.svelte';
 	import Emulator from '$lib/Emulator.svelte';
 	import Showcases from '$lib/Showcases.svelte';
 	import Settings from '$lib/settings/Settings.svelte';
-	import StatusBar from '$lib/statusbar/StatusBar.svelte';
+	import StatusBar from '$lib/Statusbar/StatusBar.svelte';
 	import RetroShell from '$lib/RetroShell.svelte';
 	import MainScreen from '$lib/MainScreen.svelte';
 
