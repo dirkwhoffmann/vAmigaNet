@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { proxy, amiga, memory, initialized } from '$lib/stores';
+	import { Layer } from '$lib/types';
+	import { proxy, amiga, memory, initialized, dragItem, layer } from '$lib/stores';
 	import { db } from '$lib/Db/db';
 
 	function handleDragEnter(event: DragEvent) {
@@ -30,10 +31,21 @@
 					const file = item.getAsFile();
 					if (file) {
 						console.log(`name = ${file.name}`);
-						try {
-							let blob = await file.arrayBuffer();
-							let uint8View = new Uint8Array(blob);
 
+						let blob = await file.arrayBuffer();
+						let uint8View = new Uint8Array(blob);
+
+						switch ($amiga.getFileType(blob)) {
+							case $proxy.FILETYPE_ADF:
+								console.log('Got ADF');
+								$dragItem = uint8View; 
+								$layer = Layer.dropzone; 
+								return;
+							default:
+								console.log('Got other');
+						}
+
+						try {
 							// Check if this file is an ADF
 							try {
 								if ($amiga.insertDisk(uint8View, blob.byteLength, 0)) return;
@@ -77,6 +89,8 @@
 			}
 		}
 	}
+
+	function handleDraggedDisk(blob: Uint8Array) {}
 
 	function handleDragStart(event: DragEvent) {
 		console.log('DragStart');

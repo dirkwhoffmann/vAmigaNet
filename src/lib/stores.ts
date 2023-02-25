@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store';
+import { writable, type Writable } from 'svelte/store';
 import { Layer, WarpMode, Theme, RenderMode } from '$lib/types'
 
 // Gateway to the WASM backend
@@ -51,9 +51,12 @@ export const aspectHeight = writable(0);
 // GUI state
 export const layout = writable('fit');
 export const showSidebar = writable(false);
-export const layer = writable(Layer.dropzone);
+export const layer = writable(Layer.none);
 export const showImpressum = writable(false); // DEPRECATED. USE layer
 export const activeSlider = writable(0);
+
+// Drag and Drop
+export const dragItem: Writable<Uint8Array | null> = writable(null);
 
 // Emulator state
 export const wasmInitialized = writable(false);

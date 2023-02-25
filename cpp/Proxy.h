@@ -101,6 +101,9 @@ struct AmigaProxy
     u32 rightChannelBuffer();
     u32 audioFillLevel();
 
+    // Handling media files
+    int getFileType(const string &blob);
+    
     // Juggling disks
     bool insertDisk(const string &blob, u32 len, u8 drive);
 

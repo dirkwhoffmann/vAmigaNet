@@ -198,6 +198,25 @@ u32 AmigaProxy::rightChannelBuffer()
     return (u32)rightChannel.ptr;
 }
 
+int AmigaProxy::getFileType(const string &blob)
+{
+    std::stringstream stream;
+    stream.write((const char *)blob.data(), blob.size());
+
+    if (Snapshot::isCompatible(stream))
+        return (int)FILETYPE_SNAPSHOT;
+    if (ADFFile::isCompatible(stream))
+        return (int)FILETYPE_ADF;
+    if (DMSFile::isCompatible(stream))
+        return (int)FILETYPE_DMS;
+    if (EXEFile::isCompatible(stream))
+        return (int)FILETYPE_EXE;
+    if (HDFFile::isCompatible(stream))
+        return (int)FILETYPE_HDF;
+
+    return FILETYPE_UNKNOWN;
+}
+
 bool AmigaProxy::insertDisk(const string &blob, u32 len, u8 drive)
 {
     printf("insertDisk(drive: %d)\n", drive);
@@ -275,6 +294,7 @@ EMSCRIPTEN_BINDINGS(AmigaProxy)
 
         .function("cpuLoad", &AmigaProxy::cpuLoad)
 
+        .function("getFileType", &AmigaProxy::getFileType)
         .function("insertDisk", &AmigaProxy::insertDisk)
 
         .function("setSampleRate", &AmigaProxy::setSampleRate)
@@ -679,6 +699,20 @@ EMSCRIPTEN_BINDINGS(Keys)
     // DriveMechanics
     constant("MECHANICS_NONE", (int)MECHANICS_NONE);
     constant("MECHANICS_A1010", (int)MECHANICS_A1010);
+
+    // FileType
+    constant("FILETYPE_UNKNOWN", (int)FILETYPE_UNKNOWN);
+    constant("FILETYPE_SNAPSHOT", (int)FILETYPE_SNAPSHOT);
+    constant("FILETYPE_SCRIPT", (int)FILETYPE_SCRIPT);
+    constant("FILETYPE_ADF", (int)FILETYPE_ADF);
+    constant("FILETYPE_HDF", (int)FILETYPE_HDF);
+    constant("FILETYPE_EXT", (int)FILETYPE_EXT);
+    constant("FILETYPE_IMG", (int)FILETYPE_IMG);
+    constant("FILETYPE_DMS", (int)FILETYPE_DMS);
+    constant("FILETYPE_EXE", (int)FILETYPE_EXE);
+    constant("FILETYPE_DIR", (int)FILETYPE_DIR);
+    constant("FILETYPE_ROM", (int)FILETYPE_ROM);
+    constant("FILETYPE_EXTENDED_ROM", (int)FILETYPE_EXTENDED_ROM);
 
     // FloppyDriveType
     constant("DRIVE_DD_35", (int)DRIVE_DD_35);
