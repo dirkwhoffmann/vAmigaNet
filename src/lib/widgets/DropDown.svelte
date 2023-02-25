@@ -22,7 +22,7 @@
 		e.preventDefault();
 
 		// Force the dropdown to close
-		if (document.activeElement) document.activeElement?.blur();
+		if (document.activeElement) (document.activeElement as HTMLElement).blur();
 
 		selectedTag = value;
 		dispatch('select', { tag: tag, value: value });

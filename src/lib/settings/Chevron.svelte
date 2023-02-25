@@ -3,10 +3,10 @@
 </script>
 
 <div class="flex w-full items-center justify-between">
-	<div class="flex grow border-0 justify-center">
+	<div class="flex grow justify-center">
 		<slot />
 	</div>
-	<div class="h-4">
+	<div class="w-4 h-4">
 		<FaChevronDown />
 	</div>
 </div>
