@@ -519,6 +519,7 @@
 		// Check for joystick emulation keys on port 1
 		let events = keyDownEvents(e.code, 1);
 		if (events?.length) {
+			console.log("Emulation keys: ", events);
 			events?.forEach((event) => $joystick1.trigger(event));
 			return; // Only if "connect emulation keys"
 		}
@@ -602,12 +603,13 @@
 		const x = event.movementX / 2;
 		const y = event.movementY / 2;
 
-		if ($port1 == 1) {
-			$mouse1.detectShakeRel(x, y);
+		// Check for a shaking mouse
+		$mouse1.detectShakeRel(x, y);
+
+		if ($port1 == InputDevice.mouse) {
 			$mouse1.setDxDy(x, y);
 		}
-		if ($port2 == 1) {
-			$mouse2.detectShakeRel(x, y);
+		if ($port2 == InputDevice.mouse) {
 			$mouse2.setDxDy(x, y);
 		}
 	}
