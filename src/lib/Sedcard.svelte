@@ -32,7 +32,7 @@
 		<!-- Description -->
 		<div class="relative border-0">
 			<div class="absolute top-0 right-0">
-				<button class="btn btn-sm flex p-0 border-2 border-white" on:click={close}
+				<button class="btn btn-sm btn-square flex p-0 border-2 border-white" on:click={close}
 					><IoMdClose /></button
 				>
 			</div>

@@ -76,11 +76,12 @@
 	</div>
 	{#if $layer == Layer.showcases}
 		<Showcases />
-	{:else if $layer == Layer.none}
+	{:else}
 		<div
 			in:fade
 			class="relative bg-transparent grow flex flex-col items-center justify-center {debug}"
 		>
+		{#if $layer == Layer.none}
 			<div class={debug}>
 				<div class="rounded flex justify-center">
 					<img class="h-24 p-2 mt-3" src="va-icon.png" alt="vAmiga Icon" />
@@ -107,6 +108,7 @@
 				</p>
 			</div>
 			-->
+			{/if}
 		</div>
 	{/if}
 	<div class="relative flex justify-center align-middle bg-gray-900/50 space-x-8 {debug}">
