@@ -37,52 +37,16 @@
 
 						switch ($amiga.getFileType(blob)) {
 							case $proxy.FILETYPE_ADF:
-								console.log('Got ADF');
-								$dragItem = uint8View; 
-								$layer = Layer.dropzone; 
+							case $proxy.FILETYPE_DMS:
+							case $proxy.FILETYPE_EXE:
+								handleDraggedDisk(uint8View);
+								return;
+							case $proxy.FILETYPE_ROM:
+								await handleDraggedRom(uint8View);
 								return;
 							default:
-								console.log('Got other');
-						}
-
-						try {
-							// Check if this file is an ADF
-							try {
-								if ($amiga.insertDisk(uint8View, blob.byteLength, 0)) return;
-							} catch (exc) {}
-							console.log('No valid disk');
-
-							let info = $memory.analyzeRom(uint8View, blob.byteLength);
-							console.log('ROM analyzed: ', info);
-
-							if (info.crc32) {
-								try {
-									const t = info.title;
-
-									const id = await db.roms.add({
-										crc32: info.crc32,
-										title: info.title,
-										version: info.version,
-										released: info.released,
-										model: info.model,
-										isAros: info.isAros,
-										isDiag: info.isDiag,
-										isCommodore: info.isCommodore,
-										isHyperion: info.isHyperion,
-										isPatched: info.isPatched,
-										isUnknown: info.isUnknown,
-										rom: uint8View,
-										ext: null,
-										extStart: 0
-									});
-
-									console.log(`${t} successfully added with id ${id}`);
-								} catch (error) {
-									console.log(`Failed to add Kickstart`);
-								}
-							}
-						} catch (exc) {
-							$proxy.reportException();
+								console.warn('Unsupported file format');
+								return;
 						}
 					}
 				}
@@ -90,14 +54,42 @@
 		}
 	}
 
-	function handleDraggedDisk(blob: Uint8Array) {}
-
-	function handleDragStart(event: DragEvent) {
-		console.log('DragStart');
+	function handleDraggedDisk(blob: Uint8Array) {
+		console.log('Got disk');
+		$dragItem = blob;
+		$layer = Layer.dropzone;
 	}
 
-	function handleDragEnd(event: DragEvent) {
-		console.log('DragEnd');
+	async function handleDraggedRom(blob: Uint8Array) {
+		let info = $memory.analyzeRom(blob, blob.byteLength);
+		console.log('ROM analyzed: ', info);
+
+		if (info.crc32) {
+			try {
+				const t = info.title;
+
+				const id = await db.roms.add({
+					crc32: info.crc32,
+					title: info.title,
+					version: info.version,
+					released: info.released,
+					model: info.model,
+					isAros: info.isAros,
+					isDiag: info.isDiag,
+					isCommodore: info.isCommodore,
+					isHyperion: info.isHyperion,
+					isPatched: info.isPatched,
+					isUnknown: info.isUnknown,
+					rom: blob,
+					ext: null,
+					extStart: 0
+				});
+
+				console.log(`${t} successfully added with id ${id}`);
+			} catch (error) {
+				console.log(`Failed to add Kickstart`);
+			}
+		}
 	}
 </script>
 

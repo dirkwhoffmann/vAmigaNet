@@ -1,5 +1,7 @@
 #include "Proxy.h"
 #include "RomFile.h"
+#include "ExtendedRomFile.h"
+#include "EXTFile.h"
 #include <cstdlib>
 #include <stdio.h>
 #include <exception>
@@ -205,8 +207,14 @@ int AmigaProxy::getFileType(const string &blob)
 
     if (Snapshot::isCompatible(stream))
         return (int)FILETYPE_SNAPSHOT;
+    if (RomFile::isCompatible(stream))
+        return (int)FILETYPE_ROM;
+    if (ExtendedRomFile::isCompatible(stream))
+        return (int)FILETYPE_EXTENDED_ROM;
     if (ADFFile::isCompatible(stream))
         return (int)FILETYPE_ADF;
+    if (EXTFile::isCompatible(stream))
+        return (int)FILETYPE_EXT;
     if (DMSFile::isCompatible(stream))
         return (int)FILETYPE_DMS;
     if (EXEFile::isCompatible(stream))
