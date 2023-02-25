@@ -1,21 +1,20 @@
 <script lang="ts">
 	import { Layer } from '$lib/types';
-	import MyButton from './Widgets/MyButton.svelte';
 	import { fade } from 'svelte/transition';
 	import { liveQuery } from 'dexie';
 	import { db, type RomEntry } from '$lib/Db/db';
 	import { browser } from '$app/environment';
 	import FaTrash from 'svelte-icons/fa/FaTrash.svelte';
-	import FaWindowClose from 'svelte-icons/fa/FaWindowClose.svelte';
 	import IoMdClose from 'svelte-icons/io/IoMdClose.svelte';
 	import { proxy, amiga, memory, initialized, layer } from '$lib/stores';
 
-	let roms = liveQuery(() => (browser ? db.roms.orderBy('title').toArray() : []));
-
-	$: console.log("roms = ", $roms); 
+	// Connect to Dexie DB
+	let roms: RomEntry[]; 
+	let myQuery = liveQuery(() => (browser ? db.roms.orderBy('title').toArray() : []));	
+	myQuery.subscribe(value => { roms = value })
 
 	export let show = true;
-
+	
 	async function addRomToDatabase(rom: Uint8Array, ext: Uint8Array | null = null, extStart = 0) {
 		console.log('addRomToDatabase: Adding buffer of size ', rom.length);
 		let info = $memory.analyzeRom(rom, rom.length);
@@ -144,8 +143,8 @@
 					<tr class="h-8 {debug} text-center text-base-content border-purple-400 font-josefin">
 						Use drag-and-drop to add additional ROM images.
 					</tr>
-					{#if $roms}
-						{#each $roms as rom}
+					{#if roms}
+						{#each roms as rom}
 							<tr class="h-8 {debug} border-purple-400">
 								<td class="">
 									<div class="flex h-[5.5rem] space-x-4">
@@ -199,10 +198,10 @@
 				</p>
 				<h3>AROS</h3>
 				<p>
-					If you don't have the original Kickstart at hand, you may install the Amiga Research
+					If you don't have an original Kickstart at hand, you may install the Amiga Research
 					Operating System ROM (AROS). AROS is an open source Kickstart variant, which can be freely
 					redistributed. Unfortunately not all Amiga programs are compatible with AROS, which is why
-					I strongly recommend to use original ROMs. 					
+					we strongly recommend to run vAmiga Online with original ROMs. 					
 				</p>
 			</article>
 		{/if}
