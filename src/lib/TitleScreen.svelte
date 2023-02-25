@@ -16,6 +16,11 @@
 	let showRomViewer = false;
 	let showImpressum = false;
 
+	$: if (($layer == Layer.kickstart)) {
+		console.log('Layer.kickstart...');
+		showRomViewer = true;
+	}
+
 	async function launch() {
 		await $audio.setup();
 		$amiga.run();
@@ -34,7 +39,7 @@
 	async function openShowcases() {
 		await $audio.setup();
 		$layer = $layer == Layer.showcases ? Layer.none : Layer.showcases;
-		$showSidebar = false; 
+		$showSidebar = false;
 	}
 
 	async function openRoms() {
@@ -63,7 +68,7 @@
 	<div in:fade={{ duration: 2000 }}>
 		<!--<div class="absolute w-full h-full bg-base-100" />-->
 		<div class="absolute h-full blur-sm">
-			<div class="h-full w-screen bg-gradient-to-t from-primary to-secondary"></div>
+			<div class="h-full w-screen bg-gradient-to-t from-primary to-secondary" />
 		</div>
 		<div class="absolute h-full blur-sm">
 			<img class="h-full w-screen object-fill opacity-60" src="matrix.jpg" alt="Background" />

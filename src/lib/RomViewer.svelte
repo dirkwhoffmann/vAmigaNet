@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Layer } from '$lib/types';
 	import MyButton from './Widgets/MyButton.svelte';
 	import { fade } from 'svelte/transition';
 	import { liveQuery } from 'dexie';
@@ -7,7 +8,7 @@
 	import FaTrash from 'svelte-icons/fa/FaTrash.svelte';
 	import FaWindowClose from 'svelte-icons/fa/FaWindowClose.svelte';
 	import IoMdClose from 'svelte-icons/io/IoMdClose.svelte';
-	import { proxy, amiga, memory, initialized } from '$lib/stores';
+	import { proxy, amiga, memory, initialized, layer } from '$lib/stores';
 
 	let roms = liveQuery(() => (browser ? db.roms.orderBy('title').toArray() : []));
 
@@ -97,6 +98,7 @@
 	function close() {
 		console.log('close');
 		show = false;
+		$layer = Layer.none;
 	}
 
 	async function deleteAction(e: MouseEvent, id: number) {

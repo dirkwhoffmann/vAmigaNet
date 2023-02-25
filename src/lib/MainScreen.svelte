@@ -89,6 +89,8 @@
 			} catch (error) {
 				console.log(`Failed to add Kickstart`);
 			}
+			console.log("Opening Kickstart viewer");
+			$layer = Layer.kickstart;
 		}
 	}
 </script>
