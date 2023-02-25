@@ -36,10 +36,14 @@
 	>
 {:else}
 	<div class="dropdown dropdown-end">
-		<button class="btn btn-primary w-[18rem] border-0 rounded-none text-xl font-normal"
+		<!-- Make DropDown work in Safari using the label / tabindex trick (see DaisyUI doc) -->
+		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+		<!-- svelte-ignore a11y-label-has-associated-control -->
+		<label tabindex="0" class="btn btn-primary w-[18rem] border-0 rounded-none text-xl font-normal"
 			><Chevron>{displayName}</Chevron>
-		</button>
-		<ul class="dropdown-content menu p-2 text-xl bg-accent w-[18rem]">
+		</label>
+		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+		<ul tabindex="0" class="dropdown-content menu p-2 text-xl bg-accent w-[18rem]">
 			{#each values as { name, id }, i}
 				<li class="" id={id.toString()}>
 					<button class="bg-accent text-accent-content" on:click={(e) => listAction(e, id)}

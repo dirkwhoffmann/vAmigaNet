@@ -114,9 +114,13 @@
 <div class="flex h-8">
 	<div class="h-full w-1 bg-black" />
 	<div class="dropdown dropdown-end">
-		<button class="flex w-20 text-xs h-full justify-center items-center {color}">{value}</button>
+		<!-- Make DropDown work in Safari using the label / tabindex trick (see DaisyUI doc) -->
+		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+		<!-- svelte-ignore a11y-label-has-associated-control -->
+		<label tabindex="0" class="flex w-20 text-xs h-full justify-center items-center {color}">{value}</label>
+		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 		<ul
-			class="dropdown-content bg-accent text-accent-content menu menu-compact rounded p-0 text-sm w-64"
+		tabindex="0" class="dropdown-content bg-accent text-accent-content menu menu-compact rounded p-0 text-sm w-64"
 		>
 			{#each modes as name, i}
 				<li class="">
@@ -128,4 +132,5 @@
 			{/each}
 		</ul>
 	</div>
+	
 </div>
