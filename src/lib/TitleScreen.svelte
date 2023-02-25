@@ -76,7 +76,7 @@
 	</div>
 	{#if $layer == Layer.showcases}
 		<Showcases />
-	{:else}
+	{:else if $layer == Layer.none}
 		<div
 			in:fade
 			class="relative bg-transparent grow flex flex-col items-center justify-center {debug}"
@@ -92,7 +92,7 @@
 						<div class="font-sofia-semi text-xl pl-2 pb-10">Version 0.2</div>
 						<div class="flex space-x-5">
 							<button class="btn btn-primary" on:click={launch}>Power On</button>
-							<button class="btn btn-primary p-1.5" on:click={gotoGitHub}><FaGithub /></button>
+							<button class="btn btn-primary btn-square p-1.5" on:click={gotoGitHub}><FaGithub /></button>
 						</div>
 					</div>
 				</div>
