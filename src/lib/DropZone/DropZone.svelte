@@ -1,12 +1,10 @@
 <script lang="ts">
 	import { layer, dragItem, amiga } from '$lib/stores';
 	import { Layer } from '$lib/types';
-	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import DropZoneCell from './DropZoneCell.svelte';
 
 	function insert(drive: number) {
-		console.log("insert", drive);
 		if ($dragItem) {
 			console.log("dragItem: ", dragItem);
 			$amiga.insertDisk($dragItem, $dragItem.length, drive);

@@ -15,14 +15,13 @@
 	export let tag = 0;
 	export let selectedTag = 0;
 
-	const dispatch = createEventDispatcher<{ select: ActionEvent }>();
+	const infoDispatcher = createEventDispatcher<{ info: ActionEvent }>();
 
 	$: opac = locked ? 'opacity-50' : '';
 
 	const infoAction = (e: Event) => {
 		e.preventDefault();
-		console.log('infoAction');
-		dispatch('info', { tag: tag, value: e.target!.value });
+		infoDispatcher('info', { tag: tag, value: selectedTag });
 	};
 
 </script>

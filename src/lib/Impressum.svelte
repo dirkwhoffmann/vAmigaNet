@@ -1,5 +1,4 @@
 <script lang="ts">
-	import MyButton from '$lib/Widgets/MyButton.svelte';
 	import { fade } from 'svelte/transition';
 
     function close() {

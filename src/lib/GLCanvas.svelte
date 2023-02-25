@@ -1,6 +1,7 @@
 <svelte:options accessors={true} />
 
 <script lang="ts">
+	import { InputDevice } from '$lib/types';
 	import { proxy, amiga, denise, keyboard, joystick1, joystick2 } from '$lib/stores';
 	import { port1, port2, mouse1, mouse2, MsgShaking } from '$lib/stores';
 	import { renderMode, flickerWeight } from '$lib/stores';
@@ -444,11 +445,13 @@
 	//
 
 	// Translates a key press event to a list of gamepad actions
-	function keyDownEvents(keycode: number, port: number) {
-		let action: number;
-		if (port == 1) action = $port1 == 2 ? $keyset1[keycode] : $keyset2[keycode];
-		if (port == 2) action = $port2 == 2 ? $keyset1[keycode] : $keyset2[keycode];
-
+	function keyDownEvents(key: string, port: number) {
+		let action = undefined;
+		if (port == 1 && $port1 == InputDevice.keyset1) action = $keyset1[key]; 
+		if (port == 1 && $port1 == InputDevice.keyset2) action = $keyset2[key]; 
+		if (port == 2 && $port2 == InputDevice.keyset1) action = $keyset1[key]; 
+		if (port == 2 && $port2 == InputDevice.keyset2) action = $keyset2[key]; 
+		
 		switch (action) {
 			case undefined:
 				return [];
@@ -474,10 +477,12 @@
 	}
 
 	// Translates a key release event to a list of gamepad actions
-	function keyUpEvents(keycode: number, port: number) {
-		let action: number;
-		if (port == 1) action = $port1 == 2 ? $keyset1[keycode] : $keyset2[keycode];
-		if (port == 2) action = $port2 == 2 ? $keyset1[keycode] : $keyset2[keycode];
+	function keyUpEvents(key: string, port: number) {
+		let action = undefined;
+		if (port == 1 && $port1 == InputDevice.keyset1) action = $keyset1[key]; 
+		if (port == 1 && $port1 == InputDevice.keyset2) action = $keyset2[key]; 
+		if (port == 2 && $port2 == InputDevice.keyset1) action = $keyset1[key]; 
+		if (port == 2 && $port2 == InputDevice.keyset2) action = $keyset2[key]; 
 
 		switch (action) {
 			case undefined:
@@ -503,13 +508,14 @@
 		}
 	}
 
-	function keyDownAction(e) {
-		// console.log('keyDown: ', e);
+	function keyDownAction(e: KeyboardEvent) {
+
+		console.log("keyDownAction", e.code);
 
 		if (e.repeat) {
 			return;
 		}
-
+		
 		// Check for joystick emulation keys on port 1
 		let events = keyDownEvents(e.code, 1);
 		if (events?.length) {
@@ -532,7 +538,7 @@
 		}
 	}
 
-	function keyUpAction(e) {
+	function keyUpAction(e: KeyboardEvent) {
 		// console.log('keyUp: ', e);
 
 		// Check for joystick emulation keys on port 1
@@ -606,37 +612,37 @@
 		}
 	}
 
-	async function mouseDown(event) {
-		console.log('mousedown: ', event.which);
+	async function mouseDown(e: MouseEvent) {
+		console.log('mousedown: ', e.button);
 
 		if (!isLocked()) {
 			console.log('Locking mouse...');
 			lockMouse();
 		} else {
-			switch (event.which) {
-				case 1:
+			switch (e.button) {
+				case 0:
 					$mouse1.trigger($proxy.PRESS_LEFT);
 					break;
-				case 2:
+				case 1:
 					$mouse1.trigger($proxy.PRESS_MIDDLE);
 					break;
-				case 3:
+				case 2:
 					$mouse1.trigger($proxy.PRESS_RIGHT);
 					break;
 			}
 		}
 	}
 
-	function mouseUp(event) {
-		console.log('mouseUp: ', event.which);
-		switch (event.which) {
-			case 1:
+	function mouseUp(e: MouseEvent) {
+		console.log('mouseUp: ', e.button);
+		switch (e.button) {
+			case 0:
 				$mouse1.trigger($proxy.RELEASE_LEFT);
 				break;
-			case 2:
+			case 1:
 				$mouse1.trigger($proxy.RELEASE_MIDDLE);
 				break;
-			case 3:
+			case 2:
 				$mouse1.trigger($proxy.RELEASE_RIGHT);
 				break;
 		}

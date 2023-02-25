@@ -1,11 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import { proxy, amiga, retroShell, diskController } from '$lib/stores';
     import { dfConnected, dfHasDisk } from '$lib/stores';
-	import { onMount } from 'svelte';
-	import { fade } from 'svelte/transition';
 	import { darkTheme } from '$lib/stores';
-	import { enhance } from '$app/forms';
     import FaTimes from 'svelte-icons/fa/FaTimes.svelte'
 
     export let id: number;

@@ -1,3 +1,5 @@
+import type { KeyMap } from "$lib/types";
+
 export const TPP                = 1;
 
 export const VPOS_CNT_PAL_LF    = 313;
@@ -41,7 +43,7 @@ export const VBLANK_MIN         = 0x00;
 export const VBLANK_MAX         = 0x19;
 export const VBLANK_CNT         = 0x1A;
 
-export const AMIGA_KEYS = {
+export const AMIGA_KEYS: KeyMap = {
     'Escape':         0x45,
     'F1':             0x50,
     'F2':             0x51,

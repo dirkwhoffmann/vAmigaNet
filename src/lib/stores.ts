@@ -1,5 +1,6 @@
 import { writable, type Writable } from 'svelte/store';
 import { Layer, WarpMode, Theme, RenderMode } from '$lib/types'
+import type { KeySet } from '$lib/types';
 
 // Gateway to the WASM backend
 export const proxy: any = writable();
@@ -39,8 +40,10 @@ export const port1 = writable(1);
 export const port2 = writable(0);
 
 // Emulation keysets
-export const keyset1 = writable();
-export const keyset2 = writable();
+export const keyset1: Writable<KeySet> = writable();
+export const keyset2: Writable<KeySet> = writable();
+// export const keyset1 = writable();
+// export const keyset2 = writable();
 
 // Layout
 export const canvasWidth = writable(0);
