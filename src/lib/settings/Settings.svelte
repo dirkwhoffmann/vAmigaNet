@@ -11,7 +11,7 @@
 	import VideoSettings from '$lib/Settings/VideoSettings.svelte';
 	import AudioSettings from '$lib/Settings/AudioSettings.svelte';
 
-	let category = 'general';
+	let active = 'GENERAL';
 
 	onMount(() => {});
 </script>
@@ -24,19 +24,19 @@
 		<div class="font-sofia-extra">
 			<div class="text-5xl">SETTINGS</div>
 			<div class="float space-x-4 mb-6">
-				<ConfigCategory name="GENERAL" on:click={() => (category = 'general')} />
-				<ConfigCategory name="MACHINE" on:click={() => (category = 'machine')} />
-				<ConfigCategory name="VIDEO" on:click={() => (category = 'video')} />
-				<ConfigCategory name="AUDIO" on:click={() => (category = 'audio')} />
+				<ConfigCategory name="GENERAL" {active} on:click={() => (active = 'GENERAL')} />
+				<ConfigCategory name="MACHINE" {active} on:click={() => (active = 'MACHINE')} />
+				<ConfigCategory name="VIDEO" {active} on:click={() => (active = 'VIDEO')} />
+				<ConfigCategory name="AUDIO" {active} on:click={() => (active = 'AUDIO')} />
 			</div>
 		</div>
-		{#if category == 'general'}
+		{#if active == 'GENERAL'}
 			<GeneralSettings />
-		{:else if category == 'machine'}
+		{:else if active == 'MACHINE'}
 			<MachineSettings />
-		{:else if category == 'video'}
+		{:else if active == 'VIDEO'}
 			<VideoSettings />
-		{:else if category == 'audio'}
+		{:else if active == 'AUDIO'}
 			<AudioSettings />
 		{/if}
 	</div>
