@@ -55,7 +55,7 @@
 				</div>
 			{:else}
 				<div class="mt-4 relative">
-					<button class="btn" on:click={runTitle}>Start</button>
+					<button class="btn btn-primary" on:click={runTitle}>Start</button>
 				</div>
 			{/if}
 		</div>
