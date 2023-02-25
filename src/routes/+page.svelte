@@ -42,7 +42,7 @@
 		});
 
 		window.addEventListener('error', handleUncatchedError);
-		window.addEventListener('unhandledrejection', handleUncatchedError);
+		window.addEventListener('unhandledrejection', handleUncatchedRejection);
 	});
 
 	$: if (canvas != undefined) resize();
@@ -89,7 +89,15 @@
 		resize();
 	}
 
-	function handleUncatchedError(event: Event) {
+	function handleUncatchedError(event: ErrorEvent) {
+		if (event.error instanceof WebAssembly.Exception) {
+			// event.preventDefault();
+			$what = $amiga.what();
+			$errno = $amiga.errorCode();
+		}
+	}
+
+	function handleUncatchedRejection(event: PromiseRejectionEvent) {
 		if (event.reason instanceof WebAssembly.Exception) {
 			// event.preventDefault();
 			$what = $amiga.what();
