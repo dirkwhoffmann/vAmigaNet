@@ -278,7 +278,7 @@ Thread::warpOn(isize source)
 {
     assert(source >= 0 && source < 8);
     
-    changeWarpTo(warpMode | (u8)(1 << source), false);
+    changeWarpTo(warpMode | (u8)(1 << source));
 }
 
 void
@@ -286,7 +286,7 @@ Thread::warpOff(isize source)
 {
     assert(source >= 0 && source < 8);
     
-    changeWarpTo(warpMode & ~(u8)(1 << source), false);
+    changeWarpTo(warpMode & ~(u8)(1 << source));
 }
 
 void

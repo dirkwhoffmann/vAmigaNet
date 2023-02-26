@@ -2,6 +2,9 @@ import type { KeyMap } from "$lib/types";
 
 export const TPP                = 1;
 
+export const CLK_FREQUENCY_PAL  = 28375160;
+export const CLK_FREQUENCY_NTSC = 28636360;
+
 export const VPOS_CNT_PAL_LF    = 313;
 export const VPOS_CNT_PAL_SF    = 312;
 export const VPOS_MAX_PAL_LF    = 312;

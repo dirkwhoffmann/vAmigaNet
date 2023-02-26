@@ -123,6 +123,10 @@ struct AgnusProxy
     AgnusProxy();
 
     u32 frameCount() const;
+
+    void scheduleGUITimerAbs(u32 frames, u32 payload);
+    void scheduleGUITimerRel(u32 frames, u32 payload);
+
 };
 
 struct DeniseProxy

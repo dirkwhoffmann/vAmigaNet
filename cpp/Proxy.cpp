@@ -346,11 +346,25 @@ u32 AgnusProxy::frameCount() const
     return (u32)amiga->agnus.pos.frame;
 }
 
+void AgnusProxy::scheduleGUITimerAbs(u32 frames, u32 payload)
+{
+    printf("Cycles: %ld\n", (isize)frames * CLK_FREQUENCY_PAL / 50);
+    amiga->agnus.scheduleGUITimerAbs((isize)frames * CLK_FREQUENCY_PAL / 50, payload);
+}
+
+void AgnusProxy::scheduleGUITimerRel(u32 frames, u32 payload)
+{
+    printf("rel Cycles: %ld\n", (isize)frames * CLK_FREQUENCY_PAL / 50);
+    amiga->agnus.scheduleGUITimerRel((isize)frames * CLK_FREQUENCY_PAL / 50, payload);
+}
+
 EMSCRIPTEN_BINDINGS(AgnusProxy)
 {
     class_<AgnusProxy>("AgnusProxy")
         .constructor<>()
-        .function("frameCount", &AgnusProxy::frameCount);
+        .function("frameCount", &AgnusProxy::frameCount)
+        .function("scheduleGUITimerAbs", &AgnusProxy::scheduleGUITimerAbs)
+        .function("scheduleGUITimerRel", &AgnusProxy::scheduleGUITimerRel);
 }
 
 //
@@ -758,7 +772,7 @@ EMSCRIPTEN_BINDINGS(Keys)
     constant("MSG_PAUSE", (int)MSG_PAUSE);
     constant("MSG_STEP", (int)MSG_STEP);
     constant("MSG_RESET", (int)MSG_RESET);
-    constant("MSG_HALT", (int)MSG_HALT);
+    constant("MSG_SHUTDOWN", (int)MSG_SHUTDOWN);
     constant("MSG_ABORT", (int)MSG_ABORT);
     constant("MSG_WARP_ON", (int)MSG_WARP_ON);
     constant("MSG_WARP_OFF", (int)MSG_WARP_OFF);
@@ -830,6 +844,7 @@ EMSCRIPTEN_BINDINGS(Keys)
     constant("MSG_SRV_STATE", (int)MSG_SRV_STATE);
     constant("MSG_SRV_RECEIVE", (int)MSG_SRV_RECEIVE);
     constant("MSG_SRV_SEND", (int)MSG_SRV_SEND);
+    constant("MSG_GUI_EVENT", (int)MSG_GUI_EVENT);
 
     // Option
     constant("OPT_VIDEO_FORMAT", (int)OPT_VIDEO_FORMAT);

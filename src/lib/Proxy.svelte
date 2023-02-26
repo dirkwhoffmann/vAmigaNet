@@ -3,7 +3,7 @@
 <script lang="ts">
 	import type { DataBaseItem } from '$lib/types';
 	import { onMount } from 'svelte';
-	import { WarpMode } from '$lib/types'
+	import { WarpMode } from '$lib/types';
 	import {
 		proxy,
 		audio,
@@ -29,7 +29,7 @@
 		MsgPause,
 		MsgStep,
 		MsgReset,
-		MsgHalt,
+		MsgShutdown,
 		MsgAbort,
 		MsgWarpOn,
 		MsgWarpOff,
@@ -156,8 +156,18 @@
 			$warpMode = showcase.warp;
 
 			$amiga.run();
-		}
-		catch (exception) {
+
+			// Set GUI timer to manage disk changes
+			if (showcase.title == 'Absolute Inebriation') {
+				console.log("Scheduling disk change (inebriation)");
+				$agnus.scheduleGUITimerAbs(100, 42);
+			}
+			if (showcase.title == 'Eon') {
+				console.log("Scheduling disk change (eon)");
+				$agnus.scheduleGUITimerAbs(100, 42);
+			}
+
+		} catch (exception) {
 			console.log('CATCHED ' + exception);
 			throw exception;
 			// console.error($amiga.getExceptionMessage(exception));
@@ -190,7 +200,9 @@
 		}
 		try {
 			const item = await db.roms.get(crc32);
-			if (!item) { return false; }
+			if (!item) {
+				return false;
+			}
 
 			if (item?.rom) {
 				$memory.loadRom(item!.rom, item!.rom!.length);
@@ -213,13 +225,13 @@
 
 	export async function installRoms(crcs: [number]) {
 		for (const crc of crcs) {
-			console.log("Trying to install ROM", crc);
+			console.log('Trying to install ROM', crc);
 			const success = await installRom(crc);
 			if (success) {
-				console.log("SUCCESS.");
+				console.log('SUCCESS.');
 				return true;
 			} else {
-				console.log("FAILED.");
+				console.log('FAILED.');
 			}
 		}
 		return false;
@@ -233,7 +245,7 @@
 		installRom(2231503309);
 	}
 
-	$: updateWarp($warpMode)
+	$: updateWarp($warpMode);
 	export function updateWarp(warpMode: WarpMode) {
 		if (!$amiga) return;
 
@@ -302,7 +314,7 @@
 				3304125791, // Kickstart 1.3
 				2798523958, // Kickstart 1.2
 				3283989056, // Kickstart 2.04
-				1062194186, // Aros
+				1062194186 // Aros
 			];
 
 			$proxy.installRoms(defaultRoms);
@@ -362,8 +374,8 @@
 				$halted = false;
 				break;
 
-			case $proxy.MSG_HALT:
-				$MsgHalt++;
+			case $proxy.MSG_SHUTDOWN:
+				$MsgShutdown++;
 				break;
 
 			case $proxy.MSG_ABORT:
@@ -682,6 +694,10 @@
 
 			case $proxy.MSG_SRV_SEND:
 				$MsgSrvSend++;
+				break;
+
+			case $proxy.MSG_GUI_EVENT:
+				console.log("MSG_GUI_EVENT received");
 				break;
 
 			default:
