@@ -1,7 +1,10 @@
 <script lang="ts">
+	import type { ActionEvent } from '$lib/Settings/Settings.svelte';
 	import { onMount } from 'svelte';
 	import { proxy, amiga, cpu, agnus } from '$lib/stores';
 	import { darkTheme } from '$lib/stores';
+	import MyDropDown from '$lib/Widgets/MyDropDown.svelte';
+	import DropDownList from '$lib/Widgets/DropDownList.svelte';
 
 	export let acceleration = 1.0;
 	export let mhz = 0.0;
@@ -12,11 +15,20 @@
 	export let latchedEmuFrame = 0.0;
 	export let latchedGpuFrame = 0.0;
 
-	let open = false;
 	let mode = 0;
 	let value = '';
 	$: color = $darkTheme ? 'text-gray-300' : 'text-black';
-	
+
+	let tag = 0;
+	let values = [
+		{ name: 'Amiga Frequency', id: 0 },
+		{ name: 'Amiga Refresh Rate', id: 1 },
+		{ name: 'Host CPU Load', id: 2 },
+		{ name: 'Host GPU Refresh Rate', id: 3 },
+		{ name: 'Audio Buffer Fill Level', id: 4 }
+	];
+	let selectedTag = 0;
+
 	let modes = [
 		'Amiga Frequency',
 		'Amiga Refresh Rate',
@@ -99,38 +111,23 @@
 		}
 	}
 
-	function action(e: MouseEvent, id: number) {
-		e.preventDefault();
-		// mode = Number((e.target as HTMLElement).id);
-		mode = Number(id);
-		open = false;
+	function selectAction(event: CustomEvent<ActionEvent>) {
+		event.preventDefault();
+		mode = event.detail.value;
 		redraw();
 	}
 
-	const defaultClass =
-		'font-medium py-1 px-4 text-xs text-blue-200 bg-slate-600 hover:bg-slate-500';
 </script>
 
 <div class="flex h-8">
 	<div class="h-full w-1 bg-black" />
-	<div class="dropdown dropdown-end">
-		<!-- Make DropDown work in Safari using the label / tabindex trick (see DaisyUI doc) -->
-		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-		<!-- svelte-ignore a11y-label-has-associated-control -->
-		<label tabindex="0" class="flex w-20 text-xs h-full justify-center items-center {color}">{value}</label>
-		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-		<ul
-		tabindex="0" class="dropdown-content bg-accent text-accent-content menu menu-compact rounded p-0 text-sm w-64"
-		>
-			{#each modes as name, i}
-				<li class="">
-					<button on:click={(e) => action(e, i)}>
-						<div class="w-4">{@html mode == i ? '&#10003' : ''}</div>
-						{name}</button
-					>
-				</li>
-			{/each}
-		</ul>
-	</div>
-	
+	<MyDropDown
+		{values}
+		{selectedTag}
+		{tag}
+		title={value}
+		on:select={selectAction}
+		titleStyle="flex w-20 text-xs h-full justify-center items-center"
+		listStyle="bg-accent text-accent-content menu menu-compact rounded p-0 text-sm w-64"
+	/>
 </div>

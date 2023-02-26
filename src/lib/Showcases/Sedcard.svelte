@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { DataBaseItem } from '$lib/types';
 	import { fade } from 'svelte/transition';
 	import IoMdClose from 'svelte-icons/io/IoMdClose.svelte';
 	import { proxy, audio, amiga, romcrc } from '$lib/stores';

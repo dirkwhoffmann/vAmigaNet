@@ -1,16 +1,11 @@
 <script lang="ts">
+	import type { DataBaseItem } from '$lib/types';
 	import { fade } from 'svelte/transition';
-	import Carousel from '$lib/Widgets/Carousel.svelte';
+	import Carousel from '$lib/Showcases/Carousel.svelte';
 	import { demos, games, tools } from './database';
-	import { romcrc } from '$lib/stores';
 	import Sedcard from './Sedcard.svelte';
 
-	let show = 0;
-
-	$: aros = $romcrc == 1062194186;
-
 	var selected: DataBaseItem | null = null;
-	$: src = 'footage/' + (selected?.url ?? '') + '-large.jpg';
 
 	let demoCarousel: Carousel;
 	let gamesCarousel: Carousel;
@@ -30,11 +25,7 @@
         showSedcard = true;
 	}
 
-	let tabs = ['Demos', 'Games', 'Tools'];
 	let activeTab = 0;
-	$: console.log('activeTab = ', activeTab);
-	$: console.log('showSedcard = ', showSedcard);
-	const debug = ''; // 'border-2';
 </script>
 
 <div class="modal" class:modal-open={showSedcard}>
