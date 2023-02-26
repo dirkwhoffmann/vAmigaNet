@@ -6,6 +6,8 @@
 	export let selected: DataBaseItem | null;
 	export let show = true;
 
+	$: console.log("romcrc = ", $romcrc);
+	$: console.log("selected title ", selected);
 	$: src = 'footage/' + (selected?.url ?? '') + '-large.jpg';
 	$: disabled = selected?.incompatibleRoms.includes($romcrc);
 

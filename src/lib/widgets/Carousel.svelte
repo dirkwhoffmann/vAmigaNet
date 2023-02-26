@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { romcrc } from '$lib/stores';
 	import { fade } from 'svelte/transition';
 	import { Splide, SplideSlide } from '@splidejs/svelte-splide';
 	import { createEventDispatcher } from 'svelte';
@@ -44,8 +45,7 @@
 					bind:this={cmps[index]}
 					src="footage/{item.url}-small.jpg"
 					title={item.title}
-					locked={item.locked}
-					aros={item.aros}
+					locked={item.incompatibleRoms.includes($romcrc)}
 				/>
 			</SplideSlide>
 		{/each}

@@ -153,8 +153,10 @@
 				await insert(showcase.adf[i], i);
 			}
 			$amiga.run();
-		} catch (exception) {
+		}
+		catch (exception) {
 			console.log('CATCHED ' + exception);
+			throw exception;
 			// console.error($amiga.getExceptionMessage(exception));
 		}
 	}
@@ -185,6 +187,8 @@
 		}
 		try {
 			const item = await db.roms.get(crc32);
+			if (!item) { return false; }
+
 			if (item?.rom) {
 				$memory.loadRom(item!.rom, item!.rom!.length);
 				$romcrc = crc32;
@@ -206,8 +210,14 @@
 
 	export async function installRoms(crcs: [number]) {
 		for (const crc of crcs) {
+			console.log("Trying to install ROM", crc);
 			const success = await installRom(crc);
-			if (success) return true;
+			if (success) {
+				console.log("SUCCESS.");
+				return true;
+			} else {
+				console.log("FAILED.");
+			}
 		}
 		return false;
 	}
@@ -293,7 +303,6 @@
 			];
 
 			$proxy.installRoms(defaultRoms);
-			// $proxy.installAros();
 
 			console.log('Initialization completed');
 			$initialized = true;
