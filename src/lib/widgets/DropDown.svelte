@@ -13,9 +13,7 @@
 
 	const dispatch = createEventDispatcher<{ select: ActionEvent }>();
 
-	$: console.log('title: ', title);
 	$: displayName = title == '' ? displayedName(selectedTag) : title;
-
 	function displayedName(selectedTag: number): string {
 		if (title != '') return title;
 		for (const value of values) {

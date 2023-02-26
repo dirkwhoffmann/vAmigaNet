@@ -2,7 +2,7 @@
 
 <script lang="ts">
 	import { InputDevice } from '$lib/types';
-	import { proxy, amiga, denise, keyboard, joystick1, joystick2 } from '$lib/stores';
+	import { proxy, amiga, denise, keyboard, joystick1, joystick2, poweredOn, running } from '$lib/stores';
 	import { port1, port2, mouse1, mouse2, MsgShaking } from '$lib/stores';
 	import { renderMode, flickerWeight } from '$lib/stores';
 	import { shaking } from '$lib/stores';
@@ -393,12 +393,12 @@
 			gl.uniform1i(lfSampler, 1);
 			gl.uniform1i(sfSampler, 0);
 
-			if ($flickerWeight) {
+			if ($flickerWeight && $running) {
 				const weight = 1.0 - ($flickerWeight / 100);
 				gl.useProgram(mergeShaderProgram);
 				gl.uniform1f(lfWeight, flickerCnt % 4 >= 2 ? 1.0 : weight);
 				gl.uniform1f(sfWeight, flickerCnt % 4 >= 2 ? weight : 1.0);
-				flickerCnt += 1;
+				flickerCnt += 2;
 			}
 		}
 
