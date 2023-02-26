@@ -7,11 +7,17 @@
 	export let values = [{ name: '???', id: 0 }];
 	export let selectedTag = 0;
 	export let locked = false;
+	export let titleStyle = '';
+	export let listStyle = '';
+	export let title = '';
 
 	const dispatch = createEventDispatcher<{ select: ActionEvent }>();
 
-	$: displayName = displayedName(selectedTag);
+	$: console.log('title: ', title);
+	$: displayName = title == '' ? displayedName(selectedTag) : title;
+
 	function displayedName(selectedTag: number): string {
+		if (title != '') return title;
 		for (const value of values) {
 			if (value.id == selectedTag) return value.name;
 		}
@@ -39,11 +45,21 @@
 		<!-- Make DropDown work in Safari using the label / tabindex trick (see DaisyUI doc) -->
 		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 		<!-- svelte-ignore a11y-label-has-associated-control -->
-		<label tabindex="0" class="btn btn-primary w-[18rem] border-0 rounded-none text-xl font-normal"
-			><Chevron>{displayName}</Chevron>
-		</label>
+		{#if title == ''}
+			<label
+				tabindex="0"
+				class="{titleStyle}"
+				><Chevron>{displayName}</Chevron>
+			</label>
+		{:else}
+			<label
+				tabindex="0"
+				class="{titleStyle}"
+				>{title}
+			</label>
+		{/if}
 		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-		<ul tabindex="0" class="dropdown-content menu p-2 text-xl bg-accent w-[18rem]">
+		<ul tabindex="0" class="dropdown-content menu p-2 text-xl bg-accent {listStyle}">
 			{#each values as { name, id }, i}
 				<li class="" id={id.toString()}>
 					<button class="bg-accent text-accent-content" on:click={(e) => listAction(e, id)}

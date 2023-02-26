@@ -3,8 +3,7 @@
 	import { onMount } from 'svelte';
 	import { proxy, amiga, cpu, agnus } from '$lib/stores';
 	import { darkTheme } from '$lib/stores';
-	import MyDropDown from '$lib/Widgets/MyDropDown.svelte';
-	import DropDownList from '$lib/Widgets/DropDownList.svelte';
+	import DropDown from '$lib/Widgets/DropDown.svelte';
 
 	export let acceleration = 1.0;
 	export let mhz = 0.0;
@@ -121,7 +120,7 @@
 
 <div class="flex h-8">
 	<div class="h-full w-1 bg-black" />
-	<MyDropDown
+	<DropDown
 		{values}
 		{selectedTag}
 		{tag}

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { DataBaseItem } from '$lib/types';
 	import { romcrc } from '$lib/stores';
 	import { fade } from 'svelte/transition';
 	import { Splide, SplideSlide } from '@splidejs/svelte-splide';

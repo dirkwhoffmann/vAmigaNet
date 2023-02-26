@@ -4,7 +4,6 @@
 	import GiPadlock from 'svelte-icons/gi/GiPadlock.svelte';
 	import type { ActionEvent } from '$lib/Settings/Settings.svelte';
 	import DropDown from '$lib/Widgets/DropDown.svelte';
-	import MyDropDown from '$lib/Widgets/MyDropDown.svelte';
 	import Slider from '$lib/Widgets/Slider.svelte';
 
 	export let name = '';
@@ -50,8 +49,7 @@
 		</div>
 		<div class="border-0 bg-primary h-12">
 			{#if min == max}
-				<!--<DropDown {values} {locked} {tag} {selectedTag} on:select />-->
-				<MyDropDown
+				<DropDown
 				{values}
 				{selectedTag}
 				{tag}
