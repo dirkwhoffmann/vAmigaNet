@@ -34,7 +34,7 @@
 
 </script>
 
-<div class="p-4 rounded-xl bg-primary/50">
+<div class="p-4 rounded-xl bg-primary/50 backdrop-blur">
 	<div class="flex flex-col items-center">
 		<div
 			class="h-32 w-32 border-2 rounded-xl p-5 {bopac}"
