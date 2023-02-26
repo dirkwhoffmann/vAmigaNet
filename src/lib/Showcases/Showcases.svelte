@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
 	import Carousel from '$lib/Widgets/Carousel.svelte';
-	import { demos, games, tools } from '$lib/database';
+	import { demos, games, tools } from './database';
 	import { romcrc } from '$lib/stores';
-	import Sedcard from '$lib/Sedcard.svelte';
+	import Sedcard from './Sedcard.svelte';
 
 	let show = 0;
 

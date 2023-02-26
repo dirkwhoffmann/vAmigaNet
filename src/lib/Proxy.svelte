@@ -1,6 +1,7 @@
 <svelte:options accessors={true} />
 
 <script lang="ts">
+	import type { DataBaseItem } from '$lib/types';
 	import { onMount } from 'svelte';
 	import { WarpMode } from '$lib/types'
 	import {
@@ -135,23 +136,25 @@
 	export async function runShowcase(showcase: DataBaseItem) {
 		await $audio.setup();
 		try {
-			console.log('Running ' + showcase.title + '...');
+			console.log('Showcase:', showcase.title);
 			$amiga.powerOff();
-			console.log('requiredRom = ' + showcase.requiredRom);
 			if (showcase.requiredRom) {
-				console.log('Installing Rom: ' + showcase.requiredRom);
+				console.log('Installing Rom:', showcase.requiredRom);
 				$proxy.installRom(showcase.requiredRom);
 			}
-			console.log('Configuring CHIP: ' + showcase.memory[0]);
+			console.log('Configuring CHIP:', showcase.memory[0]);
 			$amiga.configure($proxy.OPT_CHIP_RAM, showcase.memory[0]);
-			console.log('Configuring SLOW: ' + showcase.memory[1]);
+			console.log('Configuring SLOW:', showcase.memory[1]);
 			$amiga.configure($proxy.OPT_SLOW_RAM, showcase.memory[1]);
-			console.log('Configuring FAST: ' + showcase.memory[2]);
+			console.log('Configuring FAST:', showcase.memory[2]);
 			$amiga.configure($proxy.OPT_FAST_RAM, showcase.memory[2]);
 			for (let i = 0; i < showcase.adf.length; i++) {
-				console.log('Inserting disk ' + i + ': ' + showcase.adf[i]);
+				console.log('Inserting disk ' + i + ':', showcase.adf[i]);
 				await insert(showcase.adf[i], i);
 			}
+			console.log('Configuring warp mode: ' + showcase.warp);
+			$warpMode = showcase.warp;
+
 			$amiga.run();
 		}
 		catch (exception) {

@@ -1,3 +1,5 @@
+import { WarpMode } from "$lib/types";
+
 export const demos: DataBaseItem[] = [
 	{
 		url: 'batmanrises',
@@ -8,7 +10,8 @@ export const demos: DataBaseItem[] = [
 		adf: ['BatmanRises1.adf', 'BatmanRises2.adf'],
 		memory: [1024, 512, 0],
         requiredRom: null,
-        incompatibleRoms: []
+        incompatibleRoms: [],
+		warp: WarpMode.never
 	},
 	{
 		url: 'rinkadink',
@@ -19,7 +22,8 @@ export const demos: DataBaseItem[] = [
 		adf: ['RinkADink.adf'],
 		memory: [512, 512, 0],
         requiredRom: null,
-        incompatibleRoms: []
+        incompatibleRoms: [],
+		warp: WarpMode.never
 	},
 	{
 		url: 'desertdreams',
@@ -30,7 +34,8 @@ export const demos: DataBaseItem[] = [
 		adf: ['DesertDream1.adf', 'DesertDream2.adf'],
 		memory: [1024, 512, 0],
         requiredRom: null,
-        incompatibleRoms: []
+        incompatibleRoms: [],
+		warp: WarpMode.never
 	},
 	{
 		url: 'inebriation',
@@ -41,7 +46,8 @@ export const demos: DataBaseItem[] = [
 		adf: ['AbsoluteInebriation1.adf', 'AbsoluteInebriation2.adf'],
 		memory: [512, 512, 0],
         requiredRom: null,
-        incompatibleRoms: []
+        incompatibleRoms: [],
+		warp: WarpMode.never
 	},
 	{
 		url: 'eon',
@@ -52,7 +58,8 @@ export const demos: DataBaseItem[] = [
 		adf: ['Eon1.adf', 'Eon2.adf'],
 		memory: [512, 512, 0],
         requiredRom: null,
-        incompatibleRoms: [1062194186]
+        incompatibleRoms: [1062194186],
+		warp: WarpMode.never
 	},
     {
 		url: 'kyrios',
@@ -63,7 +70,8 @@ export const demos: DataBaseItem[] = [
 		adf: ['Kyrios.adf'],
 		memory: [1024, 512, 0],
         requiredRom: null,
-        incompatibleRoms: [1062194186]
+        incompatibleRoms: [1062194186],
+		warp: WarpMode.never
 	},
     {
 		url: '3ddemo',
@@ -74,7 +82,8 @@ export const demos: DataBaseItem[] = [
 		adf: ['3Ddemo2.adf'],
 		memory: [1024, 512, 0],
         requiredRom: null,
-        incompatibleRoms: [1062194186]
+        incompatibleRoms: [1062194186],
+		warp: WarpMode.never
 	}
 ];
 
@@ -88,7 +97,8 @@ export const games: DataBaseItem[] = [
 		adf: ['TrapRunner.adf'],
 		memory: [512, 512, 0],
         requiredRom: null,
-        incompatibleRoms: []
+        incompatibleRoms: [],
+		warp: WarpMode.never
 	},
 	{
 		url: 'celtic',
@@ -99,7 +109,8 @@ export const games: DataBaseItem[] = [
 		adf: ['CelticHeart.adf'],
 		memory: [512, 512, 0],
         requiredRom: null,
-        incompatibleRoms: []
+        incompatibleRoms: [],
+		warp: WarpMode.never
 	},
 	{
 		url: 'paccer',
@@ -110,7 +121,8 @@ export const games: DataBaseItem[] = [
 		adf: ['Paccer.adf'],
 		memory: [512, 512, 0],
         requiredRom: null,
-        incompatibleRoms: [1062194186]
+        incompatibleRoms: [1062194186],
+		warp: WarpMode.never
 	},
 	{
 		url: 'defender',
@@ -121,7 +133,8 @@ export const games: DataBaseItem[] = [
 		adf: ['DefenderOfTheCrown1.adf', 'DefenderOfTheCrown2.adf'],
 		memory: [512, 512, 0],
         requiredRom: null,
-        incompatibleRoms: [1062194186]
+        incompatibleRoms: [1062194186],
+		warp: WarpMode.never
 	}
 ];
 
@@ -135,7 +148,8 @@ export const tools: DataBaseItem[] = [
 		adf: ['SysInfo.adf'],
 		memory: [1024, 512, 0],
         requiredRom: null,
-        incompatibleRoms: []
+        incompatibleRoms: [],
+		warp: WarpMode.never
 	},
 	{
 		url: 'testkit',
@@ -146,7 +160,8 @@ export const tools: DataBaseItem[] = [
 		adf: ['AmigaTestKit.adf'],
 		memory: [512, 512, 0],
         requiredRom: null,
-        incompatibleRoms: []
+        incompatibleRoms: [],
+		warp: WarpMode.never
 	},
 	{
 		url: 'diagrom',
@@ -157,6 +172,7 @@ export const tools: DataBaseItem[] = [
 		adf: [],
 		memory: [512, 512, 0],
         requiredRom: 2231503309,
-        incompatibleRoms: []
+        incompatibleRoms: [],
+		warp: WarpMode.never
 	}
 ];

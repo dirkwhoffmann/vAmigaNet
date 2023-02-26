@@ -12,7 +12,6 @@
 	import Sidebar from '$lib/Sidebar/Sidebar.svelte';
 	import TitleScreen from '$lib/TitleScreen.svelte';
 	import Emulator from '$lib/Emulator.svelte';
-	import Showcases from '$lib/Showcases.svelte';
 	import Settings from '$lib/Settings/Settings.svelte';
 	import StatusBar from '$lib/Statusbar/StatusBar.svelte';
 	import RetroShell from '$lib/RetroShell.svelte';

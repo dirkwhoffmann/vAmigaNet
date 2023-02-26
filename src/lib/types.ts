@@ -48,3 +48,15 @@ export interface KeySet {
 export interface KeyMap {
     [key: string] : number
 }
+
+export interface DataBaseItem {
+    url: string;
+    title: string;
+    subtitle: string;
+    description: string;
+    adf: string[];
+    memory: number[];
+    requiredRom: number | null;
+    incompatibleRoms: number[];
+    warp: WarpMode;
+}

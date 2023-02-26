@@ -13,17 +13,6 @@ declare namespace App {
 
 declare global {
 
-	interface DataBaseItem {
-		url: string;
-		title: string;
-		subtitle: string;
-		description: string;
-		adf: string[];
-		memory: number[];
-		requiredRom: number | null;
-		incompatibleRoms: number[];
-	}
-
 	interface Window {
 		Module: Proxy;
 	}

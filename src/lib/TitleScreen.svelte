@@ -10,7 +10,7 @@
 	import { goto } from '$app/navigation';
 	import Impressum from '$lib/Impressum.svelte';
 	import RomViewer from '$lib/RomViewer.svelte';
-	import Showcases from '$lib/Showcases.svelte';
+	import Showcases from '$lib/Showcases/Showcases.svelte';
 
 	let debug = ''; // 'border-2';
 	let showRomViewer = false;
