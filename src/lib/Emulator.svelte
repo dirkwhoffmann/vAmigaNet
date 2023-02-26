@@ -79,7 +79,7 @@
 	export function doAnimationFrame(animationFrame: number, now: DOMHighResTimeStamp) {
 		/*
 		if (animationFrame % 50 == 0) {
-			console.log(":: Frame " + animationFrame);
+			console.log("Frame " + animationFrame);
 		}
 		*/
 

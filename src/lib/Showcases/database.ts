@@ -44,7 +44,7 @@ export const demos: DataBaseItem[] = [
 		subtitle: 'Virtual Dreams & Fairlight',
 		description:
 			'This demo was released in December of 1992. It was the first production of Virtual Dreams, a Finnish-based Amiga demo group. The group reached their breakthrough in their time spent as the demo section of Fairlight.',
-		adf: ['AbsoluteInebriation1.adf', 'AbsoluteInebriation2.adf'],
+		adf: ['AbsoluteInebriation1.adf'],
 		memory: [512, 512, 0],
 		requiredRom: null,
 		incompatibleRoms: [],
@@ -56,7 +56,7 @@ export const demos: DataBaseItem[] = [
 		subtitle: 'The Black Lotus',
 		description:
 			'This demo is one of the best ever created for the Commodore Amiga. It shows impressively what the machine is capable of when its potential is exploited to the max.',
-		adf: ['Eon1.adf', 'Eon2.adf'],
+		adf: ['Eon1.adf'],
 		memory: [512, 512, 0],
 		requiredRom: null,
 		incompatibleRoms: [1062194186],

@@ -348,14 +348,14 @@ u32 AgnusProxy::frameCount() const
 
 void AgnusProxy::scheduleGUITimerAbs(u32 frames, u32 payload)
 {
-    printf("Cycles: %ld\n", (isize)frames * CLK_FREQUENCY_PAL / 50);
-    amiga->agnus.scheduleGUITimerAbs((isize)frames * CLK_FREQUENCY_PAL / 50, payload);
+    // printf("Cycles: %lld\n", (Cycle)frames * CLK_FREQUENCY_PAL / 50);
+    amiga->agnus.scheduleGUITimerAbs((Cycle)frames * CLK_FREQUENCY_PAL / 50, payload);
 }
 
 void AgnusProxy::scheduleGUITimerRel(u32 frames, u32 payload)
 {
-    printf("rel Cycles: %ld\n", (isize)frames * CLK_FREQUENCY_PAL / 50);
-    amiga->agnus.scheduleGUITimerRel((isize)frames * CLK_FREQUENCY_PAL / 50, payload);
+    // printf("rel Cycles: %lld\n", (Cycle)frames * CLK_FREQUENCY_PAL / 50);
+    amiga->agnus.scheduleGUITimerRel((Cycle)frames * CLK_FREQUENCY_PAL / 50, payload);
 }
 
 EMSCRIPTEN_BINDINGS(AgnusProxy)

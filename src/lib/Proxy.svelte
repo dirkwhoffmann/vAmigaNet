@@ -160,11 +160,12 @@
 			// Set GUI timer to manage disk changes
 			if (showcase.title == 'Absolute Inebriation') {
 				console.log("Scheduling disk change (inebriation)");
-				$agnus.scheduleGUITimerAbs(100, 42);
+				// Change disk after 60 seconds (3000 frames)
+				$agnus.scheduleGUITimerAbs(3000, 1); 
 			}
 			if (showcase.title == 'Eon') {
 				console.log("Scheduling disk change (eon)");
-				$agnus.scheduleGUITimerAbs(100, 42);
+				$agnus.scheduleGUITimerAbs(7600, 2);
 			}
 
 		} catch (exception) {
@@ -184,8 +185,9 @@
 			let response = await fetch('adf/' + name);
 			let blob = await response.arrayBuffer();
 			let uint8View = new Uint8Array(blob);
-			console.log('Calling $amiga.insertDisk');
+			console.log('Calling $amiga.insertDisk', uint8View, drive);
 			$amiga.insertDisk(uint8View, blob.byteLength, drive);
+			console.log('Disk inserted');
 		} catch (exc) {
 			reportException();
 		}
@@ -697,7 +699,15 @@
 				break;
 
 			case $proxy.MSG_GUI_EVENT:
-				console.log("MSG_GUI_EVENT received");
+				console.log("MSG_GUI_EVENT received: ", d1, d2);
+				if (d2 == 1) {
+					console.log("Inserting disk 2...");
+					insert('AbsoluteInebriation2.adf', 0);
+				}
+				if (d2 == 2) {
+					console.log("Inserting disk 2...");
+					insert('Eon2.adf', 0);
+				}
 				break;
 
 			default:
