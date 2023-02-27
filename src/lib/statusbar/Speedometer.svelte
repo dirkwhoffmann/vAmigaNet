@@ -126,7 +126,7 @@
 		{tag}
 		title={value}
 		on:select={selectAction}
-		titleStyle="flex w-20 text-xs h-full justify-center items-center"
+		titleStyle="flex w-20 text-xs h-full justify-center items-center text-primary-content"
 		listStyle="bg-accent text-accent-content menu menu-compact rounded p-0 text-sm w-64"
 	/>
 </div>
