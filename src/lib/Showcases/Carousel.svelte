@@ -1,10 +1,11 @@
 <script lang="ts">
 	import type { DataBaseItem } from '$lib/types';
-	import { romcrc } from '$lib/stores';
+	import { romcrc, kickstarts } from '$lib/stores';
 	import { fade } from 'svelte/transition';
 	import { Splide, SplideSlide } from '@splidejs/svelte-splide';
 	import { createEventDispatcher } from 'svelte';
 	import CarouselItem from '$lib/Showcases/CarouselItem.svelte';
+	import { element } from 'svelte/internal';
 
 	export let category = '';
 	export let items: DataBaseItem[] = [];
@@ -29,6 +30,8 @@
 		});
 	}
 
+	// $: enabled = $kickstarts.map(kick => kick.crc32).some(crc => item.roms.includes(crc));
+
 </script>
 
 <div class="p-4" in:fade>
@@ -46,7 +49,7 @@
 					bind:this={cmps[index]}
 					src="footage/{item.url}-small.jpg"
 					title={item.title}
-					locked={item.incompatibleRoms.includes($romcrc)}
+					locked={!$kickstarts.map(kick => kick.crc32).some(crc => item.roms.includes(crc))}
 				/>
 			</SplideSlide>
 		{/each}

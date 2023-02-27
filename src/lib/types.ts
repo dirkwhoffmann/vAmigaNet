@@ -56,7 +56,6 @@ export interface DataBaseItem {
     description: string;
     adf: string[];
     memory: number[];
-    requiredRom: number | null;
-    incompatibleRoms: number[];
+    roms: number[];
     warp: WarpMode;
 }

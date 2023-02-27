@@ -1,6 +1,7 @@
 import { writable, type Writable } from 'svelte/store';
 import { Layer, WarpMode, Theme, RenderMode } from '$lib/types'
 import type { KeySet } from '$lib/types';
+import type { RomEntry } from './Db/db';
 
 // Gateway to the WASM backend
 export const proxy: any = writable();
@@ -78,6 +79,9 @@ export const dfWriting = writable([false,false,false,false]);
 export const dfUnsaved = writable([false,false,false,false]);
 export const dfProtected = writable([false,false,false,false]);
 export const dfCylinder = writable([0,0,0,0]);
+
+// Kickstarts
+export const kickstarts: Writable<RomEntry[]> = writable([]); 
 export const romcrc = writable(0);
 
 // Error state

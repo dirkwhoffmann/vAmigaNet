@@ -138,10 +138,8 @@
 		try {
 			console.log('Showcase:', showcase.title);
 			$amiga.powerOff();
-			if (showcase.requiredRom) {
-				console.log('Installing Rom:', showcase.requiredRom);
-				$proxy.installRom(showcase.requiredRom);
-			}
+			console.log('Installing Rom:', showcase.roms);
+			$proxy.installRoms(showcase.roms);
 			console.log('Configuring CHIP:', showcase.memory[0]);
 			$amiga.configure($proxy.OPT_CHIP_RAM, showcase.memory[0]);
 			console.log('Configuring SLOW:', showcase.memory[1]);

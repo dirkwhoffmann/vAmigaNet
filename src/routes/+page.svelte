@@ -1,7 +1,10 @@
 <script lang="ts">
 	import '../app.css';
+	import { db, type RomEntry } from '$lib/Db/db';
+	import { browser } from '$app/environment';
+	import { liveQuery } from 'dexie';
 	import { Layer } from '$lib/types';
-	import { initialized, proxy, amiga } from '$lib/stores';
+	import { initialized, proxy, amiga, kickstarts } from '$lib/stores';
 	import { layer, poweredOn, what, errno } from '$lib/stores';
 	import { layout, showSidebar } from '$lib/stores';
 	import { canvasWidth, canvasHeight, aspectWidth, aspectHeight } from '$lib/stores';
@@ -31,6 +34,12 @@
 	// Timeout for debouncing the resize event
 	let timeout: NodeJS.Timeout;
 
+	// Connect to Dexie DB
+	let myQuery = liveQuery(() => (browser ? db.roms.orderBy('title').toArray() : []));	
+	myQuery.subscribe(value => { $kickstarts = value })
+
+	$: console.log("Kickstarts: ", $kickstarts);
+	
 	onMount(() => {
 		console.log('+page: onMount()');
 		mounted = true;

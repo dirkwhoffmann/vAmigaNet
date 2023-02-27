@@ -144,3 +144,10 @@ export const AMIGA_KEYS: KeyMap = {
     'Numpad0':        0x0f,
     'NumpadDecimal':  0x3c
   };
+
+  export const CRC32 = {
+    'Aros':           1062194186,
+    'Kick12':         2798523958,
+    'Kick13':         3304125791,
+    'DiagROM':        2231503309
+  };

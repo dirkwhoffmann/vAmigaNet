@@ -2,15 +2,20 @@
 	import type { DataBaseItem } from '$lib/types';
 	import { fade } from 'svelte/transition';
 	import IoMdClose from 'svelte-icons/io/IoMdClose.svelte';
-	import { proxy, audio, amiga, romcrc } from '$lib/stores';
+	import { proxy, audio, amiga, romcrc, kickstarts } from '$lib/stores';
+	import type { RomEntry } from '$lib/Db/db';
 
 	export let selected: DataBaseItem | null;
 	export let show = true;
 
-	$: console.log("romcrc = ", $romcrc);
-	$: console.log("selected title ", selected);
+	$: console.log('romcrc = ', $romcrc);
+	$: console.log('selected title ', selected);
 	$: src = 'footage/' + (selected?.url ?? '') + '-large.jpg';
-	$: disabled = selected?.incompatibleRoms.includes($romcrc);
+
+	$: enabled = $kickstarts.map(kick => kick.crc32).some(crc => selected?.roms.includes(crc));
+	$: disabled = !enabled; 
+
+	$: console.log("Showcase enabled", enabled); 
 
 	function close() {
 		console.log('close');
@@ -49,7 +54,7 @@
 			</div>
 			{#if disabled}
 				<div class="text-error font-josefin">
-					This item is locked because it requires an original Kickstart to run.
+					Please install Kickstart 1.2 or Kickstart 1.3 to unlock this title.
 				</div>
 				<div class="mt-4 relative">
 					<button class="btn btn-disabled bg-gray-500 text-white opacity-20" on:click={runTitle}
