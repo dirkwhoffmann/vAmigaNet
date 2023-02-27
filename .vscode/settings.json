@@ -1,3 +1,6 @@
 {
-    "cmake.sourceDirectory": "${workspaceFolder}/cpp/emulator/CPU/Moira"
+    "cmake.sourceDirectory": "${workspaceFolder}/cpp/emulator/CPU/Moira",
+    "files.associations": {
+        "string": "cpp"
+    }
 }

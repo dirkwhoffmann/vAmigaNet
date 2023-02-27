@@ -106,6 +106,7 @@ struct AmigaProxy
     
     // Juggling disks
     bool insertDisk(const string &blob, u32 len, u8 drive);
+    void ejectDisk(u8 drive);
 
     // Experimental (didn't manage to get it working)
     string getExceptionMessage(intptr_t exceptionPtr);

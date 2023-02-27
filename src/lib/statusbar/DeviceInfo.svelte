@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { darkTheme } from '$lib/stores';
+	import { darkTheme, dfHasDisk } from '$lib/stores';
 	import BarBox from './BarBox.svelte';
+	import DropDown2 from '$lib/Widgets/DropDown2.svelte';
 
 	export let cyl = 0;
 	export let disk = true;
@@ -25,11 +26,26 @@
 		e.preventDefault();
 		// dispatch('push', { sender: (e.target as HTMLElement).id });
 	}
+
+	let tag = 0;
+	let values = [
+		{ name: 'Eject', id: 0 }
+	];
+
 </script>
 
+<DropDown2 
+	{values}
+	{tag}
+	selectable={false}
+	listStyle="menu menu-compact rounded p-0 text-sm w-32"
+	disabled={!disk}
+	on:select
+>
 <BarBox {bg}>
 	<img class="border-0 pr-1 py-1.5 h-full object-scale-down {invert} {opc}" {src} alt="Floppy icon" />
 	<div class="border-0 w-6 items-center pl-1 text-left leading-none text-sm {textcol}">
 		{cyl}
 	</div>
 </BarBox>
+</DropDown2>

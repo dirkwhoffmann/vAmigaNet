@@ -263,6 +263,11 @@ bool AmigaProxy::insertDisk(const string &blob, u32 len, u8 drive)
     }
 }
 
+void AmigaProxy::ejectDisk(u8 drive)
+{
+    amiga->df[drive]->ejectDisk();
+}
+
 // This didn't work. I received a null pointer all the tome
 string AmigaProxy::getExceptionMessage(intptr_t exceptionPtr)
 {
@@ -304,6 +309,7 @@ EMSCRIPTEN_BINDINGS(AmigaProxy)
 
         .function("getFileType", &AmigaProxy::getFileType)
         .function("insertDisk", &AmigaProxy::insertDisk)
+        .function("ejectDisk", &AmigaProxy::ejectDisk)
 
         .function("setSampleRate", &AmigaProxy::setSampleRate)
         .function("updateAudio", &AmigaProxy::updateAudio)

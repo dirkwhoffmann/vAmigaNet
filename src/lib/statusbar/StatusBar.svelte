@@ -15,7 +15,8 @@
 		debugMode,
 		halted,
 		muted,
-		audio
+		audio,
+		amiga
 	} from '$lib/stores';
 	import StatusIcon from './StatusIcon.svelte';
 	import WarpControl from './WarpControl.svelte';
@@ -40,6 +41,12 @@
 		$audio.setup();
 		dispatch('push', { sender: (e.target as HTMLElement).id });
 	}
+
+	function ejectAction(nr: number) {
+		console.log("eject ", nr);
+		$amiga.ejectDisk(nr);
+	}
+
 </script>
 
 <div class="z-50 relative flex h-8 mb-1 {bg}">
@@ -63,6 +70,7 @@
 					writing={$dfWriting[i]}
 					unsaved={$dfUnsaved[i]}
 					wp={$dfProtected[i]}
+					on:select={(e) => ejectAction(i)}
 				/>
 			{/if}
 		{/each}
