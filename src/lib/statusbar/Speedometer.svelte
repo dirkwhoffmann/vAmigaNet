@@ -5,6 +5,8 @@
 	import { darkTheme } from '$lib/stores';
 	import DropDown from '$lib/Widgets/DropDown.svelte';
 	import DropDown2 from '$lib/Widgets/DropDown2.svelte';
+	import Menu from '$lib/Widgets/Menu.svelte';
+	import { MenuItem } from '$lib/types';
 
 	export let acceleration = 1.0;
 	export let mhz = 0.0;
@@ -29,13 +31,15 @@
 	];
 	let selectedTag = 0;
 
-	let modes = [
-		'Amiga Frequency',
-		'Amiga Refresh Rate',
-		'Host CPU Load',
-		'Host GPU Refresh Rate',
-		'Audio Buffer Fill Level'
+	let items: MenuItem[] = [
+		new MenuItem('Amiga Frequency', 0),
+		new MenuItem('Amiga Refresh Rate', 1),
+		new MenuItem('Host CPU Load', 2),
+		new MenuItem('Host GPU Refresh Rate', 3),
+		new MenuItem('Audio Buffer Fill Level', 4)
 	];
+	items[0].isSelected = true;
+
 	// <div class="w-4">{@html selection == id ? '&#10003' : ''}</div>
 	// const dispatch = createEventDispatcher<{push:{sender:string}}>();
 
@@ -114,6 +118,12 @@
 	function selectAction(event: CustomEvent<ActionEvent>) {
 		event.preventDefault();
 		mode = event.detail.value;
+		items.forEach(function (item, i) {
+			item.isSelected = item.tag == mode;
+		});
+
+		// Force component to refresh
+		items = items;
 		redraw();
 	}
 </script>
@@ -121,16 +131,6 @@
 <div class="flex h-8">
 	<div class="h-full w-1 bg-black" />
 	<!--
-	<DropDown
-		{values}
-		{selectedTag}
-		{tag}
-		title={value}
-		on:select={selectAction}
-		titleStyle="flex w-20 text-xs h-full justify-center items-center text-primary-content"
-		listStyle="bg-accent text-accent-content menu menu-compact rounded p-0 text-sm w-64"
-	/>
-	-->
 	<DropDown2
 		{values}
 		{selectedTag}
@@ -142,4 +142,16 @@
 	>
 	<div class="flex w-20 text-xs h-full justify-center items-center">{value}</div>
 	</DropDown2>
+	-->
+	<Menu
+		{items}
+		{selectedTag}
+		{tag}
+		title={value}
+		on:select={selectAction}
+		dropdownStyle="dropdown-end"
+		listStyle="menu menu-compact rounded text-sm w-64"
+	>
+		<div class="flex w-20 text-xs h-full justify-center items-center">{value}</div>
+	</Menu>
 </div>

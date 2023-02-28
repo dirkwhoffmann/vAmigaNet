@@ -59,3 +59,18 @@ export interface DataBaseItem {
     roms: number[];
     warp: WarpMode;
 }
+
+//
+// Experimental
+// 
+
+export class MenuItem {
+	title = '';
+	tag = 0;
+	isEnabled = true;
+	isHidden = false;
+	isSelected = false;
+	isSeparator = false;
+
+	constructor(title: string, tag: number) { this.title = title; this.tag = tag;  }
+}
