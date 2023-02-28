@@ -5,11 +5,10 @@
 	import { proxy, amiga, memory } from '$lib/stores';
 	import { poweredOn, romcrc } from '$lib/stores';
 	import { fade } from 'svelte/transition';
-	import type { ActionEvent } from '$lib/Settings/Settings.svelte';
 	import { browser } from '$app/environment';
 	import { liveQuery } from 'dexie';
 	import { db, type RomEntry } from '$lib/Db/db';
-	import { Theme } from '$lib/types';
+	import type { ActionEvent } from '$lib/types';
 
 	let kickstart: number;
 	let kickName = '';

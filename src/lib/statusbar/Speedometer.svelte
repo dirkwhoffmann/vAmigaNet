@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ActionEvent } from '$lib/Settings/Settings.svelte';
+	import type { ActionEvent } from '$lib/types';
 	import { onMount } from 'svelte';
 	import { proxy, amiga, cpu, agnus } from '$lib/stores';
 	import { darkTheme } from '$lib/stores';

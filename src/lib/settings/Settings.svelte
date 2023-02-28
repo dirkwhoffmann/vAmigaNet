@@ -1,7 +1,3 @@
-<script context="module" lang="ts">
-	export type ActionEvent = { tag: number; value: number };
-</script>
-
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import ConfigCategory from '$lib/Settings/ConfigCategory.svelte';

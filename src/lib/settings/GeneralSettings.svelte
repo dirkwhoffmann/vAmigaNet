@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { warpMode, theme, darkTheme, border, shaking } from '$lib/stores';
-	import type { ActionEvent } from '$lib/Settings/Settings.svelte';
+	import type { ActionEvent } from '$lib/types';
 	import { fade } from 'svelte/transition';
 	import ConfigSection from './ConfigSection.svelte';
 	import ConfigItem from '$lib/Settings/ConfigItem.svelte';

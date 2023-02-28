@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import Chevron from '$lib/Settings/Chevron.svelte'; // TODO: MOVE TO widgets
-	import type { ActionEvent } from '$lib/Settings/Settings.svelte'; // TODO: MOVE TO types.ts
-	import { MenuSeparator, type MenuItem } from '$lib/types';
+    import type { ActionEvent, MenuItem } from '$lib/types';
+	import { MenuSeparator } from '$lib/types';
 	import Checkmark from './Checkmark.svelte';
 
-	// Identifier of this menu
+	// Menu identifier
 	export let tag = 0;
 
 	// Menu items

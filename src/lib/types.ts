@@ -1,6 +1,6 @@
-// 
+//
 // Enums
-// 
+//
 
 export enum InputDevice {
 	none,
@@ -41,28 +41,33 @@ export enum WarpMode {
 // Interfaces
 //
 
+export interface ActionEvent {
+	tag: number;
+	value: number;
+}
+
 export interface KeySet {
-    [key: string] : number
+	[key: string]: number;
 }
 
 export interface KeyMap {
-    [key: string] : number
+	[key: string]: number;
 }
 
 export interface DataBaseItem {
-    url: string;
-    title: string;
-    subtitle: string;
-    description: string;
-    adf: string[];
-    memory: number[];
-    roms: number[];
-    warp: WarpMode;
+	url: string;
+	title: string;
+	subtitle: string;
+	description: string;
+	adf: string[];
+	memory: number[];
+	roms: number[];
+	warp: WarpMode;
 }
 
 //
 // Experimental
-// 
+//
 
 export class MenuItem {
 	title = '';
@@ -72,9 +77,14 @@ export class MenuItem {
 	isSelected = false;
 	isSeparator = false;
 
-	constructor(title: string, tag: number) { this.title = title; this.tag = tag;  }
+	constructor(title: string, tag: number) {
+		this.title = title;
+		this.tag = tag;
+	}
 }
 
 export class MenuSeparator extends MenuItem {
-	constructor() { super('', 0); } 
+	constructor() {
+		super('', 0);
+	}
 }
