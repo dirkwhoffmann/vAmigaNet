@@ -46,7 +46,7 @@
 				<li class="divider" />
 			{:else if !item.isHidden}
 				<li id={tag.toString()}>
-					<button class={style(i)} on:click={(e) => action(e, tag)}>
+					<button class={style(i)} on:click={(e) => action(e, item.tag)}>
 						<Checkmark enabled={selectedItems.length != 0} visible={item.isSelected} />
 						{item.title}</button
 					>

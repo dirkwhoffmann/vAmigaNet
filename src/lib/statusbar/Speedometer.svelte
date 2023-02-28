@@ -21,9 +21,6 @@
 	let value = '';
 	$: color = $darkTheme ? 'text-gray-300' : 'text-black';
 
-	let tag = 0;
-	let selectedTag = 0;
-
 	let items: MenuItem[] = [
 		new MenuItem('Amiga Frequency', 0),
 		new MenuItem('Amiga Refresh Rate', 1),
@@ -125,9 +122,6 @@
 	<div class="h-full w-1 bg-black" />
 	<Menu
 		{items}
-		{selectedTag}
-		{tag}
-		title={value}
 		on:select={selectAction}
 		dropdownStyle="dropdown-end"
 		listStyle="menu menu-compact rounded text-sm w-64"
