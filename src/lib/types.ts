@@ -74,3 +74,7 @@ export class MenuItem {
 
 	constructor(title: string, tag: number) { this.title = title; this.tag = tag;  }
 }
+
+export class MenuSeparator extends MenuItem {
+	constructor() { super('', 0); } 
+}

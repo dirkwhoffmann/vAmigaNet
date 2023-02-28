@@ -6,7 +6,7 @@
 	import DropDown from '$lib/Widgets/DropDown.svelte';
 	import DropDown2 from '$lib/Widgets/DropDown2.svelte';
 	import Menu from '$lib/Widgets/Menu.svelte';
-	import { MenuItem } from '$lib/types';
+	import { MenuItem, MenuSeparator } from '$lib/types';
 
 	export let acceleration = 1.0;
 	export let mhz = 0.0;
@@ -22,19 +22,14 @@
 	$: color = $darkTheme ? 'text-gray-300' : 'text-black';
 
 	let tag = 0;
-	let values = [
-		{ name: 'Amiga Frequency', id: 0 },
-		{ name: 'Amiga Refresh Rate', id: 1 },
-		{ name: 'Host CPU Load', id: 2 },
-		{ name: 'Host GPU Refresh Rate', id: 3 },
-		{ name: 'Audio Buffer Fill Level', id: 4 }
-	];
 	let selectedTag = 0;
 
 	let items: MenuItem[] = [
 		new MenuItem('Amiga Frequency', 0),
 		new MenuItem('Amiga Refresh Rate', 1),
 		new MenuItem('Host CPU Load', 2),
+		new MenuSeparator(), 
+		new MenuItem('', 5),
 		new MenuItem('Host GPU Refresh Rate', 3),
 		new MenuItem('Audio Buffer Fill Level', 4)
 	];
@@ -130,19 +125,6 @@
 
 <div class="flex h-8">
 	<div class="h-full w-1 bg-black" />
-	<!--
-	<DropDown2
-		{values}
-		{selectedTag}
-		{tag}
-		title={value}
-		on:select={selectAction}
-		dropdownStyle="dropdown-end"
-		listStyle="menu menu-compact rounded text-sm w-64"
-	>
-	<div class="flex w-20 text-xs h-full justify-center items-center">{value}</div>
-	</DropDown2>
-	-->
 	<Menu
 		{items}
 		{selectedTag}

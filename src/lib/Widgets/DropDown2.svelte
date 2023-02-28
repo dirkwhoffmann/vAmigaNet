@@ -12,7 +12,7 @@
 	export let listStyle = '';
 	export let title = '';
 
-    $: disabledStyle = disabled ? 'hover:bg-base-100 opacity-30' : '';
+	$: disabledStyle = disabled ? 'hover:bg-base-100 opacity-30' : '';
 
 	const dispatch = createEventDispatcher<{ select: ActionEvent }>();
 
@@ -47,7 +47,7 @@
 	<ul tabindex="0" class="dropdown-content menu bg-base-100 text-base-content {listStyle}">
 		{#each values as { name, id }, i}
 			<li id={id.toString()}>
-				<button {disabled} class="{disabledStyle}" on:click={(e) => listAction(e, id)}>
+				<button {disabled} class={disabledStyle} on:click={(e) => listAction(e, id)}>
 					{#if selectable}
 						<div class="w-4">{@html selectedTag == id ? '&#10003' : ''}</div>
 					{/if}
