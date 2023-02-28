@@ -2,7 +2,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import Chevron from '$lib/Settings/Chevron.svelte'; // TODO: MOVE TO widgets
 	import type { ActionEvent } from '$lib/Settings/Settings.svelte'; // TODO: MOVE TO types.ts
-	import type { MenuItem } from '$lib/types';
+	import { MenuSeparator, type MenuItem } from '$lib/types';
 	import Checkmark from './Checkmark.svelte';
 
 	// Identifier of this menu
@@ -41,14 +41,14 @@
 	</label>
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 	<ul tabindex="0" class="dropdown-content menu bg-base-100 text-base-content {listStyle}">
-		{#each items as { title, tag, isHidden, isSelected }, i}
-			{#if title == ''}
+		{#each items as item, i}
+			{#if item instanceof MenuSeparator}
 				<li class="divider" />
-			{:else if !isHidden}
+			{:else if !item.isHidden}
 				<li id={tag.toString()}>
 					<button class={style(i)} on:click={(e) => action(e, tag)}>
-						<Checkmark enabled={selectedItems.length != 0} visible={isSelected} />
-						{title}</button
+						<Checkmark enabled={selectedItems.length != 0} visible={item.isSelected} />
+						{item.title}</button
 					>
 				</li>
 			{/if}

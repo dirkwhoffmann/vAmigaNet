@@ -28,8 +28,6 @@
 		new MenuItem('Amiga Frequency', 0),
 		new MenuItem('Amiga Refresh Rate', 1),
 		new MenuItem('Host CPU Load', 2),
-		new MenuSeparator(), 
-		new MenuItem('', 5),
 		new MenuItem('Host GPU Refresh Rate', 3),
 		new MenuItem('Audio Buffer Fill Level', 4)
 	];
