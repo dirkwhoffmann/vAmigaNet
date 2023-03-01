@@ -322,7 +322,9 @@
 	<ConfigSection name="Floppy Drives">
 		<ConfigItem
 			name="DF0"
-			values={[{ name: 'Internal Drive', id: 1 }]}
+			items={[
+				new MenuItem('Internal Drive', 1)
+			]}
 			tag={0}
 			selectedTag={df0}
 			on:select={dfAction}

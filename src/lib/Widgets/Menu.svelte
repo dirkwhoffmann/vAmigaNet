@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-    import type { ActionEvent, MenuItem } from '$lib/types';
+	import type { ActionEvent, MenuItem } from '$lib/types';
 	import { MenuSeparator } from '$lib/types';
 	import Checkmark from './Checkmark.svelte';
 
@@ -10,6 +10,9 @@
 	// Menu items
 	export let items: MenuItem[];
 	$: selectedItems = items.filter((item) => item.isSelected);
+
+	// State
+	export let isEnabled = true;
 
 	// Visual appearance
 	export let dropdownStyle = '';
@@ -35,22 +38,22 @@
 	<!-- Make DropDown work in Safari using the label / tabindex trick (see DaisyUI doc) -->
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 	<!-- svelte-ignore a11y-label-has-associated-control -->
-	<label tabindex="0">
+	<label tabindex="0" class="{isEnabled ? '' : 'pointer-events-none'}">
 		<slot />
 	</label>
-	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-	<ul tabindex="0" class="dropdown-content menu bg-base-100 text-base-content {listStyle}">
-		{#each items as item, i}
-			{#if item instanceof MenuSeparator}
-				<li class="divider" />
-			{:else if !item.isHidden}
-				<li id={tag.toString()}>
-					<button class={style(i)} on:click={(e) => action(e, item.tag)}>
-						<Checkmark enabled={selectedItems.length != 0} visible={item.isSelected} />
-						{item.title}</button
-					>
-				</li>
-			{/if}
-		{/each}
-	</ul>
+		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+		<ul tabindex="0" class="dropdown-content menu bg-base-100 text-base-content {listStyle}">
+			{#each items as item, i}
+				{#if item instanceof MenuSeparator}
+					<li class="divider" />
+				{:else if !item.isHidden}
+					<li id={tag.toString()}>
+						<button class={style(i)} on:click={(e) => action(e, item.tag)}>
+							<Checkmark enabled={selectedItems.length != 0} visible={item.isSelected} />
+							{item.title}</button
+						>
+					</li>
+				{/if}
+			{/each}
+		</ul>
 </div>

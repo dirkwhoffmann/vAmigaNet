@@ -2,13 +2,11 @@
 	import { createEventDispatcher } from 'svelte';
 	import GoInfo from 'svelte-icons/go/GoInfo.svelte';
 	import GiPadlock from 'svelte-icons/gi/GiPadlock.svelte';
-	import { MenuItem, type ActionEvent } from '$lib/types';
-	import DropDown from '$lib/Widgets/DropDown.svelte';
+	import type { MenuItem, ActionEvent } from '$lib/types';
 	import Slider from '$lib/Widgets/Slider.svelte';
 	import Menu from '$lib/Widgets/Menu.svelte';
 
 	export let name = '';
-	export let values = []; // DEPRECATED
 	export let min = 0;
 	export let max = 0;
 	export let locked = false;
@@ -17,14 +15,6 @@
 	export let selectedTag = 0;
 
 	export let items: MenuItem[] = [];
-	$: setupItems(values);
-	function setupItems(values) {
-		if (values.length != 0) {
-			items = [];
-			values.forEach((element) => items.push(new MenuItem(element.name, element.id)));
-		}
-	}
-	$: console.log('Items = ', items);
 
 	const dispatcher = createEventDispatcher<{ select: ActionEvent }>();
 	const infoDispatcher = createEventDispatcher<{ info: ActionEvent }>();
@@ -81,11 +71,17 @@
 		</div>
 		<div class="border-0 bg-primary h-12">
 			{#if min == max}
-				<Menu {items} listStyle="w-[18rem] bg-accent text-accent-content" on:select={selectAction}>
-					<button class="btn btn-primary w-[18rem] border-0 rounded-none text-xl font-normal"
-						>{displayName}</button
-					></Menu
+				<Menu isEnabled={!locked} {items} listStyle="w-[18rem] bg-accent text-accent-content" on:select={selectAction}>
+					{#if locked}
+					<button class="btn btn-primary {opac} w-[18rem] border-0 rounded-none text-xl font-normal"
+					>{displayName}</button
 				>
+			{:else}
+						<button class="btn btn-primary w-[18rem] border-0 rounded-none text-xl font-normal"
+							>{displayName}</button
+						>
+					{/if}
+				</Menu>
 			{:else}
 				<Slider {min} {max} {locked} {tag} {selectedTag} on:select />
 			{/if}
