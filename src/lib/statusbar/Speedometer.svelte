@@ -126,6 +126,6 @@
 		dropdownStyle="dropdown-end"
 		listStyle="menu menu-compact rounded text-sm w-64"
 	>
-		<div class="flex w-20 text-xs h-full justify-center items-center">{value}</div>
+		<div class="flex w-20 text-xs text-primary-content h-full justify-center items-center">{value}</div>
 	</Menu>
 </div>
