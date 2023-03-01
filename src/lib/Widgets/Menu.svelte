@@ -38,22 +38,28 @@
 	<!-- Make DropDown work in Safari using the label / tabindex trick (see DaisyUI doc) -->
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 	<!-- svelte-ignore a11y-label-has-associated-control -->
-	<label tabindex="0" class="{isEnabled ? '' : 'pointer-events-none'}">
+	<label tabindex="0" class={isEnabled ? '' : 'pointer-events-none'}>
 		<slot />
 	</label>
-		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-		<ul tabindex="0" class="dropdown-content menu bg-base-100 text-base-content {listStyle}">
+	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+	<ul tabindex="0" class="dropdown-content menu bg-base-100 text-base-content {listStyle}">
+		{#key items}
 			{#each items as item, i}
 				{#if item instanceof MenuSeparator}
 					<li class="divider" />
 				{:else if !item.isHidden}
 					<li id={tag.toString()}>
-						<button class={style(i)} on:click={(e) => action(e, item.tag)}>
+						<button
+							disabled={!item.isEnabled}
+							class={item.isEnabled ? '' : 'hover:bg-base-100 opacity-40'}
+							on:click={(e) => action(e, item.tag)}
+						>
 							<Checkmark enabled={selectedItems.length != 0} visible={item.isSelected} />
 							{item.title}</button
 						>
 					</li>
 				{/if}
 			{/each}
-		</ul>
+		{/key}
+	</ul>
 </div>
