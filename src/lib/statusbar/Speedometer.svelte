@@ -3,8 +3,6 @@
 	import { onMount } from 'svelte';
 	import { proxy, amiga, cpu, agnus } from '$lib/stores';
 	import { darkTheme } from '$lib/stores';
-	import DropDown from '$lib/Widgets/DropDown.svelte';
-	import DropDown2 from '$lib/Widgets/DropDown2.svelte';
 	import Menu from '$lib/Widgets/Menu.svelte';
 	import { MenuItem, MenuSeparator } from '$lib/types';
 
