@@ -9,6 +9,7 @@
 	import { liveQuery } from 'dexie';
 	import { db, type RomEntry } from '$lib/Db/db';
 	import type { ActionEvent } from '$lib/types';
+	import { MenuItem } from '$lib/types';
 
 	let kickstart: number;
 	let kickName = '';
@@ -168,24 +169,24 @@
 	<ConfigSection name="CPU">
 		<ConfigItem
 			name="CPU"
-			values={[
-				{ name: '68000', id: $proxy.CPU_68000 },
-				{ name: '68010', id: $proxy.CPU_68010 },
-				{ name: '68EC020', id: $proxy.CPU_68EC020 }
+			items={[
+				new MenuItem('68000', $proxy.CPU_68000),
+				new MenuItem('68010', $proxy.CPU_68010),
+				new MenuItem('68EC020', $proxy.CPU_68EC020)
 			]}
 			selectedTag={cpuRevision}
 			on:select={cpuRevAction}
 		/>
 		<ConfigItem
 			name="Frequency"
-			values={[
-				{ name: '7 Mhz', id: 0 },
-				{ name: '14 Mhz', id: 2 },
-				{ name: '21 Mhz', id: 3 },
-				{ name: '28 Mhz', id: 4 },
-				{ name: '35 Mhz', id: 5 },
-				{ name: '42 Mhz', id: 6 },
-				{ name: '84 Mhz', id: 12 }
+			items={[
+				new MenuItem('7 Mhz', 0),
+				new MenuItem('14 Mhz', 2),
+				new MenuItem('21 Mhz', 3),
+				new MenuItem('28 Mhz', 4),
+				new MenuItem('35 Mhz', 5),
+				new MenuItem('42 Mhz', 6),
+				new MenuItem('84 Mhz', 12),
 			]}
 			selectedTag={cpuSpeed}
 			on:select={cpuSpeedAction}
@@ -194,11 +195,11 @@
 	<ConfigSection name="Custom Chipset">
 		<ConfigItem
 			name="Agnus Revision"
-			values={[
-				{ name: 'Early OCS', id: $proxy.AGNUS_OCS_OLD },
-				{ name: 'OCS', id: $proxy.AGNUS_OCS },
-				{ name: 'ECS (1MB)', id: $proxy.AGNUS_ECS_1MB },
-				{ name: 'ECS (2MB)', id: $proxy.AGNUS_ECS_2MB }
+			items={[
+				new MenuItem('Early OCS', $proxy.AGNUS_OCS_OLD),
+				new MenuItem('OCS', $proxy.AGNUS_OCS),
+				new MenuItem('ECS (1MB)', $proxy.AGNUS_ECS_1MB),
+				new MenuItem('ECS (2MB)', $proxy.AGNUS_ECS_2MB)
 			]}
 			selectedTag={agnusRevision}
 			on:select={agnusRevAction}
@@ -206,9 +207,9 @@
 		/>
 		<ConfigItem
 			name="Denise Revision"
-			values={[
-				{ name: 'OCS', id: $proxy.DENISE_OCS },
-				{ name: 'ECS', id: $proxy.DENISE_ECS }
+			items={[
+				new MenuItem('OCS', $proxy.DENISE_OCS),
+				new MenuItem('ECS', $proxy.DENISE_ECS),
 			]}
 			selectedTag={deniseRevision}
 			on:select={deniseRevAction}
@@ -216,10 +217,10 @@
 		/>
 		<ConfigItem
 			name="Real-time Clock"
-			values={[
-				{ name: 'NONE', id: $proxy.RTC_NONE },
-				{ name: 'OKI', id: $proxy.RTC_OKI },
-				{ name: 'RICOH', id: $proxy.RTC_RICOH }
+			items={[
+				new MenuItem('NONE', $proxy.RTC_NONE),
+				new MenuItem('OKI', $proxy.RTC_OKI),
+				new MenuItem('RICOH', $proxy.RTC_RICOH),
 			]}
 			selectedTag={rtcModel}
 			on:select={rtcModelAction}
@@ -229,11 +230,11 @@
 	<ConfigSection name="Memory">
 		<ConfigItem
 			name="Chip RAM"
-			values={[
-				{ name: '256 KB', id: 256 },
-				{ name: '512 KB', id: 512 },
-				{ name: '1024 KB', id: 1024 },
-				{ name: '2048 KB', id: 2048 }
+			items={[
+				new MenuItem('256 KB', 256),
+				new MenuItem('512 KB', 512),
+				new MenuItem('1024 KB', 1024),
+				new MenuItem('2048 KB', 2048)
 			]}
 			selectedTag={chipRam}
 			on:select={chipRamAction}
@@ -241,11 +242,11 @@
 		/>
 		<ConfigItem
 			name="Slow RAM"
-			values={[
-				{ name: '0 KB', id: 0 },
-				{ name: '512 KB', id: 512 },
-				{ name: '1 MB', id: 1024 },
-				{ name: '1.5 MB', id: 1536 }
+			items={[
+				new MenuItem('0 KB', 0),
+				new MenuItem('512 KB', 512),
+				new MenuItem('1 MB', 1024),
+				new MenuItem('1.5 MB', 1536)
 			]}
 			selectedTag={slowRam}
 			on:select={slowRamAction}
@@ -253,16 +254,16 @@
 		/>
 		<ConfigItem
 			name="Fast RAM"
-			values={[
-				{ name: '0 KB', id: 0 },
-				{ name: '64 KB', id: 64 },
-				{ name: '128 KB', id: 128 },
-				{ name: '256 KB', id: 256 },
-				{ name: '512 KB', id: 512 },
-				{ name: '1 MB', id: 1024 },
-				{ name: '2 MB', id: 2048 },
-				{ name: '4 MB', id: 4096 },
-				{ name: '8 MB', id: 8192 }
+			items={[
+				new MenuItem('0 KB', 0),
+				new MenuItem('64 KB', 64),
+				new MenuItem('128 KB', 118),
+				new MenuItem('256 KB', 256),
+				new MenuItem('512 KB', 512),
+				new MenuItem('1 MB', 1024),
+				new MenuItem('2 MB', 2048),
+				new MenuItem('4 MB', 4096),
+				new MenuItem('8 MB', 8192)
 			]}
 			selectedTag={fastRam}
 			on:select={fastRamAction}
@@ -270,49 +271,49 @@
 		/>
 		<ConfigItem
 			name="Memory Layout"
-			values={[
-				{ name: 'Amiga 500', id: $proxy.BANK_MAP_A500 },
-				{ name: 'Amiga 1000', id: $proxy.BANK_MAP_A1000 },
-				{ name: 'Amiga 2000A', id: $proxy.BANK_MAP_A2000A },
-				{ name: 'Amiga 2000B', id: $proxy.BANK_MAP_A2000B }
+			items={[
+				new MenuItem('Amiga 500', $proxy.BANK_MAP_A500),
+				new MenuItem('Amiga 1000', $proxy.BANK_MAP_A1000),
+				new MenuItem('Amiga 2000A', $proxy.BANK_MAP_A2000A),
+				new MenuItem('Amiga 2000B', $proxy.BANK_MAP_A2000B),
 			]}
 			selectedTag={bankMap}
 			on:select={bankMapAction}
 		/>
 		<ConfigItem
 			name="Memory Startup Pattern"
-			values={[
-				{ name: 'All Zeroes', id: $proxy.RAM_INIT_ALL_ZEROES },
-				{ name: 'All Ones', id: $proxy.RAM_INIT_ALL_ONES },
-				{ name: 'Random', id: $proxy.RAM_INIT_RANDOMIZED }
+			items={[
+				new MenuItem('All Zeroes', $proxy.RAM_INIT_ALL_ZEROES),
+				new MenuItem('All Ones', $proxy.RAM_INIT_ALL_ONES),
+				new MenuItem('Random', $proxy.RAM_INIT_RANDOMIZED)
 			]}
 			selectedTag={initPattern}
 			on:select={initPatternAction}
 		/>
 		<ConfigItem
 			name="Unmapped Memory Area"
-			values={[
-				{ name: 'Floating', id: $proxy.UNMAPPED_FLOATING },
-				{ name: 'All Zeroes', id: $proxy.UNMAPPED_ALL_ZEROES },
-				{ name: 'All Ones', id: $proxy.UNMAPPED_ALL_ONES }
+			items={[
+				new MenuItem('Floating', $proxy.UNMAPPED_FLOATING),
+				new MenuItem('All Zeroes', $proxy.UNMAPPED_ALL_ZEROES),
+				new MenuItem('All Ones', $proxy.UNMAPPED_ALL_ONES)
 			]}
 			selectedTag={unmapped}
 			on:select={unmappedAction}
 		/>
 		<ConfigItem
 			name="Emulate Slow RAM Mirror"
-			values={[
-				{ name: 'Yes', id: 1 },
-				{ name: 'No', id: 0 }
+			items={[
+				new MenuItem('Yes', 1),
+				new MenuItem('No', 0)
 			]}
 			selectedTag={slowRamMirror}
 			on:select={slowRamMirrorAction}
 		/>
 		<ConfigItem
 			name="Emulate Slow RAM Bus Delays"
-			values={[
-				{ name: 'Yes', id: 1 },
-				{ name: 'No', id: 0 }
+			items={[
+				new MenuItem('Yes', 1),
+				new MenuItem('No', 0)
 			]}
 			selectedTag={slowRamDelay}
 			on:select={slowRamDelayAction}
@@ -328,9 +329,9 @@
 		/>
 		<ConfigItem
 			name="DF1"
-			values={[
-				{ name: 'None', id: 0 },
-				{ name: 'A1010', id: 1 }
+			items={[
+				new MenuItem('None', 0),
+				new MenuItem('A1010', 1)
 			]}
 			tag={1}
 			selectedTag={df1}
@@ -339,9 +340,9 @@
 		/>
 		<ConfigItem
 			name="DF2"
-			values={[
-				{ name: 'None', id: 0 },
-				{ name: 'A1010', id: 1 }
+			items={[
+				new MenuItem('None', 0),
+				new MenuItem('A1010', 1)
 			]}
 			tag={2}
 			selectedTag={df2}
@@ -350,9 +351,9 @@
 		/>
 		<ConfigItem
 			name="DF3"
-			values={[
-				{ name: 'None', id: 0 },
-				{ name: 'A1010', id: 1 }
+			items={[
+				new MenuItem('None', 0),
+				new MenuItem('A1010', 1)
 			]}
 			tag={3}
 			selectedTag={df3}

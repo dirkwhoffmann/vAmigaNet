@@ -8,7 +8,7 @@
 	import Menu from '$lib/Widgets/Menu.svelte';
 
 	export let name = '';
-	export let values = [{ name: '???', id: 0 }];
+	export let values = []; // DEPRECATED
 	export let min = 0;
 	export let max = 0;
 	export let locked = false;
@@ -19,8 +19,10 @@
 	export let items: MenuItem[] = [];
 	$: setupItems(values);
 	function setupItems(values) {
-		items = [];
-		values.forEach((element) => items.push(new MenuItem(element.name, element.id)));
+		if (values.length != 0) {
+			items = [];
+			values.forEach((element) => items.push(new MenuItem(element.name, element.id)));
+		}
 	}
 	$: console.log('Items = ', items);
 
@@ -42,20 +44,18 @@
 		return '???';
 	}
 
-	$: updateSelected(selectedTag); 
+	$: updateSelected(selectedTag);
 	function updateSelected(sel: number) {
 		items.forEach(function (item, i) {
 			item.isSelected = item.tag == selectedTag;
 		});
-		items = items; 
-
+		items = items;
 	}
 
 	function selectAction(event: CustomEvent<ActionEvent>) {
 		selectedTag = event.detail.value;
 		dispatcher('select', { tag: tag, value: selectedTag });
 	}
-
 </script>
 
 <div class="py-0.5 px-0">
@@ -81,16 +81,6 @@
 		</div>
 		<div class="border-0 bg-primary h-12">
 			{#if min == max}
-				<!--
-			<DropDown
-				{values}
-				{selectedTag}
-				{tag}
-				on:select
-				titleStyle="btn btn-primary w-[18rem] border-0 rounded-none text-xl font-normal"
-				listStyle="w-[18rem] bg-accent text-accent-content"
-			/>
-			-->
 				<Menu {items} listStyle="w-[18rem] bg-accent text-accent-content" on:select={selectAction}>
 					<button class="btn btn-primary w-[18rem] border-0 rounded-none text-xl font-normal"
 						>{displayName}</button
