@@ -27,6 +27,7 @@ export const audio: any = writable();
 // Theming
 export const theme = writable(Theme.default);
 export const darkTheme = writable(true);
+export const invert = writable('invert');
 
 // Settings (move to settings store?!)
 export const renderMode = writable(RenderMode.smooth);

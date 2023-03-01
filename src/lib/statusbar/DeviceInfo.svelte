@@ -3,8 +3,8 @@
 	import BarBox from './BarBox.svelte';
 	import Menu from '$lib/Widgets/Menu.svelte';
 	import { MenuItem } from '$lib/types';
+	import TemplateImage from '$lib/Widgets/TemplateImage.svelte';
 
-	export let nr = 0;
 	export let cyl = 0;
 	export let disk = true;
 	export let motor = false;
@@ -36,19 +36,21 @@
 	function update(hasDisk: boolean) {
 		items[0].isEnabled = hasDisk;
 		items[0] = items[0];
-		console.log("disk", disk);
-		console.log("items[0].isEnabled", items[0].isEnabled);
+		console.log('disk', disk);
+		console.log('items[0].isEnabled', items[0].isEnabled);
 	}
-
 </script>
 
 <Menu {items} {tag} listStyle="menu menu-compact rounded p-0 text-sm w-32" on:select>
 	<BarBox {bg}>
+		<TemplateImage style="border-0 pr-1 py-1.5 h-full object-scale-down" {src} />
+		<!--
 		<img
 			class="border-0 pr-1 py-1.5 h-full object-scale-down {invert} {opc}"
 			{src}
 			alt="Floppy icon"
 		/>
+		-->
 		<div class="border-0 w-6 items-center pl-1 text-left leading-none text-sm {textcol}">
 			{cyl}
 		</div>

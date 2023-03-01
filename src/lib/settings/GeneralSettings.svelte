@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import { warpMode, theme, darkTheme, border, shaking } from '$lib/stores';
+	import { border, darkTheme, invert, theme, shaking, warpMode } from '$lib/stores';
 	import type { ActionEvent } from '$lib/types';
 	import { MenuItem, Theme } from '$lib/types';
 	import ConfigSection from './ConfigSection.svelte';
@@ -27,38 +27,47 @@
 			case Theme.default:
 				newTheme = 'mytheme';
 				$darkTheme = true;
+				$invert = 'invert';
 				break;
 			case Theme.light:
 				newTheme = 'light';
 				$darkTheme = true;
+				$invert = 'invert';
 				break;
 			case Theme.dark:
 				newTheme = 'dark';
 				$darkTheme = true;
+				$invert = 'invert';
 				break;
 			case Theme.coffee:
 				newTheme = 'coffee';
 				$darkTheme = false;
+				$invert = '';
 				break;
 			case Theme.cupcake:
 				newTheme = 'cupcake';
 				$darkTheme = false;
+				$invert = '';
 				break;
 			case Theme.forest:
 				newTheme = 'forest';
 				$darkTheme = true;
+				$invert = 'invert';
 				break;
 			case Theme.aqua:
 				newTheme = 'aqua';
 				$darkTheme = false;
+				$invert = '';
 				break;
 			case Theme.garden:
 				newTheme = 'garden';
 				$darkTheme = true;
+				$invert = 'invert';
 				break;
 			case Theme.pastel:
 				newTheme = 'pastel';
 				$darkTheme = false;
+				$invert = '';
 				break;
 		}
 		document.querySelector('html')!.setAttribute('data-theme', newTheme);

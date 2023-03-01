@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-    import { dfConnected, dfHasDisk } from '$lib/stores';
-	import { darkTheme } from '$lib/stores';
+    import { dfConnected, dfHasDisk, invert } from '$lib/stores';
     import FaTimes from 'svelte-icons/fa/FaTimes.svelte'
+    import TemplateImage from '$lib/Widgets/TemplateImage.svelte';
 
     export let id: number;
 	export let name: string;
@@ -37,15 +37,15 @@
 <div class="p-4 rounded-xl bg-primary/50 backdrop-blur">
 	<div class="flex flex-col items-center">
 		<div
-			class="h-32 w-32 border-2 rounded-xl p-5 {bopac}"
+			class="h-32 w-32 border-2 border-primary-content rounded-xl p-5 {bopac}"
 			on:mouseenter={mouseEnter}
 			on:mouseleave={mouseLeave}
 			on:mousedown={mouseClick}
 		>
         {#if !enabled}
-            <div class="w-full h-full opacity-50"><FaTimes /></div>
+            <div class="w-full h-full opacity-50 text-primary-content"><FaTimes /></div>
         {:else if selected || hasDisk}
-            <img class="{$darkTheme ? 'invert' : ''} {opac}" src="icons/disk.png" alt="Floppy Disk"/>
+            <img class="{$invert} {opac}" src="icons/disk.png" alt="Floppy Disk"/>
         {/if}
 		</div>
 		<div class="font-azaret text-primary-content text-xl">{name}</div>

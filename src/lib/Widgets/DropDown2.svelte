@@ -37,7 +37,7 @@
 </script>
 
 <div class="dropdown {dropdownStyle}">
-	<!-- Make DropDown work in Safari using the label / tabindex trick (see DaisyUI doc) -->
+	<!-- Make work in Safari using the label / tabindex trick (see DaisyUI doc) -->
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 	<!-- svelte-ignore a11y-label-has-associated-control -->
 	<label tabindex="0">
