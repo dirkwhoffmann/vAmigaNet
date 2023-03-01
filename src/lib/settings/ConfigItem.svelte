@@ -2,9 +2,10 @@
 	import { createEventDispatcher } from 'svelte';
 	import GoInfo from 'svelte-icons/go/GoInfo.svelte';
 	import GiPadlock from 'svelte-icons/gi/GiPadlock.svelte';
-	import type { ActionEvent } from '$lib/types';
+	import { MenuItem, type ActionEvent } from '$lib/types';
 	import DropDown from '$lib/Widgets/DropDown.svelte';
 	import Slider from '$lib/Widgets/Slider.svelte';
+	import Menu from '$lib/Widgets/Menu.svelte';
 
 	export let name = '';
 	export let values = [{ name: '???', id: 0 }];
@@ -15,6 +16,15 @@
 	export let tag = 0;
 	export let selectedTag = 0;
 
+	export let items: MenuItem[] = [];
+	$: setupItems(values);
+	function setupItems(values) {
+		items = [];
+		values.forEach((element) => items.push(new MenuItem(element.name, element.id)));
+	}
+	$: console.log('Items = ', items);
+
+	const dispatcher = createEventDispatcher<{ select: ActionEvent }>();
 	const infoDispatcher = createEventDispatcher<{ info: ActionEvent }>();
 
 	$: opac = locked ? 'opacity-50' : '';
@@ -23,6 +33,28 @@
 		e.preventDefault();
 		infoDispatcher('info', { tag: tag, value: selectedTag });
 	};
+
+	$: displayName = displayedName(selectedTag);
+	function displayedName(selectedTag: number): string {
+		for (const item of items) {
+			if (item.tag == selectedTag) return item.title;
+		}
+		return '???';
+	}
+
+	$: updateSelected(selectedTag); 
+	function updateSelected(sel: number) {
+		items.forEach(function (item, i) {
+			item.isSelected = item.tag == selectedTag;
+		});
+		items = items; 
+
+	}
+
+	function selectAction(event: CustomEvent<ActionEvent>) {
+		selectedTag = event.detail.value;
+		dispatcher('select', { tag: tag, value: selectedTag });
+	}
 
 </script>
 
@@ -49,7 +81,8 @@
 		</div>
 		<div class="border-0 bg-primary h-12">
 			{#if min == max}
-				<DropDown
+				<!--
+			<DropDown
 				{values}
 				{selectedTag}
 				{tag}
@@ -57,6 +90,12 @@
 				titleStyle="btn btn-primary w-[18rem] border-0 rounded-none text-xl font-normal"
 				listStyle="w-[18rem] bg-accent text-accent-content"
 			/>
+			-->
+				<Menu {items} listStyle="w-[18rem] bg-accent text-accent-content" on:select={selectAction}>
+					<button class="btn btn-primary w-[18rem] border-0 rounded-none text-xl font-normal"
+						>{displayName}</button
+					></Menu
+				>
 			{:else}
 				<Slider {min} {max} {locked} {tag} {selectedTag} on:select />
 			{/if}
