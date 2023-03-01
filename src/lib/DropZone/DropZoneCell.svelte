@@ -2,7 +2,6 @@
 	import { createEventDispatcher } from 'svelte';
     import { dfConnected, dfHasDisk, invert } from '$lib/stores';
     import FaTimes from 'svelte-icons/fa/FaTimes.svelte'
-    import TemplateImage from '$lib/Widgets/TemplateImage.svelte';
 
     export let id: number;
 	export let name: string;
