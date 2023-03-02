@@ -128,7 +128,7 @@
 			h = rech.current;
 		}
 
-		glCanvas.update(now);
+		glCanvas.update();
 	}
 
 	function render() {

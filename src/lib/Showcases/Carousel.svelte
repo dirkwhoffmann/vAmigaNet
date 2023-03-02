@@ -37,7 +37,7 @@
 	<Splide
 		{options}
 		on:click={(e) => {
-			if (e != undefined) {
+			if (e) {
 				dispatch('message', items[e.detail.Slide.index]);
 			}
 		}}
@@ -53,5 +53,5 @@
 			</SplideSlide>
 		{/each}
 	</Splide>
-	<div class="py-2" />
+	<div class="py-2"></div>
 </div>
