@@ -619,7 +619,7 @@
 
 		if (!isLocked()) {
 			console.log('Locking mouse...');
-			lockMouse();
+			await lockMouse();
 		} else {
 			switch (e.button) {
 				case 0:

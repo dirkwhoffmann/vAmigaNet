@@ -1,7 +1,6 @@
 <svelte:options accessors={true} />
 
 <script lang="ts">
-	import { romcrc } from '$lib/stores';
 	import FaLock from 'svelte-icons/fa/FaLock.svelte';
 
 	export let title = '???';

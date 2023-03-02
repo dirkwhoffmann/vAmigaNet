@@ -5,6 +5,7 @@
 	import type { MenuItem, ActionEvent } from '$lib/types';
 	import Slider from '$lib/Widgets/Slider.svelte';
 	import Menu from '$lib/Widgets/Menu.svelte';
+	import Chevron from "$lib/Widgets/Chevron.svelte";
 
 	export let name = '';
 	export let min = 0;
@@ -36,8 +37,8 @@
 
 	$: updateSelected(selectedTag);
 	function updateSelected(sel: number) {
-		items.forEach(function (item, i) {
-			item.isSelected = item.tag == selectedTag;
+		items.forEach(function (item) {
+			item.isSelected = item.tag == sel;
 		});
 		items = items;
 	}
@@ -74,11 +75,10 @@
 				<Menu isEnabled={!locked} {items} listStyle="w-[18rem] bg-accent text-accent-content" on:select={selectAction}>
 					{#if locked}
 					<button class="btn btn-primary {opac} w-[18rem] border-0 rounded-none text-xl font-normal"
-					>{displayName}</button
-				>
+					>{displayName}</button>
 			{:else}
 						<button class="btn btn-primary w-[18rem] border-0 rounded-none text-xl font-normal"
-							>{displayName}</button
+							><Chevron>{displayName}</Chevron></button
 						>
 					{/if}
 				</Menu>

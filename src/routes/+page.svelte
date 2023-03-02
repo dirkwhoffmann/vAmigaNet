@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../app.css';
-	import { db, type RomEntry } from '$lib/Db/db';
+	import { db } from '$lib/Db/db';
 	import { browser } from '$app/environment';
 	import { liveQuery } from 'dexie';
 	import { Layer } from '$lib/types';
@@ -10,7 +10,6 @@
 	import { canvasWidth, canvasHeight, aspectWidth, aspectHeight } from '$lib/stores';
 	import { port1, port2 } from '$lib/stores';
 	import { onMount } from 'svelte';
-	import { fade } from 'svelte/transition';
 	import '@splidejs/svelte-splide/css';
 	import Sidebar from '$lib/Sidebar/Sidebar.svelte';
 	import TitleScreen from '$lib/TitleScreen.svelte';

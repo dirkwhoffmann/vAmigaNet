@@ -1,11 +1,10 @@
 <script lang="ts">
 	import type { DataBaseItem } from '$lib/types';
-	import { romcrc, kickstarts } from '$lib/stores';
+	import { kickstarts } from '$lib/stores';
 	import { fade } from 'svelte/transition';
 	import { Splide, SplideSlide } from '@splidejs/svelte-splide';
 	import { createEventDispatcher } from 'svelte';
 	import CarouselItem from '$lib/Showcases/CarouselItem.svelte';
-	import { element } from 'svelte/internal';
 
 	export let category = '';
 	export let items: DataBaseItem[] = [];

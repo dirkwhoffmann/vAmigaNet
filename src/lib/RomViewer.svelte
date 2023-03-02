@@ -57,14 +57,14 @@
 			blob = await response.arrayBuffer();
 			let arosExt = new Uint8Array(blob);
 
-			addRomToDatabase(arosRom, arosExt);
+			await addRomToDatabase(arosRom, arosExt);
 
 			// Add DiagROM
 			response = await fetch('roms/diagrom-121.bin');
 			blob = await response.arrayBuffer();
 			let diagRom = new Uint8Array(blob);
 
-			addRomToDatabase(diagRom);
+			await addRomToDatabase(diagRom);
 		} catch (exc) {
 			console.error('Cannot install default Roms');
 		}

@@ -22,11 +22,6 @@
 	$: opc = unsaved ? 'opacity-40' : 'opacity-70';
 	$: textcol = $darkTheme ? 'text-gray-300' : 'text-black';
 
-	function click(e: Event) {
-		e.preventDefault();
-		// dispatch('push', { sender: (e.target as HTMLElement).id });
-	}
-
 	let tag = 0;
 	let items = [new MenuItem('Eject', 0)];
 

@@ -1,6 +1,7 @@
 <svelte:options accessors={true} />
 
 <script lang="ts">
+    import { CRC32 } from "$lib/constants";
 	import type { DataBaseItem } from '$lib/types';
 	import { onMount } from 'svelte';
 	import { WarpMode } from '$lib/types';
@@ -238,11 +239,11 @@
 	}
 
 	export async function installAros() {
-		installRom(1062194186);
+		await installRom(CRC32.Aros);
 	}
 
 	export async function installDiagRom() {
-		installRom(2231503309);
+		await installRom(CRC32.DiagROM);
 	}
 
 	$: updateWarp($warpMode);
