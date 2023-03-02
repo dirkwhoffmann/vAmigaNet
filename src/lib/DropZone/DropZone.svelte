@@ -3,12 +3,9 @@
 	import { Layer } from '$lib/types';
 	import { fade } from 'svelte/transition';
 	import DropZoneCell from './DropZoneCell.svelte';
-	import { audio } from '$lib/stores';
 
 	function insert(drive: number)
 	{
-		audio.setup();
-
 		if ($dragItem) {
 			console.log('dragItem: ', dragItem);
 			$amiga.insertDisk($dragItem, $dragItem.length, drive);

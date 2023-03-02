@@ -2,6 +2,7 @@
 	import { createEventDispatcher } from 'svelte';
     import { dfConnected, dfHasDisk, invert } from '$lib/stores';
     import FaTimes from 'svelte-icons/fa/FaTimes.svelte'
+	import { audio } from '$lib/stores';
 
     export let id: number;
 	export let name: string;
@@ -25,9 +26,10 @@
         selected = false;
 	}
 
-    function mouseClick(event: MouseEvent) {
+    async function mouseClick(event: MouseEvent) {
         event.preventDefault();
         console.log("mouseClick");
+		await $audio.setup();
         dispatch('drive', name );
     }
 
