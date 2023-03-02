@@ -5,7 +5,8 @@
 	import DropZoneCell from './DropZoneCell.svelte';
 	import { audio } from '$lib/stores';
 
-	function insert(drive: number) {
+	function insert(drive: number)
+	{
 		audio.setup();
 
 		if ($dragItem) {
