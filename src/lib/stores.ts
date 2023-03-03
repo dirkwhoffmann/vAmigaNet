@@ -30,9 +30,6 @@ export const darkTheme = writable(true);
 export const invert = writable('invert');
 
 // Settings (move to settings store?!)
-export const renderMode = writable(RenderMode.smooth);
-export const flickerWeight = writable(50);
-export const texSampler = writable(1);
 
 // Control ports (connected devices)
 export const port1 = writable(1);

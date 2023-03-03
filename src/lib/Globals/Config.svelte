@@ -1,17 +1,24 @@
 <script lang="ts">
+    import { Opt, RenderMode, Theme, WarpMode } from "$lib/types";
     import { amiga, config, diskController, proxy } from '$lib/stores';
     import { darkTheme, invert } from '$lib/stores';
-    import { Opt, Theme, WarpMode } from "$lib/types";
 
+    // General settings
     let wMode: WarpMode = WarpMode.auto; // TODO: Rename to warpMode
     let theme: Theme = Theme.default;
     let canvasBorder = false;
     let shaking = true;
 
+    // Video settings
+    let renderMode = RenderMode.smooth;
+    let palette = 0;
+    let brightness = 0;
+    let contrast = 0;
+    let saturation = 0;
+    let flickerWeight = 50;
+
     export function get(option: Opt): string
     {
-        console.log("Config.get ", option);
-
         switch (option) {
             case Opt.WARP_MODE:
                 return [wMode].toString();
@@ -21,9 +28,21 @@
                 return canvasBorder.toString();
             case Opt.SHAKING:
                 return shaking.toString();
+            case Opt.RENDER_MODE:
+                return renderMode.toString();
+            case Opt.PALETTE:
+                return $amiga.getConfig($proxy.OPT_PALETTE).toString();
+            case Opt.BRIGHTNESS:
+                return $amiga.getConfig($proxy.OPT_BRIGHTNESS).toString();
+            case Opt.CONTRAST:
+                return $amiga.getConfig($proxy.OPT_CONTRAST).toString();
+            case Opt.SATURATION:
+                return $amiga.getConfig($proxy.OPT_SATURATION).toString();
+            case Opt.FLICKER_WEIGHT:
+                return flickerWeight.toString();
             default:
                 console.warn("get: Invalid option: ", option);
-            // TODO: Throw exception
+                // TODO: Throw exception
                 return "???";
         }
     }
@@ -56,6 +75,24 @@
                 break;
             case Opt.SHAKING:
                 shaking = val === 'true';
+                break;
+            case Opt.RENDER_MODE:
+                renderMode = Number(val);
+                break;
+            case Opt.PALETTE:
+                $amiga.configure($proxy.OPT_PALETTE, Number(val));
+                break;
+            case Opt.BRIGHTNESS:
+                $amiga.configure($proxy.OPT_BRIGHTNESS, Number(val));
+                break;
+            case Opt.CONTRAST:
+                $amiga.configure($proxy.OPT_CONTRAST, Number(val));
+                break;
+            case Opt.SATURATION:
+                $amiga.configure($proxy.OPT_SATURATION, Number(val));
+                break;
+            case Opt.FLICKER_WEIGHT:
+                flickerWeight = Number(flickerWeight);
                 break;
             default:
                 console.warn("set: Invalid option: ", option);

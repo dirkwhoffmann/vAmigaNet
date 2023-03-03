@@ -5,7 +5,6 @@
     import { InputDevice, Opt } from '$lib/types';
     import { proxy, amiga, config, denise, keyboard, joystick1, joystick2, running } from '$lib/stores';
     import { port1, port2, mouse1, mouse2, MsgShaking } from '$lib/stores';
-    import { renderMode, flickerWeight } from '$lib/stores';
     import { VPIXELS, HPIXELS } from '$lib/constants';
     import { AMIGA_KEYS } from '$lib/constants';
     import { keyset1, keyset2 } from '$lib/stores';
@@ -66,8 +65,9 @@
     let mainShaderProgram: WebGLProgram;
     let sampler: WebGLUniformLocation;
 
-    $: imageRendering =
-        $renderMode == RenderMode.smooth ? 'image-rendering: auto' : 'image-rendering: pixelated';
+    $: imageRendering = $config.getNum(Opt.RENDER_MODE) == RenderMode.smooth ?
+        'image-rendering: auto' : 'image-rendering: pixelated';
+
     //
     // Merge shader
     //
@@ -404,11 +404,12 @@
             gl.uniform1i(lfSampler, 1);
             gl.uniform1i(sfSampler, 0);
 
-            if ($flickerWeight && $running) {
-                const weight = 1.0 - ($flickerWeight / 100);
+            let weight = $config.getNum(Opt.FLICKER_WEIGHT);
+            if (weight > 0 && $running) {
+                const scaled = 1.0 - (weight / 100);
                 gl.useProgram(mergeShaderProgram);
-                gl.uniform1f(lfWeight, flickerCnt % 4 >= 2 ? 1.0 : weight);
-                gl.uniform1f(sfWeight, flickerCnt % 4 >= 2 ? weight : 1.0);
+                gl.uniform1f(lfWeight, flickerCnt % 4 >= 2 ? 1.0 : scaled);
+                gl.uniform1f(sfWeight, flickerCnt % 4 >= 2 ? scaled : 1.0);
                 flickerCnt += 2;
             }
         }

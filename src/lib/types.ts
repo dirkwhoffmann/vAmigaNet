@@ -8,7 +8,13 @@ export enum Opt
 	WARP_MODE,
 	THEME ,
 	CANVAS_BORDER ,
-	SHAKING
+	SHAKING,
+	RENDER_MODE,
+	FLICKER_WEIGHT,
+	PALETTE,
+	BRIGHTNESS,
+	CONTRAST,
+	SATURATION
 }
 
 export enum InputDevice {
