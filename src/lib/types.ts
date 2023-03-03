@@ -38,6 +38,21 @@ export enum Opt
 	HD0,
 
 	//
+	// Audio settings
+	//
+
+	AUDVOL0,
+	AUDVOL1,
+	AUDVOL2,
+	AUDVOL3,
+	AUDVOLL,
+	AUDVOLR,
+	STEP_VOLUME,
+	POLL_VOLUME,
+	INSERT_VOLUME,
+	EJECT_VOLUME,
+
+	//
 	// Video settings
 	//
 

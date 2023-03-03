@@ -79,6 +79,31 @@
                 return 'TODO';
 
             //
+            // Audio settings
+            //
+
+            case Opt.AUDVOL0:
+                return $amiga.getDriveConfig($proxy.OPT_AUDVOL, 0);
+            case Opt.AUDVOL1:
+                return $amiga.getDriveConfig($proxy.OPT_AUDVOL, 1);
+            case Opt.AUDVOL2:
+                return $amiga.getDriveConfig($proxy.OPT_AUDVOL, 2);
+            case Opt.AUDVOL3:
+                return $amiga.getDriveConfig($proxy.OPT_AUDVOL, 3);
+            case Opt.AUDVOLL:
+                return $amiga.getConfig($proxy.OPT_AUDVOLL);
+            case Opt.AUDVOLR:
+                return $amiga.getConfig($proxy.OPT_AUDVOLR);
+            case Opt.STEP_VOLUME:
+                return $amiga.getDriveConfig($proxy.OPT_STEP_VOLUME, 0);
+            case Opt.POLL_VOLUME:
+                return $amiga.getDriveConfig($proxy.OPT_POLL_VOLUME, 0);
+            case Opt.INSERT_VOLUME:
+                return $amiga.getDriveConfig($proxy.OPT_INSERT_VOLUME, 0);
+            case Opt.EJECT_VOLUME:
+                return $amiga.getDriveConfig($proxy.OPT_EJECT_VOLUME, 0);
+
+            //
             // Video settings
             //
 
@@ -135,9 +160,9 @@
                 shaking = val === 'true';
                 break;
 
-                //
-                // Machine settings
-                //
+            //
+            // Machine settings
+            //
 
             case Opt.CPU_REVISION:
                 $amiga.configure($proxy.OPT_CPU_REVISION, Number(val));
@@ -199,10 +224,44 @@
                 // TODO
                 return 'TODO';
 
+            //
+            // Audio settings
+            //
 
-                //
-                // Video settings
-                //
+            case Opt.AUDVOL0:
+                $amiga.configureDrive($proxy.OPT_AUDVOL, 0, Number(val));
+                break;
+            case Opt.AUDVOL1:
+                $amiga.configureDrive($proxy.OPT_AUDVOL, 1, Number(val));
+                break;
+            case Opt.AUDVOL2:
+                $amiga.configureDrive($proxy.OPT_AUDVOL, 2, Number(val));
+                break;
+            case Opt.AUDVOL3:
+                $amiga.configureDrive($proxy.OPT_AUDVOL, 3, Number(val));
+                break;
+            case Opt.AUDVOLL:
+                $amiga.configure($proxy.OPT_AUDVOLL, Number(val));
+                break;
+            case Opt.AUDVOLR:
+                $amiga.configure($proxy.OPT_AUDVOLR, Number(val));
+                break;
+            case Opt.STEP_VOLUME:
+                $amiga.configure($proxy.OPT_STEP_VOLUME, Number(val));
+                break;
+            case Opt.POLL_VOLUME:
+                $amiga.configure($proxy.OPT_POLL_VOLUME, Number(val));
+                break;
+            case Opt.INSERT_VOLUME:
+                $amiga.configure($proxy.OPT_INSERT_VOLUME, Number(val));
+                break;
+            case Opt.EJECT_VOLUME:
+                $amiga.configure($proxy.OPT_EJECT_VOLUME, Number(val));
+                break;
+
+            //
+            // Video settings
+            //
 
             case Opt.RENDER_MODE:
                 renderMode = Number(val);
@@ -321,7 +380,8 @@
         document.querySelector('html').setAttribute('data-theme', newTheme);
     }
 
-    function connectDrive(nr: number, connect: boolean) {
+    function connectDrive(nr: number, connect: boolean)
+    {
         if (connect) {
             for (let i = 1; i <= nr; i++) {
                 $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, i, 1);
