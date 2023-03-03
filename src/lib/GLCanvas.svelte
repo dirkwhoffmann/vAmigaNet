@@ -2,11 +2,10 @@
 
 <script lang="ts">
     import { onMount, onDestroy } from 'svelte';
-    import { InputDevice } from '$lib/types';
-    import { proxy, amiga, denise, keyboard, joystick1, joystick2, running } from '$lib/stores';
+    import { InputDevice, Opt } from '$lib/types';
+    import { proxy, amiga, config, denise, keyboard, joystick1, joystick2, running } from '$lib/stores';
     import { port1, port2, mouse1, mouse2, MsgShaking } from '$lib/stores';
     import { renderMode, flickerWeight } from '$lib/stores';
-    import { shaking } from '$lib/stores';
     import { VPIXELS, HPIXELS } from '$lib/constants';
     import { AMIGA_KEYS } from '$lib/constants';
     import { keyset1, keyset2 } from '$lib/stores';
@@ -587,7 +586,7 @@
         console.log('MSG_SHAKING received');
 
         // Release the mouse if configured so
-        if ($shaking) unlockMouse();
+        if ($config.getBool(Opt.SHAKING)) unlockMouse();
     }
 
     function lockChangeAlert()

@@ -3,10 +3,10 @@
     import { darkTheme, invert } from '$lib/stores';
     import { Opt, Theme, WarpMode } from "$lib/types";
 
-    let wMode: WarpMode;
-    let theme: Theme;
-    let canvasBorder: boolean;
-    let shaking: boolean;
+    let wMode: WarpMode = WarpMode.auto; // TODO: Rename to warpMode
+    let theme: Theme = Theme.default;
+    let canvasBorder = false;
+    let shaking = true;
 
     export function get(option: Opt): string
     {
@@ -20,13 +20,26 @@
             case Opt.CANVAS_BORDER:
                 return canvasBorder.toString();
             case Opt.SHAKING:
-                return [theme].toString();
+                return shaking.toString();
             default:
-                console.warn("Invalid option: ", option);
+                console.warn("get: Invalid option: ", option);
             // TODO: Throw exception
                 return "???";
         }
     }
+
+    export function getNum(option: Opt): number
+    {
+        let result = get(option);
+        return result === 'true' ? 1 : result === 'false' ? 0 : Number(result);
+    }
+
+    export function getBool(option: Opt): boolean
+    {
+        let result = get(option);
+        return result === 'true' ? true : false;
+    }
+
 
     export function set(option: Opt, val: string)
     {
@@ -45,7 +58,7 @@
                 shaking = val === 'true';
                 break;
             default:
-                console.warn("Invalid option: ", option);
+                console.warn("set: Invalid option: ", option);
             // TODO: Throw exception
         }
 
@@ -64,6 +77,8 @@
     {
         console.log("(updateWarpState", wMode);
 
+        if (!$amiga) return; // GET RID OF THIS
+
         let newWarp = false;
         switch (wMode) {
             case WarpMode.auto:
@@ -76,7 +91,6 @@
                 newWarp = true;
                 break;
         }
-        if (!$amiga) return; // GET RID OF THIS
 
         if (newWarp) {
             $amiga.warpOn();

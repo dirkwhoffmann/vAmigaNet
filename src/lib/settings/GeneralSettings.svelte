@@ -1,9 +1,10 @@
 <script lang="ts">
-    import {onMount} from 'svelte';
-    import {fade} from 'svelte/transition';
-    import {border, darkTheme, invert, theme, shaking, warpMode} from '$lib/stores';
-    import type {ActionEvent} from '$lib/types';
-    import {MenuItem, Theme} from '$lib/types';
+    import { onMount } from 'svelte';
+    import { fade } from 'svelte/transition';
+    import { Opt } from "$lib/types";
+    import { config } from '$lib/stores';
+    import type { ActionEvent } from '$lib/types';
+    import { MenuItem, Theme } from '$lib/types';
     import ConfigSection from './ConfigSection.svelte';
     import ConfigItem from '$lib/Settings/ConfigItem.svelte';
 
@@ -17,79 +18,27 @@
 
     function warpAction(event: CustomEvent<ActionEvent>)
     {
-        console.log('warpAction');
-
-        $warpMode = event.detail.value;
-        update();
+        console.log('warpAction', event.detail.value);
+        $config.set(Opt.WARP_MODE, event.detail.value);
     }
 
     function themeAction(event: CustomEvent<ActionEvent>)
     {
-        console.log('themeAction', $theme, event.detail.value);
-        $theme = event.detail.value;
-        let newTheme = '';
-        switch ($theme) {
-            case Theme.default:
-                newTheme = 'mytheme';
-                $darkTheme = true;
-                $invert = 'invert';
-                break;
-            case Theme.light:
-                newTheme = 'light';
-                $darkTheme = true;
-                $invert = 'invert';
-                break;
-            case Theme.dark:
-                newTheme = 'dark';
-                $darkTheme = true;
-                $invert = 'invert';
-                break;
-            case Theme.coffee:
-                newTheme = 'coffee';
-                $darkTheme = false;
-                $invert = '';
-                break;
-            case Theme.cupcake:
-                newTheme = 'cupcake';
-                $darkTheme = false;
-                $invert = '';
-                break;
-            case Theme.forest:
-                newTheme = 'forest';
-                $darkTheme = true;
-                $invert = 'invert';
-                break;
-            case Theme.aqua:
-                newTheme = 'aqua';
-                $darkTheme = false;
-                $invert = '';
-                break;
-            case Theme.garden:
-                newTheme = 'garden';
-                $darkTheme = true;
-                $invert = 'invert';
-                break;
-            case Theme.pastel:
-                newTheme = 'pastel';
-                $darkTheme = false;
-                $invert = '';
-                break;
-        }
-        document.querySelector('html')!.setAttribute('data-theme', newTheme);
+        console.log('themeAction', event.detail.value);
+        $config.set(Opt.THEME, event.detail.value);
         update();
     }
 
     function borderAction(event: CustomEvent<ActionEvent>)
     {
-        console.log('borderAction');
-        $border = event.detail.value;
+        $config.set(Opt.CANVAS_BORDER, event.detail.value == 1 ? 'true' : 'false');
         update();
     }
 
     function shakingAction(event: CustomEvent<ActionEvent>)
     {
         console.log('shakingAction');
-        $shaking = event.detail.value;
+        $config.set(Opt.SHAKING, event.detail.value == 1 ? 'true' : 'false');
         update();
     }
 </script>
@@ -98,7 +47,7 @@
     <ConfigSection name="Warp mode">
         <ConfigItem
                 name="Enable warp mode"
-                selectedTag={$warpMode}
+                selectedTag={$config.getNum(Opt.WARP_MODE)}
                 on:select={warpAction}
                 items={[
 				new MenuItem('During Disk Accesses', 0),
@@ -110,7 +59,7 @@
     <ConfigSection name="Appearance">
         <ConfigItem
                 name="Color theme"
-                selectedTag={$theme}
+                selectedTag={$config.getNum(Opt.THEME)}
                 on:select={themeAction}
                 items={[
 				new MenuItem('Default', Theme.default),
@@ -126,7 +75,7 @@
         />
         <ConfigItem
                 name="Draw Canvas Border"
-                selectedTag={$border}
+                selectedTag={$config.getNum(Opt.CANVAS_BORDER)}
                 on:select={borderAction}
                 items={[new MenuItem('Yes', 1), new MenuItem('No', 0)]}
         />
@@ -134,7 +83,7 @@
     <ConfigSection name="Peripherals">
         <ConfigItem
                 name="Release Mouse by Shaking"
-                selectedTag={$shaking}
+                selectedTag={$config.getNum(Opt.SHAKING)}
                 on:select={shakingAction}
                 items={[new MenuItem('Yes', 1), new MenuItem('No', 0)]}
         />

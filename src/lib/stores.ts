@@ -33,8 +33,6 @@ export const invert = writable('invert');
 export const renderMode = writable(RenderMode.smooth);
 export const flickerWeight = writable(50);
 export const texSampler = writable(1);
-export const border = writable(0);
-export const shaking = writable(1);
 
 // Control ports (connected devices)
 export const port1 = writable(1);

@@ -1,9 +1,13 @@
 <script lang="ts">
-	import StatusIcon from './StatusIcon.svelte';
-	import { proxy, amiga, cpu, agnus, warp, warpMode } from '$lib/stores';
+    import { Opt } from "$lib/types";
+    import StatusIcon from './StatusIcon.svelte';
+	import { proxy, amiga, config, cpu, agnus, warp } from '$lib/stores';
 
     function iconUrl(warpMode: number, warp: boolean) {
-		switch (warpMode) {
+
+        console.log("iconURL = ", warpMode);
+
+        switch (warpMode) {
 			case 0: // Auto
 				return warp ? 'icons/warp-auto-on.png' : 'icons/warp-auto-off.png';
 			case 1: // Off
@@ -14,11 +18,12 @@
 				return '';
 		}
 	}
-    $: src = iconUrl($warpMode, $warp);
+    $: src = iconUrl(Number($config.get(Opt.WARP_MODE)), $warp);
 
 	function action(e: MouseEvent) {
 		e.preventDefault();
-        $warpMode = ($warpMode + 1) % 3; 
+        let current = $config.get(Opt.WARP_MODE);
+        $config.set(Opt.WARP_MODE, (current + 1) % 3);
 	}
 </script>
 
