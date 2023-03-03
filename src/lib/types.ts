@@ -4,11 +4,43 @@
 
 export enum Opt
 {
+
+	//
 	// General options
+	//
+
 	WARP_MODE,
 	THEME ,
 	CANVAS_BORDER ,
 	SHAKING,
+
+	//
+	// Machine settings
+	//
+
+	CPU_REVISION,
+	CPU_SPEED,
+	AGNUS_REVISION,
+	DENISE_REVISION,
+	RTC_MODEL,
+	CHIP_RAM,
+	SLOW_RAM,
+	FAST_RAM,
+	BANK_MAP,
+	INIT_PATTERN,
+	UNMAPPED,
+	SLOW_RAM_MIRROR,
+	SLOW_RAM_DELAY,
+	DF0,
+	DF1,
+	DF2,
+	DF3,
+	HD0,
+
+	//
+	// Video settings
+	//
+
 	RENDER_MODE,
 	FLICKER_WEIGHT,
 	PALETTE,

@@ -11,15 +11,22 @@
 
     // Video settings
     let renderMode = RenderMode.smooth;
+    /*
     let palette = 0;
     let brightness = 0;
     let contrast = 0;
     let saturation = 0;
+    */
     let flickerWeight = 50;
 
     export function get(option: Opt): string
     {
         switch (option) {
+
+            //
+            // General settings
+            //
+
             case Opt.WARP_MODE:
                 return [wMode].toString();
             case Opt.THEME:
@@ -28,6 +35,53 @@
                 return canvasBorder.toString();
             case Opt.SHAKING:
                 return shaking.toString();
+
+            //
+            // Machine settings
+            //
+
+            case Opt.CPU_REVISION:
+                return $amiga.getConfig($proxy.OPT_CPU_REVISION).toString();
+            case Opt.CPU_SPEED:
+                return $amiga.getConfig($proxy.OPT_CPU_OVERCLOCKING).toString();
+            case Opt.AGNUS_REVISION:
+                return $amiga.getConfig($proxy.OPT_AGNUS_REVISION).toString();
+            case Opt.DENISE_REVISION:
+                return $amiga.getConfig($proxy.OPT_DENISE_REVISION).toString();
+            case Opt.RTC_MODEL:
+                return $amiga.getConfig($proxy.OPT_RTC_MODEL).toString();
+            case Opt.CHIP_RAM:
+                return $amiga.getConfig($proxy.OPT_CHIP_RAM).toString();
+            case Opt.SLOW_RAM:
+                return $amiga.getConfig($proxy.OPT_SLOW_RAM).toString();
+            case Opt.FAST_RAM:
+                return $amiga.getConfig($proxy.OPT_FAST_RAM).toString();
+            case Opt.BANK_MAP:
+                return $amiga.getConfig($proxy.OPT_BANKMAP).toString();
+            case Opt.INIT_PATTERN:
+                return $amiga.getConfig($proxy.OPT_RAM_INIT_PATTERN).toString();
+            case Opt.UNMAPPED:
+                return $amiga.getConfig($proxy.OPT_UNMAPPING_TYPE).toString();
+            case Opt.SLOW_RAM_MIRROR:
+                return $amiga.getConfig($proxy.OPT_SLOW_RAM_MIRROR).toString();
+            case Opt.SLOW_RAM_DELAY:
+                return $amiga.getConfig($proxy.OPT_SLOW_RAM_DELAY).toString();
+            case Opt.DF0:
+                return $amiga.getDriveConfig($proxy.OPT_DRIVE_CONNECT, 0).toString();
+            case Opt.DF1:
+                return $amiga.getDriveConfig($proxy.OPT_DRIVE_CONNECT, 1).toString();
+            case Opt.DF2:
+                return $amiga.getDriveConfig($proxy.OPT_DRIVE_CONNECT, 2).toString();
+            case Opt.DF3:
+                return $amiga.getDriveConfig($proxy.OPT_DRIVE_CONNECT, 3).toString();
+            case Opt.HD0:
+                // TODO
+                return 'TODO';
+
+            //
+            // Video settings
+            //
+
             case Opt.RENDER_MODE:
                 return renderMode.toString();
             case Opt.PALETTE:
@@ -55,8 +109,7 @@
 
     export function getBool(option: Opt): boolean
     {
-        let result = get(option);
-        return result === 'true' ? true : false;
+        return getNum(option) != 0;
     }
 
 
@@ -64,6 +117,11 @@
     {
         console.log("In set", option, val);
         switch (option) {
+
+            //
+            // General settings
+            //
+
             case Opt.WARP_MODE:
                 setWarp(val);
                 break;
@@ -76,6 +134,76 @@
             case Opt.SHAKING:
                 shaking = val === 'true';
                 break;
+
+                //
+                // Machine settings
+                //
+
+            case Opt.CPU_REVISION:
+                $amiga.configure($proxy.OPT_CPU_REVISION, Number(val));
+                break;
+            case Opt.CPU_SPEED:
+                $amiga.configure($proxy.OPT_CPU_OVERCLOCKING, Number(val));
+                break;
+            case Opt.AGNUS_REVISION:
+                $amiga.configure($proxy.OPT_AGNUS_REVISION, Number(val));
+                break;
+            case Opt.DENISE_REVISION:
+                $amiga.configure($proxy.OPT_DENISE_REVISION, Number(val));
+                break;
+            case Opt.RTC_MODEL:
+                $amiga.configure($proxy.OPT_RTC_MODEL, Number(val));
+                break;
+            case Opt.CHIP_RAM:
+                $amiga.configure($proxy.OPT_CHIP_RAM, Number(val));
+                break;
+            case Opt.SLOW_RAM:
+                $amiga.configure($proxy.OPT_SLOW_RAM, Number(val));
+                break;
+            case Opt.FAST_RAM:
+                $amiga.configure($proxy.OPT_FAST_RAM, Number(val));
+                break;
+            case Opt.BANK_MAP:
+                $amiga.configure($proxy.OPT_BANKMAP, Number(val));
+                break;
+            case Opt.INIT_PATTERN:
+                $amiga.configure($proxy.OPT_RAM_INIT_PATTERN, Number(val));
+                break;
+            case Opt.UNMAPPED:
+                $amiga.configure($proxy.OPT_UNMAPPING_TYPE, Number(val));
+                break;
+            case Opt.SLOW_RAM_MIRROR:
+                $amiga.configure($proxy.OPT_SLOW_RAM_MIRROR, Number(val));
+                break;
+            case Opt.SLOW_RAM_DELAY:
+                $amiga.configure($proxy.OPT_SLOW_RAM_DELAY, Number(val));
+                break;
+            case Opt.DF0:
+                break;
+            case Opt.DF1:
+                $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 1, val);
+                if (val == 0) $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 2, 0);
+                if (val == 0) $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 3, 0);
+                break;
+            case Opt.DF2:
+                if (val == 1) $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 1, 1);
+                $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 2, val);
+                if (val == 0) $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 3, 0);
+                break;
+            case Opt.DF3:
+                if (val == 0) $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 1, 0);
+                if (val == 0) $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 2, 0);
+                $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 3, val);
+                break;
+            case Opt.HD0:
+                // TODO
+                return 'TODO';
+
+
+                //
+                // Video settings
+                //
+
             case Opt.RENDER_MODE:
                 renderMode = Number(val);
                 break;
@@ -193,4 +321,15 @@
         document.querySelector('html').setAttribute('data-theme', newTheme);
     }
 
+    function connectDrive(nr: number, connect: boolean) {
+        if (connect) {
+            for (let i = 1; i <= nr; i++) {
+                $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, i, 1);
+            }
+        } else {
+            for (let i = nr; i <= 4; i++) {
+                $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, i, 0);
+            }
+        }
+    }
 </script>
