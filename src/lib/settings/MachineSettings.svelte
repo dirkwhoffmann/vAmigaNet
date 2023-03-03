@@ -1,130 +1,9 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import type { ActionEvent } from '$lib/types';
-	import { Opt } from "$lib/types";
+	import { fade } from 'svelte/transition';
+	import { MenuItem, Opt } from "$lib/types";
 	import ConfigSection from './ConfigSection.svelte';
 	import ConfigItem from '$lib/Settings/ConfigItem.svelte';
-	import { amiga, config, proxy } from '$lib/stores';
-	import { poweredOn, romcrc } from '$lib/stores';
-	import { fade } from 'svelte/transition';
-	import { browser } from '$app/environment';
-	import { liveQuery } from 'dexie';
-	import { db, type RomEntry } from '$lib/Db/db';
-	import { MenuItem } from '$lib/types';
-
-	let roms = liveQuery(() => (browser ? db.roms.toArray() : []));
-	$: romValues = stripNames($roms as RomEntry[]);
-	function stripNames(entries: RomEntry[]) {
-		console.log('stripRoms', entries);
-		let result = [{ name: 'None', id: 0 }];
-		if (entries) {
-			entries.forEach((rom: RomEntry) => {
-				result.push({ name: rom.title, id: rom.crc32 });
-			});
-		}
-		return result;
-	}
-
-	$: console.log('romcrc = ' + $romcrc);
-	$: console.log('rom db = ' + $roms);
-	$: console.log('romValues = ', romValues);
-	$: power = $poweredOn;
-
-	onMount(() => {
-		update();
-	});
-
-	function update() {
-	}
-
-	//
-	// Action functions
-	//
-
-	function cpuRevAction(event: CustomEvent<ActionEvent>) {
-		$config.set(Opt.CPU_REVISION, event.detail.value);
-		update();
-	}
-
-	function cpuSpeedAction(event: CustomEvent<ActionEvent>) {
-		$config.set(Opt.CPU_SPEED, event.detail.value);
-		update();
-	}
-
-	function agnusRevAction(event: CustomEvent<ActionEvent>) {
-		$config.set(Opt.AGNUS_REVISION, event.detail.value);
-		update();
-	}
-
-	function deniseRevAction(event: CustomEvent<ActionEvent>) {
-		$config.set(Opt.DENISE_REVISION, event.detail.value);
-		update();
-	}
-
-	function rtcModelAction(event: CustomEvent<ActionEvent>) {
-		$config.set(Opt.RTC_MODEL, event.detail.value);
-		update();
-	}
-
-	function chipRamAction(event: CustomEvent<ActionEvent>) {
-		$config.set(Opt.CHIP_RAM, event.detail.value);
-		update();
-	}
-
-	function slowRamAction(event: CustomEvent<ActionEvent>) {
-		$config.set(Opt.SLOW_RAM, event.detail.value);
-		update();
-	}
-
-	function fastRamAction(event: CustomEvent<ActionEvent>) {
-		$config.set(Opt.FAST_RAM, event.detail.value);
-		update();
-	}
-
-	function bankMapAction(event: CustomEvent<ActionEvent>) {
-		$config.set(Opt.BANK_MAP, event.detail.value);
-		update();
-	}
-
-	function initPatternAction(event: CustomEvent<ActionEvent>) {
-		$config.set(Opt.INIT_PATTERN, event.detail.value);
-		update();
-	}
-
-	function unmappedAction(event: CustomEvent<ActionEvent>) {
-		$config.set(Opt.UNMAPPED, event.detail.value);
-		update();
-	}
-
-	function slowRamMirrorAction(event: CustomEvent<ActionEvent>) {
-		$config.set(Opt.SLOW_RAM_MIRROR, event.detail.value);
-		update();
-	}
-
-	function slowRamDelayAction(event: CustomEvent<ActionEvent>) {
-		$config.set(Opt.SLOW_RAM_DELAY, event.detail.value);
-		update();
-	}
-
-	function df0Action(event: CustomEvent<ActionEvent>) {
-		$config.set(Opt.DF0, event.detail.value);
-		update();
-	}
-
-	function df1Action(event: CustomEvent<ActionEvent>) {
-		$config.set(Opt.DF1, event.detail.value);
-		update();
-	}
-
-	function df2Action(event: CustomEvent<ActionEvent>) {
-		$config.set(Opt.DF2, event.detail.value);
-		update();
-	}
-
-	function df3Action(event: CustomEvent<ActionEvent>) {
-		$config.set(Opt.DF3, event.detail.value);
-		update();
-	}
+	import { config, poweredOn, proxy } from '$lib/stores';
 </script>
 
 <div in:fade>
@@ -165,7 +44,7 @@
 			]}
 			selectedTag={$config.get(Opt.AGNUS_REVISION)}
 			on:select={(e) => $config.set(Opt.AGNUS_REVISION, e.detail.value)}
-			locked={power}
+			locked={$poweredOn}
 		/>
 		<ConfigItem
 			name="Denise Revision"
@@ -175,7 +54,7 @@
 			]}
 			selectedTag={$config.get(Opt.DENISE_REVISION)}
 			on:select={(e) => $config.set(Opt.DENISE_REVISION, e.detail.value)}
-			locked={power}
+			locked={$poweredOn}
 		/>
 		<ConfigItem
 			name="Real-time Clock"
@@ -186,7 +65,7 @@
 			]}
 			selectedTag={$config.get(Opt.RTC_MODEL)}
 			on:select={(e) => $config.set(Opt.RTC_MODEL, e.detail.value)}
-			locked={power}
+			locked={$poweredOn}
 		/>
 	</ConfigSection>
 	<ConfigSection name="Memory">
@@ -200,7 +79,7 @@
 			]}
 			selectedTag={$config.get(Opt.CHIP_RAM)}
 			on:select={(e) => $config.set(Opt.CHIP_RAM, e.detail.value)}
-			locked={power}
+			locked={$poweredOn}
 		/>
 		<ConfigItem
 			name="Slow RAM"
@@ -212,7 +91,7 @@
 			]}
 			selectedTag={$config.get(Opt.SLOW_RAM)}
 			on:select={(e) => $config.set(Opt.SLOW_RAM, e.detail.value)}
-			locked={power}
+			locked={$poweredOn}
 		/>
 		<ConfigItem
 			name="Fast RAM"
@@ -229,7 +108,7 @@
 			]}
 			selectedTag={$config.get(Opt.FAST_RAM)}
 			on:select={(e) => $config.set(Opt.FAST_RAM, e.detail.value)}
-			locked={power}
+			locked={$poweredOn}
 		/>
 		<ConfigItem
 			name="Memory Layout"
@@ -300,7 +179,7 @@
 			tag={1}
 			selectedTag={$config.get(Opt.DF1)}
 			on:select={(e) => $config.set(Opt.DF1, e.detail.value)}
-			locked={power}
+			locked={$poweredOn}
 		/>
 		<ConfigItem
 			name="DF2"
@@ -311,7 +190,7 @@
 			tag={2}
 			selectedTag={$config.get(Opt.DF2)}
 			on:select={(e) => $config.set(Opt.DF2, e.detail.value)}
-			locked={power || !$config.getBool(Opt.DF1) }
+			locked={$poweredOn || !$config.getBool(Opt.DF1) }
 		/>
 		<ConfigItem
 			name="DF3"
@@ -322,7 +201,7 @@
 			tag={3}
 			selectedTag={$config.get(Opt.DF3)}
 			on:select={(e) => $config.set(Opt.DF3, e.detail.value)}
-			locked={power || !$config.getBool(Opt.DF2) }
+			locked={$poweredOn || !$config.getBool(Opt.DF2) }
 		/>
 	</ConfigSection>
 </div>
