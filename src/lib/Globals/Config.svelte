@@ -6,17 +6,11 @@
     // General settings
     let wMode: WarpMode = WarpMode.auto; // TODO: Rename to warpMode
     let theme: Theme = Theme.default;
-    let canvasBorder = false;
-    let shaking = true;
+    let canvasBorder = 0;
+    let shaking = 1;
 
     // Video settings
     let renderMode = RenderMode.smooth;
-    /*
-    let palette = 0;
-    let brightness = 0;
-    let contrast = 0;
-    let saturation = 0;
-    */
     let flickerWeight = 50;
 
     export function get(option: Opt): string
@@ -137,7 +131,6 @@
         return getNum(option) != 0;
     }
 
-
     export function set(option: Opt, val: string)
     {
         console.log("In set", option, val);
@@ -151,13 +144,13 @@
                 setWarp(val);
                 break;
             case Opt.THEME:
-                setTheme(val);
+                setTheme(Number(val));
                 break;
             case Opt.CANVAS_BORDER:
-                canvasBorder = val === 'true';
+                canvasBorder = val;
                 break;
             case Opt.SHAKING:
-                shaking = val === 'true';
+                shaking = val;
                 break;
 
             //
@@ -290,6 +283,17 @@
         $config = $config;
     }
 
+    export function setNum(option: Opt, val: number)
+    {
+        console.log("setNum: ", val, val.toString());
+        set(option, val.toString());
+    }
+
+    export function setBool(option: Opt, val: boolean)
+    {
+        set(option, val ? 'true' : 'false');
+    }
+
     function setWarp(val: string)
     {
         console.log("setWarp", val);
@@ -323,7 +327,7 @@
         }
     }
 
-    function setTheme(val: string)
+    function setTheme(val: Theme)
     {
         console.log('setTheme', val);
         theme = val;
@@ -374,6 +378,8 @@
                 $darkTheme = false;
                 $invert = '';
                 break;
+            default:
+                console.log("Invalid theme");
         }
 
         // Apply new scheme
