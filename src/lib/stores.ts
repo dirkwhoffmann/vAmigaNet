@@ -23,16 +23,15 @@ export const retroShell: any = writable();
 
 // Global components
 export const audio: any = writable();
+export const config: any = writable();
 
 // Theming
-export const theme = writable(Theme.default);
 export const darkTheme = writable(true);
 export const invert = writable('invert');
 
 // Settings (move to settings store?!)
 export const renderMode = writable(RenderMode.smooth);
 export const flickerWeight = writable(50);
-export const warpMode = writable(WarpMode.auto);
 export const texSampler = writable(1);
 export const border = writable(0);
 export const shaking = writable(1);

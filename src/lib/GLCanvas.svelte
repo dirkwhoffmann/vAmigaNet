@@ -1,13 +1,13 @@
 <svelte:options accessors={true}/>
 
 <script lang="ts">
+    import { onMount, onDestroy } from 'svelte';
     import { InputDevice } from '$lib/types';
     import { proxy, amiga, denise, keyboard, joystick1, joystick2, running } from '$lib/stores';
     import { port1, port2, mouse1, mouse2, MsgShaking } from '$lib/stores';
     import { renderMode, flickerWeight } from '$lib/stores';
     import { shaking } from '$lib/stores';
     import { VPIXELS, HPIXELS } from '$lib/constants';
-    import { onMount, onDestroy } from 'svelte';
     import { AMIGA_KEYS } from '$lib/constants';
     import { keyset1, keyset2 } from '$lib/stores';
     import { RenderMode } from './types';

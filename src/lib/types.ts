@@ -2,6 +2,15 @@
 // Enums
 //
 
+export enum Opt
+{
+	// General options
+	WARP_MODE,
+	THEME ,
+	CANVAS_BORDER ,
+	SHAKING
+}
+
 export enum InputDevice {
 	none,
 	mouse,

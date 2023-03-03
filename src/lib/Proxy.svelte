@@ -5,7 +5,8 @@
 	import type { DataBaseItem } from '$lib/types';
 	import { onMount } from 'svelte';
 	import { WarpMode } from '$lib/types';
-	import {
+    import { config } from "$lib/stores";
+    import {
 		proxy,
 		audio,
 		agnus,
@@ -107,7 +108,6 @@
 		initialized,
 		poweredOn,
 		running,
-		warpMode,
 		warp,
 		muted,
 		halted,
@@ -126,6 +126,7 @@
 	import { debugDma, keyset1, keyset2 } from '$lib/stores';
 	import { db, type RomEntry } from '$lib/Db/db';
 	import { AMIGA_KEYS } from './constants';
+    import { Opt } from "./types";
 
 	onMount(() => {
 		console.log('Proxy: onMount()');
@@ -152,7 +153,7 @@
 				await insert(showcase.adf[i], i);
 			}
 			console.log('Configuring warp mode: ' + showcase.warp);
-			$warpMode = showcase.warp;
+			$config.set(Opt.WARP_MODE, showcase.warp);
 
 			$amiga.run();
 
@@ -246,6 +247,7 @@
 		await installRom(CRC32.DiagROM);
 	}
 
+    /*
 	$: updateWarp($warpMode);
 	export function updateWarp(warpMode: WarpMode) {
 		if (!$amiga) return;
@@ -268,6 +270,7 @@
 			$amiga.warpOff();
 		}
 	}
+    */
 
 	export function onRuntimeInitialized() {
 		console.log('Creating proxies...');
@@ -369,9 +372,9 @@
 				$MsgStep++;
 				break;
 
-			case $proxy.MSG_RESET:
+            case $proxy.MSG_RESET:
 				$MsgReset++;
-				updateWarp($warpMode);
+                $config.updateWarpState();
 				$halted = false;
 				break;
 
@@ -550,13 +553,13 @@
 			case $proxy.MSG_DRIVE_MOTOR_ON:
 				$MsgDriveMotorOn++;
 				$dfMotor[d1] = true;
-				updateWarp($warpMode);
+                $config.updateWarpState();
 				break;
 
 			case $proxy.MSG_DRIVE_MOTOR_OFF:
 				$MsgDriveMotorOff++;
 				$dfMotor[d1] = false;
-				updateWarp($warpMode);
+                $config.updateWarpState();
 				break;
 
 			case $proxy.MSG_DRIVE_STEP:
@@ -660,7 +663,7 @@
 
 			case $proxy.MSG_SNAPSHOT_RESTORED:
 				$MsgSnapshotRestored++;
-				updateWarp($warpMode);
+                $config.updateWarpState();
 				break;
 
 			case $proxy.MSG_RECORDING_STARTED:
