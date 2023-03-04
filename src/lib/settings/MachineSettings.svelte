@@ -15,10 +15,10 @@
 			items={[
 				new MenuItem('68000', $proxy.CPU_68000),
 				new MenuItem('68010', $proxy.CPU_68010),
-				new MenuItem('68EC020', $proxy.CPU_68EC020)
+				new MenuItem('68020', $proxy.CPU_68EC020)
 			]}
-			selectedTag={$config.get(Opt.CPU_REVISION)}
-			on:select={(e) => $config.set(Opt.CPU_REVISION, e.detail.value)}
+			selectedTag={$config.getNum(Opt.CPU_REVISION)}
+			on:select={(e) => $config.setNum(Opt.CPU_REVISION, e.detail.value)}
 		/>
 		<ConfigItem
 			name="Frequency"
@@ -31,8 +31,8 @@
 				new MenuItem('42 Mhz', 6),
 				new MenuItem('84 Mhz', 12),
 			]}
-			selectedTag={$config.get(Opt.CPU_SPEED)}
-			on:select={(e) => $config.set(Opt.CPU_SPEED, e.detail.value)}
+			selectedTag={$config.getNum(Opt.CPU_SPEED)}
+			on:select={(e) => $config.setNum(Opt.CPU_SPEED, e.detail.value)}
 		/>
 	</ConfigSection>
 	<ConfigSection name="Custom Chipset">
@@ -44,8 +44,8 @@
 				new MenuItem('ECS (1MB)', $proxy.AGNUS_ECS_1MB),
 				new MenuItem('ECS (2MB)', $proxy.AGNUS_ECS_2MB)
 			]}
-			selectedTag={$config.get(Opt.AGNUS_REVISION)}
-			on:select={(e) => $config.set(Opt.AGNUS_REVISION, e.detail.value)}
+			selectedTag={$config.getNum(Opt.AGNUS_REVISION)}
+			on:select={(e) => $config.setNum(Opt.AGNUS_REVISION, e.detail.value)}
 			locked={$poweredOn}
 		/>
 		<ConfigItem
@@ -54,8 +54,8 @@
 				new MenuItem('OCS', $proxy.DENISE_OCS),
 				new MenuItem('ECS', $proxy.DENISE_ECS),
 			]}
-			selectedTag={$config.get(Opt.DENISE_REVISION)}
-			on:select={(e) => $config.set(Opt.DENISE_REVISION, e.detail.value)}
+			selectedTag={$config.getNum(Opt.DENISE_REVISION)}
+			on:select={(e) => $config.setNum(Opt.DENISE_REVISION, e.detail.value)}
 			locked={$poweredOn}
 		/>
 		<ConfigItem
@@ -65,8 +65,8 @@
 				new MenuItem('OKI', $proxy.RTC_OKI),
 				new MenuItem('RICOH', $proxy.RTC_RICOH),
 			]}
-			selectedTag={$config.get(Opt.RTC_MODEL)}
-			on:select={(e) => $config.set(Opt.RTC_MODEL, e.detail.value)}
+			selectedTag={$config.getNum(Opt.RTC_MODEL)}
+			on:select={(e) => $config.setNum(Opt.RTC_MODEL, e.detail.value)}
 			locked={$poweredOn}
 		/>
 	</ConfigSection>
@@ -79,8 +79,8 @@
 				new MenuItem('1024 KB', 1024),
 				new MenuItem('2048 KB', 2048)
 			]}
-			selectedTag={$config.get(Opt.CHIP_RAM)}
-			on:select={(e) => $config.set(Opt.CHIP_RAM, e.detail.value)}
+			selectedTag={$config.getNum(Opt.CHIP_RAM)}
+			on:select={(e) => $config.setNum(Opt.CHIP_RAM, e.detail.value)}
 			locked={$poweredOn}
 		/>
 		<ConfigItem
@@ -91,8 +91,8 @@
 				new MenuItem('1 MB', 1024),
 				new MenuItem('1.5 MB', 1536)
 			]}
-			selectedTag={$config.get(Opt.SLOW_RAM)}
-			on:select={(e) => $config.set(Opt.SLOW_RAM, e.detail.value)}
+			selectedTag={$config.getNum(Opt.SLOW_RAM)}
+			on:select={(e) => $config.setNum(Opt.SLOW_RAM, e.detail.value)}
 			locked={$poweredOn}
 		/>
 		<ConfigItem
@@ -108,8 +108,8 @@
 				new MenuItem('4 MB', 4096),
 				new MenuItem('8 MB', 8192)
 			]}
-			selectedTag={$config.get(Opt.FAST_RAM)}
-			on:select={(e) => $config.set(Opt.FAST_RAM, e.detail.value)}
+			selectedTag={$config.getNum(Opt.FAST_RAM)}
+			on:select={(e) => $config.setNum(Opt.FAST_RAM, e.detail.value)}
 			locked={$poweredOn}
 		/>
 		<ConfigItem
@@ -120,8 +120,8 @@
 				new MenuItem('Amiga 2000A', $proxy.BANK_MAP_A2000A),
 				new MenuItem('Amiga 2000B', $proxy.BANK_MAP_A2000B),
 			]}
-			selectedTag={$config.get(Opt.BANK_MAP)}
-			on:select={(e) => $config.set(Opt.BANK_MAP, e.detail.value)}
+			selectedTag={$config.getNum(Opt.BANK_MAP)}
+			on:select={(e) => $config.setNum(Opt.BANK_MAP, e.detail.value)}
 		/>
 		<ConfigItem
 			name="Memory Startup Pattern"
@@ -130,8 +130,8 @@
 				new MenuItem('All Ones', $proxy.RAM_INIT_ALL_ONES),
 				new MenuItem('Random', $proxy.RAM_INIT_RANDOMIZED)
 			]}
-			selectedTag={$config.get(Opt.INIT_PATTERN)}
-			on:select={(e) => $config.set(Opt.INIT_PATTERN, e.detail.value)}
+			selectedTag={$config.getNum(Opt.INIT_PATTERN)}
+			on:select={(e) => $config.setNum(Opt.INIT_PATTERN, e.detail.value)}
 		/>
 		<ConfigItem
 			name="Unmapped Memory Area"
@@ -140,8 +140,8 @@
 				new MenuItem('All Zeroes', $proxy.UNMAPPED_ALL_ZEROES),
 				new MenuItem('All Ones', $proxy.UNMAPPED_ALL_ONES)
 			]}
-			selectedTag={$config.get(Opt.UNMAPPED)}
-			on:select={(e) => $config.set(Opt.UNMAPPED, e.detail.value)}
+			selectedTag={$config.getNum(Opt.UNMAPPED)}
+			on:select={(e) => $config.setNum(Opt.UNMAPPED, e.detail.value)}
 		/>
 		<ConfigItem
 			name="Emulate Slow RAM Mirror"
@@ -149,8 +149,8 @@
 				new MenuItem('Yes', 1),
 				new MenuItem('No', 0)
 			]}
-			selectedTag={$config.get(Opt.SLOW_RAM_MIRROR)}
-			on:select={(e) => $config.set(Opt.SLOW_RAM_MIRROR, e.detail.value)}
+			selectedTag={$config.getNum(Opt.SLOW_RAM_MIRROR)}
+			on:select={(e) => $config.setNum(Opt.SLOW_RAM_MIRROR, e.detail.value)}
 		/>
 		<ConfigItem
 			name="Emulate Slow RAM Bus Delays"
@@ -158,8 +158,8 @@
 				new MenuItem('Yes', 1),
 				new MenuItem('No', 0)
 			]}
-			selectedTag={$config.get(Opt.SLOW_RAM_DELAY)}
-			on:select={(e) => $config.set(Opt.SLOW_RAM_DELAY, e.detail.value)}
+			selectedTag={$config.getNum(Opt.SLOW_RAM_DELAY)}
+			on:select={(e) => $config.setNum(Opt.SLOW_RAM_DELAY, e.detail.value)}
 		/>
 	</ConfigSection>
 	<ConfigSection name="Floppy Drives">
@@ -169,8 +169,8 @@
 				new MenuItem('Internal Drive', 1)
 			]}
 			tag={0}
-			selectedTag={$config.get(Opt.DF0)}
-			on:select={(e) => $config.set(Opt.DF0, e.detail.value)}
+			selectedTag={$config.getNum(Opt.DF0)}
+			on:select={(e) => $config.setNum(Opt.DF0, e.detail.value)}
 		/>
 		<ConfigItem
 			name="DF1"
@@ -179,8 +179,8 @@
 				new MenuItem('A1010', 1)
 			]}
 			tag={1}
-			selectedTag={$config.get(Opt.DF1)}
-			on:select={(e) => $config.set(Opt.DF1, e.detail.value)}
+			selectedTag={$config.getNum(Opt.DF1)}
+			on:select={(e) => $config.setNum(Opt.DF1, e.detail.value)}
 			locked={$poweredOn}
 		/>
 		<ConfigItem
@@ -190,8 +190,8 @@
 				new MenuItem('A1010', 1)
 			]}
 			tag={2}
-			selectedTag={$config.get(Opt.DF2)}
-			on:select={(e) => $config.set(Opt.DF2, e.detail.value)}
+			selectedTag={$config.getNum(Opt.DF2)}
+			on:select={(e) => $config.setNum(Opt.DF2, e.detail.value)}
 			locked={$poweredOn || !$config.getBool(Opt.DF1) }
 		/>
 		<ConfigItem
@@ -201,8 +201,8 @@
 				new MenuItem('A1010', 1)
 			]}
 			tag={3}
-			selectedTag={$config.get(Opt.DF3)}
-			on:select={(e) => $config.set(Opt.DF3, e.detail.value)}
+			selectedTag={$config.getNum(Opt.DF3)}
+			on:select={(e) => $config.setNum(Opt.DF3, e.detail.value)}
 			locked={$poweredOn || !$config.getBool(Opt.DF2) }
 		/>
 	</ConfigSection>

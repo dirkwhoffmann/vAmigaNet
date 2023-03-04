@@ -23,7 +23,7 @@
         <ConfigItem
                 name="Enable warp mode"
                 selectedTag={$config.getNum(Opt.WARP_MODE)}
-                on:select={(e) => $config.setNum(Opt.WARP_MODE, Number(e.detail.value))}
+                on:select={(e) => $config.setNum(Opt.WARP_MODE, e.detail.value)}
                 items={[
 				new MenuItem('During Disk Accesses', 0),
 				new MenuItem('Never', 1),
@@ -63,8 +63,4 @@
                 items={[new MenuItem('Yes', 1), new MenuItem('No', 0)]}
         />
     </ConfigSection>
-
-    <button class="btn btn-primary" on:click={saveAction}>Save</button>
-    <button class="btn btn-primary" on:click={resetAction}>Reset</button>
-
 </div>

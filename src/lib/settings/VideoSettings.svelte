@@ -13,12 +13,6 @@
 
     function update()
     {
-        /*
-        palette = $config.getNum(Opt.PALETTE);
-        brightness = $config.getNum(Opt.BRIGHTNESS);
-        contrast = $config.getNum(Opt.CONTRAST);
-        saturation = $config.getNum(Opt.SATURATION);
-        */
     }
 
     function renderModeAction(event: CustomEvent<ActionEvent>)

@@ -13,7 +13,7 @@
     }
 
     // General settings
-    let wMode: WarpMode = WarpMode.auto; // TODO: Rename to warpMode
+    let warpMode: WarpMode = WarpMode.auto; // TODO: Rename to warpMode
     let theme: Theme = Theme.default;
     let canvasBorder = 0;
     let shaking = 1;
@@ -42,16 +42,43 @@
 
     async function registerDefaults()
     {
-        console.log("Registering defaults...");
-        registerGeneralDefaults();
+        console.log("registerDefaults");
+
+        await registerGeneralDefaults();
+        await registerMachineDefaults();
     }
 
     async function registerGeneralDefaults()
     {
+        console.log("registerGeneralDefaults");
+
         await registerDefault(Opt.WARP_MODE, WarpMode.auto.toString());
         await registerDefault(Opt.THEME, Theme.default.toString());
         await registerDefault(Opt.CANVAS_BORDER, '1');
         await registerDefault(Opt.SHAKING, '1');
+    }
+
+    async function registerMachineDefaults()
+    {
+        console.log("registerMachineDefaults");
+
+        await registerDefault(Opt.CPU_REVISION, '0');
+        await registerDefault(Opt.CPU_SPEED, '0');
+        await registerDefault(Opt.AGNUS_REVISION, '0');
+        await registerDefault(Opt.DENISE_REVISION, '0');
+        await registerDefault(Opt.RTC_MODEL, '1');
+        await registerDefault(Opt.CHIP_RAM, '512');
+        await registerDefault(Opt.SLOW_RAM, '512');
+        await registerDefault(Opt.FAST_RAM, '0');
+        await registerDefault(Opt.BANK_MAP, '0');
+        await registerDefault(Opt.INIT_PATTERN, '0');
+        await registerDefault(Opt.UNMAPPED, '0');
+        await registerDefault(Opt.SLOW_RAM_MIRROR, '1');
+        await registerDefault(Opt.SLOW_RAM_DELAY, '1');
+        await registerDefault(Opt.DF0, '1');
+        await registerDefault(Opt.DF1, '1');
+        await registerDefault(Opt.DF2, '0');
+        await registerDefault(Opt.DF3, '0');
     }
 
     async function registerDefault(opt: Opt, value: string)
@@ -72,12 +99,16 @@
 
     async function restoreDefaults()
     {
-        console.log("Restoring defaults...");
+        console.log("restoreDefaults");
+
         restoreGeneralDefaults();
+        restoreMachineDefaults();
     }
 
     export async function restoreGeneralDefaults()
     {
+        console.log("restoreGeneralDefaults");
+
         await deleteDefault(Opt.WARP_MODE);
         await deleteDefault(Opt.THEME);
         await deleteDefault(Opt.CANVAS_BORDER);
@@ -85,6 +116,32 @@
 
         await registerGeneralDefaults();
         await loadGeneralSettings();
+    }
+
+    async function restoreMachineDefaults()
+    {
+        console.log("restoreMachineDefaults");
+
+        await deleteDefault(Opt.CPU_REVISION);
+        await deleteDefault(Opt.CPU_SPEED);
+        await deleteDefault(Opt.AGNUS_REVISION);
+        await deleteDefault(Opt.DENISE_REVISION);
+        await deleteDefault(Opt.RTC_MODEL);
+        await deleteDefault(Opt.CHIP_RAM);
+        await deleteDefault(Opt.SLOW_RAM);
+        await deleteDefault(Opt.FAST_RAM);
+        await deleteDefault(Opt.BANK_MAP);
+        await deleteDefault(Opt.INIT_PATTERN);
+        await deleteDefault(Opt.UNMAPPED);
+        await deleteDefault(Opt.SLOW_RAM_MIRROR);
+        await deleteDefault(Opt.SLOW_RAM_DELAY);
+        await deleteDefault(Opt.DF0);
+        await deleteDefault(Opt.DF1);
+        await deleteDefault(Opt.DF2);
+        await deleteDefault(Opt.DF3);
+
+        await registerMachineDefaults();
+        await loadMachineSettings();
     }
 
     async function deleteDefault(opt: Opt)
@@ -104,21 +161,47 @@
 
     async function loadSettings()
     {
-        console.log('Loading settings...');
+        console.log("loadSettings");
+
         loadGeneralSettings();
+        loadMachineSettings();
     }
 
     export async function loadGeneralSettings()
     {
+        console.log("loadGeneralSettings");
+
         await loadSetting(Opt.WARP_MODE);
         await loadSetting(Opt.THEME);
         await loadSetting(Opt.CANVAS_BORDER);
         await loadSetting(Opt.SHAKING);
     }
 
+    async function loadMachineSettings()
+    {
+        console.log("loadMachineSettings");
+
+        await loadSetting(Opt.CPU_REVISION);
+        await loadSetting(Opt.CPU_SPEED);
+        await loadSetting(Opt.AGNUS_REVISION);
+        await loadSetting(Opt.DENISE_REVISION);
+        await loadSetting(Opt.RTC_MODEL);
+        await loadSetting(Opt.CHIP_RAM);
+        await loadSetting(Opt.SLOW_RAM);
+        await loadSetting(Opt.FAST_RAM);
+        await loadSetting(Opt.BANK_MAP);
+        await loadSetting(Opt.INIT_PATTERN);
+        await loadSetting(Opt.UNMAPPED);
+        await loadSetting(Opt.SLOW_RAM_MIRROR);
+        await loadSetting(Opt.SLOW_RAM_DELAY);
+        await loadSetting(Opt.DF0);
+        await loadSetting(Opt.DF1);
+        await loadSetting(Opt.DF2);
+        await loadSetting(Opt.DF3);
+    }
+
     async function loadSetting(opt: Opt)
     {
-
         console.log("loadSetting ", opt);
 
         try {
@@ -141,21 +224,47 @@
 
     async function saveSettings()
     {
-        console.log('Saving settings...');
+        console.log('saveSettings');
+
         saveGeneralSettings();
+        saveMachineSettings();
     }
 
     export async function saveGeneralSettings()
     {
+        console.log("saveGeneralSettings");
+
         await saveSetting(Opt.WARP_MODE);
         await saveSetting(Opt.THEME);
         await saveSetting(Opt.CANVAS_BORDER);
         await saveSetting(Opt.SHAKING);
     }
 
+    async function saveMachineSettings()
+    {
+        console.log("saveMachineSettings");
+
+        await saveSetting(Opt.CPU_REVISION);
+        await saveSetting(Opt.CPU_SPEED);
+        await saveSetting(Opt.AGNUS_REVISION);
+        await saveSetting(Opt.DENISE_REVISION);
+        await saveSetting(Opt.RTC_MODEL);
+        await saveSetting(Opt.CHIP_RAM);
+        await saveSetting(Opt.SLOW_RAM);
+        await saveSetting(Opt.FAST_RAM);
+        await saveSetting(Opt.BANK_MAP);
+        await saveSetting(Opt.INIT_PATTERN);
+        await saveSetting(Opt.UNMAPPED);
+        await saveSetting(Opt.SLOW_RAM_MIRROR);
+        await saveSetting(Opt.SLOW_RAM_DELAY);
+        await saveSetting(Opt.DF0);
+        await saveSetting(Opt.DF1);
+        await saveSetting(Opt.DF2);
+        await saveSetting(Opt.DF3);
+    }
+
     async function saveSetting(opt: Opt)
     {
-
         const val = get(opt);
         console.log("saveSetting ", opt, val);
 
@@ -183,7 +292,7 @@
             //
 
             case Opt.WARP_MODE:
-                return [wMode].toString();
+                return [warpMode].toString();
             case Opt.THEME:
                 return [theme].toString();
             case Opt.CANVAS_BORDER:
@@ -466,18 +575,18 @@
     function setWarp(val: string)
     {
         console.log("setWarp", val);
-        wMode = Number(val);
+        warpMode = Number(val);
         updateWarpState();
     }
 
     export function updateWarpState()
     {
-        console.log("(updateWarpState", wMode);
+        console.log("(updateWarpState", warpMode);
 
         if (!$amiga) return; // GET RID OF THIS
 
         let newWarp = false;
-        switch (wMode) {
+        switch (warpMode) {
             case WarpMode.auto:
                 newWarp = $diskController.isSpinning();
                 break;
