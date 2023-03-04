@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { DataBaseItem } from '$lib/types';
 	import { fade } from 'svelte/transition';
+	import type { DataBaseItem } from '$lib/types';
 	import Carousel from '$lib/Showcases/Carousel.svelte';
 	import { demos, games, tools } from './database';
 	import Sedcard from './Sedcard.svelte';

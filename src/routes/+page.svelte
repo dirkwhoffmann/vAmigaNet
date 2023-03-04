@@ -226,15 +226,11 @@
         <MainScreen>
             <StatusBar bind:this={statusBar} on:push={push}/>
             <div bind:this={canvas} class="box relative grow border-none border-green-300 overflow-auto">
-                {#if !$poweredOn}
-                    <TitleScreen/>
-                {/if}
+                <TitleScreen/>
                 <Emulator bind:this={emulator}/>
                 <RetroShell/>
                 <Settings/>
-                {#if $layer == Layer.dropzone}
-                    <DropZone/>
-                {/if}
+                <DropZone/>
                 {#if $showSidebar}
                     <Sidebar on:select={sidebarAction}/>
                 {/if}
