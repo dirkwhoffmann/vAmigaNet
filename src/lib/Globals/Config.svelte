@@ -36,6 +36,21 @@
         {opt: Opt.DF3, default: '0'}
     ];
 
+    let compatibilityOpts: { opt: Opt, default: string }[] = [
+        {opt: Opt.BLIITTER_ACCURACY, default: '2'},
+        {opt: Opt.TODBUG, default: '1'},
+        {opt: Opt.PTR_DROPS, default: '1'},
+        {opt: Opt.ECLOCK_SYNCING, default: '1'},
+        {opt: Opt.DRIVE_SPEED, default: '1'},
+        {opt: Opt.DRIVE_MECHANICS, default: '1'},
+        {opt: Opt.OPT_LOCK_DSKSYNC, default: '0'},
+        {opt: Opt.OPT_AUTO_DSKSYNC, default: '0'},
+        {opt: Opt.CLX_SPR_SPR, default: '0'},
+        {opt: Opt.CLX_SPR_PLF, default: '0'},
+        {opt: Opt.CLX_PLF_PLF, default: '0'},
+        {opt: Opt.ACCURATE_KEYBOARD, default: '1'}
+    ];
+
     let audioOpts: { opt: Opt, default: string }[] = [
         {opt: Opt.AUDVOL0, default: '100'},
         {opt: Opt.AUDVOL1, default: '100'},
@@ -90,6 +105,7 @@
 
         await registerGeneralDefaults();
         await registerMachineDefaults();
+        await registerCompatibilityDefaults();
         await registerAudioDefaults();
         await registerVideoDefaults();
     }
@@ -108,6 +124,15 @@
         console.log("registerMachineDefaults");
 
         for (const it of machineOpts) {
+            await registerDefault(it.opt, it.default);
+        }
+    }
+
+    async function registerCompatibilityDefaults()
+    {
+        console.log("registerCompatibilityDefaults");
+
+        for (const it of compatibilityOpts) {
             await registerDefault(it.opt, it.default);
         }
     }
@@ -149,6 +174,7 @@
 
         restoreGeneralDefaults();
         restoreMachineDefaults();
+        restoreCompatibilityDefaults();
         restoreAudioDefaults();
         restoreVideoDefaults();
     }
@@ -170,6 +196,18 @@
         console.log("restoreMachineDefaults");
 
         for (const it of machineOpts) {
+            await deleteDefault(it.opt);
+        }
+
+        await registerMachineDefaults();
+        await loadMachineSettings();
+    }
+
+    export async function restoreCompatibilityDefaults()
+    {
+        console.log("restoreCompatibilityDefaults");
+
+        for (const it of compatibilityOpts) {
             await deleteDefault(it.opt);
         }
 
@@ -222,6 +260,7 @@
 
         loadGeneralSettings();
         loadMachineSettings();
+        loadCompatibilitySettings();
         loadAudioSettings();
         loadVideoSettings();
     }
@@ -240,6 +279,15 @@
         console.log("loadMachineSettings");
 
         for (const it of machineOpts) {
+            await loadSetting(it.opt);
+        }
+    }
+
+    export async function loadCompatibilitySettings()
+    {
+        console.log("loadCompatibilitySettings");
+
+        for (const it of compatibilityOpts) {
             await loadSetting(it.opt);
         }
     }
@@ -290,6 +338,7 @@
 
         saveGeneralSettings();
         saveMachineSettings();
+        saveCompatibilitySettings();
         saveAudioSettings();
         saveVideoSettings();
     }
@@ -308,6 +357,15 @@
         console.log("saveMachineSettings");
 
         for (const it of machineOpts) {
+            await saveSetting(it.opt);
+        }
+    }
+
+    export async function saveCompatibilitySettings()
+    {
+        console.log("saveCompatibilitySettings");
+
+        for (const it of compatibilityOpts) {
             await saveSetting(it.opt);
         }
     }
@@ -540,18 +598,21 @@
             case Opt.DF0:
                 break;
             case Opt.DF1:
+                console.log("SET OPT_DF1", val);
                 $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 1, val);
                 if (val == 0) $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 2, 0);
                 if (val == 0) $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 3, 0);
                 break;
             case Opt.DF2:
+                console.log("SET OPT_DF2", val);
                 if (val == 1) $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 1, 1);
                 $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 2, val);
                 if (val == 0) $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 3, 0);
                 break;
             case Opt.DF3:
-                if (val == 0) $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 1, 0);
-                if (val == 0) $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 2, 0);
+                console.log("SET OPT_DF3", val);
+                if (val == 1) $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 1, 1);
+                if (val == 1) $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 2, 1);
                 $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 3, val);
                 break;
             case Opt.HD0:

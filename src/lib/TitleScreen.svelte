@@ -98,7 +98,7 @@
                                     <div class="font-sofia-extra text-7xl mr-2">vAmiga</div>
                                     <div class="font-sofia-extra text-7xl opacity-75">Online</div>
                                 </div>
-                                <div class="font-sofia-semi text-xl pl-2 pb-10">Version 0.2</div>
+                                <div class="font-sofia-semi text-xl pl-2 pb-10">Version 0.3</div>
                                 <div class="flex space-x-5">
                                     <button class="btn btn-primary" on:click={switchOn}>Power On</button>
                                     <button class="btn btn-primary" on:click={runDemo}>Run Demo</button>
