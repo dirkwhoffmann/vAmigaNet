@@ -230,12 +230,8 @@
                     <TitleScreen/>
                 {/if}
                 <Emulator bind:this={emulator}/>
-                {#if $layer == Layer.shell}
-                    <RetroShell/>
-                {/if}
-                {#if $layer == Layer.settings}
-                    <Settings/>
-                {/if}
+                <RetroShell/>
+                <Settings/>
                 {#if $layer == Layer.dropzone}
                     <DropZone/>
                 {/if}

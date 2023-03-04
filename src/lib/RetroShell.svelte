@@ -1,111 +1,114 @@
 <script lang="ts">
-	import { proxy, amiga, retroShell } from '$lib/stores';
-	import { MsgCloseConsole, MsgUpdateConsole } from '$lib/stores';
-	import { MsgScriptDone, MsgScriptPause, MsgScriptAbort, MsgScriptWakeup } from '$lib/stores';
-	import { onMount } from 'svelte';
-	import { fade } from 'svelte/transition';
+    import { onMount } from 'svelte';
+    import { fade } from 'svelte/transition';
+    import { Layer } from "$lib/types";
+    import { layer } from "$lib/stores";
+    import { retroShell } from '$lib/stores';
+    import { MsgCloseConsole, MsgUpdateConsole } from '$lib/stores';
+    import { MsgScriptDone, MsgScriptPause, MsgScriptAbort, MsgScriptWakeup } from '$lib/stores';
 
-	let ready = false;
+    // Textual contents of the console window
+    let value = '';
 
-	// Console contents
-	let value = '';
+    // Bindings
+    let textarea: HTMLTextAreaElement | null = null;
 
-	let textarea: HTMLTextAreaElement;
+    // Message handlers
+    $: if ($MsgCloseConsole) {
+        $layer = Layer.none;
+    }
+    $: if ($MsgUpdateConsole) {
+        let rel = $retroShell.getCursorRel();
+        if (textarea != null) {
+            textarea.value = $retroShell.getText();
+            textarea.focus();
+            textarea.setSelectionRange(textarea.value.length + rel - 1, textarea.value.length + rel);
+            textarea.scrollTop = textarea.scrollHeight;
+        }
+    }
+    $: if ($MsgScriptDone) {
+        console.log('MsgScriptDone');
+    }
+    $: if ($MsgScriptPause) {
+        console.log('MsgScriptPause');
+    }
+    $: if ($MsgScriptAbort) {
+        console.log('MsgScriptAbort');
+    }
+    $: if ($MsgScriptWakeup) {
+        console.log('MsgScriptWakeup');
+    }
 
-	// Message handlers
-	$: if ($MsgUpdateConsole && ready) {
-		console.log('MsgUpdateConsole');
-		let rel = $retroShell.getCursorRel();
-		textarea.value = $retroShell.getText();
-		textarea.focus();
-		textarea.setSelectionRange(textarea.value.length + rel - 1, textarea.value.length + rel);
-		textarea.scrollTop = textarea.scrollHeight;
-	}
-	$: if ($MsgScriptDone && ready) {
-		console.log('MsgScriptDone');
-	}
-	$: if ($MsgScriptPause && ready) {
-		console.log('MsgScriptPause');
-	}
-	$: if ($MsgScriptAbort && ready) {
-		console.log('MsgScriptAbort');
-	}
-	$: if ($MsgScriptWakeup && ready) {
-		console.log('MsgScriptWakeup');
-	}
+    function onKeyDown(e: KeyboardEvent)
+    {
+        e.preventDefault();
 
-	onMount(() => {
-		console.log('RetroShell: onMount');
-		ready = true;
-	});
+        if (e.ctrlKey) {
+            switch (e.key) {
+                case 'k':
+                    $retroShell.pressCut();
+                    break;
 
-	function onKeyDown(e: KeyboardEvent) {
-		e.preventDefault();
+                case 'a':
+                    $retroShell.pressHome();
+                    break;
 
-		if (e.ctrlKey) {
-			switch (e.key) {
-				case 'k':
-					$retroShell.pressCut();
-					break;
+                default:
+                    break;
+            }
+            return;
+        }
 
-				case 'a':
-					$retroShell.pressHome();
-					break;
-
-				default:
-					break;
-			}
-			return;
-		}
-
-		switch (e.key) {
-			case 'ArrowUp':
-				$retroShell.pressUp();
-				break;
-			case 'ArrowDown':
-				$retroShell.pressDown();
-				break;
-			case 'ArrowLeft':
-				$retroShell.pressLeft();
-				break;
-			case 'ArrowRight':
-				$retroShell.pressRight();
-				break;
-			case 'Home':
-				$retroShell.pressHome();
-				break;
-			case 'End':
-				$retroShell.pressEnd();
-				break;
-			case 'Backspace':
-				$retroShell.pressBackspace();
-				break;
-			case 'Delete':
-				$retroShell.pressDelete();
-				break;
-			case 'Enter':
-				e.shiftKey ? $retroShell.pressShiftReturn() : $retroShell.pressReturn();
-				break;
-			case 'Tab':
-				$retroShell.pressTab();
-				break;
-			default:
-				if (e.key.length == 1) {
-					$retroShell.pressKey(e.key.charCodeAt(0));
-				}
-		}
-	}
+        switch (e.key) {
+            case 'ArrowUp':
+                $retroShell.pressUp();
+                break;
+            case 'ArrowDown':
+                $retroShell.pressDown();
+                break;
+            case 'ArrowLeft':
+                $retroShell.pressLeft();
+                break;
+            case 'ArrowRight':
+                $retroShell.pressRight();
+                break;
+            case 'Home':
+                $retroShell.pressHome();
+                break;
+            case 'End':
+                $retroShell.pressEnd();
+                break;
+            case 'Backspace':
+                $retroShell.pressBackspace();
+                break;
+            case 'Delete':
+                $retroShell.pressDelete();
+                break;
+            case 'Enter':
+                e.shiftKey ? $retroShell.pressShiftReturn() : $retroShell.pressReturn();
+                break;
+            case 'Tab':
+                $retroShell.pressTab();
+                break;
+            default:
+                if (e.key.length == 1) {
+                    $retroShell.pressKey(e.key.charCodeAt(0));
+                }
+        }
+    }
 </script>
 
-<div class="absolute top-0 left-0 w-full h-full flex overflow-auto" transition:fade>
-	<div class="w-16 mr-1"></div>
-	<div class="bg-gray-500/75 grow h-full overflow-auto">
+{#if $layer == Layer.shell}
+    <div class="absolute top-0 left-0 w-full h-full flex overflow-auto" transition:fade>
+        <div class="w-16 mr-1"></div>
+        <div class="bg-gray-500/75 grow h-full overflow-auto">
 		<textarea
-			bind:this={textarea}
-			readonly
-			style="resize: none; font-variant-ligatures: none"
-			class="font-azeret text-base focus:border-transparent focus:outline-none focus:ring-0 text-white bg-transparent w-full h-full p-2"
-			on:keydown={onKeyDown}
-		/>
-	</div>
-</div>
+                bind:this={textarea}
+                readonly
+                style="resize: none; font-variant-ligatures: none"
+                class="font-azeret text-base focus:border-transparent focus:outline-none focus:ring-0 text-white bg-transparent w-full h-full p-2"
+                on:keydown={onKeyDown}
+        />
+        </div>
+    </div>
+{/if}
