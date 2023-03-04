@@ -1,6 +1,5 @@
 <script lang="ts">
     import { fade } from 'svelte/transition';
-    import { Opt } from "$lib/types";
     import { config } from "$lib/stores";
     import ConfigCategory from '$lib/Settings/ConfigCategory.svelte';
     import GeneralSettings from '$lib/Settings/GeneralSettings.svelte';
@@ -10,6 +9,7 @@
 
     let active = 'GENERAL';
 
+    $: console.log("active = ", active);
     function saveAction()
     {
         switch (active) {
@@ -65,7 +65,8 @@
                 </div>
                 <div class="flex justify-between mb-6 border-0 w-[18rem]">
                     <button class="btn btn-outline text-2xl font-normal w-[8.5rem]" on:click={saveAction}>Save</button>
-                    <button class="btn btn-outline text-2xl font-normal w-[8.5rem]" on:click={resetAction}>Defaults</button>
+                    <button class="btn btn-outline text-2xl font-normal w-[8.5rem]" on:click={resetAction}>Defaults
+                    </button>
                 </div>
             </div>
         </div>

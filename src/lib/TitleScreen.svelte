@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { Layer } from '$lib/types';
-	import { audio, amiga, layer, showSidebar } from '$lib/stores';
-	import FaGithub from 'svelte-icons/fa/FaGithub.svelte';
-	import MainPageLink from '$lib/Widgets/MainPageLink.svelte';
-	import DiGrails from 'svelte-icons/di/DiGrails.svelte';
-	import GoLaw from 'svelte-icons/go/GoLaw.svelte';
-	import FaMicrochip from 'svelte-icons/fa/FaMicrochip.svelte';
 	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
+	import DiGrails from 'svelte-icons/di/DiGrails.svelte';
+	import FaGithub from 'svelte-icons/fa/FaGithub.svelte';
+	import FaMicrochip from 'svelte-icons/fa/FaMicrochip.svelte';
+	import GoLaw from 'svelte-icons/go/GoLaw.svelte';
+	import { Layer } from '$lib/types';
+	import MainPageLink from '$lib/Widgets/MainPageLink.svelte';
 	import Impressum from '$lib/Impressum.svelte';
 	import RomViewer from '$lib/RomViewer.svelte';
 	import Showcases from '$lib/Showcases/Showcases.svelte';
+	import { audio, amiga, layer, showSidebar } from '$lib/stores';
 
 	let debug = ''; // 'border-2';
 	let showRomViewer = false;
@@ -98,16 +98,6 @@
 					</div>
 				</div>
 			</div>
-			<!--
-			<div class="relative {debug} w-2/3 mt-5">
-				<p class="font-josefin text-error text-center">
-					This page is under construction and offers very little functionality, yet. I.e., it is
-					only possible to launch vAmiga with a number of preset demos. You'll find a suitable
-					selection in the Showcases section. The site is intended as a feature preview to gather
-					feedback from the user base.
-				</p>
-			</div>
-			-->
 			{/if}
 		</div>
 	{/if}
