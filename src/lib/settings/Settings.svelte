@@ -71,7 +71,7 @@
                     <div class="flex justify-between mb-6 border-0 w-[18rem]">
                         <button class="btn btn-outline text-2xl font-normal w-[8.5rem]" on:click={saveAction}>Save
                         </button>
-                        <button class="btn btn-outline text-2xl font-normal w-[8.5rem]" on:click={resetAction}>Defaults
+                        <button class="btn btn-outline text-2xl font-normal w-[8.5rem]" on:click={resetAction}>Reset
                         </button>
                     </div>
                 </div>

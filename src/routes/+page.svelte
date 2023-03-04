@@ -231,9 +231,7 @@
                 <RetroShell/>
                 <Settings/>
                 <DropZone/>
-                {#if $showSidebar}
-                    <Sidebar on:select={sidebarAction}/>
-                {/if}
+                <Sidebar on:select={sidebarAction}/>
             </div>
         </MainScreen>
     {/if}

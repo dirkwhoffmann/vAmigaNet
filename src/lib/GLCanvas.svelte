@@ -193,9 +193,6 @@
         tBuffer = createBuffer(tCoords);
         setAttribute(mainShaderProgram, 'aTextureCoord');
 
-        // Flip y axis to get the image right
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-
         // Create textures
         lfTexture = createTexture(HPIXELS, VPIXELS);
         sfTexture = createTexture(HPIXELS, VPIXELS);
@@ -208,7 +205,7 @@
 
     function updateTextureRect(x1: number, y1: number, x2: number, y2: number)
     {
-        const array = new Float32Array([x1, 1.0 - y1, x2, 1.0 - y1, x1, 1.0 - y2, x2, 1.0 - y2]);
+        const array = new Float32Array([x1, y1, x2, y1, x1, y2, x2, y2]);
         gl.bindBuffer(gl.ARRAY_BUFFER, tBuffer);
         gl.bufferSubData(gl.ARRAY_BUFFER, 0, array);
     }
