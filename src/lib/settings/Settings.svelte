@@ -20,10 +20,10 @@
                 $config.saveMachineSettings();
                 break;
             case 'AUDIO':
-                console.log("TODO");
+                $config.saveAudioSettings();
                 break;
             case 'VIDEO':
-                console.log("TODO");
+                $config.saveVideoSettings();
                 break;
         }
     }
@@ -38,10 +38,10 @@
                 $config.restoreMachineDefaults();
                 break;
             case 'AUDIO':
-                console.log("TODO");
+                $config.restoreAudioDefaults();
                 break;
             case 'VIDEO':
-                console.log("TODO");
+                $config.restoreVideoDefaults();
                 break;
         }
     }
@@ -53,7 +53,9 @@
     <div class="w-16 mr-1"/>
     <div class="bg-base-100 opacity-100 bg-opacity-80 mt-0 p-4 grow h-full overflow-auto">
         <div class="font-sofia-extra">
-            <div class="text-5xl">SETTINGS</div>
+            <div class="flex border-0 border-red-500 justify-between">
+                <div class="text-5xl">SETTINGS</div>
+            </div>
             <div class="flex border-0 border-red-500 justify-between">
                 <div class="float space-x-4 mb-6 border-0">
                     <ConfigCategory name="GENERAL" {active} on:click={() => (active = 'GENERAL')}/>

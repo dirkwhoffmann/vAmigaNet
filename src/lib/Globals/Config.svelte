@@ -1,24 +1,68 @@
 <script lang="ts">
+    import { browser } from "$app/environment";
+    import { liveQuery } from 'dexie';
     import { Opt, RenderMode, Theme, WarpMode } from "$lib/types";
     import { amiga, config, diskController, initialized, proxy } from '$lib/stores';
     import { darkTheme, invert } from '$lib/stores';
-    import { liveQuery } from 'dexie';
     import { db, type OptEntry } from '$lib/Db/db';
-    import { browser } from "$app/environment";
 
-    enum GeneralKeys
-    {
-        GEN_WARP_MODE = 'GEN_WARP_MODE',
-        GEN_THEME = 'GEN_THEME'
-    }
+    //
+    // Default settings
+    //
 
-    // General settings
-    let warpMode: WarpMode = WarpMode.auto; // TODO: Rename to warpMode
+    let generalOpts: { opt: Opt, default: string }[] = [
+        {opt: Opt.WARP_MODE, default: [WarpMode.auto].toString()},
+        {opt: Opt.THEME, default: Theme.default.toString()},
+        {opt: Opt.CANVAS_BORDER, default: '0'},
+        {opt: Opt.SHAKING, default: '1'}
+    ];
+
+    let machineOpts: { opt: Opt, default: string }[] = [
+        {opt: Opt.CPU_REVISION, default: '0'},
+        {opt: Opt.AGNUS_REVISION, default: '0'},
+        {opt: Opt.DENISE_REVISION, default: '0'},
+        {opt: Opt.RTC_MODEL, default: '0'},
+        {opt: Opt.CHIP_RAM, default: '512'},
+        {opt: Opt.SLOW_RAM, default: '512'},
+        {opt: Opt.FAST_RAM, default: '0'},
+        {opt: Opt.BANK_MAP, default: '0'},
+        {opt: Opt.INIT_PATTERN, default: '0'},
+        {opt: Opt.UNMAPPED, default: '0'},
+        {opt: Opt.SLOW_RAM_MIRROR, default: '1'},
+        {opt: Opt.SLOW_RAM_DELAY, default: '1'},
+        {opt: Opt.DF0, default: '1'},
+        {opt: Opt.DF1, default: '1'},
+        {opt: Opt.DF2, default: '0'},
+        {opt: Opt.DF3, default: '0'}
+    ];
+
+    let audioOpts: { opt: Opt, default: string }[] = [
+        {opt: Opt.AUDVOL0, default: '100'},
+        {opt: Opt.AUDVOL1, default: '100'},
+        {opt: Opt.AUDVOL2, default: '100'},
+        {opt: Opt.AUDVOL3, default: '100'},
+        {opt: Opt.AUDVOLL, default: '50'},
+        {opt: Opt.AUDVOLR, default: '50'},
+        {opt: Opt.STEP_VOLUME, default: '50'},
+        {opt: Opt.POLL_VOLUME, default: '50'},
+        {opt: Opt.INSERT_VOLUME, default: '50'},
+        {opt: Opt.EJECT_VOLUME, default: '50'}
+    ];
+
+    let videoOpts: { opt: Opt, default: string }[] = [
+        {opt: Opt.RENDER_MODE, default: RenderMode.smooth.toString()},
+        {opt: Opt.FLICKER_WEIGHT, default: '0'},
+        {opt: Opt.PALETTE, default: '0'},
+        {opt: Opt.BRIGHTNESS, default: '50'},
+        {opt: Opt.CONTRAST, default: '100'},
+        {opt: Opt.SATURATION, default: '50'}
+    ];
+
+    // GUI-specific config items that are not stored inside the emulator
+    let warpMode: WarpMode = WarpMode.auto;
     let theme: Theme = Theme.default;
     let canvasBorder = 0;
     let shaking = 1;
-
-    // Video settings
     let renderMode = RenderMode.smooth;
     let flickerWeight = 50;
 
@@ -46,50 +90,52 @@
 
         await registerGeneralDefaults();
         await registerMachineDefaults();
+        await registerAudioDefaults();
+        await registerVideoDefaults();
     }
 
     async function registerGeneralDefaults()
     {
         console.log("registerGeneralDefaults");
 
-        await registerDefault(Opt.WARP_MODE, WarpMode.auto.toString());
-        await registerDefault(Opt.THEME, Theme.default.toString());
-        await registerDefault(Opt.CANVAS_BORDER, '1');
-        await registerDefault(Opt.SHAKING, '1');
+        for (const it of generalOpts) {
+            await registerDefault(it.opt, it.default);
+        }
     }
 
     async function registerMachineDefaults()
     {
         console.log("registerMachineDefaults");
 
-        await registerDefault(Opt.CPU_REVISION, '0');
-        await registerDefault(Opt.CPU_SPEED, '0');
-        await registerDefault(Opt.AGNUS_REVISION, '0');
-        await registerDefault(Opt.DENISE_REVISION, '0');
-        await registerDefault(Opt.RTC_MODEL, '1');
-        await registerDefault(Opt.CHIP_RAM, '512');
-        await registerDefault(Opt.SLOW_RAM, '512');
-        await registerDefault(Opt.FAST_RAM, '0');
-        await registerDefault(Opt.BANK_MAP, '0');
-        await registerDefault(Opt.INIT_PATTERN, '0');
-        await registerDefault(Opt.UNMAPPED, '0');
-        await registerDefault(Opt.SLOW_RAM_MIRROR, '1');
-        await registerDefault(Opt.SLOW_RAM_DELAY, '1');
-        await registerDefault(Opt.DF0, '1');
-        await registerDefault(Opt.DF1, '1');
-        await registerDefault(Opt.DF2, '0');
-        await registerDefault(Opt.DF3, '0');
+        for (const it of machineOpts) {
+            await registerDefault(it.opt, it.default);
+        }
+    }
+
+    async function registerAudioDefaults()
+    {
+        console.log("registerAudioDefaults");
+
+        for (const it of audioOpts) {
+            await registerDefault(it.opt, it.default);
+        }
+    }
+
+    async function registerVideoDefaults()
+    {
+        console.log("registerVideoDefaults");
+
+        for (const it of videoOpts) {
+            await registerDefault(it.opt, it.default);
+        }
     }
 
     async function registerDefault(opt: Opt, value: string)
     {
         try {
-            // Try to add new database entry
-            const id = await db.opts.add({key: opt, value: value});
-            console.log("Added entry ", opt);
+            await db.opts.add({key: opt, value: value});
         } catch (error) {
-            // The entry is likely there already
-            console.log("FAILED TO ADD entry ", opt);
+            // The item is registered already
         }
     }
 
@@ -97,51 +143,62 @@
     // Restoring default settings
     //
 
-    async function restoreDefaults()
+    export async function restoreDefaults()
     {
         console.log("restoreDefaults");
 
         restoreGeneralDefaults();
         restoreMachineDefaults();
+        restoreAudioDefaults();
+        restoreVideoDefaults();
     }
 
     export async function restoreGeneralDefaults()
     {
         console.log("restoreGeneralDefaults");
 
-        await deleteDefault(Opt.WARP_MODE);
-        await deleteDefault(Opt.THEME);
-        await deleteDefault(Opt.CANVAS_BORDER);
-        await deleteDefault(Opt.SHAKING);
+        for (const it of generalOpts) {
+            await deleteDefault(it.opt);
+        }
 
         await registerGeneralDefaults();
         await loadGeneralSettings();
     }
 
-    async function restoreMachineDefaults()
+    export async function restoreMachineDefaults()
     {
         console.log("restoreMachineDefaults");
 
-        await deleteDefault(Opt.CPU_REVISION);
-        await deleteDefault(Opt.CPU_SPEED);
-        await deleteDefault(Opt.AGNUS_REVISION);
-        await deleteDefault(Opt.DENISE_REVISION);
-        await deleteDefault(Opt.RTC_MODEL);
-        await deleteDefault(Opt.CHIP_RAM);
-        await deleteDefault(Opt.SLOW_RAM);
-        await deleteDefault(Opt.FAST_RAM);
-        await deleteDefault(Opt.BANK_MAP);
-        await deleteDefault(Opt.INIT_PATTERN);
-        await deleteDefault(Opt.UNMAPPED);
-        await deleteDefault(Opt.SLOW_RAM_MIRROR);
-        await deleteDefault(Opt.SLOW_RAM_DELAY);
-        await deleteDefault(Opt.DF0);
-        await deleteDefault(Opt.DF1);
-        await deleteDefault(Opt.DF2);
-        await deleteDefault(Opt.DF3);
+        for (const it of machineOpts) {
+            await deleteDefault(it.opt);
+        }
 
         await registerMachineDefaults();
         await loadMachineSettings();
+    }
+
+    export async function restoreAudioDefaults()
+    {
+        console.log("restoreAudioDefaults");
+
+        for (const it of audioOpts) {
+            await deleteDefault(it.opt);
+        }
+
+        await registerAudioDefaults();
+        await loadAudioSettings();
+    }
+
+    export async function restoreVideoDefaults()
+    {
+        console.log("restoreVideoDefaults");
+
+        for (const it of videoOpts) {
+            await deleteDefault(it.opt);
+        }
+
+        await registerVideoDefaults();
+        await loadVideoSettings();
     }
 
     async function deleteDefault(opt: Opt)
@@ -159,45 +216,50 @@
     // Loading settings
     //
 
-    async function loadSettings()
+    export async function loadSettings()
     {
         console.log("loadSettings");
 
         loadGeneralSettings();
         loadMachineSettings();
+        loadAudioSettings();
+        loadVideoSettings();
     }
 
     export async function loadGeneralSettings()
     {
         console.log("loadGeneralSettings");
 
-        await loadSetting(Opt.WARP_MODE);
-        await loadSetting(Opt.THEME);
-        await loadSetting(Opt.CANVAS_BORDER);
-        await loadSetting(Opt.SHAKING);
+        for (const it of generalOpts) {
+            await loadSetting(it.opt);
+        }
     }
 
-    async function loadMachineSettings()
+    export async function loadMachineSettings()
     {
         console.log("loadMachineSettings");
 
-        await loadSetting(Opt.CPU_REVISION);
-        await loadSetting(Opt.CPU_SPEED);
-        await loadSetting(Opt.AGNUS_REVISION);
-        await loadSetting(Opt.DENISE_REVISION);
-        await loadSetting(Opt.RTC_MODEL);
-        await loadSetting(Opt.CHIP_RAM);
-        await loadSetting(Opt.SLOW_RAM);
-        await loadSetting(Opt.FAST_RAM);
-        await loadSetting(Opt.BANK_MAP);
-        await loadSetting(Opt.INIT_PATTERN);
-        await loadSetting(Opt.UNMAPPED);
-        await loadSetting(Opt.SLOW_RAM_MIRROR);
-        await loadSetting(Opt.SLOW_RAM_DELAY);
-        await loadSetting(Opt.DF0);
-        await loadSetting(Opt.DF1);
-        await loadSetting(Opt.DF2);
-        await loadSetting(Opt.DF3);
+        for (const it of machineOpts) {
+            await loadSetting(it.opt);
+        }
+    }
+
+    export async function loadAudioSettings()
+    {
+        console.log("loadAudioSettings");
+
+        for (const it of audioOpts) {
+            await loadSetting(it.opt);
+        }
+    }
+
+    export async function loadVideoSettings()
+    {
+        console.log("loadVideoSettings");
+
+        for (const it of videoOpts) {
+            await loadSetting(it.opt);
+        }
     }
 
     async function loadSetting(opt: Opt)
@@ -222,45 +284,50 @@
     // Saving settings
     //
 
-    async function saveSettings()
+    export async function saveSettings()
     {
         console.log('saveSettings');
 
         saveGeneralSettings();
         saveMachineSettings();
+        saveAudioSettings();
+        saveVideoSettings();
     }
 
     export async function saveGeneralSettings()
     {
         console.log("saveGeneralSettings");
 
-        await saveSetting(Opt.WARP_MODE);
-        await saveSetting(Opt.THEME);
-        await saveSetting(Opt.CANVAS_BORDER);
-        await saveSetting(Opt.SHAKING);
+        for (const it of generalOpts) {
+            await saveSetting(it.opt);
+        }
     }
 
-    async function saveMachineSettings()
+    export async function saveMachineSettings()
     {
         console.log("saveMachineSettings");
 
-        await saveSetting(Opt.CPU_REVISION);
-        await saveSetting(Opt.CPU_SPEED);
-        await saveSetting(Opt.AGNUS_REVISION);
-        await saveSetting(Opt.DENISE_REVISION);
-        await saveSetting(Opt.RTC_MODEL);
-        await saveSetting(Opt.CHIP_RAM);
-        await saveSetting(Opt.SLOW_RAM);
-        await saveSetting(Opt.FAST_RAM);
-        await saveSetting(Opt.BANK_MAP);
-        await saveSetting(Opt.INIT_PATTERN);
-        await saveSetting(Opt.UNMAPPED);
-        await saveSetting(Opt.SLOW_RAM_MIRROR);
-        await saveSetting(Opt.SLOW_RAM_DELAY);
-        await saveSetting(Opt.DF0);
-        await saveSetting(Opt.DF1);
-        await saveSetting(Opt.DF2);
-        await saveSetting(Opt.DF3);
+        for (const it of machineOpts) {
+            await saveSetting(it.opt);
+        }
+    }
+
+    export async function saveAudioSettings()
+    {
+        console.log("saveAudioSettings");
+
+        for (const it of audioOpts) {
+            await saveSetting(it.opt);
+        }
+    }
+
+    export async function saveVideoSettings()
+    {
+        console.log("saveVideoSettings");
+
+        for (const it of videoOpts) {
+            await saveSetting(it.opt);
+        }
     }
 
     async function saveSetting(opt: Opt)
