@@ -4,6 +4,8 @@
 	import ConfigSection from './ConfigSection.svelte';
 	import ConfigItem from '$lib/Settings/ConfigItem.svelte';
 	import { config, poweredOn, proxy } from '$lib/stores';
+
+
 </script>
 
 <div in:fade>

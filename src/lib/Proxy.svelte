@@ -217,10 +217,10 @@
 			} else {
 				$memory.deleteExt();
 			}
-			console.log('Rom added', item?.title);
+			// console.log('Rom added', item?.title);
 			return true;
 		} catch (error) {
-			console.log(`installRom failed: `, error);
+			// console.log(`installRom failed: `, error);
 			return false;
 		}
 	}

@@ -1,7 +1,16 @@
 <script lang="ts">
     import { Opt, RenderMode, Theme, WarpMode } from "$lib/types";
-    import { amiga, config, diskController, proxy } from '$lib/stores';
+    import { amiga, config, diskController, initialized, proxy } from '$lib/stores';
     import { darkTheme, invert } from '$lib/stores';
+    import { liveQuery } from 'dexie';
+    import { db, type OptEntry } from '$lib/Db/db';
+    import { browser } from "$app/environment";
+
+    enum GeneralKeys
+    {
+        GEN_WARP_MODE = 'GEN_WARP_MODE',
+        GEN_THEME = 'GEN_THEME'
+    }
 
     // General settings
     let wMode: WarpMode = WarpMode.auto; // TODO: Rename to warpMode
@@ -12,6 +21,158 @@
     // Video settings
     let renderMode = RenderMode.smooth;
     let flickerWeight = 50;
+
+    // Connect to Dexie DB
+    let opts: OptEntry[];
+    let myQuery = liveQuery(() => (browser ? db.opts.toArray() : []));
+    myQuery.subscribe(value => {
+        opts = value
+    })
+
+    $: console.log("CONFIG DB: ", opts);
+
+    $: if ($initialized) {
+        registerDefaults();
+        loadSettings();
+    }
+
+    //
+    // Registering default settings
+    //
+
+    async function registerDefaults()
+    {
+        console.log("Registering defaults...");
+        registerGeneralDefaults();
+    }
+
+    async function registerGeneralDefaults()
+    {
+        await registerDefault(Opt.WARP_MODE, WarpMode.auto.toString());
+        await registerDefault(Opt.THEME, Theme.default.toString());
+        await registerDefault(Opt.CANVAS_BORDER, '1');
+        await registerDefault(Opt.SHAKING, '1');
+    }
+
+    async function registerDefault(opt: Opt, value: string)
+    {
+        try {
+            // Try to add new database entry
+            const id = await db.opts.add({key: opt, value: value});
+            console.log("Added entry ", opt);
+        } catch (error) {
+            // The entry is likely there already
+            console.log("FAILED TO ADD entry ", opt);
+        }
+    }
+
+    //
+    // Restoring default settings
+    //
+
+    async function restoreDefaults()
+    {
+        console.log("Restoring defaults...");
+        restoreGeneralDefaults();
+    }
+
+    export async function restoreGeneralDefaults()
+    {
+        await deleteDefault(Opt.WARP_MODE);
+        await deleteDefault(Opt.THEME);
+        await deleteDefault(Opt.CANVAS_BORDER);
+        await deleteDefault(Opt.SHAKING);
+
+        await registerGeneralDefaults();
+        await loadGeneralSettings();
+    }
+
+    async function deleteDefault(opt: Opt)
+    {
+        try {
+            // Try to add new database entry
+            const id = await db.opts.delete(opt);
+            console.log("Removed entry ", opt);
+        } catch (error) {
+            console.log("FAILED TO REMOVE entry ", opt);
+        }
+    }
+
+    //
+    // Loading settings
+    //
+
+    async function loadSettings()
+    {
+        console.log('Loading settings...');
+        loadGeneralSettings();
+    }
+
+    export async function loadGeneralSettings()
+    {
+        await loadSetting(Opt.WARP_MODE);
+        await loadSetting(Opt.THEME);
+        await loadSetting(Opt.CANVAS_BORDER);
+        await loadSetting(Opt.SHAKING);
+    }
+
+    async function loadSetting(opt: Opt)
+    {
+
+        console.log("loadSetting ", opt);
+
+        try {
+            // Read value from database
+            const id = await db.opts.get(opt);
+            console.log("Got key / value pair ", id.key, id.value);
+
+            // Apply setting
+            set(opt, id.value);
+
+        } catch (error) {
+            // The entry is likely there already
+            console.log("FAILED TO GET entry ", opt);
+        }
+    }
+
+    //
+    // Saving settings
+    //
+
+    async function saveSettings()
+    {
+        console.log('Saving settings...');
+        saveGeneralSettings();
+    }
+
+    export async function saveGeneralSettings()
+    {
+        await saveSetting(Opt.WARP_MODE);
+        await saveSetting(Opt.THEME);
+        await saveSetting(Opt.CANVAS_BORDER);
+        await saveSetting(Opt.SHAKING);
+    }
+
+    async function saveSetting(opt: Opt)
+    {
+
+        const val = get(opt);
+        console.log("saveSetting ", opt, val);
+
+        try {
+            // Write value into database
+            const id = await db.opts.put({key: opt, value: val});
+            console.log("Saved key / value pair ", opt, val);
+
+        } catch (error) {
+            // The entry is likely there already
+            console.log("FAILED TO SAVE entry ", opt);
+        }
+    }
+
+    //
+    // Querying a config item
+    //
 
     export function get(option: Opt): string
     {
@@ -68,34 +229,31 @@
                 return $amiga.getDriveConfig($proxy.OPT_DRIVE_CONNECT, 2).toString();
             case Opt.DF3:
                 return $amiga.getDriveConfig($proxy.OPT_DRIVE_CONNECT, 3).toString();
-            case Opt.HD0:
-                // TODO
-                return 'TODO';
 
             //
             // Audio settings
             //
 
             case Opt.AUDVOL0:
-                return $amiga.getDriveConfig($proxy.OPT_AUDVOL, 0);
+                return $amiga.getDriveConfig($proxy.OPT_AUDVOL, 0).toString();
             case Opt.AUDVOL1:
-                return $amiga.getDriveConfig($proxy.OPT_AUDVOL, 1);
+                return $amiga.getDriveConfig($proxy.OPT_AUDVOL, 1).toString();
             case Opt.AUDVOL2:
-                return $amiga.getDriveConfig($proxy.OPT_AUDVOL, 2);
+                return $amiga.getDriveConfig($proxy.OPT_AUDVOL, 2).toString();
             case Opt.AUDVOL3:
-                return $amiga.getDriveConfig($proxy.OPT_AUDVOL, 3);
+                return $amiga.getDriveConfig($proxy.OPT_AUDVOL, 3).toString();
             case Opt.AUDVOLL:
-                return $amiga.getConfig($proxy.OPT_AUDVOLL);
+                return $amiga.getConfig($proxy.OPT_AUDVOLL).toString();
             case Opt.AUDVOLR:
-                return $amiga.getConfig($proxy.OPT_AUDVOLR);
+                return $amiga.getConfig($proxy.OPT_AUDVOLR).toString();
             case Opt.STEP_VOLUME:
-                return $amiga.getDriveConfig($proxy.OPT_STEP_VOLUME, 0);
+                return $amiga.getDriveConfig($proxy.OPT_STEP_VOLUME, 0).toString();
             case Opt.POLL_VOLUME:
-                return $amiga.getDriveConfig($proxy.OPT_POLL_VOLUME, 0);
+                return $amiga.getDriveConfig($proxy.OPT_POLL_VOLUME, 0).toString();
             case Opt.INSERT_VOLUME:
-                return $amiga.getDriveConfig($proxy.OPT_INSERT_VOLUME, 0);
+                return $amiga.getDriveConfig($proxy.OPT_INSERT_VOLUME, 0).toString();
             case Opt.EJECT_VOLUME:
-                return $amiga.getDriveConfig($proxy.OPT_EJECT_VOLUME, 0);
+                return $amiga.getDriveConfig($proxy.OPT_EJECT_VOLUME, 0).toString();
 
             //
             // Video settings
@@ -120,16 +278,23 @@
         }
     }
 
-    export function getNum(option: Opt): number
+    export function getNum(opt: Opt): number
     {
+        return Number(get(opt));
+        /*
         let result = get(option);
         return result === 'true' ? 1 : result === 'false' ? 0 : Number(result);
+        */
     }
 
-    export function getBool(option: Opt): boolean
+    export function getBool(opt: Opt): boolean
     {
-        return getNum(option) != 0;
+        return getNum(opt) != 0;
     }
+
+    //
+    // Setting a config item
+    //
 
     export function set(option: Opt, val: string)
     {
@@ -293,6 +458,10 @@
     {
         set(option, val ? 'true' : 'false');
     }
+
+    //
+    // Auxiliary functions
+    //
 
     function setWarp(val: string)
     {

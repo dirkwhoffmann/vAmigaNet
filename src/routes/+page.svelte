@@ -37,7 +37,7 @@
 	let myQuery = liveQuery(() => (browser ? db.roms.orderBy('title').toArray() : []));	
 	myQuery.subscribe(value => { $kickstarts = value })
 
-	$: console.log("Kickstarts: ", $kickstarts);
+	// $: console.log("Kickstarts: ", $kickstarts);
 	
 	onMount(() => {
 		console.log('+page: onMount()');

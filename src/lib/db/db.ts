@@ -17,13 +17,20 @@ export interface RomEntry {
     extStart: number;
 }
 
+export interface OptEntry {
+    key: string;
+    value: string;
+}
+
 export class MySubClassedDexie extends Dexie {
 	roms!: Table<RomEntry>;
+    opts!: Table<OptEntry>;
 
 	constructor() {
 		super('myDatabase');
-		this.version(1).stores({
-			roms: 'crc32, title'
+		this.version(3).stores({
+			roms: 'crc32, title',
+            opts: 'key'
 		});
 	}
 }

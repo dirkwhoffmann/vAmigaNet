@@ -16,7 +16,7 @@
 	export let show = true;
 	
 	async function addRomToDatabase(rom: Uint8Array, ext: Uint8Array | null = null, extStart = 0) {
-		console.log('addRomToDatabase: Adding buffer of size ', rom.length);
+
 		let info = $memory.analyzeRom(rom, rom.length);
 		if (info.crc32) {
 			try {

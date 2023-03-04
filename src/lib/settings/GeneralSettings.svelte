@@ -5,6 +5,17 @@
     import { MenuItem, Theme } from '$lib/types';
     import ConfigSection from './ConfigSection.svelte';
     import ConfigItem from '$lib/Settings/ConfigItem.svelte';
+
+    function saveAction() {
+        console.log("saveAction");
+        $config.saveGeneralSettings();
+    }
+
+    function resetAction() {
+        console.log("resetAction");
+        $config.restoreGeneralDefaults();
+    }
+
 </script>
 
 <div in:fade>
@@ -52,4 +63,8 @@
                 items={[new MenuItem('Yes', 1), new MenuItem('No', 0)]}
         />
     </ConfigSection>
+
+    <button class="btn btn-primary" on:click={saveAction}>Save</button>
+    <button class="btn btn-primary" on:click={resetAction}>Reset</button>
+
 </div>
