@@ -140,14 +140,16 @@
 		try {
 			console.log('Showcase:', showcase.title);
 			$amiga.powerOff();
-			console.log('Installing Rom:', showcase.roms);
+			console.log('Installing ROM:', showcase.roms);
 			$proxy.installRoms(showcase.roms);
-			console.log('Configuring CHIP:', showcase.memory[0]);
+			console.log('Configuring Chip RAM:', showcase.memory[0]);
 			$amiga.configure($proxy.OPT_CHIP_RAM, showcase.memory[0]);
-			console.log('Configuring SLOW:', showcase.memory[1]);
+			console.log('Configuring Slow RAM:', showcase.memory[1]);
 			$amiga.configure($proxy.OPT_SLOW_RAM, showcase.memory[1]);
-			console.log('Configuring FAST:', showcase.memory[2]);
+			console.log('Configuring Fast RAM:', showcase.memory[2]);
 			$amiga.configure($proxy.OPT_FAST_RAM, showcase.memory[2]);
+            console.log('Configuring drives:', showcase.adf.length);
+            $config.set(Opt.DF1, showcase.adf.length > 1);
 			for (let i = 0; i < showcase.adf.length; i++) {
 				console.log('Inserting disk ' + i + ':', showcase.adf[i]);
 				await insert(showcase.adf[i], i);
@@ -246,31 +248,6 @@
 	export async function installDiagRom() {
 		await installRom(CRC32.DiagROM);
 	}
-
-    /*
-	$: updateWarp($warpMode);
-	export function updateWarp(warpMode: WarpMode) {
-		if (!$amiga) return;
-
-		let newWarp = false;
-		switch (warpMode) {
-			case WarpMode.auto:
-				newWarp = $diskController.isSpinning();
-				break;
-			case WarpMode.never:
-				newWarp = false;
-				break;
-			case WarpMode.always:
-				newWarp = true;
-				break;
-		}
-		if (newWarp) {
-			$amiga.warpOn();
-		} else {
-			$amiga.warpOff();
-		}
-	}
-    */
 
 	export function onRuntimeInitialized() {
 		console.log('Creating proxies...');
