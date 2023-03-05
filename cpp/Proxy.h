@@ -139,6 +139,26 @@ struct DeniseProxy
     u32 noise() const;
 };
 
+struct DriveProxy
+{
+    int nr;
+
+    DriveProxy(int nr);
+
+    bool isConnected() const;
+    bool hasDisk() const;
+    bool hasModifiedDisk() const;
+    bool hasUnmodifiedDisk() const;
+    bool hasProtectedDisk() const;
+    bool hasUnprotectedDisk() const;
+    int currentCyl() const;
+    bool motor() const;
+
+    void markDiskAsModified();
+    void markDiskAsUnmodified();
+    void toggleWriteProtection();
+};
+
 struct JoystickProxy
 {
     int joystick;

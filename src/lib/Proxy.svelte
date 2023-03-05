@@ -13,6 +13,10 @@
 		amiga,
 		cpu,
 		denise,
+        df0,
+        df1,
+        df2,
+        df3,
 		diskController,
 		enums,
 		joystick1,
@@ -255,6 +259,10 @@
 		$amiga = new $proxy.AmigaProxy();
 		$cpu = new $proxy.CPUProxy();
 		$denise = new $proxy.DeniseProxy();
+        $df0 = new $proxy.DriveProxy(0);
+        $df1 = new $proxy.DriveProxy(1);
+        $df2 = new $proxy.DriveProxy(2);
+        $df3 = new $proxy.DriveProxy(3);
 		$diskController = new $proxy.DiskControllerProxy();
 		$enums = new $proxy.EnumProxy();
 		$joystick1 = new $proxy.JoystickProxy(1);

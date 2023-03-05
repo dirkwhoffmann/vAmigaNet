@@ -409,6 +409,88 @@ EMSCRIPTEN_BINDINGS(DeniseProxy)
 }
 
 //
+// Drive Proxy
+//
+
+DriveProxy::DriveProxy(int nr)
+{
+    assert(nr >= 0 && nr <= 3);
+    this->nr = nr;
+}
+
+bool DriveProxy::isConnected() const
+{
+    return amiga->df[nr]->isConnected();
+}
+
+bool DriveProxy::hasDisk() const
+{
+    return amiga->df[nr]->hasDisk();
+}
+
+bool DriveProxy::hasModifiedDisk() const
+{
+    return amiga->df[nr]->hasModifiedDisk();
+}
+
+bool DriveProxy::hasUnmodifiedDisk() const
+{
+    return amiga->df[nr]->hasUnmodifiedDisk();
+}
+
+bool DriveProxy::hasProtectedDisk() const
+{
+    return amiga->df[nr]->hasProtectedDisk();
+}
+
+bool DriveProxy::hasUnprotectedDisk() const
+{
+    return amiga->df[nr]->hasUnprotectedDisk();
+}
+
+int DriveProxy::currentCyl() const
+{
+    return amiga->df[nr]->currentCyl();
+}
+
+bool DriveProxy::motor() const
+{
+    return amiga->df[nr]->getMotor();
+}
+
+void DriveProxy::markDiskAsModified()
+{
+    amiga->df[nr]->markDiskAsModified();
+}
+
+void DriveProxy::markDiskAsUnmodified()
+{
+    amiga->df[nr]->markDiskAsUnmodified();
+}
+
+void DriveProxy::toggleWriteProtection()
+{
+    amiga->df[nr]->toggleWriteProtection();
+}
+
+EMSCRIPTEN_BINDINGS(DriveProxy)
+{
+    class_<DriveProxy>("DriveProxy")
+        .constructor<int>()
+        .function("isConnected", &DriveProxy::isConnected)
+        .function("hasDisk", &DriveProxy::hasDisk)
+        .function("hasModifiedDisk", &DriveProxy::hasModifiedDisk)
+        .function("hasUnmodifiedDisk", &DriveProxy::hasUnmodifiedDisk)
+        .function("hasProtectedDisk", &DriveProxy::hasProtectedDisk)
+        .function("hasUnprotectedDisk", &DriveProxy::hasUnprotectedDisk)
+        .function("currentCyl", &DriveProxy::currentCyl)
+        .function("motor", &DriveProxy::motor)
+        .function("markDiskAsModified", &DriveProxy::markDiskAsModified)
+        .function("markDiskAsUnmodified", &DriveProxy::markDiskAsUnmodified)
+        .function("toggleWriteProtection", &DriveProxy::toggleWriteProtection);
+}
+
+//
 // Joystick proxy
 //
 
