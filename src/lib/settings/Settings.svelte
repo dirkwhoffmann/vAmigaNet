@@ -5,6 +5,7 @@
     import ConfigCategory from '$lib/Settings/ConfigCategory.svelte';
     import GeneralSettings from '$lib/Settings/GeneralSettings.svelte';
     import MachineSettings from '$lib/Settings/MachineSettings.svelte';
+    import CompSettings from '$lib/Settings/CompSettings.svelte';
     import VideoSettings from '$lib/Settings/VideoSettings.svelte';
     import AudioSettings from '$lib/Settings/AudioSettings.svelte';
 
@@ -20,6 +21,9 @@
                 break;
             case 'MACHINE':
                 $config.saveMachineSettings();
+                break;
+            case 'COMPATIBILITY':
+                $config.saveCompSettings();
                 break;
             case 'AUDIO':
                 $config.saveAudioSettings();
@@ -39,6 +43,9 @@
                 break;
             case 'MACHINE':
                 $config.restoreMachineDefaults();
+                break;
+            case 'COMPATIBILITY':
+                $config.restoreCompDefaults();
                 break;
             case 'AUDIO':
                 $config.restoreAudioDefaults();
@@ -65,6 +72,7 @@
                     <div class="float space-x-4 mb-6 border-0">
                         <ConfigCategory name="GENERAL" {active} on:click={() => (active = 'GENERAL')}/>
                         <ConfigCategory name="MACHINE" {active} on:click={() => (active = 'MACHINE')}/>
+                        <ConfigCategory name="COMPATIBILITY" {active} on:click={() => (active = 'COMPATIBILITY')}/>
                         <ConfigCategory name="VIDEO" {active} on:click={() => (active = 'VIDEO')}/>
                         <ConfigCategory name="AUDIO" {active} on:click={() => (active = 'AUDIO')}/>
                     </div>
@@ -80,6 +88,8 @@
                 <GeneralSettings/>
             {:else if active == 'MACHINE'}
                 <MachineSettings/>
+            {:else if active == 'COMPATIBILITY'}
+                <CompSettings/>
             {:else if active == 'VIDEO'}
                 <VideoSettings/>
             {:else if active == 'AUDIO'}

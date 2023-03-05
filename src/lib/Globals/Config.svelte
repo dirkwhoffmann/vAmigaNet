@@ -2,8 +2,7 @@
     import { browser } from "$app/environment";
     import { liveQuery } from 'dexie';
     import { Opt, RenderMode, Theme, WarpMode } from "$lib/types";
-    import { amiga, config, diskController, initialized, proxy } from '$lib/stores';
-    import { darkTheme, invert } from '$lib/stores';
+    import { amiga, config, darkTheme, diskController, initialized, invert, proxy } from '$lib/stores';
     import { db, type OptEntry } from '$lib/Db/db';
 
     //
@@ -464,6 +463,35 @@
             case Opt.DF3:
                 return $amiga.getDriveConfig($proxy.OPT_DRIVE_CONNECT, 3).toString();
 
+                //
+                // Compatibility settings
+                //
+
+            case Opt.BLIITTER_ACCURACY:
+                return $amiga.getConfig($proxy.OPT_BLIITTER_ACCURACY).toString();
+            case Opt.TODBUG:
+                return $amiga.getConfig($proxy.OPT_TODBUG).toString();
+            case Opt.PTR_DROPS:
+                return $amiga.getConfig($proxy.OPT_PTR_DROPS).toString();
+            case Opt.ECLOCK_SYNCING:
+                return $amiga.getConfig($proxy.OPT_ECLOCK_SYNCING).toString();
+            case Opt.DRIVE_SPEED:
+                return $amiga.getConfig($proxy.OPT_DRIVE_SPEED).toString();
+            case Opt.DRIVE_MECHANICS:
+                return $amiga.getConfig($proxy.OPT_DRIVE_MECHANICS).toString();
+            case Opt.OPT_LOCK_DSKSYNC:
+                return $amiga.getConfig($proxy.OPT_LOCK_DSKSYNC).toString();
+            case Opt.OPT_AUTO_DSKSYNC:
+                return $amiga.getConfig($proxy.OPT_AUTO_DSKSYNC).toString();
+            case Opt.CLX_SPR_SPR:
+                return $amiga.getConfig($proxy.OPT_CLX_SPR_SPR).toString();
+            case Opt.CLX_SPR_PLF:
+                return $amiga.getConfig($proxy.OPT_CLX_SPR_PLF).toString();
+            case Opt.CLX_PLF_PLF:
+                return $amiga.getConfig($proxy.OPT_CLX_PLF_PLF).toString();
+            case Opt.ACCURATE_KEYBOARD:
+                return $amiga.getConfig($proxy.OPT_ACCURATE_KEYBOARD).toString();
+
             //
             // Audio settings
             //
@@ -598,26 +626,75 @@
             case Opt.DF0:
                 break;
             case Opt.DF1:
-                console.log("SET OPT_DF1", val);
                 $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 1, val);
                 if (val == 0) $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 2, 0);
                 if (val == 0) $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 3, 0);
                 break;
             case Opt.DF2:
-                console.log("SET OPT_DF2", val);
                 if (val == 1) $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 1, 1);
                 $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 2, val);
                 if (val == 0) $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 3, 0);
                 break;
             case Opt.DF3:
-                console.log("SET OPT_DF3", val);
                 if (val == 1) $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 1, 1);
                 if (val == 1) $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 2, 1);
                 $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 3, val);
                 break;
-            case Opt.HD0:
-                // TODO
-                return 'TODO';
+
+            //
+            // Compatibility Settings
+            //
+
+            case Opt.BLIITTER_ACCURACY:
+                $amiga.configure($proxy.OPT_BLIITTER_ACCURACY, Number(val));
+                break;
+
+            case Opt.TODBUG:
+                $amiga.configure($proxy.OPT_TODBUG, Number(val));
+                break;
+
+            case Opt.PTR_DROPS:
+                $amiga.configure($proxy.OPT_PTR_DROPS, Number(val));
+                break;
+
+            case Opt.ECLOCK_SYNCING:
+                $amiga.configure($proxy.OPT_ECLOCK_SYNCING, Number(val));
+                break;
+
+            case Opt.DRIVE_SPEED:
+                $amiga.configure($proxy.OPT_DRIVE_SPEED, Number(val));
+                break;
+
+            case Opt.DRIVE_MECHANICS:
+                $amiga.configureDrive($proxy.OPT_DRIVE_MECHANICS, 0, Number(val));
+                $amiga.configureDrive($proxy.OPT_DRIVE_MECHANICS, 1, Number(val));
+                $amiga.configureDrive($proxy.OPT_DRIVE_MECHANICS, 2, Number(val));
+                $amiga.configureDrive($proxy.OPT_DRIVE_MECHANICS, 3, Number(val));
+                break;
+
+            case Opt.OPT_LOCK_DSKSYNC:
+                $amiga.configure($proxy.OPT_LOCK_DSKSYNC, Number(val));
+                break;
+
+            case Opt.OPT_AUTO_DSKSYNC:
+                $amiga.configure($proxy.OPT_AUTO_DSKSYNC, Number(val));
+                break;
+
+            case Opt.CLX_SPR_SPR:
+                $amiga.configure($proxy.OPT_CLX_SPR_SPR, Number(val));
+                break;
+
+            case Opt.CLX_SPR_PLF:
+                $amiga.configure($proxy.OPT_CLX_SPR_PLF, Number(val));
+                break;
+
+            case Opt.CLX_PLF_PLF:
+                $amiga.configure($proxy.OPT_CLX_PLF_PLF, Number(val));
+                break;
+
+            case Opt.ACCURATE_KEYBOARD:
+                $amiga.configure($proxy.OPT_ACCURATE_KEYBOARD, Number(val));
+                break;
 
             //
             // Audio settings

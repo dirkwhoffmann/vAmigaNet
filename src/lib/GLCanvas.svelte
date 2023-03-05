@@ -98,11 +98,11 @@
 			vec4 color;
 		    if (mod(coord.y, 2.0) == 0.0) {
 		        // color = vec4(1.0, 0.0, 0.0, 1.0); 
-				color = texture2D(u_lfSampler, vTextureCoord);
+				color = texture2D(u_sfSampler, vTextureCoord);
 				w = u_lweight;
 		    } else {
 		        // color = vec4(1.0, 1.0, 0.0, 1.0); 
-				color = texture2D(u_sfSampler, vTextureCoord);
+				color = texture2D(u_lfSampler, vTextureCoord);
 				w = u_sweight;
 		    }
 
