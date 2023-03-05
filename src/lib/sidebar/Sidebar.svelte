@@ -1,12 +1,10 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
-    import { Layer } from '$lib/types';
     import { createEventDispatcher } from 'svelte';
+    import { Layer } from '$lib/types';
     import SidebarButton from '$lib/Sidebar/SidebarButton.svelte';
     import SidebarSection from '$lib/Sidebar/SidebarSection.svelte';
     import { fade } from 'svelte/transition';
-    import { layout, layer, debugDma, showSidebar } from '$lib/stores';
-    import { poweredOn, running, port1, port2 } from '$lib/stores';
+    import { debugDma, layer, layout, port1, port2, poweredOn, running, showSidebar } from '$lib/stores';
     import SidebarPad from '$lib/Sidebar/SidebarPad.svelte';
 
     let sel = '';
@@ -125,17 +123,18 @@
                 />
                 <SidebarPad/>
 
-                <SidebarButton on:select={select} item={shell} active={$layer == Layer.shell}/>
-                <SidebarButton on:select={select} item={monitor} active={$debugDma}/>
-                <SidebarPad/>
-
-                <SidebarSection
-                        on:select={select}
-                        expanded={sel == 'layout'}
-                        item={layoutButton}
-                        subitems={layoutItems}
-                />
                 <SidebarButton on:select={select} item={settings} active={$layer == Layer.settings}/>
+                <SidebarButton on:select={select} item={shell} active={$layer == Layer.shell}/>
+                <SidebarPad />
+                {#if $poweredOn}
+                    <SidebarSection
+                            on:select={select}
+                            expanded={sel == 'layout'}
+                            item={layoutButton}
+                            subitems={layoutItems}
+                    />
+                    <SidebarButton on:select={select} item={monitor} active={$debugDma}/>
+                {/if}
             </div>
         </div>
     </div>
