@@ -1,13 +1,26 @@
 <svelte:options accessors={true}/>
 
 <script lang="ts">
-    import { onMount, onDestroy } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
     import { InputDevice, Opt } from '$lib/types';
-    import { proxy, amiga, config, denise, keyboard, joystick1, joystick2, running } from '$lib/stores';
-    import { port1, port2, mouse1, mouse2, MsgShaking } from '$lib/stores';
-    import { VPIXELS, HPIXELS } from '$lib/constants';
-    import { AMIGA_KEYS } from '$lib/constants';
-    import { keyset1, keyset2 } from '$lib/stores';
+    import {
+        amiga,
+        config,
+        denise,
+        joystick1,
+        joystick2,
+        keyboard,
+        keyset1,
+        keyset2,
+        mouse1,
+        mouse2,
+        MsgShaking,
+        port1,
+        port2,
+        proxy,
+        running
+    } from '$lib/stores';
+    import { AMIGA_KEYS, HPIXELS, VPIXELS } from '$lib/constants';
     import { RenderMode } from './types';
 
     // Reference to the canvas element
@@ -87,26 +100,21 @@
 		varying highp vec2 vTextureCoord;
 	   	uniform sampler2D u_lfSampler;
 	   	uniform sampler2D u_sfSampler;
-		uniform float u_lweight;
-		uniform float u_sweight;
 
 		void main()
 		{
 			vec2 coord = vec2(floor(gl_FragCoord.x), floor(gl_FragCoord.y));
-			float w; 
 
 			vec4 color;
 		    if (mod(coord.y, 2.0) == 0.0) {
-		        // color = vec4(1.0, 0.0, 0.0, 1.0); 
+		        // color = vec4(1.0, 0.0, 0.0, 1.0);
 				color = texture2D(u_sfSampler, vTextureCoord);
-				w = u_lweight;
 		    } else {
-		        // color = vec4(1.0, 1.0, 0.0, 1.0); 
+		        // color = vec4(1.0, 1.0, 0.0, 1.0);
 				color = texture2D(u_lfSampler, vTextureCoord);
-				w = u_sweight;
 		    }
 
-		    gl_FragColor = color * vec4(w, w, w, 1.0);
+		    gl_FragColor = color;
 		}
    `;
 
@@ -129,16 +137,23 @@
     
 		varying highp vec2 vTextureCoord;
     	uniform sampler2D sampler;
-    	void main() {
-			gl_FragColor = texture2D(sampler, vTextureCoord);
-			/*
+    	uniform float u_lweight;
+		uniform float u_sweight;
+
+    	void main()
+    	{
+    	    float w;
+
 			vec2 coord = vec2(floor(gl_FragCoord.x), floor(gl_FragCoord.y));
 		    if (mod(coord.y, 2.0) == 0.0) {
-		        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+		        w = u_lweight;
+		        // gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0) * vec4(w, w, w, 1.0);
 		    } else {
-		        gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);
+		        w = u_sweight;
+		        // gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0) * vec4(w, w, w, 1.0);
 		    }
-			*/
+
+            gl_FragColor = texture2D(sampler, vTextureCoord) * vec4(w, w, w, 1.0);
     	}
    `;
 
@@ -173,13 +188,13 @@
 
         // Create the merge shader
         mergeShaderProgram = compileProgram(vsMerge, fsMerge);
-        lfWeight = gl.getUniformLocation(mergeShaderProgram, 'u_lweight');
-        sfWeight = gl.getUniformLocation(mergeShaderProgram, 'u_sweight');
         lfSampler = gl.getUniformLocation(mergeShaderProgram, 'u_lfSampler');
         sfSampler = gl.getUniformLocation(mergeShaderProgram, 'u_sfSampler');
 
         // Create the main shader
         mainShaderProgram = compileProgram(vsMain, fsMain);
+        lfWeight = gl.getUniformLocation(mainShaderProgram, 'u_lweight');
+        sfWeight = gl.getUniformLocation(mainShaderProgram, 'u_sweight');
         sampler = gl.getUniformLocation(mainShaderProgram, 'sampler')!;
         gl.uniform1i(sampler, 0);
 
@@ -221,8 +236,12 @@
 
         // Rectify the canvas size if not
         if (needResize) {
+            canvas.width = displayWidth;
+            canvas.height = displayHeight;
+            /*
             canvas.width = x2 - x1;
             canvas.height = y2 - y1;
+            */
         }
     }
 
@@ -383,15 +402,11 @@
             if (currLOF) {
                 // Case 1: Non-interlace mode, two long frames in a row
                 gl.useProgram(mergeShaderProgram);
-                gl.uniform1f(lfWeight, 1.0);
-                gl.uniform1f(sfWeight, 1.0);
                 gl.uniform1i(lfSampler, 0);
                 gl.uniform1i(sfSampler, 0);
             } else {
                 // Case 2: Non-interlace mode, two short frames in a row
                 gl.useProgram(mergeShaderProgram);
-                gl.uniform1f(lfWeight, 1.0);
-                gl.uniform1f(sfWeight, 1.0);
                 gl.uniform1i(lfSampler, 1);
                 gl.uniform1i(sfSampler, 1);
             }
@@ -400,15 +415,6 @@
             gl.useProgram(mergeShaderProgram);
             gl.uniform1i(lfSampler, 1);
             gl.uniform1i(sfSampler, 0);
-
-            let weight = $config.getNum(Opt.FLICKER_WEIGHT);
-            if (weight > 0 && $running) {
-                const scaled = 1.0 - (weight / 100);
-                gl.useProgram(mergeShaderProgram);
-                gl.uniform1f(lfWeight, flickerCnt % 4 >= 2 ? 1.0 : scaled);
-                gl.uniform1f(sfWeight, flickerCnt % 4 >= 2 ? scaled : 1.0);
-                flickerCnt += 2;
-            }
         }
 
         const fb = gl.createFramebuffer();
@@ -430,6 +436,20 @@
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, mergeTexture);
         gl.useProgram(mainShaderProgram);
+        gl.uniform1f(lfWeight, 1.0);
+        gl.uniform1f(sfWeight, 1.0);
+
+        // Emulate flicker in interlace mode
+        if (currLOF != prevLOF) {
+            let weight = $config.getNum(Opt.FLICKER_WEIGHT);
+            if (weight > 0 && $running) {
+                const scaled = 1.0 - (weight / 100);
+                gl.uniform1f(lfWeight, flickerCnt % 4 >= 2 ? 1.0 : scaled);
+                gl.uniform1f(sfWeight, flickerCnt % 4 >= 2 ? scaled : 1.0);
+                flickerCnt += 1;
+            }
+        }
+
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     }
 
