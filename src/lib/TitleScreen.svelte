@@ -4,7 +4,8 @@
     import DiGrails from 'svelte-icons/di/DiGrails.svelte';
     import FaGithub from 'svelte-icons/fa/FaGithub.svelte';
     import FaMicrochip from 'svelte-icons/fa/FaMicrochip.svelte';
-    import FaPowerOff from 'svelte-icons/fa/FaPowerOff.svelte';
+    import GiBatMask from 'svelte-icons/gi/GiBatMask.svelte';
+    import MdPowerSettingsNew from 'svelte-icons/md/MdPowerSettingsNew.svelte';
     import GoLaw from 'svelte-icons/go/GoLaw.svelte';
     import { Layer } from '$lib/types';
     import MainPageLink from '$lib/Widgets/MainPageLink.svelte';
@@ -98,13 +99,23 @@
                                     <div class="font-sofia-extra text-7xl mr-2">vAmiga</div>
                                     <div class="font-sofia-extra text-7xl opacity-75">Online</div>
                                 </div>
-                                <div class="font-sofia-semi text-xl pl-2 pb-10">Version 0.3</div>
+                                <div class="font-sofia-semi text-xl pl-2 pb-10">Version 0.4</div>
                                 <div class="flex space-x-5">
-                                    <button class="btn btn-primary" on:click={switchOn}>Power On</button>
-                                    <button class="btn btn-primary" on:click={runDemo}>Run Demo</button>
-                                    <button class="btn btn-primary btn-square p-1.5" on:click={gotoGitHub}>
-                                        <FaGithub/>
-                                    </button>
+                                    <div class="tooltip tooltip-primary" data-tip="Power On">
+                                        <button class="btn btn-outline btn-square p-1.5" on:click={switchOn}>
+                                            <MdPowerSettingsNew/>
+                                        </button>
+                                    </div>
+                                    <div class="tooltip tooltip-primary" data-tip="Run Demo">
+                                        <button class="btn btn-outline btn-square p-1.5" on:click={runDemo}>
+                                            <GiBatMask/>
+                                        </button>
+                                    </div>
+                                    <div class="tooltip tooltip-primary" data-tip="Visit GitHub">
+                                        <button class="btn btn-outline btn-square p-1.5" on:click={gotoGitHub}>
+                                            <FaGithub/>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
