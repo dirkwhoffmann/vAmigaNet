@@ -751,7 +751,7 @@
                 $amiga.configure($proxy.OPT_SATURATION, Number(val));
                 break;
             case Opt.FLICKER_WEIGHT:
-                flickerWeight = Number(flickerWeight);
+                flickerWeight = Number(val);
                 break;
             default:
                 console.warn("set: Invalid option: ", option);
