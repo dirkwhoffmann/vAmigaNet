@@ -51,22 +51,34 @@ EMSCRIPTEN_BINDINGS(EnumProxy)
         .function("RetroShellKey", &EnumProxy::RetroShellKey);
 }
 
+
+//
+// Agnus proxy
+//
+
+EMSCRIPTEN_BINDINGS(AgnusProxy)
+{
+    class_<AgnusProxy>("AgnusProxy")
+        .constructor<>()
+        .function("frameCount", &AgnusProxy::frameCount)
+        .function("scheduleGUITimerAbs", &AgnusProxy::scheduleGUITimerAbs)
+        .function("scheduleGUITimerRel", &AgnusProxy::scheduleGUITimerRel);
+}
+
+
 //
 // Amiga Proxy
 //
 
 AmigaProxy::AmigaProxy()
 {
+    TRY
+
     printf("Constructing Amiga...\n");
     amiga = new Amiga();
 
     printf("Adding listener...\n");
     amiga->msgQueue.setListener(amiga, &processMsg);
-
-/*
-    printf("Launching emulator thread...\n");
-    amiga->launch();
-*/
 
     // DEPRECATED (REMOVE ASAP)
     printf("Configuring...\n");
@@ -80,110 +92,8 @@ AmigaProxy::AmigaProxy()
     amiga->configure(OPT_AGNUS_REVISION, AGNUS_OCS);
 
     amiga->configure(OPT_DRIVE_CONNECT, 1, true);
-}
 
-void AmigaProxy::launch()
-{
-    printf("Launching emulator thread...\n");
-    amiga->launch();
-}
-
-void AmigaProxy::configure(int option, int value)
-{
-    try
-    {
-        amiga->configure((Option)option, (i64)value);
-    }
-    catch (VAError &err)
-    {
-        save(err);
-        throw;
-    }
-}
-
-void AmigaProxy::configureDrive(int option, int id, int value)
-{
-    try
-    {
-        amiga->configure((Option)option, (i64)id, (i64)value);
-    }
-    catch (VAError &err)
-    {
-        save(err);
-        throw;
-    }
-}
-
-int AmigaProxy::getConfig(int option)
-{
-    return (int)amiga->getConfigItem(option);
-}
-
-int AmigaProxy::getDriveConfig(int option, int id)
-{
-    return (int)amiga->getConfigItem(option, id);
-}
-
-void AmigaProxy::powerOn()
-{
-    try
-    {
-        amiga->powerOn();
-    }
-    catch (VAError &err)
-    {
-        save(err);
-        throw;
-    }
-}
-
-void AmigaProxy::powerOff()
-{
-    try
-    {
-        amiga->powerOff();
-    }
-    catch (VAError &err)
-    {
-        save(err);
-        throw;
-    }
-}
-
-void AmigaProxy::run()
-{
-    try
-    {
-        amiga->run();
-    }
-    catch (VAError &err)
-    {
-        save(err);
-        throw;
-    }
-}
-
-void AmigaProxy::pause()
-{
-    try
-    {
-        amiga->pause();
-    }
-    catch (VAError &err)
-    {
-        save(err);
-        throw;
-    }
-}
-
-void AmigaProxy::setSampleRate(unsigned sample_rate)
-{
-    amiga->host.setSampleRate(sample_rate);
-}
-
-u32 AmigaProxy::audioFillLevel()
-{
-    return u32(amiga->paula.muxer.getStats().fillLevel * 100.0);
+    CATCH
 }
 
 void AmigaProxy::updateAudio(int offset)
@@ -211,6 +121,8 @@ u32 AmigaProxy::rightChannelBuffer()
 
 int AmigaProxy::getFileType(const string &blob)
 {
+    TRY
+
     std::stringstream stream;
     stream.write((const char *)blob.data(), blob.size());
 
@@ -232,55 +144,41 @@ int AmigaProxy::getFileType(const string &blob)
         return (int)FILETYPE_HDF;
 
     return FILETYPE_UNKNOWN;
+
+    CATCH
 }
 
 bool AmigaProxy::insertDisk(const string &blob, u32 len, u8 drive)
 {
-    printf("insertDisk(drive: %d)\n", drive);
-    try
+    TRY
+
+    std::stringstream stream;
+    stream.write((const char *)blob.data(), len);
+
+    if (ADFFile::isCompatible(stream))
     {
-        std::stringstream stream;
-        stream.write((const char *)blob.data(), len);
-
-        if (ADFFile::isCompatible(stream))
-        {
-            ADFFile adf{(u8 *)blob.data(), (isize)len};
-            amiga->df[drive]->swapDisk(std::make_unique<FloppyDisk>(adf));
-            return true;
-        }
-
-        if (EXEFile::isCompatible(stream))
-        {
-            EXEFile exe{(u8 *)blob.data(), (isize)len};
-            amiga->df[drive]->swapDisk(std::make_unique<FloppyDisk>(exe));
-            return true;
-        }
-
-        if (DMSFile::isCompatible(stream))
-        {
-            DMSFile dms{(u8 *)blob.data(), (isize)len};
-            amiga->df[drive]->swapDisk(std::make_unique<FloppyDisk>(dms));
-            return true;
-        }
-
-        return false;
+        ADFFile adf{(u8 *)blob.data(), (isize)len};
+        amiga->df[drive]->swapDisk(std::make_unique<FloppyDisk>(adf));
+        return true;
     }
-    catch (VAError &err)
+
+    if (EXEFile::isCompatible(stream))
     {
-        save(err);
-        throw;
+        EXEFile exe{(u8 *)blob.data(), (isize)len};
+        amiga->df[drive]->swapDisk(std::make_unique<FloppyDisk>(exe));
+        return true;
     }
-}
 
-void AmigaProxy::ejectDisk(u8 drive)
-{
-    amiga->df[drive]->ejectDisk();
-}
+    if (DMSFile::isCompatible(stream))
+    {
+        DMSFile dms{(u8 *)blob.data(), (isize)len};
+        amiga->df[drive]->swapDisk(std::make_unique<FloppyDisk>(dms));
+        return true;
+    }
 
-// This didn't work. I received a null pointer all the tome
-string AmigaProxy::getExceptionMessage(intptr_t exceptionPtr)
-{
-    return std::string(reinterpret_cast<VAError *>(exceptionPtr)->what());
+    return false;
+
+    CATCH
 }
 
 EMSCRIPTEN_BINDINGS(AmigaProxy)
@@ -327,22 +225,12 @@ EMSCRIPTEN_BINDINGS(AmigaProxy)
         .function("updateAudio", &AmigaProxy::updateAudio)
         .function("leftChannelBuffer", &AmigaProxy::leftChannelBuffer)
         .function("rightChannelBuffer", &AmigaProxy::rightChannelBuffer)
-        .function("audioFillLevel", &AmigaProxy::audioFillLevel)
-        .function("getExceptionMessage", &AmigaProxy::getExceptionMessage);
+        .function("audioFillLevel", &AmigaProxy::audioFillLevel);
 }
 
 //
 // CPU proxy
 //
-
-CPUProxy::CPUProxy()
-{
-}
-
-u32 CPUProxy::getClock() const
-{
-    return (u32)amiga->cpu.getCpuClock();
-}
 
 EMSCRIPTEN_BINDINGS(CPUProxy)
 {
@@ -351,52 +239,10 @@ EMSCRIPTEN_BINDINGS(CPUProxy)
         .function("getClock", &CPUProxy::getClock);
 }
 
-//
-// Agnus proxy
-//
-
-AgnusProxy::AgnusProxy()
-{
-}
-
-u32 AgnusProxy::frameCount() const
-{
-    return (u32)amiga->agnus.pos.frame;
-}
-
-void AgnusProxy::scheduleGUITimerAbs(u32 frames, u32 payload)
-{
-    // printf("Cycles: %lld\n", (Cycle)frames * CLK_FREQUENCY_PAL / 50);
-    amiga->agnus.scheduleGUITimerAbs((Cycle)frames * CLK_FREQUENCY_PAL / 50, payload);
-}
-
-void AgnusProxy::scheduleGUITimerRel(u32 frames, u32 payload)
-{
-    // printf("rel Cycles: %lld\n", (Cycle)frames * CLK_FREQUENCY_PAL / 50);
-    amiga->agnus.scheduleGUITimerRel((Cycle)frames * CLK_FREQUENCY_PAL / 50, payload);
-}
-
-EMSCRIPTEN_BINDINGS(AgnusProxy)
-{
-    class_<AgnusProxy>("AgnusProxy")
-        .constructor<>()
-        .function("frameCount", &AgnusProxy::frameCount)
-        .function("scheduleGUITimerAbs", &AgnusProxy::scheduleGUITimerAbs)
-        .function("scheduleGUITimerRel", &AgnusProxy::scheduleGUITimerRel);
-}
 
 //
 // Denise proxy
 //
-
-DeniseProxy::DeniseProxy()
-{
-}
-
-u32 DeniseProxy::noise() const
-{
-    return (u32)amiga->denise.pixelEngine.getNoise();
-}
 
 TextureWrapper DeniseProxy::getEmulatorTexture()
 {
@@ -424,67 +270,6 @@ EMSCRIPTEN_BINDINGS(DeniseProxy)
 // Drive Proxy
 //
 
-DriveProxy::DriveProxy(int nr)
-{
-    assert(nr >= 0 && nr <= 3);
-    this->nr = nr;
-}
-
-bool DriveProxy::isConnected() const
-{
-    return amiga->df[nr]->isConnected();
-}
-
-bool DriveProxy::hasDisk() const
-{
-    return amiga->df[nr]->hasDisk();
-}
-
-bool DriveProxy::hasModifiedDisk() const
-{
-    return amiga->df[nr]->hasModifiedDisk();
-}
-
-bool DriveProxy::hasUnmodifiedDisk() const
-{
-    return amiga->df[nr]->hasUnmodifiedDisk();
-}
-
-bool DriveProxy::hasProtectedDisk() const
-{
-    return amiga->df[nr]->hasProtectedDisk();
-}
-
-bool DriveProxy::hasUnprotectedDisk() const
-{
-    return amiga->df[nr]->hasUnprotectedDisk();
-}
-
-int DriveProxy::currentCyl() const
-{
-    return amiga->df[nr]->currentCyl();
-}
-
-bool DriveProxy::motor() const
-{
-    return amiga->df[nr]->getMotor();
-}
-
-void DriveProxy::markDiskAsModified()
-{
-    amiga->df[nr]->markDiskAsModified();
-}
-
-void DriveProxy::markDiskAsUnmodified()
-{
-    amiga->df[nr]->markDiskAsUnmodified();
-}
-
-void DriveProxy::toggleWriteProtection()
-{
-    amiga->df[nr]->toggleWriteProtection();
-}
-
 EMSCRIPTEN_BINDINGS(DriveProxy)
 {
     class_<DriveProxy>("DriveProxy")
@@ -506,18 +291,6 @@ EMSCRIPTEN_BINDINGS(DriveProxy)
 // Joystick proxy
 //
 
-JoystickProxy::JoystickProxy(int joystick)
-{
-    assert(joystick == 1 || joystick == 2);
-    this->joystick = joystick;
-}
-
-void JoystickProxy::trigger(int action)
-{
-    ControlPort &port = joystick == 1 ? amiga->controlPort1 : amiga->controlPort2;
-    port.joystick.trigger(action);
-}
-
 EMSCRIPTEN_BINDINGS(JoystickProxy)
 {
     class_<JoystickProxy>("JoystickProxy")
@@ -528,20 +301,6 @@ EMSCRIPTEN_BINDINGS(JoystickProxy)
 //
 // Keyboard proxy
 //
-
-KeyboardProxy::KeyboardProxy()
-{
-}
-
-void KeyboardProxy::pressKey(u8 keycode)
-{
-    amiga->keyboard.pressKey(keycode);
-}
-
-void KeyboardProxy::releaseKey(u8 keycode)
-{
-    amiga->keyboard.releaseKey(keycode);
-}
 
 EMSCRIPTEN_BINDINGS(KeyboardProxy)
 {
@@ -555,103 +314,53 @@ EMSCRIPTEN_BINDINGS(KeyboardProxy)
 // Memory proxy
 //
 
-MemoryProxy::MemoryProxy()
-{
-}
-
 RomInfo
 MemoryProxy::analyzeRom(const string &blob, u32 len)
 {
+    TRY
+
     RomInfo info{};
 
-    try
+    std::stringstream stream;
+    stream.write((const char *)blob.data(), len);
+
+    if (RomFile::isCompatible(stream))
     {
-        std::stringstream stream;
-        stream.write((const char *)blob.data(), len);
+        RomFile rom{(u8 *)blob.data(), (isize)len};
+        u32 crc32 = util::crc32(rom.data.ptr, rom.data.size);
+        RomIdentifier id = RomFile::identifier(crc32);
 
-        if (RomFile::isCompatible(stream))
-        {
-            RomFile rom{(u8 *)blob.data(), (isize)len};
-            u32 crc32 = util::crc32(rom.data.ptr, rom.data.size);
-            RomIdentifier id = RomFile::identifier(crc32);
-
-            info.crc32 = crc32;
-            info.title = RomFile::title(id);
-            info.version = RomFile::version(id);
-            info.released = RomFile::released(id);
-            info.model = RomFile::model(id);
-            info.isAros = RomFile::isArosRom(id);
-            info.isDiag = RomFile::isDiagRom(id);
-            info.isCommodore = RomFile::isCommodoreRom(id);
-            info.isHyperion = RomFile::isHyperionRom(id);
-            info.isPatched = RomFile::isPatchedRom(id);
-            info.isUnknown = ROM_UNKNOWN == id;
-        }
-        return info;
+        info.crc32 = crc32;
+        info.title = RomFile::title(id);
+        info.version = RomFile::version(id);
+        info.released = RomFile::released(id);
+        info.model = RomFile::model(id);
+        info.isAros = RomFile::isArosRom(id);
+        info.isDiag = RomFile::isDiagRom(id);
+        info.isCommodore = RomFile::isCommodoreRom(id);
+        info.isHyperion = RomFile::isHyperionRom(id);
+        info.isPatched = RomFile::isPatchedRom(id);
+        info.isUnknown = ROM_UNKNOWN == id;
     }
-    catch (VAError &err)
-    {
-        save(err);
-        throw;
-    }
-}
+    return info;
 
-bool MemoryProxy::hasRom() const
-{
-    return amiga->mem.hasRom();
-}
-
-bool MemoryProxy::hasExt() const
-{
-    return amiga->mem.hasExt();
+    CATCH
 }
 
 bool MemoryProxy::loadRom(const string &blob, u32 len)
 {
-    try
-    {
-        amiga->mem.loadRom((u8 *)blob.c_str(), len);
-        return amiga->mem.hasRom();
-    }
-    catch (VAError &err)
-    {
-        save(err);
-        throw;
-    }
+    TRY
+    amiga->mem.loadRom((u8 *)blob.c_str(), len);
+    return amiga->mem.hasRom();
+    CATCH
 }
 
 bool MemoryProxy::loadExt(const string &blob, u32 len)
 {
-    try
-    {
-        amiga->mem.loadExt((u8 *)blob.c_str(), len);
-        return amiga->mem.hasExt();
-    }
-    catch (VAError &err)
-    {
-        save(err);
-        throw;
-    }
-}
-
-void MemoryProxy::deleteRom()
-{
-    amiga->mem.deleteRom();
-}
-
-void MemoryProxy::deleteWom()
-{
-    amiga->mem.deleteWom();
-}
-
-void MemoryProxy::deleteExt()
-{
-    amiga->mem.deleteExt();
-}
-
-u32 MemoryProxy::romFingerprint() const
-{
-    return amiga->mem.romFingerprint();
+    TRY
+    amiga->mem.loadExt((u8 *)blob.c_str(), len);
+    return amiga->mem.hasExt();
+    CATCH
 }
 
 EMSCRIPTEN_BINDINGS(MemoryProxy)
@@ -672,42 +381,6 @@ EMSCRIPTEN_BINDINGS(MemoryProxy)
 //
 // Mouse proxy
 //
-
-MouseProxy::MouseProxy(int mouse)
-{
-    assert(mouse == 1 || mouse == 2);
-    this->mouse = mouse;
-}
-
-bool MouseProxy::detectShakeAbs(double x, double y)
-{
-    ControlPort &port = mouse == 1 ? amiga->controlPort1 : amiga->controlPort2;
-    return port.mouse.detectShakeXY(x, y);
-}
-
-bool MouseProxy::detectShakeRel(double x, double y)
-{
-    ControlPort &port = mouse == 1 ? amiga->controlPort1 : amiga->controlPort2;
-    return port.mouse.detectShakeDxDy(x, y);
-}
-
-void MouseProxy::setXY(double x, double y)
-{
-    ControlPort &port = mouse == 1 ? amiga->controlPort1 : amiga->controlPort2;
-    port.mouse.setXY(x, y);
-}
-
-void MouseProxy::setDxDy(double x, double y)
-{
-    ControlPort &port = mouse == 1 ? amiga->controlPort1 : amiga->controlPort2;
-    port.mouse.setDxDy(x, y);
-}
-
-void MouseProxy::trigger(int action)
-{
-    ControlPort &port = mouse == 1 ? amiga->controlPort1 : amiga->controlPort2;
-    port.mouse.trigger((GamePadAction)action);
-}
 
 EMSCRIPTEN_BINDINGS(MouseProxy)
 {
@@ -741,15 +414,6 @@ EMSCRIPTEN_BINDINGS(DiskControllerProxy)
 // Paula proxy
 //
 
-PaulaProxy::PaulaProxy()
-{
-}
-
-bool PaulaProxy::isMuted() const
-{
-    return amiga->paula.muxer.isMuted();
-}
-
 EMSCRIPTEN_BINDINGS(PaulaProxy)
 {
     class_<PaulaProxy>("PaulaProxy")
@@ -760,30 +424,6 @@ EMSCRIPTEN_BINDINGS(PaulaProxy)
 //
 // RetroShell proxy
 //
-
-RetroShellProxy::RetroShellProxy()
-{
-}
-
-string RetroShellProxy::getText()
-{
-    return amiga->retroShell.text();
-}
-
-void RetroShellProxy::press(RetroShellKey key)
-{
-    amiga->retroShell.press(key);
-}
-
-void RetroShellProxy::pressKey(char c)
-{
-    amiga->retroShell.press(c);
-}
-
-void RetroShellProxy::pressShiftReturn()
-{
-    amiga->retroShell.press(RSKEY_RETURN, true);
-}
 
 EMSCRIPTEN_BINDINGS(RetroShellProxy)
 {
