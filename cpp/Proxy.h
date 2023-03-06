@@ -59,6 +59,17 @@ struct EnumProxy
     string RetroShellKey(int value) { return RetroShellKeyEnum::key(value); }
 };
 
+struct AgnusProxy
+{
+    AgnusProxy();
+
+    u32 frameCount() const;
+
+    void scheduleGUITimerAbs(u32 frames, u32 payload);
+    void scheduleGUITimerRel(u32 frames, u32 payload);
+
+};
+
 struct AmigaProxy
 {
     AmigaProxy();
@@ -124,17 +135,6 @@ struct CPUProxy
     u32 getClock() const;
 };
 
-struct AgnusProxy
-{
-    AgnusProxy();
-
-    u32 frameCount() const;
-
-    void scheduleGUITimerAbs(u32 frames, u32 payload);
-    void scheduleGUITimerRel(u32 frames, u32 payload);
-
-};
-
 struct DeniseProxy
 {
     DeniseProxy();
@@ -142,6 +142,15 @@ struct DeniseProxy
     // Textures
     TextureWrapper getEmulatorTexture();
     u32 noise() const;
+};
+
+struct DiskControllerProxy
+{
+    DiskControllerProxy();
+
+    bool isSpinning() const { return amiga->paula.diskController.spinning(); }
+    int getSelected() const { return amiga->paula.diskController.getSelected(); }
+    int getState() const { return amiga->paula.diskController.getState(); }
 };
 
 struct DriveProxy
@@ -213,11 +222,11 @@ struct MouseProxy
     void trigger(int action);
 };
 
-struct DiskControllerProxy
+struct PaulaProxy
 {
-    DiskControllerProxy();
+    PaulaProxy();
 
-    bool isSpinning() const { return amiga->paula.diskController.spinning(); }
+    bool isMuted() const;
 };
 
 struct RetroShellProxy

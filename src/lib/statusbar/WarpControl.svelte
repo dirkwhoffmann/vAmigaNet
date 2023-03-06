@@ -5,8 +5,6 @@
 
     function iconUrl(warpMode: number, warp: boolean) {
 
-        console.log("iconURL = ", warpMode);
-
         switch (warpMode) {
 			case 0: // Auto
 				return warp ? 'icons/warp-auto-on.png' : 'icons/warp-auto-off.png';

@@ -732,7 +732,29 @@ EMSCRIPTEN_BINDINGS(DiskControllerProxy)
 {
     class_<DiskControllerProxy>("DiskControllerProxy")
         .constructor<>()
-        .function("isSpinning", &DiskControllerProxy::isSpinning);
+        .function("isSpinning", &DiskControllerProxy::isSpinning)
+        .function("getSelected", &DiskControllerProxy::getSelected)
+        .function("getState", &DiskControllerProxy::getState);
+}
+
+//
+// Paula proxy
+//
+
+PaulaProxy::PaulaProxy()
+{
+}
+
+bool PaulaProxy::isMuted() const
+{
+    return amiga->paula.muxer.isMuted();
+}
+
+EMSCRIPTEN_BINDINGS(PaulaProxy)
+{
+    class_<PaulaProxy>("PaulaProxy")
+        .constructor<>()
+        .function("isMuted", &PaulaProxy::isMuted);
 }
 
 //
@@ -821,6 +843,13 @@ EMSCRIPTEN_BINDINGS(Keys)
     // DriveMechanics
     constant("MECHANICS_NONE", (int)MECHANICS_NONE);
     constant("MECHANICS_A1010", (int)MECHANICS_A1010);
+
+   // DriveState
+    constant("DRIVE_DMA_OFF", (int)DRIVE_DMA_OFF);
+    constant("DRIVE_DMA_WAIT", (int)DRIVE_DMA_WAIT);
+    constant("DRIVE_DMA_READ", (int)DRIVE_DMA_READ);
+    constant("DRIVE_DMA_WRITE", (int)DRIVE_DMA_WRITE);
+    constant("DRIVE_DMA_FLUSH", (int)DRIVE_DMA_FLUSH);
 
     // FileType
     constant("FILETYPE_UNKNOWN", (int)FILETYPE_UNKNOWN);

@@ -25,6 +25,7 @@ export const keyboard: any = writable();
 export const memory: any = writable();
 export const mouse1: any = writable();
 export const mouse2: any = writable();
+export const paula: any = writable();
 export const retroShell: any = writable();
 
 // Global components

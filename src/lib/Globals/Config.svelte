@@ -311,12 +311,9 @@
 
     async function loadSetting(opt: Opt)
     {
-        console.log("loadSetting ", opt);
-
         try {
             // Read value from database
             const id = await db.opts.get(opt);
-            console.log("Got key / value pair ", id.key, id.value);
 
             // Apply setting
             set(opt, id.value);
@@ -560,7 +557,6 @@
 
     export function set(option: Opt, val: string)
     {
-        console.log("In set", option, val);
         switch (option) {
 
             //

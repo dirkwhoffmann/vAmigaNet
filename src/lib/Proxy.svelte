@@ -36,6 +36,7 @@
         memory,
         mouse1,
         mouse2,
+        paula,
         MsgAbort,
         MsgAutoSnapshotTaken,
         MsgBreakpointReached,
@@ -276,6 +277,7 @@
         $memory = new $proxy.MemoryProxy();
         $mouse1 = new $proxy.MouseProxy(1);
         $mouse2 = new $proxy.MouseProxy(2);
+        $paula = new $proxy.PaulaProxy();
         $retroShell = new $proxy.RetroShellProxy();
         $amiga = new $proxy.AmigaProxy();
 
@@ -332,19 +334,23 @@
 
         if (!$initialized) return;
 
+        const state = $diskController.getState();
+        const sel = $diskController.getSelected();
+        const write = state == $proxy.DRIVE_DMA_WRITE;
+
         $poweredOn = $amiga.poweredOn();
         $running = $amiga.isRunning();
         $warp = $amiga.inWarpMode();
-        // TODO: muted ch
+        $muted = $paula.isMuted() || $warp;
         $halted = $amiga.isHalted();
         $debugMode = $amiga.inDebugMode();
-        $dfConnected = [df0.isConnected(), df1.isConnected(), df2.isConnected(), df3.isConnected()];
-        $dfHasDisk = [df0.hasDisk(), df1.hasDisk(), df2.hasDisk(), df3.hasDisk()];
-        $dfMotor = [df0.motor(), df1.motor(), df2.motor(), df3.motor()];
-        // TODO: writing
-        $dfUnsaved = [df0.hasUnsavedDisk(), df1.hasUnsavedDisk(), df2.hasUnsavedDisk(), df3.hasUnsavedDisk()];
-        $dfProtected = [df0.hasProtectedDisk(), df1.hasProtectedDisk(), df2.hasProtectedDisk(), df3.hasProtectedDisk()];
-        $dfCylinder = [df0.currentCyl(), df1.currentCyl(), df2.currentCyl(), df3.currentCyl()];
+        $dfConnected = [$df0.isConnected(), $df1.isConnected(), $df2.isConnected(), $df3.isConnected()];
+        $dfHasDisk = [$df0.hasDisk(), $df1.hasDisk(), $df2.hasDisk(), $df3.hasDisk()];
+        $dfMotor = [$df0.motor(), $df1.motor(), $df2.motor(), $df3.motor()];
+        $dfWriting = [sel == 0 && write, sel == 1 && write, sel == 2 && write, sel == 3 && write];
+        $dfUnsaved = [$df0.hasModifiedDisk(), $df1.hasModifiedDisk(), $df2.hasModifiedDisk(), $df3.hasModifiedDisk()];
+        $dfProtected = [$df0.hasProtectedDisk(), $df1.hasProtectedDisk(), $df2.hasProtectedDisk(), $df3.hasProtectedDisk()];
+        $dfCylinder = [$df0.currentCyl(), $df1.currentCyl(), $df2.currentCyl(), $df3.currentCyl()];
 
     }
 
@@ -367,26 +373,21 @@
 
             case $proxy.MSG_POWER_ON:
                 $MsgPowerOn++;
-                $poweredOn = true;
                 updateStateVariables();
                 break;
 
             case $proxy.MSG_POWER_OFF:
                 $MsgPowerOff++;
-                $poweredOn = false;
-                $running = false;
                 updateStateVariables();
                 break;
 
             case $proxy.MSG_RUN:
                 $MsgRun++;
-                $running = true;
                 updateStateVariables();
                 break;
 
             case $proxy.MSG_PAUSE:
                 $MsgPause++;
-                $running = false;
                 updateStateVariables();
                 break;
 
@@ -397,7 +398,6 @@
             case $proxy.MSG_RESET:
                 $MsgReset++;
                 $config.updateWarpState();
-                $halted = false;
                 updateStateVariables();
                 break;
 
@@ -411,34 +411,32 @@
 
             case $proxy.MSG_WARP_ON:
                 $MsgWarpOn++;
-                $warp = true;
+                updateStateVariables();
                 break;
 
             case $proxy.MSG_WARP_OFF:
                 $MsgWarpOff++;
-                $warp = false;
+                updateStateVariables();
                 break;
 
             case $proxy.MSG_DEBUG_ON:
                 $MsgDebugOn++;
-                console.log('debug mode on');
-                $debugMode = true;
+                updateStateVariables();
                 break;
 
             case $proxy.MSG_DEBUG_OFF:
                 $MsgDebugOff++;
-                console.log('debug mode off');
-                $debugMode = false;
+                updateStateVariables();
                 break;
 
             case $proxy.MSG_MUTE_ON:
                 $MsgMuteOn++;
-                $muted = true;
+                updateStateVariables();
                 break;
 
             case $proxy.MSG_MUTE_OFF:
                 $MsgMuteOff++;
-                $muted = false;
+                updateStateVariables();
                 break;
 
             case $proxy.MSG_POWER_LED_ON:
@@ -515,7 +513,7 @@
 
             case $proxy.MSG_CPU_HALT:
                 $MsgCpuHalt++;
-                $halted = true;
+                updateStateVariables();
                 break;
 
             case $proxy.MSG_COPPERBP_REACHED:
@@ -544,12 +542,12 @@
 
             case $proxy.MSG_DRIVE_CONNECT:
                 $MsgDriveConnect++;
-                $dfConnected[d1] = true;
+                updateStateVariables();
                 break;
 
             case $proxy.MSG_DRIVE_DISCONNECT:
                 $MsgDriveDisconnect++;
-                $dfConnected[d1] = false;
+                updateStateVariables();
                 break;
 
             case $proxy.MSG_DRIVE_SELECT:
@@ -562,7 +560,7 @@
 
             case $proxy.MSG_DRIVE_WRITE:
                 $MsgDriveWrite++;
-                $dfWriting[d1] = d2 == 1;
+                updateStateVariables();
                 break;
 
             case $proxy.MSG_DRIVE_LED_ON:
@@ -575,58 +573,58 @@
 
             case $proxy.MSG_DRIVE_MOTOR_ON:
                 $MsgDriveMotorOn++;
-                $dfMotor[d1] = true;
                 $config.updateWarpState();
+                updateStateVariables();
                 break;
 
             case $proxy.MSG_DRIVE_MOTOR_OFF:
                 $MsgDriveMotorOff++;
-                $dfMotor[d1] = false;
                 $config.updateWarpState();
+                updateStateVariables();
                 break;
 
             case $proxy.MSG_DRIVE_STEP:
                 $MsgDriveStep++;
-                $dfCylinder[d1] = d2;
+                updateStateVariables();
                 $audio.playStepSound(d3, d4);
                 break;
 
             case $proxy.MSG_DRIVE_POLL:
                 $MsgDrivePoll++;
-                $dfCylinder[d1] = d2;
+                updateStateVariables();
                 $audio.playStepSound(d3, d4);
                 break;
 
             case $proxy.MSG_DISK_INSERT:
                 $MsgDiskInsert++;
-                $dfHasDisk[d1] = true;
+                updateStateVariables();
                 $audio.playInsertSound(d3, d4);
                 break;
 
             case $proxy.MSG_DISK_EJECT:
                 $MsgDiskEject++;
-                $dfHasDisk[d1] = false;
+                updateStateVariables();
                 $audio.playEjectSound(d3, d4);
                 break;
 
             case $proxy.MSG_DISK_SAVED:
                 $MsgDiskSaved++;
-                $dfUnsaved[d1] = false;
+                updateStateVariables();
                 break;
 
             case $proxy.MSG_DISK_UNSAVED:
                 $MsgDiskUnsaved++;
-                $dfUnsaved[d1] = true;
+                updateStateVariables();
                 break;
 
             case $proxy.MSG_DISK_PROTECT:
                 $MsgDiskProtect++;
-                $dfProtected[d1] = true;
+                updateStateVariables();
                 break;
 
             case $proxy.MSG_DISK_UNPROTECT:
                 $MsgDiskUnprotect++;
-                $dfProtected[d1] = false;
+                updateStateVariables();
                 break;
 
             case $proxy.MSG_HDC_CONNECT:
@@ -662,7 +660,6 @@
                 break;
 
             case $proxy.MSG_SHAKING:
-                console.log('MSG_SHAKING');
                 $MsgShaking++;
                 break;
 
@@ -687,6 +684,7 @@
             case $proxy.MSG_SNAPSHOT_RESTORED:
                 $MsgSnapshotRestored++;
                 $config.updateWarpState();
+                updateStateVariables();
                 break;
 
             case $proxy.MSG_RECORDING_STARTED:
