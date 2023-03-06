@@ -5,6 +5,8 @@ import type { RomEntry } from './Db/db';
 
 // Gateway to the WASM backend
 export const proxy: any = writable();
+// export const wasmInitialized = writable(false);
+export const initialized = writable(false);
 
 // Proxies
 export const agnus: any = writable();
@@ -42,8 +44,6 @@ export const port2 = writable(0);
 // Emulation keysets
 export const keyset1: Writable<KeySet> = writable();
 export const keyset2: Writable<KeySet> = writable();
-// export const keyset1 = writable();
-// export const keyset2 = writable();
 
 // Layout
 export const canvasWidth = writable(0);
@@ -62,8 +62,6 @@ export const activeSlider = writable(0);
 export const dragItem: Writable<Uint8Array | null> = writable(null);
 
 // Emulator state
-export const wasmInitialized = writable(false);
-export const initialized = writable(false);
 export const poweredOn = writable(false);
 export const running = writable(false);
 export const warp = writable(false);

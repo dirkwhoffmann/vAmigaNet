@@ -66,6 +66,9 @@ struct AmigaProxy
     Buffer<float> leftChannel;
     Buffer<float> rightChannel;
 
+    // Operating
+    void launch();
+
     // Handling exceptions
     int errorCode() { return ::errorCode; }
     string what() { return ::what; }
@@ -83,6 +86,9 @@ struct AmigaProxy
     bool poweredOff() { return amiga->isPoweredOff(); }
     bool isRunning() { return amiga->isRunning(); }
     bool isPaused() { return amiga->isPaused(); }
+    bool isHalted() { return amiga->isHalted(); }
+    void inWarpMode() { amiga->inWarpMode(); }
+    void inDebugMode() { amiga->inDebugMode(); }
     // - (void)isReady:(ExceptionWrapper *)ex;
     void powerOn();
     void powerOff();
@@ -90,7 +96,6 @@ struct AmigaProxy
     void pause();
     void halt() { amiga->halt(); }
     void stopAndGo() { amiga->stopAndGo(); }
-    void inWarpMode() { amiga->inWarpMode(); }
     void warpOn() { amiga->warpOn(); }
     void warpOff() { amiga->warpOff(); }
 

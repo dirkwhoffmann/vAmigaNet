@@ -63,9 +63,12 @@ AmigaProxy::AmigaProxy()
     printf("Adding listener...\n");
     amiga->msgQueue.setListener(amiga, &processMsg);
 
+/*
     printf("Launching emulator thread...\n");
     amiga->launch();
+*/
 
+    // DEPRECATED (REMOVE ASAP)
     printf("Configuring...\n");
     amiga->configure(OPT_AUDVOLL, 100);
     amiga->configure(OPT_AUDVOLR, 100);
@@ -77,6 +80,12 @@ AmigaProxy::AmigaProxy()
     amiga->configure(OPT_AGNUS_REVISION, AGNUS_OCS);
 
     amiga->configure(OPT_DRIVE_CONNECT, 1, true);
+}
+
+void AmigaProxy::launch()
+{
+    printf("Launching emulator thread...\n");
+    amiga->launch();
 }
 
 void AmigaProxy::configure(int option, int value)
@@ -278,6 +287,7 @@ EMSCRIPTEN_BINDINGS(AmigaProxy)
 {
     class_<AmigaProxy>("AmigaProxy")
         .constructor<>()
+        .function("launch", &AmigaProxy::launch)
         .function("errorCode", &AmigaProxy::errorCode)
 
         .function("what", &AmigaProxy::what)
@@ -294,6 +304,9 @@ EMSCRIPTEN_BINDINGS(AmigaProxy)
         .function("poweredOff", &AmigaProxy::poweredOff)
         .function("isRunning", &AmigaProxy::isRunning)
         .function("isPaused", &AmigaProxy::isPaused)
+        .function("isHalted", &AmigaProxy::isHalted)
+        .function("inWarpMode", &AmigaProxy::inWarpMode)
+        .function("inDebugMode", &AmigaProxy::inDebugMode)
         // isReady
         .function("powerOn", &AmigaProxy::powerOn)
         .function("powerOff", &AmigaProxy::powerOff)
@@ -301,7 +314,6 @@ EMSCRIPTEN_BINDINGS(AmigaProxy)
         .function("pause", &AmigaProxy::pause)
         .function("halt", &AmigaProxy::halt)
         .function("stopAndGo", &AmigaProxy::stopAndGo)
-        .function("inWarpMode", &AmigaProxy::inWarpMode)
         .function("warpOn", &AmigaProxy::warpOn)
         .function("warpOff", &AmigaProxy::warpOff)
 

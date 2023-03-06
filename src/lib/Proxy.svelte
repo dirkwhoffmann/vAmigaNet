@@ -1,706 +1,742 @@
-<svelte:options accessors={true} />
+<svelte:options accessors={true}/>
 
 <script lang="ts">
     import { CRC32 } from "$lib/constants";
-	import type { DataBaseItem } from '$lib/types';
-	import { onMount } from 'svelte';
-	import { WarpMode } from '$lib/types';
-    import { config } from "$lib/stores";
+    import type { DataBaseItem } from '$lib/types';
+    import { onMount } from 'svelte';
     import {
-		proxy,
-		audio,
-		agnus,
-		amiga,
-		cpu,
-		denise,
+        agnus,
+        amiga,
+        audio,
+        config,
+        cpu,
+        debugDma,
+        debugMode,
+        denise,
         df0,
         df1,
         df2,
         df3,
-		diskController,
-		enums,
-		joystick1,
-		joystick2,
-		keyboard,
-		memory,
-		mouse1,
-		mouse2,
-		retroShell,
-		MsgNone,
-		MsgRegister,
-		MsgConfig,
-		MsgPowerOn,
-		MsgPowerOff,
-		MsgRun,
-		MsgPause,
-		MsgStep,
-		MsgReset,
-		MsgShutdown,
-		MsgAbort,
-		MsgWarpOn,
-		MsgWarpOff,
-		MsgDebugOn,
-		MsgDebugOff,
-		MsgMuteOn,
-		MsgMuteOff,
-		MsgPowerLedOn,
-		MsgPowerLedDim,
-		MsgPowerLedOff,
-		MsgCloseConsole,
-		MsgUpdateConsole,
-		MsgScriptDone,
-		MsgScriptPause,
-		MsgScriptAbort,
-		MsgScriptWakeup,
-		MsgVideoFormat,
-		MsgOverclocking,
-		MsgBreakpointReached,
-		MsgBreakpointUpdated,
-		MsgWatchpointReached,
-		MsgWatchpointUpdated,
-		MsgCatchpointReached,
-		MsgCatchpointUpdated,
-		MsgSwTrapReached,
-		MsgCpuHalt,
-		MsgCopperBpReached,
-		MsgCopperBpUpdated,
-		MsgCopperWpReached,
-		MsgCopperWpUpdated,
-		MsgViewport,
-		MsgMemLayout,
-		MsgDriveConnect,
-		MsgDriveDisconnect,
-		MsgDriveSelect,
-		MsgDriveRead,
-		MsgDriveWrite,
-		MsgDriveLedOn,
-		MsgDriveLedOff,
-		MsgDriveMotorOn,
-		MsgDriveMotorOff,
-		MsgDriveStep,
-		MsgDrivePoll,
-		MsgDiskInsert,
-		MsgDiskEject,
-		MsgDiskSaved,
-		MsgDiskUnsaved,
-		MsgDiskProtect,
-		MsgDiskUnprotect,
-		MsgHdcConnect,
-		MsgHdcDisconnect,
-		MsgHdcState,
-		MsgHdrStep,
-		MsgHdrRead,
-		MsgHdrWrite,
-		MsgHdrIdle,
-		MsgCtrlAmigaAmiga,
-		MsgShaking,
-		MsgSerIn,
-		MsgSerOut,
-		MsgAutoSnapshotTaken,
-		MsgUserSnapshotTaken,
-		MsgSnapshotRestored,
-		MsgRecordingStarted,
-		MsgRecordingStopped,
-		MsgRecordingAborted,
-		MsgDmaDebugOn,
-		MsgDmaDebugOff,
-		MsgSrvState,
-		MsgSrvReceive,
-		MsgSrvSend
-	} from '$lib/stores';
-	import {
-		initialized,
-		poweredOn,
-		running,
-		warp,
-		muted,
-		halted,
-		debugMode,
-		romcrc
-	} from '$lib/stores';
-	import {
-		dfConnected,
-		dfHasDisk,
-		dfMotor,
-		dfWriting,
-		dfUnsaved,
-		dfCylinder,
-		dfProtected
-	} from '$lib/stores';
-	import { debugDma, keyset1, keyset2 } from '$lib/stores';
-	import { db, type RomEntry } from '$lib/Db/db';
-	import { AMIGA_KEYS } from './constants';
+        dfConnected,
+        dfCylinder,
+        dfHasDisk,
+        dfMotor,
+        dfProtected,
+        dfUnsaved,
+        dfWriting,
+        diskController,
+        enums,
+        halted,
+        initialized,
+        joystick1,
+        joystick2,
+        keyboard,
+        keyset1,
+        keyset2,
+        memory,
+        mouse1,
+        mouse2,
+        MsgAbort,
+        MsgAutoSnapshotTaken,
+        MsgBreakpointReached,
+        MsgBreakpointUpdated,
+        MsgCatchpointReached,
+        MsgCatchpointUpdated,
+        MsgCloseConsole,
+        MsgConfig,
+        MsgCopperBpReached,
+        MsgCopperBpUpdated,
+        MsgCopperWpReached,
+        MsgCopperWpUpdated,
+        MsgCpuHalt,
+        MsgCtrlAmigaAmiga,
+        MsgDebugOff,
+        MsgDebugOn,
+        MsgDiskEject,
+        MsgDiskInsert,
+        MsgDiskProtect,
+        MsgDiskSaved,
+        MsgDiskUnprotect,
+        MsgDiskUnsaved,
+        MsgDmaDebugOff,
+        MsgDmaDebugOn,
+        MsgDriveConnect,
+        MsgDriveDisconnect,
+        MsgDriveLedOff,
+        MsgDriveLedOn,
+        MsgDriveMotorOff,
+        MsgDriveMotorOn,
+        MsgDrivePoll,
+        MsgDriveRead,
+        MsgDriveSelect,
+        MsgDriveStep,
+        MsgDriveWrite,
+        MsgHdcConnect,
+        MsgHdcDisconnect,
+        MsgHdcState,
+        MsgHdrIdle,
+        MsgHdrRead,
+        MsgHdrStep,
+        MsgHdrWrite,
+        MsgMemLayout,
+        MsgMuteOff,
+        MsgMuteOn,
+        MsgNone,
+        MsgOverclocking,
+        MsgPause,
+        MsgPowerLedDim,
+        MsgPowerLedOff,
+        MsgPowerLedOn,
+        MsgPowerOff,
+        MsgPowerOn,
+        MsgRecordingAborted,
+        MsgRecordingStarted,
+        MsgRecordingStopped,
+        MsgRegister,
+        MsgReset,
+        MsgRun,
+        MsgScriptAbort,
+        MsgScriptDone,
+        MsgScriptPause,
+        MsgScriptWakeup,
+        MsgSerIn,
+        MsgSerOut,
+        MsgShaking,
+        MsgShutdown,
+        MsgSnapshotRestored,
+        MsgSrvReceive,
+        MsgSrvSend,
+        MsgSrvState,
+        MsgStep,
+        MsgSwTrapReached,
+        MsgUpdateConsole,
+        MsgUserSnapshotTaken,
+        MsgVideoFormat,
+        MsgViewport,
+        MsgWarpOff,
+        MsgWarpOn,
+        MsgWatchpointReached,
+        MsgWatchpointUpdated,
+        muted,
+        poweredOn,
+        proxy,
+        retroShell,
+        romcrc,
+        running,
+        warp
+    } from "$lib/stores";
+    import { db } from '$lib/Db/db';
     import { Opt } from "./types";
 
-	onMount(() => {
-		console.log('Proxy: onMount()');
+    onMount(() => {
+        console.log('Proxy: onMount()');
 
-		// Prepare to receive messages
-		$proxy.processMsg = processMsg;
-	});
+        // Prepare to receive messages
+        $proxy.processMsg = processMsg;
+    });
 
-	export async function runShowcase(showcase: DataBaseItem) {
-		await $audio.setup();
-		try {
-			console.log('Showcase:', showcase.title);
-			$amiga.powerOff();
-			console.log('Installing ROM:', showcase.roms);
-			$proxy.installRoms(showcase.roms);
-			console.log('Configuring Chip RAM:', showcase.memory[0]);
-			$amiga.configure($proxy.OPT_CHIP_RAM, showcase.memory[0]);
-			console.log('Configuring Slow RAM:', showcase.memory[1]);
-			$amiga.configure($proxy.OPT_SLOW_RAM, showcase.memory[1]);
-			console.log('Configuring Fast RAM:', showcase.memory[2]);
-			$amiga.configure($proxy.OPT_FAST_RAM, showcase.memory[2]);
+    export async function runShowcase(showcase: DataBaseItem)
+    {
+        await $audio.setup();
+        try {
+            console.log('Showcase:', showcase.title);
+            $amiga.powerOff();
+            console.log('Installing ROM:', showcase.roms);
+            $proxy.installRoms(showcase.roms);
+            console.log('Configuring Chip RAM:', showcase.memory[0]);
+            $amiga.configure($proxy.OPT_CHIP_RAM, showcase.memory[0]);
+            console.log('Configuring Slow RAM:', showcase.memory[1]);
+            $amiga.configure($proxy.OPT_SLOW_RAM, showcase.memory[1]);
+            console.log('Configuring Fast RAM:', showcase.memory[2]);
+            $amiga.configure($proxy.OPT_FAST_RAM, showcase.memory[2]);
             console.log('Configuring drives:', showcase.adf.length);
             $config.set(Opt.DF1, showcase.adf.length > 1);
-			for (let i = 0; i < showcase.adf.length; i++) {
-				console.log('Inserting disk ' + i + ':', showcase.adf[i]);
-				await insert(showcase.adf[i], i);
-			}
-			console.log('Configuring warp mode: ' + showcase.warp);
-			$config.set(Opt.WARP_MODE, showcase.warp);
+            for (let i = 0; i < showcase.adf.length; i++) {
+                console.log('Inserting disk ' + i + ':', showcase.adf[i]);
+                await insert(showcase.adf[i], i);
+            }
+            console.log('Configuring warp mode: ' + showcase.warp);
+            $config.set(Opt.WARP_MODE, showcase.warp);
             console.log('Launchine emulator...');
-			$amiga.run();
+            $amiga.run();
 
-			// Set GUI timer to manage disk changes
-			if (showcase.title == 'Absolute Inebriation') {
-				console.log("Scheduling disk change (inebriation)");
-				// Change disk after 60 seconds (3000 frames)
-				$agnus.scheduleGUITimerAbs(3000, 1); 
-			}
-			if (showcase.title == 'Eon') {
-				console.log("Scheduling disk change (eon)");
-				$agnus.scheduleGUITimerAbs(7600, 2);
-			}
+            // Set GUI timer to manage disk changes
+            if (showcase.title == 'Absolute Inebriation') {
+                console.log("Scheduling disk change (inebriation)");
+                // Change disk after 60 seconds (3000 frames)
+                $agnus.scheduleGUITimerAbs(3000, 1);
+            }
+            if (showcase.title == 'Eon') {
+                console.log("Scheduling disk change (eon)");
+                $agnus.scheduleGUITimerAbs(7600, 2);
+            }
 
             console.log('Done');
 
         } catch (exception) {
-			console.log('CATCHED ' + exception);
-			throw exception;
-			// console.error($amiga.getExceptionMessage(exception));
-		}
-	}
+            console.log('CATCHED ' + exception);
+            throw exception;
+            // console.error($amiga.getExceptionMessage(exception));
+        }
+    }
 
-	export function reportException() {
-		console.error('Exception ' + $amiga.errorCode() + ': ' + $amiga.what());
-	}
+    export function reportException()
+    {
+        console.error('Exception ' + $amiga.errorCode() + ': ' + $amiga.what());
+    }
 
-	export async function insert(name: string, drive: number) {
-		try {
-			console.log('Fetching adf/' + name);
-			let response = await fetch('adf/' + name);
-			let blob = await response.arrayBuffer();
-			let uint8View = new Uint8Array(blob);
-			console.log('Calling $amiga.insertDisk', uint8View, drive);
-			$amiga.insertDisk(uint8View, blob.byteLength, drive);
-			console.log('Disk inserted');
-		} catch (exc) {
-			reportException();
-		}
-	}
+    export async function insert(name: string, drive: number)
+    {
+        try {
+            console.log('Fetching adf/' + name);
+            let response = await fetch('adf/' + name);
+            let blob = await response.arrayBuffer();
+            let uint8View = new Uint8Array(blob);
+            console.log('Calling $amiga.insertDisk', uint8View, drive);
+            $amiga.insertDisk(uint8View, blob.byteLength, drive);
+            console.log('Disk inserted');
+        } catch (exc) {
+            reportException();
+        }
+    }
 
-	export async function installRom(crc32: number) {
-		if (crc32 == 0) {
-			$memory.deleteRom();
-			$memory.deleteExt();
-			$romcrc = crc32;
-			return true;
-		}
-		try {
-			const item = await db.roms.get(crc32);
-			if (!item) {
-				return false;
-			}
+    export async function installRom(crc32: number)
+    {
+        if (crc32 == 0) {
+            $memory.deleteRom();
+            $memory.deleteExt();
+            $romcrc = crc32;
+            return true;
+        }
+        try {
+            const item = await db.roms.get(crc32);
+            if (!item) {
+                return false;
+            }
 
-			if (item?.rom) {
-				$memory.loadRom(item!.rom, item!.rom!.length);
-				$romcrc = crc32;
-			} else {
-				$memory.deleteRom();
-			}
-			if (item?.ext) {
-				$memory.loadExt(item!.ext, item!.ext!.length);
-			} else {
-				$memory.deleteExt();
-			}
-			// console.log('Rom added', item?.title);
-			return true;
-		} catch (error) {
-			// console.log(`installRom failed: `, error);
-			return false;
-		}
-	}
+            if (item?.rom) {
+                $memory.loadRom(item!.rom, item!.rom!.length);
+                $romcrc = crc32;
+            } else {
+                $memory.deleteRom();
+            }
+            if (item?.ext) {
+                $memory.loadExt(item!.ext, item!.ext!.length);
+            } else {
+                $memory.deleteExt();
+            }
+            // console.log('Rom added', item?.title);
+            return true;
+        } catch (error) {
+            // console.log(`installRom failed: `, error);
+            return false;
+        }
+    }
 
-	export async function installRoms(crcs: [number]) {
-		for (const crc of crcs) {
-			console.log('Trying to install ROM', crc);
-			const success = await installRom(crc);
-			if (success) {
-				console.log('SUCCESS.');
-				return true;
-			} else {
-				console.log('FAILED.');
-			}
-		}
-		return false;
-	}
+    export async function installRoms(crcs: [number])
+    {
+        for (const crc of crcs) {
+            console.log('Trying to install ROM', crc);
+            const success = await installRom(crc);
+            if (success) {
+                console.log('SUCCESS.');
+                return true;
+            } else {
+                console.log('FAILED.');
+            }
+        }
+        return false;
+    }
 
-	export async function installAros() {
-		await installRom(CRC32.Aros);
-	}
+    export async function installAros()
+    {
+        await installRom(CRC32.Aros);
+    }
 
-	export async function installDiagRom() {
-		await installRom(CRC32.DiagROM);
-	}
+    export async function installDiagRom()
+    {
+        await installRom(CRC32.DiagROM);
+    }
 
-	export function onRuntimeInitialized() {
-		console.log('Creating proxies...');
-		$agnus = new $proxy.AgnusProxy();
-		$amiga = new $proxy.AmigaProxy();
-		$cpu = new $proxy.CPUProxy();
-		$denise = new $proxy.DeniseProxy();
+    export function onRuntimeInitialized()
+    {
+        console.log('Creating proxies...');
+        $agnus = new $proxy.AgnusProxy();
+        $cpu = new $proxy.CPUProxy();
+        $denise = new $proxy.DeniseProxy();
         $df0 = new $proxy.DriveProxy(0);
         $df1 = new $proxy.DriveProxy(1);
         $df2 = new $proxy.DriveProxy(2);
         $df3 = new $proxy.DriveProxy(3);
-		$diskController = new $proxy.DiskControllerProxy();
-		$enums = new $proxy.EnumProxy();
-		$joystick1 = new $proxy.JoystickProxy(1);
-		$joystick2 = new $proxy.JoystickProxy(2);
-		$keyboard = new $proxy.KeyboardProxy();
-		$memory = new $proxy.MemoryProxy();
-		$mouse1 = new $proxy.MouseProxy(1);
-		$mouse2 = new $proxy.MouseProxy(2);
-		$retroShell = new $proxy.RetroShellProxy();
+        $diskController = new $proxy.DiskControllerProxy();
+        $enums = new $proxy.EnumProxy();
+        $joystick1 = new $proxy.JoystickProxy(1);
+        $joystick2 = new $proxy.JoystickProxy(2);
+        $keyboard = new $proxy.KeyboardProxy();
+        $memory = new $proxy.MemoryProxy();
+        $mouse1 = new $proxy.MouseProxy(1);
+        $mouse2 = new $proxy.MouseProxy(2);
+        $retroShell = new $proxy.RetroShellProxy();
+        $amiga = new $proxy.AmigaProxy();
 
-		console.log('Configuring the emulator...');
+        // Start the emulator
+        console.log('Launching the emulator...');
+        $amiga.launch();
 
-		// Apply some default settings
-		$amiga.configure($proxy.OPT_AGNUS_REVISION, $proxy.AGNUS_ECS_2MB);
+        console.log('Configuring the emulator...');
 
-		$keyset1 = {
-			ArrowLeft: $proxy.PULL_LEFT,
-			ArrowRight: $proxy.PULL_RIGHT,
-			ArrowUp: $proxy.PULL_UP,
-			ArrowDown: $proxy.PULL_DOWN,
-			ControlRight: $proxy.PRESS_FIRE,
-			Space: $proxy.PRESS_FIRE
-		};
+        // Apply some default settings
+        $amiga.configure($proxy.OPT_AGNUS_REVISION, $proxy.AGNUS_ECS_2MB);
 
-		$keyset2 = {
-			KeyS: $proxy.PULL_LEFT,
-			KeyD: $proxy.PULL_RIGHT,
-			KeyE: $proxy.PULL_UP,
-			KeyX: $proxy.PULL_DOWN,
-			KeyC: $proxy.RELEASE_FIRE
-		};
+        $keyset1 = {
+            ArrowLeft: $proxy.PULL_LEFT,
+            ArrowRight: $proxy.PULL_RIGHT,
+            ArrowUp: $proxy.PULL_UP,
+            ArrowDown: $proxy.PULL_DOWN,
+            ControlRight: $proxy.PRESS_FIRE,
+            Space: $proxy.PRESS_FIRE
+        };
 
-		(async () => {
-			console.log('Installing Roms...');
+        $keyset2 = {
+            KeyS: $proxy.PULL_LEFT,
+            KeyD: $proxy.PULL_RIGHT,
+            KeyE: $proxy.PULL_UP,
+            KeyX: $proxy.PULL_DOWN,
+            KeyC: $proxy.RELEASE_FIRE
+        };
 
-			// Install AROS
-			const defaultRoms = [
-				3304125791, // Kickstart 1.3
-				2798523958, // Kickstart 1.2
-				3283989056, // Kickstart 2.04
-				1062194186 // Aros
-			];
+        (async () => {
+            console.log('Installing Roms...');
 
-			$proxy.installRoms(defaultRoms);
+            // Install AROS
+            const defaultRoms = [
+                3304125791, // Kickstart 1.3
+                2798523958, // Kickstart 1.2
+                3283989056, // Kickstart 2.04
+                1062194186 // Aros
+            ];
 
-			console.log('Initialization completed');
-			$initialized = true;
-		})();
+            $proxy.installRoms(defaultRoms);
 
-		// Trigger an exception (for debugging, only)
-		// $amiga.configure($proxy.OPT_AGNUS_REVISION, 42);
-	}
+            console.log('Initialization completed');
+            $initialized = true;
+        })();
 
-	function processMsg(id: number, d1: number, d2: number, d3: number, d4: number) {
-		// console.log(`Message: ${$enums.MsgTypeKey(id)}(${d1}, ${d2}, ${d3}, ${d4})`);
+        // Trigger an exception (for debugging, only)
+        // $amiga.configure($proxy.OPT_AGNUS_REVISION, 42);
+    }
 
-		switch (id) {
-			case $proxy.MSG_NONE:
-				$MsgNone++;
-				break;
+    export function updateStateVariables()
+    {
+        console.log("updateStateVariables");
 
-			case $proxy.MSG_REGISTER:
-				$MsgRegister++;
-				break;
+        if (!$initialized) return;
 
-			case $proxy.MSG_CONFIG:
-				$MsgConfig++;
-				break;
+        $poweredOn = $amiga.poweredOn();
+        $running = $amiga.isRunning();
+        $warp = $amiga.inWarpMode();
+        // TODO: muted ch
+        $halted = $amiga.isHalted();
+        $debugMode = $amiga.inDebugMode();
+        $dfConnected = [df0.isConnected(), df1.isConnected(), df2.isConnected(), df3.isConnected()];
+        $dfHasDisk = [df0.hasDisk(), df1.hasDisk(), df2.hasDisk(), df3.hasDisk()];
+        $dfMotor = [df0.motor(), df1.motor(), df2.motor(), df3.motor()];
+        // TODO: writing
+        $dfUnsaved = [df0.hasUnsavedDisk(), df1.hasUnsavedDisk(), df2.hasUnsavedDisk(), df3.hasUnsavedDisk()];
+        $dfProtected = [df0.hasProtectedDisk(), df1.hasProtectedDisk(), df2.hasProtectedDisk(), df3.hasProtectedDisk()];
+        $dfCylinder = [df0.currentCyl(), df1.currentCyl(), df2.currentCyl(), df3.currentCyl()];
 
-			case $proxy.MSG_POWER_ON:
-				$MsgPowerOn++;
-				$poweredOn = true;
-				break;
+    }
 
-			case $proxy.MSG_POWER_OFF:
-				$MsgPowerOff++;
-				$poweredOn = false;
-				$running = false;
-				break;
+    function processMsg(id: number, d1: number, d2: number, d3: number, d4: number)
+    {
+        // console.log(`Message: ${$enums.MsgTypeKey(id)}(${d1}, ${d2}, ${d3}, ${d4})`);
 
-			case $proxy.MSG_RUN:
-				$MsgRun++;
-				$running = true;
-				break;
+        switch (id) {
+            case $proxy.MSG_NONE:
+                $MsgNone++;
+                break;
 
-			case $proxy.MSG_PAUSE:
-				$MsgPause++;
-				$running = false;
-				break;
+            case $proxy.MSG_REGISTER:
+                $MsgRegister++;
+                break;
 
-			case $proxy.MSG_STEP:
-				$MsgStep++;
-				break;
+            case $proxy.MSG_CONFIG:
+                $MsgConfig++;
+                break;
+
+            case $proxy.MSG_POWER_ON:
+                $MsgPowerOn++;
+                $poweredOn = true;
+                updateStateVariables();
+                break;
+
+            case $proxy.MSG_POWER_OFF:
+                $MsgPowerOff++;
+                $poweredOn = false;
+                $running = false;
+                updateStateVariables();
+                break;
+
+            case $proxy.MSG_RUN:
+                $MsgRun++;
+                $running = true;
+                updateStateVariables();
+                break;
+
+            case $proxy.MSG_PAUSE:
+                $MsgPause++;
+                $running = false;
+                updateStateVariables();
+                break;
+
+            case $proxy.MSG_STEP:
+                $MsgStep++;
+                break;
 
             case $proxy.MSG_RESET:
-				$MsgReset++;
+                $MsgReset++;
                 $config.updateWarpState();
-				$halted = false;
-				break;
+                $halted = false;
+                updateStateVariables();
+                break;
 
-			case $proxy.MSG_SHUTDOWN:
-				$MsgShutdown++;
-				break;
+            case $proxy.MSG_SHUTDOWN:
+                $MsgShutdown++;
+                break;
 
-			case $proxy.MSG_ABORT:
-				$MsgAbort++;
-				break;
+            case $proxy.MSG_ABORT:
+                $MsgAbort++;
+                break;
 
-			case $proxy.MSG_WARP_ON:
-				$MsgWarpOn++;
-				$warp = true;
-				break;
+            case $proxy.MSG_WARP_ON:
+                $MsgWarpOn++;
+                $warp = true;
+                break;
 
-			case $proxy.MSG_WARP_OFF:
-				$MsgWarpOff++;
-				$warp = false;
-				break;
+            case $proxy.MSG_WARP_OFF:
+                $MsgWarpOff++;
+                $warp = false;
+                break;
 
-			case $proxy.MSG_DEBUG_ON:
-				$MsgDebugOn++;
-				console.log('debug mode on');
-				$debugMode = true;
-				break;
+            case $proxy.MSG_DEBUG_ON:
+                $MsgDebugOn++;
+                console.log('debug mode on');
+                $debugMode = true;
+                break;
 
-			case $proxy.MSG_DEBUG_OFF:
-				$MsgDebugOff++;
-				console.log('debug mode off');
-				$debugMode = false;
-				break;
+            case $proxy.MSG_DEBUG_OFF:
+                $MsgDebugOff++;
+                console.log('debug mode off');
+                $debugMode = false;
+                break;
 
-			case $proxy.MSG_MUTE_ON:
-				$MsgMuteOn++;
-				$muted = true;
-				break;
+            case $proxy.MSG_MUTE_ON:
+                $MsgMuteOn++;
+                $muted = true;
+                break;
 
-			case $proxy.MSG_MUTE_OFF:
-				$MsgMuteOff++;
-				$muted = false;
-				break;
+            case $proxy.MSG_MUTE_OFF:
+                $MsgMuteOff++;
+                $muted = false;
+                break;
 
-			case $proxy.MSG_POWER_LED_ON:
-				$MsgPowerLedOn++;
-				break;
+            case $proxy.MSG_POWER_LED_ON:
+                $MsgPowerLedOn++;
+                break;
 
-			case $proxy.MSG_POWER_LED_DIM:
-				$MsgPowerLedDim++;
-				break;
+            case $proxy.MSG_POWER_LED_DIM:
+                $MsgPowerLedDim++;
+                break;
 
-			case $proxy.MSG_POWER_LED_OFF:
-				$MsgPowerLedOff++;
-				break;
+            case $proxy.MSG_POWER_LED_OFF:
+                $MsgPowerLedOff++;
+                break;
 
-			case $proxy.MSG_CLOSE_CONSOLE:
-				$MsgCloseConsole++;
-				break;
+            case $proxy.MSG_CLOSE_CONSOLE:
+                $MsgCloseConsole++;
+                break;
 
-			case $proxy.MSG_UPDATE_CONSOLE:
-				$MsgUpdateConsole++;
-				break;
+            case $proxy.MSG_UPDATE_CONSOLE:
+                $MsgUpdateConsole++;
+                break;
 
-			case $proxy.MSG_SCRIPT_DONE:
-				$MsgScriptDone++;
-				break;
+            case $proxy.MSG_SCRIPT_DONE:
+                $MsgScriptDone++;
+                break;
 
-			case $proxy.MSG_SCRIPT_PAUSE:
-				$MsgScriptPause++;
-				break;
+            case $proxy.MSG_SCRIPT_PAUSE:
+                $MsgScriptPause++;
+                break;
 
-			case $proxy.MSG_SCRIPT_ABORT:
-				$MsgScriptAbort++;
-				break;
+            case $proxy.MSG_SCRIPT_ABORT:
+                $MsgScriptAbort++;
+                break;
 
-			case $proxy.MSG_SCRIPT_WAKEUP:
-				$MsgScriptWakeup++;
-				break;
+            case $proxy.MSG_SCRIPT_WAKEUP:
+                $MsgScriptWakeup++;
+                break;
 
-			case $proxy.MSG_VIDEO_FORMAT:
-				$MsgVideoFormat++;
-				break;
+            case $proxy.MSG_VIDEO_FORMAT:
+                $MsgVideoFormat++;
+                break;
 
-			case $proxy.MSG_OVERCLOCKING:
-				$MsgOverclocking++;
-				break;
+            case $proxy.MSG_OVERCLOCKING:
+                $MsgOverclocking++;
+                break;
 
-			case $proxy.MSG_BREAKPOINT_REACHED:
-				$MsgBreakpointReached++;
-				break;
+            case $proxy.MSG_BREAKPOINT_REACHED:
+                $MsgBreakpointReached++;
+                break;
 
-			case $proxy.MSG_BREAKPOINT_UPDATED:
-				$MsgBreakpointUpdated++;
-				break;
+            case $proxy.MSG_BREAKPOINT_UPDATED:
+                $MsgBreakpointUpdated++;
+                break;
 
-			case $proxy.MSG_WATCHPOINT_REACHED:
-				$MsgWatchpointReached++;
-				break;
+            case $proxy.MSG_WATCHPOINT_REACHED:
+                $MsgWatchpointReached++;
+                break;
 
-			case $proxy.MSG_WATCHPOINT_UPDATED:
-				$MsgWatchpointUpdated++;
-				break;
+            case $proxy.MSG_WATCHPOINT_UPDATED:
+                $MsgWatchpointUpdated++;
+                break;
 
-			case $proxy.MSG_CATCHPOINT_REACHED:
-				$MsgCatchpointReached++;
-				break;
+            case $proxy.MSG_CATCHPOINT_REACHED:
+                $MsgCatchpointReached++;
+                break;
 
-			case $proxy.MSG_CATCHPOINT_UPDATED:
-				$MsgCatchpointUpdated++;
-				break;
+            case $proxy.MSG_CATCHPOINT_UPDATED:
+                $MsgCatchpointUpdated++;
+                break;
 
-			case $proxy.MSG_SWTRAP_REACHED:
-				$MsgSwTrapReached++;
-				break;
+            case $proxy.MSG_SWTRAP_REACHED:
+                $MsgSwTrapReached++;
+                break;
 
-			case $proxy.MSG_CPU_HALT:
-				$MsgCpuHalt++;
-				$halted = true;
-				break;
+            case $proxy.MSG_CPU_HALT:
+                $MsgCpuHalt++;
+                $halted = true;
+                break;
 
-			case $proxy.MSG_COPPERBP_REACHED:
-				$MsgCopperBpReached++;
-				break;
+            case $proxy.MSG_COPPERBP_REACHED:
+                $MsgCopperBpReached++;
+                break;
 
-			case $proxy.MSG_COPPERBP_UPDATED:
-				$MsgCopperBpUpdated++;
-				break;
+            case $proxy.MSG_COPPERBP_UPDATED:
+                $MsgCopperBpUpdated++;
+                break;
 
-			case $proxy.MSG_COPPERWP_REACHED:
-				$MsgCopperWpReached++;
-				break;
+            case $proxy.MSG_COPPERWP_REACHED:
+                $MsgCopperWpReached++;
+                break;
 
-			case $proxy.MSG_COPPERWP_UPDATED:
-				$MsgCopperWpUpdated++;
-				break;
+            case $proxy.MSG_COPPERWP_UPDATED:
+                $MsgCopperWpUpdated++;
+                break;
 
-			case $proxy.MSG_VIEWPORT:
-				$MsgViewport++;
-				break;
+            case $proxy.MSG_VIEWPORT:
+                $MsgViewport++;
+                break;
 
-			case $proxy.MSG_MEM_LAYOUT:
-				$MsgMemLayout++;
-				break;
+            case $proxy.MSG_MEM_LAYOUT:
+                $MsgMemLayout++;
+                break;
 
-			case $proxy.MSG_DRIVE_CONNECT:
-				$MsgDriveConnect++;
-				$dfConnected[d1] = true;
-				break;
+            case $proxy.MSG_DRIVE_CONNECT:
+                $MsgDriveConnect++;
+                $dfConnected[d1] = true;
+                break;
 
-			case $proxy.MSG_DRIVE_DISCONNECT:
-				$MsgDriveDisconnect++;
-				$dfConnected[d1] = false;
-				break;
+            case $proxy.MSG_DRIVE_DISCONNECT:
+                $MsgDriveDisconnect++;
+                $dfConnected[d1] = false;
+                break;
 
-			case $proxy.MSG_DRIVE_SELECT:
-				$MsgDriveSelect++;
-				break;
+            case $proxy.MSG_DRIVE_SELECT:
+                $MsgDriveSelect++;
+                break;
 
-			case $proxy.MSG_DRIVE_READ:
-				$MsgDriveRead++;
-				break;
+            case $proxy.MSG_DRIVE_READ:
+                $MsgDriveRead++;
+                break;
 
-			case $proxy.MSG_DRIVE_WRITE:
-				$MsgDriveWrite++;
-				$dfWriting[d1] = d2 == 1;
-				break;
+            case $proxy.MSG_DRIVE_WRITE:
+                $MsgDriveWrite++;
+                $dfWriting[d1] = d2 == 1;
+                break;
 
-			case $proxy.MSG_DRIVE_LED_ON:
-				$MsgDriveLedOn++;
-				break;
+            case $proxy.MSG_DRIVE_LED_ON:
+                $MsgDriveLedOn++;
+                break;
 
-			case $proxy.MSG_DRIVE_LED_OFF:
-				$MsgDriveLedOff++;
-				break;
+            case $proxy.MSG_DRIVE_LED_OFF:
+                $MsgDriveLedOff++;
+                break;
 
-			case $proxy.MSG_DRIVE_MOTOR_ON:
-				$MsgDriveMotorOn++;
-				$dfMotor[d1] = true;
+            case $proxy.MSG_DRIVE_MOTOR_ON:
+                $MsgDriveMotorOn++;
+                $dfMotor[d1] = true;
                 $config.updateWarpState();
-				break;
+                break;
 
-			case $proxy.MSG_DRIVE_MOTOR_OFF:
-				$MsgDriveMotorOff++;
-				$dfMotor[d1] = false;
+            case $proxy.MSG_DRIVE_MOTOR_OFF:
+                $MsgDriveMotorOff++;
+                $dfMotor[d1] = false;
                 $config.updateWarpState();
-				break;
+                break;
 
-			case $proxy.MSG_DRIVE_STEP:
-				$MsgDriveStep++;
-				$dfCylinder[d1] = d2;
-				$audio.playStepSound(d3, d4);
-				break;
+            case $proxy.MSG_DRIVE_STEP:
+                $MsgDriveStep++;
+                $dfCylinder[d1] = d2;
+                $audio.playStepSound(d3, d4);
+                break;
 
-			case $proxy.MSG_DRIVE_POLL:
-				$MsgDrivePoll++;
-				$dfCylinder[d1] = d2;
-				$audio.playStepSound(d3, d4);
-				break;
+            case $proxy.MSG_DRIVE_POLL:
+                $MsgDrivePoll++;
+                $dfCylinder[d1] = d2;
+                $audio.playStepSound(d3, d4);
+                break;
 
-			case $proxy.MSG_DISK_INSERT:
-				$MsgDiskInsert++;
-				$dfHasDisk[d1] = true;
-				$audio.playInsertSound(d3, d4);
-				break;
+            case $proxy.MSG_DISK_INSERT:
+                $MsgDiskInsert++;
+                $dfHasDisk[d1] = true;
+                $audio.playInsertSound(d3, d4);
+                break;
 
-			case $proxy.MSG_DISK_EJECT:
-				$MsgDiskEject++;
-				$dfHasDisk[d1] = false;
-				$audio.playEjectSound(d3, d4);
-				break;
+            case $proxy.MSG_DISK_EJECT:
+                $MsgDiskEject++;
+                $dfHasDisk[d1] = false;
+                $audio.playEjectSound(d3, d4);
+                break;
 
-			case $proxy.MSG_DISK_SAVED:
-				$MsgDiskSaved++;
-				$dfUnsaved[d1] = false;
-				break;
+            case $proxy.MSG_DISK_SAVED:
+                $MsgDiskSaved++;
+                $dfUnsaved[d1] = false;
+                break;
 
-			case $proxy.MSG_DISK_UNSAVED:
-				$MsgDiskUnsaved++;
-				$dfUnsaved[d1] = true;
-				break;
+            case $proxy.MSG_DISK_UNSAVED:
+                $MsgDiskUnsaved++;
+                $dfUnsaved[d1] = true;
+                break;
 
-			case $proxy.MSG_DISK_PROTECT:
-				$MsgDiskProtect++;
-				$dfProtected[d1] = true;
-				break;
+            case $proxy.MSG_DISK_PROTECT:
+                $MsgDiskProtect++;
+                $dfProtected[d1] = true;
+                break;
 
-			case $proxy.MSG_DISK_UNPROTECT:
-				$MsgDiskUnprotect++;
-				$dfProtected[d1] = false;
-				break;
+            case $proxy.MSG_DISK_UNPROTECT:
+                $MsgDiskUnprotect++;
+                $dfProtected[d1] = false;
+                break;
 
-			case $proxy.MSG_HDC_CONNECT:
-				$MsgHdcConnect++;
-				break;
+            case $proxy.MSG_HDC_CONNECT:
+                $MsgHdcConnect++;
+                break;
 
-			case $proxy.MSG_HDC_DISCONNECT:
-				$MsgHdcDisconnect++;
-				break;
+            case $proxy.MSG_HDC_DISCONNECT:
+                $MsgHdcDisconnect++;
+                break;
 
-			case $proxy.MSG_HDC_STATE:
-				$MsgHdcState++;
-				break;
+            case $proxy.MSG_HDC_STATE:
+                $MsgHdcState++;
+                break;
 
-			case $proxy.MSG_HDR_STEP:
-				$MsgHdrStep++;
-				break;
+            case $proxy.MSG_HDR_STEP:
+                $MsgHdrStep++;
+                break;
 
-			case $proxy.MSG_HDR_READ:
-				$MsgHdrRead++;
-				break;
+            case $proxy.MSG_HDR_READ:
+                $MsgHdrRead++;
+                break;
 
-			case $proxy.MSG_HDR_WRITE:
-				$MsgHdrWrite++;
-				break;
+            case $proxy.MSG_HDR_WRITE:
+                $MsgHdrWrite++;
+                break;
 
-			case $proxy.MSG_HDR_IDLE:
-				$MsgHdrIdle++;
-				break;
+            case $proxy.MSG_HDR_IDLE:
+                $MsgHdrIdle++;
+                break;
 
-			case $proxy.MSG_CTRL_AMIGA_AMIGA:
-				$MsgCtrlAmigaAmiga++;
-				break;
+            case $proxy.MSG_CTRL_AMIGA_AMIGA:
+                $MsgCtrlAmigaAmiga++;
+                break;
 
-			case $proxy.MSG_SHAKING:
-				console.log('MSG_SHAKING');
-				$MsgShaking++;
-				break;
+            case $proxy.MSG_SHAKING:
+                console.log('MSG_SHAKING');
+                $MsgShaking++;
+                break;
 
-			case $proxy.MSG_SER_IN:
-				// console.log("SER_IN: ", String.fromCharCode(d1 & 0xFF));
-				$MsgSerIn++;
-				break;
+            case $proxy.MSG_SER_IN:
+                // console.log("SER_IN: ", String.fromCharCode(d1 & 0xFF));
+                $MsgSerIn++;
+                break;
 
-			case $proxy.MSG_SER_OUT:
-				// console.log("SER_OUT: ", String.fromCharCode(d1 & 0xFF));
-				$MsgSerOut++;
-				break;
+            case $proxy.MSG_SER_OUT:
+                // console.log("SER_OUT: ", String.fromCharCode(d1 & 0xFF));
+                $MsgSerOut++;
+                break;
 
-			case $proxy.MSG_AUTO_SNAPSHOT_TAKEN:
-				$MsgAutoSnapshotTaken++;
-				break;
+            case $proxy.MSG_AUTO_SNAPSHOT_TAKEN:
+                $MsgAutoSnapshotTaken++;
+                break;
 
-			case $proxy.MSG_USER_SNAPSHOT_TAKEN:
-				$MsgUserSnapshotTaken++;
-				break;
+            case $proxy.MSG_USER_SNAPSHOT_TAKEN:
+                $MsgUserSnapshotTaken++;
+                break;
 
-			case $proxy.MSG_SNAPSHOT_RESTORED:
-				$MsgSnapshotRestored++;
+            case $proxy.MSG_SNAPSHOT_RESTORED:
+                $MsgSnapshotRestored++;
                 $config.updateWarpState();
-				break;
+                break;
 
-			case $proxy.MSG_RECORDING_STARTED:
-				$MsgRecordingStarted++;
-				break;
+            case $proxy.MSG_RECORDING_STARTED:
+                $MsgRecordingStarted++;
+                break;
 
-			case $proxy.MSG_RECORDING_STOPPED:
-				$MsgRecordingStopped++;
-				break;
+            case $proxy.MSG_RECORDING_STOPPED:
+                $MsgRecordingStopped++;
+                break;
 
-			case $proxy.MSG_RECORDING_ABORTED:
-				$MsgRecordingAborted++;
-				break;
+            case $proxy.MSG_RECORDING_ABORTED:
+                $MsgRecordingAborted++;
+                break;
 
-			case $proxy.MSG_DMA_DEBUG_ON:
-				$MsgDmaDebugOn++;
-				$debugDma = true;
-				break;
+            case $proxy.MSG_DMA_DEBUG_ON:
+                $MsgDmaDebugOn++;
+                $debugDma = true;
+                break;
 
-			case $proxy.MSG_DMA_DEBUG_OFF:
-				$MsgDmaDebugOff++;
-				$debugDma = false;
-				break;
+            case $proxy.MSG_DMA_DEBUG_OFF:
+                $MsgDmaDebugOff++;
+                $debugDma = false;
+                break;
 
-			case $proxy.MSG_SRV_STATE:
-				$MsgSrvState++;
-				break;
+            case $proxy.MSG_SRV_STATE:
+                $MsgSrvState++;
+                break;
 
-			case $proxy.MSG_SRV_RECEIVE:
-				$MsgSrvReceive++;
-				break;
+            case $proxy.MSG_SRV_RECEIVE:
+                $MsgSrvReceive++;
+                break;
 
-			case $proxy.MSG_SRV_SEND:
-				$MsgSrvSend++;
-				break;
+            case $proxy.MSG_SRV_SEND:
+                $MsgSrvSend++;
+                break;
 
-			case $proxy.MSG_GUI_EVENT:
-				console.log("MSG_GUI_EVENT received: ", d1, d2);
-				if (d2 == 1) {
-					console.log("Inserting disk 2...");
-					insert('AbsoluteInebriation2.adf', 0);
-				}
-				if (d2 == 2) {
-					console.log("Inserting disk 2...");
-					insert('Eon2.adf', 0);
-				}
-				break;
+            case $proxy.MSG_GUI_EVENT:
+                console.log("MSG_GUI_EVENT received: ", d1, d2);
+                if (d2 == 1) {
+                    console.log("Inserting disk 2...");
+                    insert('AbsoluteInebriation2.adf', 0);
+                }
+                if (d2 == 2) {
+                    console.log("Inserting disk 2...");
+                    insert('Eon2.adf', 0);
+                }
+                break;
 
-			default:
-				break;
-		}
-	}
+            default:
+                break;
+        }
+    }
 </script>
