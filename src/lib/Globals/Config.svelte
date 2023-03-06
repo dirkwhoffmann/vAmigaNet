@@ -111,8 +111,6 @@
 
     async function registerGeneralDefaults()
     {
-        console.log("registerGeneralDefaults");
-
         for (const it of generalOpts) {
             await registerDefault(it.opt, it.default);
         }
@@ -120,8 +118,6 @@
 
     async function registerMachineDefaults()
     {
-        console.log("registerMachineDefaults");
-
         for (const it of machineOpts) {
             await registerDefault(it.opt, it.default);
         }
@@ -129,8 +125,6 @@
 
     async function registerCompatibilityDefaults()
     {
-        console.log("registerCompatibilityDefaults");
-
         for (const it of compatibilityOpts) {
             await registerDefault(it.opt, it.default);
         }
@@ -138,8 +132,6 @@
 
     async function registerAudioDefaults()
     {
-        console.log("registerAudioDefaults");
-
         for (const it of audioOpts) {
             await registerDefault(it.opt, it.default);
         }
@@ -147,8 +139,6 @@
 
     async function registerVideoDefaults()
     {
-        console.log("registerVideoDefaults");
-
         for (const it of videoOpts) {
             await registerDefault(it.opt, it.default);
         }
@@ -180,8 +170,6 @@
 
     export async function restoreGeneralDefaults()
     {
-        console.log("restoreGeneralDefaults");
-
         for (const it of generalOpts) {
             await deleteDefault(it.opt);
         }
@@ -192,8 +180,6 @@
 
     export async function restoreMachineDefaults()
     {
-        console.log("restoreMachineDefaults");
-
         for (const it of machineOpts) {
             await deleteDefault(it.opt);
         }
@@ -204,8 +190,6 @@
 
     export async function restoreCompatibilityDefaults()
     {
-        console.log("restoreCompatibilityDefaults");
-
         for (const it of compatibilityOpts) {
             await deleteDefault(it.opt);
         }
@@ -216,8 +200,6 @@
 
     export async function restoreAudioDefaults()
     {
-        console.log("restoreAudioDefaults");
-
         for (const it of audioOpts) {
             await deleteDefault(it.opt);
         }
@@ -228,8 +210,6 @@
 
     export async function restoreVideoDefaults()
     {
-        console.log("restoreVideoDefaults");
-
         for (const it of videoOpts) {
             await deleteDefault(it.opt);
         }
@@ -243,7 +223,6 @@
         try {
             // Try to add new database entry
             const id = await db.opts.delete(opt);
-            console.log("Removed entry ", opt);
         } catch (error) {
             console.log("FAILED TO REMOVE entry ", opt);
         }
@@ -266,8 +245,6 @@
 
     export async function loadGeneralSettings()
     {
-        console.log("loadGeneralSettings");
-
         for (const it of generalOpts) {
             await loadSetting(it.opt);
         }
@@ -275,8 +252,6 @@
 
     export async function loadMachineSettings()
     {
-        console.log("loadMachineSettings");
-
         for (const it of machineOpts) {
             await loadSetting(it.opt);
         }
@@ -284,8 +259,6 @@
 
     export async function loadCompatibilitySettings()
     {
-        console.log("loadCompatibilitySettings");
-
         for (const it of compatibilityOpts) {
             await loadSetting(it.opt);
         }
@@ -293,8 +266,6 @@
 
     export async function loadAudioSettings()
     {
-        console.log("loadAudioSettings");
-
         for (const it of audioOpts) {
             await loadSetting(it.opt);
         }
@@ -302,8 +273,6 @@
 
     export async function loadVideoSettings()
     {
-        console.log("loadVideoSettings");
-
         for (const it of videoOpts) {
             await loadSetting(it.opt);
         }
@@ -320,7 +289,6 @@
 
         } catch (error) {
             // The entry is likely there already
-            console.log("FAILED TO GET entry ", opt);
         }
     }
 
@@ -341,8 +309,6 @@
 
     export async function saveGeneralSettings()
     {
-        console.log("saveGeneralSettings");
-
         for (const it of generalOpts) {
             await saveSetting(it.opt);
         }
@@ -350,8 +316,6 @@
 
     export async function saveMachineSettings()
     {
-        console.log("saveMachineSettings");
-
         for (const it of machineOpts) {
             await saveSetting(it.opt);
         }
@@ -359,8 +323,6 @@
 
     export async function saveCompatibilitySettings()
     {
-        console.log("saveCompatibilitySettings");
-
         for (const it of compatibilityOpts) {
             await saveSetting(it.opt);
         }
@@ -368,8 +330,6 @@
 
     export async function saveAudioSettings()
     {
-        console.log("saveAudioSettings");
-
         for (const it of audioOpts) {
             await saveSetting(it.opt);
         }
@@ -377,8 +337,6 @@
 
     export async function saveVideoSettings()
     {
-        console.log("saveVideoSettings");
-
         for (const it of videoOpts) {
             await saveSetting(it.opt);
         }
@@ -387,16 +345,13 @@
     async function saveSetting(opt: Opt)
     {
         const val = get(opt);
-        console.log("saveSetting ", opt, val);
 
         try {
             // Write value into database
             const id = await db.opts.put({key: opt, value: val});
-            console.log("Saved key / value pair ", opt, val);
 
         } catch (error) {
             // The entry is likely there already
-            console.log("FAILED TO SAVE entry ", opt);
         }
     }
 
@@ -782,8 +737,6 @@
 
     export function updateWarpState()
     {
-        console.log("updateWarpState", warpMode);
-
         if (!$amiga) return; // GET RID OF THIS
 
         let newWarp = false;

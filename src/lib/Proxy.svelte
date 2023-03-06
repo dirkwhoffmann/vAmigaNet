@@ -36,7 +36,6 @@
         memory,
         mouse1,
         mouse2,
-        paula,
         MsgAbort,
         MsgAutoSnapshotTaken,
         MsgBreakpointReached,
@@ -119,6 +118,7 @@
         MsgWatchpointReached,
         MsgWatchpointUpdated,
         muted,
+        paula,
         poweredOn,
         proxy,
         retroShell,
@@ -237,14 +237,9 @@
     export async function installRoms(crcs: [number])
     {
         for (const crc of crcs) {
-            console.log('Trying to install ROM', crc);
+
             const success = await installRom(crc);
-            if (success) {
-                console.log('SUCCESS.');
-                return true;
-            } else {
-                console.log('FAILED.');
-            }
+            if (success) return true;
         }
         return false;
     }
@@ -330,8 +325,6 @@
 
     export function updateStateVariables()
     {
-        console.log("updateStateVariables");
-
         if (!$initialized) return;
 
         const state = $diskController.getState();
@@ -351,7 +344,6 @@
         $dfUnsaved = [$df0.hasModifiedDisk(), $df1.hasModifiedDisk(), $df2.hasModifiedDisk(), $df3.hasModifiedDisk()];
         $dfProtected = [$df0.hasProtectedDisk(), $df1.hasProtectedDisk(), $df2.hasProtectedDisk(), $df3.hasProtectedDisk()];
         $dfCylinder = [$df0.currentCyl(), $df1.currentCyl(), $df2.currentCyl(), $df3.currentCyl()];
-
     }
 
     function processMsg(id: number, d1: number, d2: number, d3: number, d4: number)

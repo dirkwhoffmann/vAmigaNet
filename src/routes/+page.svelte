@@ -146,6 +146,7 @@
                 try {
                     if ($amiga.poweredOn()) {
                         $amiga.powerOff();
+                        $amiga.hardReset();
                     } else {
                         $amiga.run();
                     }
