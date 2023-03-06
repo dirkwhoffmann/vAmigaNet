@@ -1,3 +1,6 @@
+# Main CMake file for vAmiga Online (WASM build)
+# Usage: emcmake cmake -S . -B <builddir>
+
 cmake_minimum_required(VERSION 3.16)
 
 # Language options

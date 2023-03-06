@@ -233,8 +233,8 @@ public:
 protected:
 
     void changeStateTo(ExecutionState requestedState, bool blocking);
-    void changeWarpTo(u8 value, bool blocking = true);
-    void changeDebugTo(u8 value, bool blocking = true);
+    void changeWarpTo(u8 value, bool blocking = false);
+    void changeDebugTo(u8 value, bool blocking = false);
     
     
     //

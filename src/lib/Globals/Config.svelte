@@ -786,7 +786,7 @@
 
     export function updateWarpState()
     {
-        console.log("(updateWarpState", warpMode);
+        console.log("updateWarpState", warpMode);
 
         if (!$amiga) return; // GET RID OF THIS
 
@@ -804,8 +804,10 @@
         }
 
         if (newWarp) {
+            console.log("Calling warpOn");
             $amiga.warpOn();
         } else {
+            console.log("Calling warpOff");
             $amiga.warpOff();
         }
     }

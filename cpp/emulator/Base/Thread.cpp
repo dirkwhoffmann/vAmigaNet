@@ -98,6 +98,11 @@ Thread::main()
     
     while (++loopCounter) {
 
+/*
+        if (loopCounter % 50 == 0 || state != newState) {
+            printf("old state: %ld new state: %ld\n", state, newState);
+        }
+*/
         if (isRunning()) {
 
             switch (getThreadMode()) {
@@ -243,7 +248,8 @@ Thread::run(bool blocking)
 
         // Throw an exception if the emulator is not ready to run
         isReady();
-        
+
+        printf("Changing state to RUNNING\n");
         // Request a state change and wait until the new state has been reached
         changeStateTo(EXEC_RUNNING, blocking);
     }
@@ -306,6 +312,9 @@ Thread::debugOff(isize source)
 void
 Thread::changeStateTo(ExecutionState requestedState, bool blocking)
 {
+    // REMOVE ASAP
+    blocking = false;
+
     newState = requestedState;
     if (blocking) while (state != requestedState) { };
 }

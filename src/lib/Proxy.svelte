@@ -160,7 +160,7 @@
 			}
 			console.log('Configuring warp mode: ' + showcase.warp);
 			$config.set(Opt.WARP_MODE, showcase.warp);
-
+            console.log('Launchine emulator...');
 			$amiga.run();
 
 			// Set GUI timer to manage disk changes
@@ -174,7 +174,9 @@
 				$agnus.scheduleGUITimerAbs(7600, 2);
 			}
 
-		} catch (exception) {
+            console.log('Done');
+
+        } catch (exception) {
 			console.log('CATCHED ' + exception);
 			throw exception;
 			// console.error($amiga.getExceptionMessage(exception));

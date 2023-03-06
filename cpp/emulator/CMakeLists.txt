@@ -1,10 +1,9 @@
+# Usage: emcmake cmake -S . -B <builddir>
+
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 
 # Set the project name
 project(vAmigaCore)
-
-# Enable testing
-enable_testing()
 
 # Specify the C++ standard
 set(CMAKE_CXX_STANDARD 20)
@@ -19,32 +18,14 @@ endif()
 # Add the emulator library
 add_library(vAmigaCore Amiga.cpp)
 
-# Add the console app (vAmiga Headless)
-add_executable(vAmigaConsole Headless.cpp)
-target_link_libraries(vAmigaConsole vAmigaCore)
-
 # Specify compile options
 target_compile_definitions(vAmigaCore PUBLIC _USE_MATH_DEFINES)
-if(WIN32)
-  target_link_libraries(vAmigaConsole ws2_32)
-endif()
-if(MSVC)
-  target_compile_options(vAmigaCore PUBLIC /W4 /bigobj) # /WX disabled for now
-  target_compile_options(vAmigaCore PUBLIC /wd4100 /wd4201 /wd4324 /wd4458 /wd4091 /wd4430)
-  set_source_files_properties(CPU/Moira/Moira.cpp PROPERTIES COMPILE_FLAGS "/wd4127")
-elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  target_compile_options(vAmigaCore PUBLIC -Wall -Werror)
-  target_compile_options(vAmigaCore PUBLIC -Wno-unused-parameter)
-  target_compile_options(vAmigaCore PUBLIC -fconcepts)
-  target_compile_options(vAmigaCore PUBLIC -Wno-restrict)
-  target_compile_options(vAmigaCore PUBLIC -Wno-dangling-pointer)
-  target_compile_options(vAmigaCore PUBLIC -Wno-array-bounds)
-else()
-  target_compile_options(vAmigaCore PUBLIC -Wall -Werror)
-  target_compile_options(vAmigaCore PUBLIC -Wno-unused-parameter)
-  target_compile_options(vAmigaCore PUBLIC -Wno-gnu-anonymous-struct)
-  target_compile_options(vAmigaCore PUBLIC -Wno-nested-anon-types)
-endif()
+target_compile_options(vAmigaCore PRIVATE -Wall -Werror)
+target_compile_options(vAmigaCore PRIVATE -Wno-unused-parameter -Wno-unused-but-set-variable)
+target_compile_options(vAmigaCore PRIVATE -O3 -mnontrapping-fptoint -fwasm-exceptions)
+target_compile_options(vAmigaCore PRIVATE -Wfatal-errors)
+target_compile_options(vAmigaCore PRIVATE -sWASM_WORKERS)
+set_target_properties(vAmigaCore PROPERTIES LINK_FLAGS "-O3 -mnontrapping-fptoint -fwasm-exceptions" )
 
 # Add include paths
 target_include_directories(vAmigaCore PUBLIC
@@ -105,9 +86,4 @@ add_subdirectory(xdms)
 add_subdirectory(CPU/Moira/softfloat)
 
 # Add libraries
-set(THREADS_PREFER_PTHREAD_FLAG ON)
-find_package(Threads REQUIRED)
-target_link_libraries(vAmigaCore xdms softfloat Threads::Threads)
-
-# Add tests
-add_test(NAME SelfTest COMMAND vAmigaConsole --selftest)
+target_link_libraries(vAmigaCore xdms softfloat)
