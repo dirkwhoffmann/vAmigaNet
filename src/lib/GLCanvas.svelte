@@ -329,7 +329,7 @@
         resizeCanvasToDisplaySize();
 
         // Get the latest half-picture from the emulator
-        updateTexture();
+        return updateTexture();
     }
 
     export function render()
@@ -378,7 +378,7 @@
                 // console.log('Frame sync mismatch: ' + frameNr + ' -> ' + frame.frameNr);
 
                 // Return immediately if we alredy have this texture
-                if (frame.frameNr == frameNr) return;
+                if (frame.frameNr == frameNr) return false;
             }
             frameNr = frame.frameNr;
 
@@ -394,6 +394,7 @@
                 gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, tex);
             }
         }
+        return true;
     }
 
     function createMergeTexture()

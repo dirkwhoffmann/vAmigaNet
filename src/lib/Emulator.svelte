@@ -94,8 +94,7 @@
 		}
 
 		if ($poweredOn) {
-			update(now);
-			render();
+			if(update(now)) render();
 		} else {
 			// console.log('Skipping draw: Store not yet initialized');
 		}
@@ -139,7 +138,11 @@
 			h = rech.current;
 		}
 
-		if (glCanvas) glCanvas.update();
+		let textureChange= glCanvas ? glCanvas.update() : false;
+		
+		console.log("update "+textureChange);
+		//true signals when rendering is necessary
+		return textureChange||textureAnimates || canvasAnimates;
 	}
 
 	function render() {
