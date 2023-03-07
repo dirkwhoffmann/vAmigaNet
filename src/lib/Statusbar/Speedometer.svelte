@@ -28,9 +28,6 @@
 	];
 	items[0].isSelected = true;
 
-	// <div class="w-4">{@html selection == id ? '&#10003' : ''}</div>
-	// const dispatch = createEventDispatcher<{push:{sender:string}}>();
-
 	onMount(() => {
 		console.log('Speedometer: onMount()');
 		latchedTimestamp = Date.now();

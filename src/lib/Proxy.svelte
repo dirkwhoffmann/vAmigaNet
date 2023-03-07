@@ -333,7 +333,7 @@
 
         $poweredOn = $amiga.poweredOn();
         $running = $amiga.isRunning();
-        $warp = $amiga.inWarpMode();
+        // $warp = $amiga.inWarpMode();
         $muted = $paula.isMuted() || $warp;
         $halted = $amiga.isHalted();
         $debugMode = $amiga.inDebugMode();
@@ -403,11 +403,13 @@
 
             case $proxy.MSG_WARP_ON:
                 $MsgWarpOn++;
+                $warp = true;
                 updateStateVariables();
                 break;
 
             case $proxy.MSG_WARP_OFF:
                 $MsgWarpOff++;
+                $warp = false;
                 updateStateVariables();
                 break;
 
