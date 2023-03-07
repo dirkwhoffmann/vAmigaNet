@@ -109,7 +109,7 @@ EmuMsg AmigaProxy::readMessage()
     Message msg;
     EmuMsg result;
 
-    result.valid = amiga->msgQueue.get(msg.type, msg.data1, msg.data2, msg.data3, msg.data4);
+    result.valid = amiga->msgQueue.get(msg);
 
     result.type = (u32)msg.type;
     result.d1 = (u32)msg.data1;
