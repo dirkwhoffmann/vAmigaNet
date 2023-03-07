@@ -3,7 +3,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { Opt } from '$lib/types';
-	import { layout, config, poweredOn } from '$lib/stores';
+	import { amiga, config, layout, poweredOn, proxy } from '$lib/stores';
 	import { canvasWidth, canvasHeight, aspectWidth, aspectHeight } from '$lib/stores';
 	import GLCanvas from '$lib/GLCanvas.svelte';
 	import { AnimatedFloat } from '$lib/Utils/AnimatedFloat';
@@ -76,11 +76,22 @@
 	}
 
 	export function doAnimationFrame(animationFrame: number, now: DOMHighResTimeStamp) {
+
 		/*
 		if (animationFrame % 50 == 0) {
 			console.log("Frame " + animationFrame);
 		}
 		*/
+
+		// Process pending messages
+		while (1) {
+			let msg = $amiga.readMessage();
+			if (msg.valid) {
+				$proxy.processMsg(msg.type, msg.d1, msg.d2, msg.d3, msg.d4);
+			} else {
+				break;
+			}
+		}
 
 		if ($poweredOn) {
 			update(now);
@@ -91,6 +102,7 @@
 	}
 
 	function update(now: DOMHighResTimeStamp) {
+
 		let textureAnimates = textureRect.animates();
 		let canvasAnimates = recw.animates() || rech.animates();
 		animating = textureAnimates || canvasAnimates;
@@ -127,11 +139,11 @@
 			h = rech.current;
 		}
 
-		glCanvas.update();
+		if (glCanvas) glCanvas.update();
 	}
 
 	function render() {
-		glCanvas.render();
+		if (glCanvas) glCanvas.render();
 	}
 </script>
 

@@ -99,7 +99,7 @@
                                     <div class="font-sofia-extra text-7xl mr-2">vAmiga</div>
                                     <div class="font-sofia-extra text-7xl opacity-75">Online</div>
                                 </div>
-                                <div class="font-sofia-semi text-xl pl-2 pb-10">Version 0.4</div>
+                                <div class="font-sofia-semi text-xl pl-2 pb-10">Version 0.5</div>
                                 <div class="flex space-x-5">
                                     <div class="tooltip tooltip-primary" data-tip="Power On">
                                         <button class="btn btn-outline btn-square p-1.5" on:click={switchOn}>

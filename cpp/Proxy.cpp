@@ -18,6 +18,14 @@ void processMsg(const void *amiga, long id, int d1, int d2, int d3, int d4)
 
 EMSCRIPTEN_BINDINGS(Structures)
 {
+    value_object<EmuMsg>("EmuMsg")
+        .field("valid", &EmuMsg::valid)
+        .field("type", &EmuMsg::type)
+        .field("d1", &EmuMsg::d1)
+        .field("d2", &EmuMsg::d2)
+        .field("d3", &EmuMsg::d3)
+        .field("d4", &EmuMsg::d4);
+
     value_object<TextureWrapper>("TextureWrapper")
         .field("frameNr", &TextureWrapper::frameNr)
         .field("data", &TextureWrapper::data)
@@ -77,8 +85,8 @@ AmigaProxy::AmigaProxy()
     printf("Constructing Amiga...\n");
     amiga = new Amiga();
 
-    printf("Adding listener...\n");
-    amiga->msgQueue.setListener(amiga, &processMsg);
+    // printf("Adding listener...\n");
+    // amiga->msgQueue.setListener(amiga, &processMsg);
 
     // DEPRECATED (REMOVE ASAP)
     printf("Configuring...\n");
@@ -94,6 +102,22 @@ AmigaProxy::AmigaProxy()
     amiga->configure(OPT_DRIVE_CONNECT, 1, true);
 
     CATCH
+}
+
+EmuMsg AmigaProxy::readMessage()
+{
+    Message msg;
+    EmuMsg result;
+
+    result.valid = amiga->msgQueue.get(msg.type, msg.data1, msg.data2, msg.data3, msg.data4);
+
+    result.type = (u32)msg.type;
+    result.d1 = (u32)msg.data1;
+    result.d2 = (u32)msg.data2;
+    result.d3 = (u32)msg.data3;
+    result.d4 = (u32)msg.data4;
+
+    return result;
 }
 
 void AmigaProxy::updateAudio(int offset)
@@ -185,6 +209,8 @@ EMSCRIPTEN_BINDINGS(AmigaProxy)
 {
     class_<AmigaProxy>("AmigaProxy")
         .constructor<>()
+        .function("readMessage", &AmigaProxy::readMessage)
+
         .function("launch", &AmigaProxy::launch)
         .function("errorCode", &AmigaProxy::errorCode)
 

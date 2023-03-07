@@ -12,6 +12,16 @@ using namespace vamiga;
 
 typedef struct
 {
+    bool valid;
+    u32 type;
+    u32 d1;
+    u32 d2;
+    u32 d3;
+    u32 d4;
+} EmuMsg;
+
+typedef struct
+{
     u32 crc32;
     string title;
     string version;
@@ -81,6 +91,9 @@ struct AmigaProxy
 
     Buffer<float> leftChannel;
     Buffer<float> rightChannel;
+
+    // Handling messages
+    EmuMsg readMessage();
 
     // Handling exceptions
     int errorCode() { return ::errorCode; }
