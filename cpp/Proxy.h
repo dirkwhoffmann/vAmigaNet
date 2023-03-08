@@ -47,13 +47,6 @@ Amiga *amiga = nullptr;
 
 
 //
-// Message processing
-//
-
-void processMsg(const void *amiga, long id, int data1, int data2, int data3, int data4);
-
-
-//
 // Exception handling
 //
 
@@ -93,8 +86,7 @@ struct AmigaProxy
     Buffer<float> rightChannel;
 
     // Handling messages
-    EmuMsg readMessage();
-    Message readMessage2();
+    Message readMessage();
 
     // Handling exceptions
     int errorCode() { return ::errorCode; }

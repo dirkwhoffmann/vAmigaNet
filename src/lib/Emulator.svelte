@@ -97,7 +97,7 @@
         // Process pending messages
         while (1) {
 
-            let msg = $amiga.readMessage2();
+            let msg = $amiga.readMessage();
             if (msg.type == 0) break;
 
             $proxy.processMsg(msg);

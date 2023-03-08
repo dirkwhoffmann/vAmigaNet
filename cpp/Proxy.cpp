@@ -6,12 +6,6 @@
 #include <stdio.h>
 #include <exception>
 
-void processMsg(const void *amiga, long id, int d1, int d2, int d3, int d4)
-{
-    // Reroute call to JavaScript
-    MAIN_THREAD_ASYNC_EM_ASM({ self.Module.processMsg($0, $1, $2, $3, $4); }, id, d1, d2, d3, d4);
-}
-
 //
 // Structures
 //
@@ -28,14 +22,6 @@ EMSCRIPTEN_BINDINGS(Structures)
         .field("type", &Message::type)
         .field("value", &Message::value)
         .field("drive", &Message::drive);
-
-    value_object<EmuMsg>("EmuMsg")
-        .field("valid", &EmuMsg::valid)
-        .field("type", &EmuMsg::type)
-        .field("d1", &EmuMsg::d1)
-        .field("d2", &EmuMsg::d2)
-        .field("d3", &EmuMsg::d3)
-        .field("d4", &EmuMsg::d4);
 
     value_object<TextureWrapper>("TextureWrapper")
         .field("frameNr", &TextureWrapper::frameNr)
@@ -112,7 +98,7 @@ AmigaProxy::AmigaProxy()
     CATCH
 }
 
-Message AmigaProxy::readMessage2()
+Message AmigaProxy::readMessage()
 {
     Message msg;
 
@@ -121,25 +107,6 @@ Message AmigaProxy::readMessage2()
     }
 
     return msg;
-}
-
-EmuMsg AmigaProxy::readMessage()
-{
-    Message msg;
-    EmuMsg result;
-
-    result.valid = amiga->msgQueue.get(msg);
-
-    result.type = (u32)msg.type;
-    result.d1 = (u32)msg.value;
-
-    /*
-    result.d2 = (u32)msg.data2;
-    result.d3 = (u32)msg.data3;
-    result.d4 = (u32)msg.data4;
-    */
-
-    return result;
 }
 
 void AmigaProxy::updateAudio(int offset)
@@ -232,7 +199,6 @@ EMSCRIPTEN_BINDINGS(AmigaProxy)
     class_<AmigaProxy>("AmigaProxy")
         .constructor<>()
         .function("readMessage", &AmigaProxy::readMessage)
-        .function("readMessage2", &AmigaProxy::readMessage2)
 
         .function("launch", &AmigaProxy::launch)
         .function("errorCode", &AmigaProxy::errorCode)
