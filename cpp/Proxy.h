@@ -94,6 +94,7 @@ struct AmigaProxy
 
     // Handling messages
     EmuMsg readMessage();
+    Message readMessage2();
 
     // Handling exceptions
     int errorCode() { return ::errorCode; }

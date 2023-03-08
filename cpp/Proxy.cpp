@@ -18,6 +18,17 @@ void processMsg(const void *amiga, long id, int d1, int d2, int d3, int d4)
 
 EMSCRIPTEN_BINDINGS(Structures)
 {
+    value_object<DriveMsg>("DriveMsg")
+        .field("nr", &DriveMsg::nr)
+        .field("cylinder", &DriveMsg::cylinder)
+        .field("volume", &DriveMsg::volume)
+        .field("pan", &DriveMsg::pan);
+
+    value_object<Message>("Message")
+        .field("type", &Message::type)
+        .field("value", &Message::value)
+        .field("drive", &Message::drive);
+
     value_object<EmuMsg>("EmuMsg")
         .field("valid", &EmuMsg::valid)
         .field("type", &EmuMsg::type)
@@ -85,9 +96,6 @@ AmigaProxy::AmigaProxy()
     printf("Constructing Amiga...\n");
     amiga = new Amiga();
 
-    // printf("Adding listener...\n");
-    // amiga->msgQueue.setListener(amiga, &processMsg);
-
     // DEPRECATED (REMOVE ASAP)
     printf("Configuring...\n");
     amiga->configure(OPT_AUDVOLL, 100);
@@ -104,6 +112,17 @@ AmigaProxy::AmigaProxy()
     CATCH
 }
 
+Message AmigaProxy::readMessage2()
+{
+    Message msg;
+
+    if (!amiga->msgQueue.get(msg)) {
+        msg.type = 0;
+    }
+
+    return msg;
+}
+
 EmuMsg AmigaProxy::readMessage()
 {
     Message msg;
@@ -112,10 +131,13 @@ EmuMsg AmigaProxy::readMessage()
     result.valid = amiga->msgQueue.get(msg);
 
     result.type = (u32)msg.type;
-    result.d1 = (u32)msg.data1;
+    result.d1 = (u32)msg.value;
+
+    /*
     result.d2 = (u32)msg.data2;
     result.d3 = (u32)msg.data3;
     result.d4 = (u32)msg.data4;
+    */
 
     return result;
 }
@@ -210,6 +232,7 @@ EMSCRIPTEN_BINDINGS(AmigaProxy)
     class_<AmigaProxy>("AmigaProxy")
         .constructor<>()
         .function("readMessage", &AmigaProxy::readMessage)
+        .function("readMessage2", &AmigaProxy::readMessage2)
 
         .function("launch", &AmigaProxy::launch)
         .function("errorCode", &AmigaProxy::errorCode)

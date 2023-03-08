@@ -346,11 +346,14 @@
         $dfCylinder = [$df0.currentCyl(), $df1.currentCyl(), $df2.currentCyl(), $df3.currentCyl()];
     }
 
-    function processMsg(id: number, d1: number, d2: number, d3: number, d4: number)
+    function processMsg(msg)
     {
-        // console.log(`Message: ${$enums.MsgTypeKey(id)}(${d1}, ${d2}, ${d3}, ${d4})`);
+        let type = msg.type;
+        let value = msg.value;
 
-        switch (id) {
+        console.log(`Message: ${$enums.MsgTypeKey(type)}(${value})`);
+
+        switch (type) {
             case $proxy.MSG_NONE:
                 $MsgNone++;
                 break;
@@ -580,25 +583,25 @@
             case $proxy.MSG_DRIVE_STEP:
                 $MsgDriveStep++;
                 updateStateVariables();
-                $audio.playStepSound(d3, d4);
+                $audio.playStepSound(msg.drive.volume, msg.drive.pan);
                 break;
 
             case $proxy.MSG_DRIVE_POLL:
                 $MsgDrivePoll++;
                 updateStateVariables();
-                $audio.playStepSound(d3, d4);
+                $audio.playStepSound(msg.drive.volume, msg.drive.pan);
                 break;
 
             case $proxy.MSG_DISK_INSERT:
                 $MsgDiskInsert++;
                 updateStateVariables();
-                $audio.playInsertSound(d3, d4);
+                $audio.playInsertSound(msg.drive.volume, msg.drive.pan);
                 break;
 
             case $proxy.MSG_DISK_EJECT:
                 $MsgDiskEject++;
                 updateStateVariables();
-                $audio.playEjectSound(d3, d4);
+                $audio.playEjectSound(msg.drive.volume, msg.drive.pan);
                 break;
 
             case $proxy.MSG_DISK_SAVED:
