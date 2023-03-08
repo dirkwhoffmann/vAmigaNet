@@ -23,12 +23,16 @@
 	$: textcol = $darkTheme ? 'text-gray-300' : 'text-black';
 
 	let tag = 0;
-	let items = [new MenuItem('Eject', 0)];
+	let items = [new MenuItem('Insert', 0), new MenuItem('Eject',1)];
 
 	$: update(disk);
 	function update(hasDisk: boolean) {
-		items[0].isEnabled = hasDisk;
+		items[0].isEnabled = !hasDisk;
 		items[0] = items[0];
+
+		items[1].isEnabled = hasDisk;
+		items[1]=items[1];
+
 		console.log('disk', disk);
 		console.log('items[0].isEnabled', items[0].isEnabled);
 	}

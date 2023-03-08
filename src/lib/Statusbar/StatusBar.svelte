@@ -47,8 +47,47 @@
 		$amiga.ejectDisk(nr);
 	}
 
+
+	function read_file_stream(file)
+	{
+		return new Promise(async (resolve, reject)=>{
+			try{
+				var fileReader=new FileReader();
+				fileReader.onload = function(){
+					resolve(new Uint8Array(this.result));
+				}
+				fileReader.readAsArrayBuffer(file);
+
+			} catch(e)
+			{
+				reject(e);
+			}
+
+
+
+		});
+	}
+	async function read_file(e){
+		let file=e.target.files[0];
+		let u8 = await read_file_stream(file) as Uint8Array;
+		$amiga.insertDisk(u8, u8.length, insertInDriveNr);
+		inputFile.value="";
+	}
+
+
+	let inputFile:HTMLInputElement;
+	let insertInDriveNr=0;
+
+	function insertFile(nr:number){
+		insertInDriveNr=nr;
+		inputFile.click()
+	}
+
+
+
 </script>
 
+<input bind:this={inputFile} type="file" class="hidden" on:change={read_file}>
 <div class="z-50 relative flex h-8 mb-1 {bg}">
 	<BarBox>
 		<button
@@ -70,7 +109,7 @@
 					writing={$dfWriting[i]}
 					unsaved={$dfUnsaved[i]}
 					wp={$dfProtected[i]}
-					on:select={(e) => ejectAction(i)}
+					on:select={(e) => {if(e.detail.value==1) ejectAction(i); else insertFile(i);}}
 				/>
 			{/if}
 		{/each}
