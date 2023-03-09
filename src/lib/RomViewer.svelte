@@ -7,6 +7,7 @@
 	import FaTrash from 'svelte-icons/fa/FaTrash.svelte';
 	import IoMdClose from 'svelte-icons/io/IoMdClose.svelte';
 	import { proxy, amiga, memory, initialized, layer } from '$lib/stores';
+	import FileDialog from '$lib/Utils/FileDialog.svelte';
 
 	// Connect to Dexie DB
 	let roms: RomEntry[]; 
@@ -120,7 +121,14 @@
 
 	const debug = ''; //'border-2';
 	let activeTab = 0;
+
+	let fdialog:FileDialog;
+	function onInsert(e: CustomEvent<{ file: Uint8Array }>){
+		let filebuffer = e.detail.file;
+		$memory.loadRom(filebuffer, filebuffer.length);
+	}
 </script>
+<FileDialog bind:this={fdialog} on:loaded={onInsert}></FileDialog>
 
 <div class="{debug} border-green-500 h-full flex flex-col">
 	<div class="flex items-center space-x-2 mx-2">
@@ -141,7 +149,7 @@
 			<table in:fade class="table table-compact table-zebra w-full">
 				<tbody class={debug}>
 					<tr class="h-8 {debug} text-center text-base-content border-purple-400 font-josefin">
-						Use drag-and-drop to add additional ROM images.
+						Use drag-and-drop to add additional ROM images. Or <button class="px-2 rounded-md bg-slate-600 text-white" on:click={fdialog.open()}>open file dialog</button>
 					</tr>
 					{#if roms}
 						{#each roms as rom}
