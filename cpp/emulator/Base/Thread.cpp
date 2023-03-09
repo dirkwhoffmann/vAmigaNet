@@ -48,7 +48,7 @@ Thread::sleep<Thread::ThreadMode::Periodic>()
     auto now = util::Time::now();
 
     // Only proceed if we're not running in warp mode
-    if (warpMode) return;
+    if (warp) return;
 
     // Check if we're running too slow...
     if (now > targetTime) {
@@ -88,7 +88,7 @@ Thread::sleep<Thread::ThreadMode::Pulsed>()
     auto timeout = util::Time(i64(2000000000.0 / refreshRate()));
 
     // Wait for the next pulse
-    if (!warpMode) waitForWakeUp(timeout);
+    if (!warp) waitForWakeUp(timeout);
 }
 
 void
@@ -107,7 +107,7 @@ Thread::main()
             }
         }
 
-        if (!warpMode || !isRunning()) {
+        if (!warp || !isRunning()) {
             
             switch (getThreadMode()) {
 
@@ -116,92 +116,14 @@ Thread::main()
             }
         }
         
-        // Are we requested to enter or exit warp mode?
-        if (warpChangeRequest.test()) {
-
-            if (newWarpMode != warpMode) {
-
-                CoreComponent::warpOnOff(newWarpMode);
-                warpMode = newWarpMode;
-            }
-
-            warpChangeRequest.clear();
-            warpChangeRequest.notify_one();
-        }
-
-        // Are we requested to enter or exit debug mode?
-        if (debugChangeRequest.test()) {
-
-            if (newDebugMode != debugMode) {
-
-                CoreComponent::debugOnOff(newDebugMode);
-                debugMode = newDebugMode;
-            }
-
-            debugChangeRequest.clear();
-            debugChangeRequest.notify_one();
-        }
-
         // Are we requested to change state?
         if (stateChangeRequest.test()) {
 
-            while (newState != state) {
-
-                if (state == EXEC_OFF && newState == EXEC_PAUSED) {
-
-                    CoreComponent::powerOn();
-                    state = EXEC_PAUSED;
-
-                } else if (state == EXEC_OFF && newState == EXEC_RUNNING) {
-
-                    CoreComponent::powerOn();
-                    state = EXEC_PAUSED;
-
-                } else if (state == EXEC_PAUSED && newState == EXEC_OFF) {
-
-                    CoreComponent::powerOff();
-                    state = EXEC_OFF;
-
-                } else if (state == EXEC_PAUSED && newState == EXEC_RUNNING) {
-
-                    CoreComponent::run();
-                    state = EXEC_RUNNING;
-
-                } else if (state == EXEC_RUNNING && newState == EXEC_OFF) {
-
-                    state = EXEC_PAUSED;
-                    CoreComponent::pause();
-
-                } else if (state == EXEC_RUNNING && newState == EXEC_PAUSED) {
-
-                    state = EXEC_PAUSED;
-                    CoreComponent::pause();
-
-                } else if (state == EXEC_RUNNING && newState == EXEC_SUSPENDED) {
-
-                    state = EXEC_SUSPENDED;
-
-                } else if (state == EXEC_SUSPENDED && newState == EXEC_RUNNING) {
-
-                    state = EXEC_RUNNING;
-
-                } else if (newState == EXEC_HALTED) {
-
-                    CoreComponent::halt();
-                    state = EXEC_HALTED;
-                    return;
-
-                } else {
-
-                    // Invalid state transition
-                    fatalError;
-                }
-
-                debug(RUN_DEBUG, "Changed state to %s\n", ExecutionStateEnum::key(state));
-            }
-
+            switchState(newState);
             stateChangeRequest.clear();
             stateChangeRequest.notify_one();
+
+            if (state == EXEC_HALTED) return;
         }
 
         // Compute the CPU load once in a while
@@ -216,6 +138,94 @@ Thread::main()
             loadClock.stop();
             nonstopClock.restart();
         }
+    }
+}
+
+void
+Thread::switchState(ExecutionState newState)
+{
+    assert(isEmulatorThread());
+
+    while (newState != state) {
+
+        if (state == EXEC_OFF && newState == EXEC_PAUSED) {
+
+            CoreComponent::powerOn();
+            state = EXEC_PAUSED;
+
+        } else if (state == EXEC_OFF && newState == EXEC_RUNNING) {
+
+            CoreComponent::powerOn();
+            state = EXEC_PAUSED;
+
+        } else if (state == EXEC_PAUSED && newState == EXEC_OFF) {
+
+            CoreComponent::powerOff();
+            state = EXEC_OFF;
+
+        } else if (state == EXEC_PAUSED && newState == EXEC_RUNNING) {
+
+            CoreComponent::run();
+            state = EXEC_RUNNING;
+
+        } else if (state == EXEC_RUNNING && newState == EXEC_OFF) {
+
+            state = EXEC_PAUSED;
+            CoreComponent::pause();
+
+        } else if (state == EXEC_RUNNING && newState == EXEC_PAUSED) {
+
+            state = EXEC_PAUSED;
+            CoreComponent::pause();
+
+        } else if (state == EXEC_RUNNING && newState == EXEC_SUSPENDED) {
+
+            state = EXEC_SUSPENDED;
+
+        } else if (state == EXEC_SUSPENDED && newState == EXEC_RUNNING) {
+
+            state = EXEC_RUNNING;
+
+        } else if (newState == EXEC_HALTED) {
+
+            CoreComponent::halt();
+            state = EXEC_HALTED;
+
+        } else {
+
+            // Invalid state transition
+            fatalError;
+        }
+
+        debug(RUN_DEBUG, "Changed state to %s\n", ExecutionStateEnum::key(state));
+    }
+}
+
+void
+Thread::switchWarp(bool state, u8 source)
+{
+    assert(source >= 0 && source < 8);
+    assert(isEmulatorThread() || !isRunning());
+
+    u8 old = warp;
+    state ? SET_BIT(warp, source) : CLR_BIT(warp, source);
+
+    if (bool(old) != bool(warp)) {
+        CoreComponent::warpOnOff(warp);
+    }
+}
+
+void
+Thread::switchTrack(bool state, u8 source)
+{
+    assert(source >= 0 && source < 8);
+    assert(isEmulatorThread() || !isRunning());
+
+    u8 old = track;
+    state ? SET_BIT(track, source) : CLR_BIT(track, source);
+
+    if (bool(old) != bool(track)) {
+        CoreComponent::trackOnOff(track);
     }
 }
 
@@ -286,7 +296,7 @@ void
 Thread::halt()
 {
     assert(!isEmulatorThread());
-    
+
     changeStateTo(EXEC_HALTED);
     join();
 }
@@ -294,36 +304,31 @@ Thread::halt()
 void
 Thread::warpOn(isize source)
 {
-    assert(source >= 0 && source < 8);
-    
-    changeWarpTo(warpMode | (u8)(1 << source));
+    SUSPENDED switchWarp(true, u8(source));
 }
 
 void
 Thread::warpOff(isize source)
 {
-    assert(source >= 0 && source < 8);
-    
-    changeWarpTo(warpMode & ~(u8)(1 << source));
+    SUSPENDED switchWarp(false, u8(source));
 }
 
 void
-Thread::debugOn(isize source)
+Thread::trackOn(isize source)
 {
-    assert(source >= 0 && source < 8);
-    
-    changeDebugTo(debugMode | (u8)(1 << source));
+    SUSPENDED switchTrack(true, u8(source));
 }
 
 void
-Thread::debugOff(isize source)
+Thread::trackOff(isize source)
 {
-    changeDebugTo(debugMode & ~(u8)(1 << source));
+    SUSPENDED switchTrack(false, u8(source));
 }
 
 void
 Thread::changeStateTo(ExecutionState requestedState)
 {
+    assert(!isEmulatorThread());
     assert(stateChangeRequest.test() == false);
 
     // Assign new state
@@ -336,40 +341,6 @@ Thread::changeStateTo(ExecutionState requestedState)
     // Wait until the change has been performed
     stateChangeRequest.wait(true);
     assert(stateChangeRequest.test() == false);
-}
-
-void
-Thread::changeWarpTo(u8 value)
-{
-    assert(warpChangeRequest.test() == false);
-
-    // Assign new state
-    newWarpMode = value;
-
-    // Request the change
-    warpChangeRequest.test_and_set();
-    assert(warpChangeRequest.test() == true);
-
-    // Wait until the change has been performed
-    warpChangeRequest.wait(true);
-    assert(warpChangeRequest.test() == false);
-}
-
-void
-Thread::changeDebugTo(u8 value)
-{
-    assert(debugChangeRequest.test() == false);
-
-    // Assign new state
-    newDebugMode = value;
-
-    // Request the change
-    debugChangeRequest.test_and_set();
-    assert(debugChangeRequest.test() == true);
-
-    // Wait until the change has been performed
-    debugChangeRequest.wait(true);
-    assert(debugChangeRequest.test() == false);
 }
 
 void

@@ -11,8 +11,8 @@
 		dfWriting,
 		dfUnsaved,
 		dfProtected,
+		track,
 		warp,
-		debugMode,
 		halted,
 		muted,
 		audio,
@@ -24,7 +24,7 @@
 	let speedometer: Speedometer;
 
 	$: muteIcon = $muted || $warp; 
-	$: debugIcon = $debugMode; 
+	$: debugIcon = $track;
 	$: haltIcon = $halted; 
 
 	const dispatch = createEventDispatcher<{ push: { sender: string } }>();

@@ -43,6 +43,35 @@ struct VideoFormatEnum : util::Reflection<VideoFormatEnum, VideoFormat>
 };
 #endif
 
+enum_long(WARP_MODE)
+{
+    WARP_AUTO,
+    WARP_NEVER,
+    WARP_ALWAYS
+};
+typedef WARP_MODE WarpMode;
+
+#ifdef __cplusplus
+struct WarpModeEnum : util::Reflection<WarpModeEnum, WarpMode>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = WARP_ALWAYS;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
+
+    static const char *prefix() { return "WARP"; }
+    static const char *key(WarpMode value)
+    {
+        switch (value) {
+
+            case WARP_AUTO:     return "WARP_AUTO";
+            case WARP_NEVER:    return "WARP_NEVER";
+            case WARP_ALWAYS:   return "WARP_ALWAYS";
+        }
+        return "???";
+    }
+};
+#endif
+
 enum_long(SYNC_MODE)
 {
     SYNC_NATIVE_FPS,
@@ -317,6 +346,7 @@ struct ChipsetRegEnum : util::Reflection<ChipsetRegEnum, ChipsetReg>
 typedef struct
 {
     VideoFormat type;
+    WarpMode warpMode;
     SyncMode syncMode;
     isize proposedFps;
 }
@@ -346,18 +376,16 @@ typedef u32 RunLoopFlags;
 namespace RL
 {
 constexpr u32 STOP               = (1 << 0);
-constexpr u32 WARP_ON            = (1 << 1);
-constexpr u32 WARP_OFF           = (1 << 2);
-constexpr u32 SOFTSTOP_REACHED   = (1 << 3);
-constexpr u32 BREAKPOINT_REACHED = (1 << 4);
-constexpr u32 WATCHPOINT_REACHED = (1 << 5);
-constexpr u32 CATCHPOINT_REACHED = (1 << 6);
-constexpr u32 SWTRAP_REACHED     = (1 << 7);
-constexpr u32 COPPERBP_REACHED   = (1 << 8);
-constexpr u32 COPPERWP_REACHED   = (1 << 9);
-constexpr u32 AUTO_SNAPSHOT      = (1 << 10);
-constexpr u32 USER_SNAPSHOT      = (1 << 11);
-constexpr u32 SYNC_THREAD        = (1 << 12);
+constexpr u32 SOFTSTOP_REACHED   = (1 << 1);
+constexpr u32 BREAKPOINT_REACHED = (1 << 2);
+constexpr u32 WATCHPOINT_REACHED = (1 << 3);
+constexpr u32 CATCHPOINT_REACHED = (1 << 4);
+constexpr u32 SWTRAP_REACHED     = (1 << 5);
+constexpr u32 COPPERBP_REACHED   = (1 << 6);
+constexpr u32 COPPERWP_REACHED   = (1 << 7);
+constexpr u32 AUTO_SNAPSHOT      = (1 << 8);
+constexpr u32 USER_SNAPSHOT      = (1 << 9);
+constexpr u32 SYNC_THREAD        = (1 << 10);
 };
 
 #endif

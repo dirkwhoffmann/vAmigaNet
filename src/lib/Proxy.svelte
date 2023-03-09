@@ -11,7 +11,6 @@
         config,
         cpu,
         debugDma,
-        debugMode,
         denise,
         df0,
         df1,
@@ -124,7 +123,9 @@
         retroShell,
         romcrc,
         running,
-        warp
+        track,
+        warp,
+        warpMode
     } from "$lib/stores";
     import { db } from '$lib/Db/db';
     import { Opt } from "./types";
@@ -333,10 +334,11 @@
 
         $poweredOn = $amiga.poweredOn();
         $running = $amiga.isRunning();
-        // $warp = $amiga.inWarpMode();
+        $warp = $amiga.isWarping();
+        $warpMode = $config.getNum(Opt.WARP_MODE);
+        $track = $amiga.isTracking();
         $muted = $paula.isMuted() || $warp;
         $halted = $amiga.isHalted();
-        $debugMode = $amiga.inDebugMode();
         $dfConnected = [$df0.isConnected(), $df1.isConnected(), $df2.isConnected(), $df3.isConnected()];
         $dfHasDisk = [$df0.hasDisk(), $df1.hasDisk(), $df2.hasDisk(), $df3.hasDisk()];
         $dfMotor = [$df0.motor(), $df1.motor(), $df2.motor(), $df3.motor()];
@@ -351,7 +353,7 @@
         let type = msg.type;
         let value = msg.value;
 
-        console.log(`Message: ${$enums.MsgTypeKey(type)}(${value})`);
+        // console.log(`Message: ${$enums.MsgTypeKey(type)}(${value})`);
 
         switch (type) {
             case $proxy.MSG_NONE:
@@ -392,7 +394,6 @@
 
             case $proxy.MSG_RESET:
                 $MsgReset++;
-                $config.updateWarpState();
                 updateStateVariables();
                 break;
 
@@ -406,13 +407,11 @@
 
             case $proxy.MSG_WARP_ON:
                 $MsgWarpOn++;
-                $warp = true;
                 updateStateVariables();
                 break;
 
             case $proxy.MSG_WARP_OFF:
                 $MsgWarpOff++;
-                $warp = false;
                 updateStateVariables();
                 break;
 
@@ -570,13 +569,11 @@
 
             case $proxy.MSG_DRIVE_MOTOR_ON:
                 $MsgDriveMotorOn++;
-                $config.updateWarpState();
                 updateStateVariables();
                 break;
 
             case $proxy.MSG_DRIVE_MOTOR_OFF:
                 $MsgDriveMotorOff++;
-                $config.updateWarpState();
                 updateStateVariables();
                 break;
 
@@ -680,7 +677,6 @@
 
             case $proxy.MSG_SNAPSHOT_RESTORED:
                 $MsgSnapshotRestored++;
-                $config.updateWarpState();
                 updateStateVariables();
                 break;
 

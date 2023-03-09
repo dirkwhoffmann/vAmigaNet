@@ -73,7 +73,6 @@
     ];
 
     // GUI-specific config items that are not stored inside the emulator
-    let warpMode: WarpMode = WarpMode.auto;
     let theme: Theme = Theme.default;
     let canvasBorder = 0;
     let shaking = 1;
@@ -367,8 +366,6 @@
             // General settings
             //
 
-            case Opt.WARP_MODE:
-                return [warpMode].toString();
             case Opt.THEME:
                 return [theme].toString();
             case Opt.CANVAS_BORDER:
@@ -384,6 +381,8 @@
                 return $amiga.getConfig($proxy.OPT_CPU_REVISION).toString();
             case Opt.CPU_SPEED:
                 return $amiga.getConfig($proxy.OPT_CPU_OVERCLOCKING).toString();
+            case Opt.WARP_MODE:
+                return $amiga.getConfig($proxy.OPT_WARP_MODE).toString();
             case Opt.AGNUS_REVISION:
                 return $amiga.getConfig($proxy.OPT_AGNUS_REVISION).toString();
             case Opt.DENISE_REVISION:
@@ -518,9 +517,6 @@
             // General settings
             //
 
-            case Opt.WARP_MODE:
-                setWarp(val);
-                break;
             case Opt.THEME:
                 setTheme(Number(val));
                 break;
@@ -540,6 +536,9 @@
                 break;
             case Opt.CPU_SPEED:
                 $amiga.configure($proxy.OPT_CPU_OVERCLOCKING, Number(val));
+                break;
+            case Opt.WARP_MODE:
+                $amiga.configure($proxy.OPT_WARP_MODE, Number(val));
                 break;
             case Opt.AGNUS_REVISION:
                 $amiga.configure($proxy.OPT_AGNUS_REVISION, Number(val));
@@ -727,39 +726,6 @@
     //
     // Auxiliary functions
     //
-
-    function setWarp(val: string)
-    {
-        console.log("setWarp", val);
-        warpMode = Number(val);
-        updateWarpState();
-    }
-
-    export function updateWarpState()
-    {
-        if (!$amiga) return; // GET RID OF THIS
-
-        let newWarp = false;
-        switch (warpMode) {
-            case WarpMode.auto:
-                newWarp = $diskController.isSpinning();
-                break;
-            case WarpMode.never:
-                newWarp = false;
-                break;
-            case WarpMode.always:
-                newWarp = true;
-                break;
-        }
-
-        if (newWarp) {
-            console.log("Calling warpOn");
-            $amiga.warpOn();
-        } else {
-            console.log("Calling warpOff");
-            $amiga.warpOff();
-        }
-    }
 
     function setTheme(val: Theme)
     {

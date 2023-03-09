@@ -5,7 +5,6 @@ import type { RomEntry } from './Db/db';
 
 // Gateway to the WASM backend
 export const proxy: any = writable();
-// export const wasmInitialized = writable(false);
 export const initialized = writable(false);
 
 // Proxies
@@ -66,9 +65,10 @@ export const dragItem: Writable<Uint8Array | null> = writable(null);
 export const poweredOn = writable(false);
 export const running = writable(false);
 export const warp = writable(false);
+export const warpMode = writable(0);
+export const track = writable(false);
 export const muted = writable(false);
 export const halted = writable(false);
-export const debugMode = writable(false);
 export const debugDma = writable(false);
 export const dfConnected = writable([false,false,false,false]);
 export const dfHasDisk = writable([false,false,false,false]);

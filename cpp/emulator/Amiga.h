@@ -141,13 +141,17 @@ private:
 
 
     //
-    // Snapshot storage
+    // Storage
     //
 
 private:
     
     Snapshot *autoSnapshot = nullptr;
     Snapshot *userSnapshot = nullptr;
+
+
+    typedef struct { Cycle trigger; i64 payload; } Alarm;
+    std::vector<Alarm> alarms;
 
     
     //
@@ -210,8 +214,8 @@ private:
     void _halt() override;
     void _warpOn() override;
     void _warpOff() override;
-    void _debugOn() override;
-    void _debugOff() override;
+    void _trackOn() override;
+    void _trackOff() override;
     void _inspect() const override;
 
     template <class T>
@@ -316,8 +320,6 @@ public:
     
     // Convenience wrappers
     void signalStop() { setFlag(RL::STOP); }
-    void signalWarpOn() { setFlag(RL::WARP_ON); }
-    void signalWarpOff() { setFlag(RL::WARP_OFF); }
     void signalAutoSnapshot() { setFlag(RL::AUTO_SNAPSHOT); }
     void signalUserSnapshot() { setFlag(RL::USER_SNAPSHOT); }
     
@@ -367,7 +369,29 @@ private:
     // Takes a snapshot of a certain kind
     void takeAutoSnapshot();
     void takeUserSnapshot();
-    
+
+
+    //
+    // Handling alarms
+    //
+
+public:
+
+    /* Alarms are scheduled notifications set by the client (GUI). Once the
+     * trigger cycle of an alarm has been reached, the emulator sends a
+     * MSG_ALARM to the client.
+     */
+    void setAlarmAbs(Cycle trigger, i64 payload);
+    void setAlarmRel(Cycle trigger, i64 payload);
+
+    // Services an alarm event
+    void serviceAlarmEvent();
+
+private:
+
+    // Schedules the next alarm event
+    void scheduleNextAlarm();
+
     
     //
     // Miscellaneous

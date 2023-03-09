@@ -212,6 +212,7 @@ Amiga::resetConfig()
     std::vector <Option> options = {
 
         OPT_VIDEO_FORMAT,
+        OPT_WARP_MODE,
         OPT_SYNC_MODE,
         OPT_PROPOSED_FPS
     };
@@ -229,6 +230,10 @@ Amiga::getConfigItem(Option option) const
         case OPT_VIDEO_FORMAT:
 
             return config.type;
+
+        case OPT_WARP_MODE:
+
+            return config.warpMode;
 
         case OPT_SYNC_MODE:
 
@@ -422,6 +427,25 @@ Amiga::setConfigItem(Option option, i64 value)
             }
             return;
 
+        case OPT_WARP_MODE:
+
+            if (!WarpModeEnum::isValid(value)) {
+                throw VAError(ERROR_OPT_INVARG, WarpModeEnum::keyList());
+            }
+
+            config.warpMode = WarpMode(value);
+
+            switch (config.warpMode) {
+
+                case WARP_AUTO:     paula.diskController.spinning() ? warpOn() : warpOff(); break;
+                case WARP_NEVER:    warpOff(); break;
+                case WARP_ALWAYS:   warpOn(); break;
+
+                default:
+                    fatalError;
+            }
+            return;
+
         case OPT_SYNC_MODE:
 
             if (!SyncModeEnum::isValid(value)) {
@@ -476,6 +500,7 @@ Amiga::configure(Option option, i64 value)
     switch (option) {
 
         case OPT_VIDEO_FORMAT:
+        case OPT_WARP_MODE:
         case OPT_SYNC_MODE:
         case OPT_PROPOSED_FPS:
             
@@ -932,6 +957,8 @@ Amiga::_dump(Category category, std::ostream& os) const
 
         os << tab("Machine type");
         os << VideoFormatEnum::key(config.type) << std::endl;
+        os << tab("Warp mode");
+        os << WarpModeEnum::key(config.warpMode);
         os << tab("Sync mode");
         os << SyncModeEnum::key(config.syncMode);
         if (config.syncMode == SYNC_FIXED_FPS) os << " (" << config.proposedFps << " fps)";
@@ -946,10 +973,10 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << bol(isRunning()) << std::endl;
         os << tab("Suspended");
         os << bol(isSuspended()) << std::endl;
-        os << tab("Warp mode");
-        os << bol(inWarpMode()) << std::endl;
-        os << tab("Debug mode");
-        os << bol(inDebugMode()) << std::endl;
+        os << tab("Warping");
+        os << bol(isWarping()) << std::endl;
+        os << tab("Tracking");
+        os << bol(isTracking()) << std::endl;
         os << std::endl;
         os << tab("Refresh rate");
         os << dec(isize(refreshRate())) << " Fps" << std::endl;
@@ -1061,7 +1088,7 @@ Amiga::_powerOn()
     for (auto &bp : std::vector <u32> (INITIAL_BREAKPOINTS)) {
         
         cpu.debugger.breakpoints.setAt(bp);
-        debugMode = true;
+        track = true;
     }
     
     // Update the recorded debug information
@@ -1087,7 +1114,7 @@ Amiga::_run()
     debug(RUN_DEBUG, "_run\n");
 
     // Enable or disable CPU debugging
-    debugMode ? cpu.debugger.enableLogging() : cpu.debugger.disableLogging();
+    track ? cpu.debugger.enableLogging() : cpu.debugger.disableLogging();
 
     msgQueue.put(MSG_RUN);
 }
@@ -1130,17 +1157,17 @@ Amiga::_warpOff()
 }
 
 void
-Amiga::_debugOn()
+Amiga::_trackOn()
 {
-    debug(RUN_DEBUG, "_debugOn\n");
+    debug(RUN_DEBUG, "_trackOn\n");
 
     msgQueue.put(MSG_DEBUG_ON);
 }
 
 void
-Amiga::_debugOff()
+Amiga::_trackOff()
 {
-    debug(RUN_DEBUG, "_debugOff\n");
+    debug(RUN_DEBUG, "_trackOff\n");
 
     msgQueue.put(MSG_DEBUG_OFF);
 }
@@ -1195,8 +1222,7 @@ Amiga::execute()
             if (flags & RL::SOFTSTOP_REACHED) {
                 clearFlag(RL::SOFTSTOP_REACHED);
                 inspect();
-                newState = EXEC_PAUSED;
-                stateChangeRequest.test_and_set();
+                switchState(EXEC_PAUSED);
                 break;
             }
 
@@ -1206,8 +1232,7 @@ Amiga::execute()
                 inspect();
                 auto addr = cpu.debugger.breakpoints.hit->addr;
                 msgQueue.put(MSG_BREAKPOINT_REACHED, CpuMsg { addr, 0});
-                newState = EXEC_PAUSED;
-                stateChangeRequest.test_and_set();
+                switchState(EXEC_PAUSED);
                 break;
             }
 
@@ -1217,8 +1242,7 @@ Amiga::execute()
                 inspect();
                 auto addr = cpu.debugger.watchpoints.hit->addr;
                 msgQueue.put(MSG_WATCHPOINT_REACHED, CpuMsg {addr, 0});
-                newState = EXEC_PAUSED;
-                stateChangeRequest.test_and_set();
+                switchState(EXEC_PAUSED);
                 break;
             }
 
@@ -1228,8 +1252,7 @@ Amiga::execute()
                 inspect();
                 auto vector = u8(cpu.debugger.catchpoints.hit->addr);
                 msgQueue.put(MSG_CATCHPOINT_REACHED, CpuMsg {cpu.getPC0(), vector});
-                newState = EXEC_PAUSED;
-                stateChangeRequest.test_and_set();
+                switchState(EXEC_PAUSED);
                 break;
             }
 
@@ -1238,8 +1261,7 @@ Amiga::execute()
                 clearFlag(RL::SWTRAP_REACHED);
                 inspect();
                 msgQueue.put(MSG_SWTRAP_REACHED, CpuMsg {cpu.getPC0(), 0});
-                newState = EXEC_PAUSED;
-                stateChangeRequest.test_and_set();
+                switchState(EXEC_PAUSED);
                 break;
             }
 
@@ -1249,8 +1271,7 @@ Amiga::execute()
                 inspect();
                 auto addr = u8(agnus.copper.debugger.breakpoints.hit->addr);
                 msgQueue.put(MSG_COPPERBP_REACHED, CpuMsg { addr, 0 });
-                newState = EXEC_PAUSED;
-                stateChangeRequest.test_and_set();
+                switchState(EXEC_PAUSED);
                 break;
             }
 
@@ -1260,30 +1281,17 @@ Amiga::execute()
                 inspect();
                 auto addr = u8(agnus.copper.debugger.watchpoints.hit->addr);
                 msgQueue.put(MSG_COPPERWP_REACHED, CpuMsg { addr, 0 });
-                newState = EXEC_PAUSED;
-                stateChangeRequest.test_and_set();
+                switchState(EXEC_PAUSED);
                 break;
             }
 
             // Are we requested to terminate the run loop?
             if (flags & RL::STOP) {
                 clearFlag(RL::STOP);
-                newState = EXEC_PAUSED;
-                stateChangeRequest.test_and_set();
+                switchState(EXEC_PAUSED);
                 break;
             }
 
-            // Are we requested to enter or exit warp mode?
-            if (flags & RL::WARP_ON) {
-                clearFlag(RL::WARP_ON);
-                CoreComponent::warpOn();
-            }
-
-            if (flags & RL::WARP_OFF) {
-                clearFlag(RL::WARP_OFF);
-                CoreComponent::warpOff();
-            }
-            
             // Are we requested to synchronize the thread?
             if (flags & RL::SYNC_THREAD) {
                 clearFlag(RL::SYNC_THREAD);
@@ -1470,6 +1478,57 @@ Amiga::takeUserSnapshot()
     
     userSnapshot = new Snapshot(*this);
     msgQueue.put(MSG_USER_SNAPSHOT_TAKEN);
+}
+
+void
+Amiga::setAlarmAbs(Cycle trigger, i64 payload)
+{
+    {   SUSPENDED
+
+        alarms.push_back(Alarm { trigger, payload });
+        scheduleNextAlarm();
+    }
+}
+
+void
+Amiga::setAlarmRel(Cycle trigger, i64 payload)
+{
+    {   SUSPENDED
+
+        alarms.push_back(Alarm { agnus.clock + trigger, payload });
+        scheduleNextAlarm();
+    }
+}
+
+void
+Amiga::serviceAlarmEvent()
+{
+    for (auto it = alarms.begin(); it != alarms.end(); ) {
+
+        if (it->trigger <= agnus.clock) {
+            msgQueue.put(MSG_GUI_EVENT, it->payload);
+            it = alarms.erase(it);
+        } else {
+            it++;
+        }
+    }
+    scheduleNextAlarm();
+}
+
+void
+Amiga::scheduleNextAlarm()
+{
+    Cycle trigger = INT64_MAX;
+
+    agnus.cancel<SLOT_ALA>();
+
+    for(Alarm alarm : alarms) {
+
+        if (alarm.trigger < trigger) {
+            agnus.scheduleAbs<SLOT_ALA>(alarm.trigger, ALA_TRIGGER);
+            trigger = alarm.trigger;
+        }
+    }
 }
 
 fs::path

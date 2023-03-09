@@ -111,8 +111,8 @@ struct AmigaProxy
     bool isRunning() { TRY return amiga->isRunning(); CATCH }
     bool isPaused() { TRY return amiga->isPaused(); CATCH }
     bool isHalted() { TRY return amiga->isHalted(); CATCH }
-    void inWarpMode() { TRY amiga->inWarpMode(); CATCH }
-    void inDebugMode() { TRY amiga->inDebugMode(); CATCH }
+    bool isWarping() { TRY return amiga->isWarping(); CATCH }
+    bool isTracking() { TRY return amiga->isTracking(); CATCH }
 
     // Changing state
     void powerOn() { TRY amiga->powerOn(); CATCH }

@@ -111,9 +111,9 @@ namespace vamiga {
  * into warp mode. In this mode, timing synchronization is disabled causing the
  * emulator to run as fast as possible.
  *
- * Similar to warp mode, the emulator may be put into debug mode. This mode is
+ * Similar to warp mode, the emulator may be put into track mode. This mode is
  * enabled when the GUI debugger is opend and disabled when the debugger is
- * closed. In debug mode, several time-consuming tasks are performed that are
+ * closed. In track mode, several time-consuming tasks are performed that are
  * usually left out. E.g., the CPU tracks all executed instructions and stores
  * the recorded information in a trace buffer.
  */
@@ -135,15 +135,9 @@ protected:
     ExecutionState newState = EXEC_OFF;
     std::atomic_flag stateChangeRequest {};
 
-    // The current warp state and a change request
-    u8 warpMode = 0;
-    u8 newWarpMode = 0;
-    std::atomic_flag warpChangeRequest {};
-
-    // The current debug state and a change request
-    u8 debugMode = 0;
-    u8 newDebugMode = 0;
-    std::atomic_flag debugChangeRequest {};
+    // Warp state and track state
+    u8 warp = 0;
+    u8 track = 0;
 
     // Counters
     isize loopCounter = 0;
@@ -193,6 +187,13 @@ private:
     // Returns true if this functions is called from within the emulator thread
     bool isEmulatorThread() { return std::this_thread::get_id() == thread.get_id(); }
 
+public:
+    
+    // Performs a state change
+    void switchState(ExecutionState newState);
+    void switchWarp(bool state, u8 source = 0);
+    void switchTrack(bool state, u8 source = 0);
+
 
     //
     // Analyzing
@@ -225,20 +226,19 @@ public:
     void pause();
     void halt();
 
-    bool inWarpMode() const { return warpMode != 0; }
+    bool isWarping() const { return warp != 0; }
     void warpOn(isize source = 0);
     void warpOff(isize source = 0);
 
-    bool inDebugMode() const { return debugMode != 0; }
-    void debugOn(isize source = 0);
-    void debugOff(isize source = 0);
+    bool isTracking() const { return track != 0; }
+    void trackOn(isize source = 0);
+    void trackOff(isize source = 0);
 
 protected:
 
+    // Initiates a state change
     void changeStateTo(ExecutionState requestedState);
-    void changeWarpTo(u8 value);
-    void changeDebugTo(u8 value);
-    
+
     
     //
     // Synchronizing

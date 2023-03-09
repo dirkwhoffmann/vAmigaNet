@@ -218,8 +218,8 @@ EMSCRIPTEN_BINDINGS(AmigaProxy)
         .function("isRunning", &AmigaProxy::isRunning)
         .function("isPaused", &AmigaProxy::isPaused)
         .function("isHalted", &AmigaProxy::isHalted)
-        .function("inWarpMode", &AmigaProxy::inWarpMode)
-        .function("inDebugMode", &AmigaProxy::inDebugMode)
+        .function("isWarping", &AmigaProxy::isWarping)
+        .function("isTracking", &AmigaProxy::isTracking)
         // isReady
         .function("powerOn", &AmigaProxy::powerOn)
         .function("powerOff", &AmigaProxy::powerOff)
@@ -632,6 +632,7 @@ EMSCRIPTEN_BINDINGS(Keys)
 
     // Option
     constant("OPT_VIDEO_FORMAT", (int)OPT_VIDEO_FORMAT);
+    constant("OPT_WARP_MODE", (int)OPT_WARP_MODE);
     constant("OPT_SYNC_MODE", (int)OPT_SYNC_MODE);
     constant("OPT_PROPOSED_FPS", (int)OPT_PROPOSED_FPS);
     constant("OPT_AGNUS_REVISION", (int)OPT_AGNUS_REVISION);

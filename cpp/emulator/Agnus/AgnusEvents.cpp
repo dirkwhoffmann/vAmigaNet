@@ -182,7 +182,7 @@ Agnus::scheduleGUITimerAbs(Cycle cycle, u32 payload)
 {
     {   SUSPENDED
 
-        scheduleAbs<SLOT_GUI>(cycle, GUI_TRIGGER, payload);
+        scheduleAbs<SLOT_ALA>(cycle, ALA_TRIGGER, payload);
     }
 }
 
@@ -191,7 +191,7 @@ Agnus::scheduleGUITimerRel(Cycle cycle, u32 payload)
 {
     {   SUSPENDED
 
-        scheduleRel<SLOT_GUI>(cycle, GUI_TRIGGER, payload);
+        scheduleRel<SLOT_ALA>(cycle, ALA_TRIGGER, payload);
     }
 }
 
@@ -819,13 +819,6 @@ Agnus::serviceINSEvent(EventID id)
 
     // Reschedule event
     rescheduleRel<SLOT_INS>((Cycle)(inspectionInterval * 28000000));
-}
-
-void
-Agnus::serviceGUIEvent()
-{
-    msgQueue.put(MSG_GUI_EVENT, data[SLOT_GUI]);
-    cancel<SLOT_GUI>();
 }
 
 }

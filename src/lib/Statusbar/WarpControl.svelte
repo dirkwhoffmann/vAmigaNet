@@ -1,7 +1,7 @@
 <script lang="ts">
     import { Opt } from "$lib/types";
     import StatusIcon from './StatusIcon.svelte';
-	import { proxy, amiga, config, cpu, agnus, warp } from '$lib/stores';
+	import { config, proxy, warp, warpMode } from '$lib/stores';
 
     function iconUrl(warpMode: number, warp: boolean) {
 
@@ -16,12 +16,13 @@
 				return '';
 		}
 	}
-    $: src = iconUrl(Number($config.get(Opt.WARP_MODE)), $warp);
+    $: src = iconUrl($warpMode, $warp);
 
 	function action(e: MouseEvent) {
 		e.preventDefault();
         let current = $config.get(Opt.WARP_MODE);
         $config.set(Opt.WARP_MODE, (current + 1) % 3);
+        $proxy.updateStateVariables();
 	}
 </script>
 
