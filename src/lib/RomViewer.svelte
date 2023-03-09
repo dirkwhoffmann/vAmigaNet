@@ -149,7 +149,7 @@
 			<table in:fade class="table table-compact table-zebra w-full">
 				<tbody class={debug}>
 					<tr class="h-8 {debug} text-center text-base-content border-purple-400 font-josefin">
-						Use drag-and-drop to add additional ROM images. Or <button class="px-2 rounded-md bg-slate-600 text-white" on:click={fdialog.open()}>open file dialog</button>
+						Use drag-and-drop or <button class="btn btn-primary btn-outline btn-sm" on:click={fdialog.open}>file dialog</button> to add additional ROM images. 
 					</tr>
 					{#if roms}
 						{#each roms as rom}
