@@ -20,6 +20,7 @@
 	} from '$lib/stores';
 	import StatusIcon from './StatusIcon.svelte';
 	import WarpControl from './WarpControl.svelte';
+	import FileDialog from '$lib/Utils/FileDialog.svelte';
 
 	let speedometer: Speedometer;
 
@@ -47,47 +48,19 @@
 		$amiga.ejectDisk(nr);
 	}
 
-
-	function read_file_stream(file)
-	{
-		return new Promise(async (resolve, reject)=>{
-			try{
-				var fileReader=new FileReader();
-				fileReader.onload = function(){
-					resolve(new Uint8Array(this.result));
-				}
-				fileReader.readAsArrayBuffer(file);
-
-			} catch(e)
-			{
-				reject(e);
-			}
-
-
-
-		});
-	}
-	async function read_file(e){
-		let file=e.target.files[0];
-		let u8 = await read_file_stream(file) as Uint8Array;
-		$amiga.insertDisk(u8, u8.length, insertInDriveNr);
-		inputFile.value="";
-	}
-
-
-	let inputFile:HTMLInputElement;
+	let fdialog:FileDialog;
 	let insertInDriveNr=0;
-
 	function insertFile(nr:number){
 		insertInDriveNr=nr;
-		inputFile.click()
+		fdialog.open();
+	}
+	function onInsert(e: CustomEvent<{ file: Uint8Array }>){
+		let filebuffer = e.detail.file;
+		$amiga.insertDisk(filebuffer, filebuffer.length, insertInDriveNr);
 	}
 
-
-
 </script>
-
-<input bind:this={inputFile} type="file" class="hidden" on:change={read_file}>
+<FileDialog bind:this={fdialog} on:loaded={onInsert}></FileDialog>
 <div class="z-50 relative flex h-8 mb-1 {bg}">
 	<BarBox>
 		<button
