@@ -681,7 +681,8 @@ EMSCRIPTEN_BINDINGS(Keys)
     constant("OPT_HDR_TYPE", (int)OPT_HDR_TYPE);
     constant("OPT_HDR_PAN", (int)OPT_HDR_PAN);
     constant("OPT_HDR_STEP_VOLUME", (int)OPT_HDR_STEP_VOLUME);
-    constant("OPT_SERIAL_DEVICE", (int)OPT_SERIAL_DEVICE);
+    constant("OPT_SER_DEVICE", (int)OPT_SER_DEVICE);
+    constant("OPT_SER_VERBOSE", (int)OPT_SER_VERBOSE);
     constant("OPT_HIDDEN_BITPLANES", (int)OPT_HIDDEN_BITPLANES);
     constant("OPT_HIDDEN_SPRITES", (int)OPT_HIDDEN_SPRITES);
     constant("OPT_HIDDEN_LAYERS", (int)OPT_HIDDEN_LAYERS);
