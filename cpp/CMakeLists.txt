@@ -13,7 +13,7 @@ project(vAmiga)
 add_executable(vAmiga main.cpp Proxy.cpp)
 
 # Emscripten compiler settings
-target_compile_options(vAmiga PRIVATE -O1)
+target_compile_options(vAmiga PRIVATE -O3)
 target_compile_options(vAmiga PRIVATE -sWASM_WORKERS)
 target_compile_options(vAmiga PRIVATE -Wall -Werror -Wfatal-errors)
 target_compile_options(vAmiga PRIVATE -Wno-unused-parameter)

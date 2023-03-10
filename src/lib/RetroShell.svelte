@@ -4,7 +4,7 @@
     import { Layer } from "$lib/types";
     import { layer } from "$lib/stores";
     import { retroShell } from '$lib/stores';
-    import { MsgCloseConsole, MsgUpdateConsole } from '$lib/stores';
+    import { MsgConsoleClose, MsgConsoleUpdate } from '$lib/stores';
     import { MsgScriptDone, MsgScriptPause, MsgScriptAbort, MsgScriptWakeup } from '$lib/stores';
 
     // Textual contents of the console window
@@ -14,10 +14,10 @@
     let textarea: HTMLTextAreaElement | null = null;
 
     // Message handlers
-    $: if ($MsgCloseConsole) {
+    $: if ($MsgConsoleClose) {
         $layer = Layer.none;
     }
-    $: if ($MsgUpdateConsole) {
+    $: if ($MsgConsoleUpdate) {
         let rel = $retroShell.getCursorRel();
         if (textarea != null) {
             textarea.value = $retroShell.getText();

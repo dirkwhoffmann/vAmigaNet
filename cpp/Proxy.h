@@ -72,10 +72,6 @@ struct AgnusProxy
     AgnusProxy() { };
 
     u32 frameCount() const { TRY return (u32)amiga->agnus.pos.frame; CATCH }
-
-    void scheduleGUITimerAbs(u32 frames, u32 payload) { TRY amiga->agnus.scheduleGUITimerAbs((Cycle)frames * CLK_FREQUENCY_PAL / 50, payload); CATCH }
-    void scheduleGUITimerRel(u32 frames, u32 payload) { TRY amiga->agnus.scheduleGUITimerRel((Cycle)frames * CLK_FREQUENCY_PAL / 50, payload); CATCH }
-
 };
 
 struct AmigaProxy
@@ -140,6 +136,10 @@ struct AmigaProxy
     // Juggling disks
     bool insertDisk(const string &blob, u32 len, u8 drive);
     void ejectDisk(u8 drive) { TRY amiga->df[drive]->ejectDisk(); CATCH }
+
+    // Managing alarms
+    void setAlarmAbs(int frames, int payload);
+    void setAlarmRel(int frames, int payload);
 };
 
 struct CPUProxy

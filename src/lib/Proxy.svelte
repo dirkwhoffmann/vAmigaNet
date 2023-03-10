@@ -157,12 +157,16 @@
             if (showcase.title == 'Absolute Inebriation') {
                 console.log("Scheduling disk change (inebriation)");
                 // Change disk after 60 seconds (3000 frames)
-                $agnus.scheduleGUITimerAbs(3000, 1);
+                $amiga.setAlarmAbs(3000, 1);
             }
             if (showcase.title == 'Eon') {
                 console.log("Scheduling disk change (eon)");
-                $agnus.scheduleGUITimerAbs(7600, 2);
+                $amiga.setAlarmAbs(7600, 2);
             }
+
+            // REMOVE ASAP
+            console.log("Scheduling test alarm... Remove ASAP");
+            $amiga.setAlarmRel(50, 3);
 
             console.log('Done');
 
@@ -684,12 +688,13 @@
 
             case $proxy.MSG_ALARM:
                 $MsgAlarm++;
-                console.log("MSG_GUI_EVENT received: ", d1, d2);
-                if (d2 == 1) {
+                console.log("Alarm received: ", msg.value);
+
+                if (msg.value == 1) {
                     console.log("Inserting disk 2...");
                     insert('AbsoluteInebriation2.adf', 0);
                 }
-                if (d2 == 2) {
+                if (msg.value == 2) {
                     console.log("Inserting disk 2...");
                     insert('Eon2.adf', 0);
                 }

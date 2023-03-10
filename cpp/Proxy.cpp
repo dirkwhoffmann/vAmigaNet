@@ -65,9 +65,7 @@ EMSCRIPTEN_BINDINGS(AgnusProxy)
 {
     class_<AgnusProxy>("AgnusProxy")
         .constructor<>()
-        .function("frameCount", &AgnusProxy::frameCount)
-        .function("scheduleGUITimerAbs", &AgnusProxy::scheduleGUITimerAbs)
-        .function("scheduleGUITimerRel", &AgnusProxy::scheduleGUITimerRel);
+        .function("frameCount", &AgnusProxy::frameCount);
 }
 
 
@@ -194,6 +192,23 @@ bool AmigaProxy::insertDisk(const string &blob, u32 len, u8 drive)
     CATCH
 }
 
+void AmigaProxy::setAlarmAbs(int frames, int payload)
+{
+    TRY
+    Cycle trigger = (Cycle)frames * CLK_FREQUENCY_PAL / 50;
+    printf("Scheduling alarm... %lld\n", trigger);
+    amiga->setAlarmAbs(trigger , payload);
+    CATCH
+};
+
+void AmigaProxy::setAlarmRel(int frames, int payload)
+{
+    TRY
+    Cycle trigger = (Cycle)frames * CLK_FREQUENCY_PAL / 50;
+    amiga->setAlarmRel(trigger, payload);
+    CATCH
+};
+
 EMSCRIPTEN_BINDINGS(AmigaProxy)
 {
     class_<AmigaProxy>("AmigaProxy")
@@ -240,7 +255,10 @@ EMSCRIPTEN_BINDINGS(AmigaProxy)
         .function("updateAudio", &AmigaProxy::updateAudio)
         .function("leftChannelBuffer", &AmigaProxy::leftChannelBuffer)
         .function("rightChannelBuffer", &AmigaProxy::rightChannelBuffer)
-        .function("audioFillLevel", &AmigaProxy::audioFillLevel);
+        .function("audioFillLevel", &AmigaProxy::audioFillLevel)
+
+        .function("setAlarmAbs", &AmigaProxy::setAlarmAbs)
+        .function("setAlarmRel", &AmigaProxy::setAlarmRel);
 }
 
 //

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
 	import type { DataBaseItem } from '$lib/types';
+	import { MsgAlarm } from "$lib/stores";
 	import Carousel from '$lib/Showcases/Carousel.svelte';
 	import { demos, games, tools } from './database';
 	import Sedcard from './Sedcard.svelte';
@@ -26,6 +27,7 @@
 	}
 
 	let activeTab = 0;
+
 </script>
 
 <div class="modal" class:modal-open={showSedcard}>
