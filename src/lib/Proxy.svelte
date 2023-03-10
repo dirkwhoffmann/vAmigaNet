@@ -37,87 +37,76 @@
         memory,
         mouse1,
         mouse2,
+        MsgNone,
+        MsgConfig,
+        MsgPower,
+        MsgRun,
+        MsgPause,
+        MsgStep,
+        MsgReset,
+        MsgShutdown,
         MsgAbort,
-        MsgAutoSnapshotTaken,
+        MsgWarp,
+        MsgTrack,
+        MsgMute,
+        MsgPowerLedOn,
+        MsgPowerLedDim,
+        MsgPowerLedOff,
+        MsgConsoleClose,
+        MsgConsoleUpdate,
+        MsgConsoleDebugger,
+        MsgScriptDone,
+        MsgScriptPause,
+        MsgScriptAbort,
+        MsgScriptWakeup,
+        MsgVideoFormat,
+        MsgOverclocking,
         MsgBreakpointReached,
         MsgBreakpointUpdated,
+        MsgWatchpointReached,
+        MsgWatchpointUpdated,
         MsgCatchpointReached,
         MsgCatchpointUpdated,
-        MsgCloseConsole,
-        MsgConfig,
+        MsgSwTrapReached,
+        MsgCpuHalt,
         MsgCopperBpReached,
         MsgCopperBpUpdated,
         MsgCopperWpReached,
         MsgCopperWpUpdated,
-        MsgCpuHalt,
-        MsgCtrlAmigaAmiga,
-        MsgDebugOff,
-        MsgDebugOn,
-        MsgDiskEject,
-        MsgDiskInsert,
-        MsgDiskProtect,
-        MsgDiskSaved,
-        MsgDiskUnprotect,
-        MsgDiskUnsaved,
-        MsgDmaDebugOff,
-        MsgDmaDebugOn,
-        MsgDriveConnect,
-        MsgDriveDisconnect,
-        MsgDriveLedOff,
-        MsgDriveLedOn,
-        MsgDriveMotorOff,
-        MsgDriveMotorOn,
-        MsgDrivePoll,
-        MsgDriveRead,
-        MsgDriveSelect,
-        MsgDriveStep,
-        MsgDriveWrite,
-        MsgHdcConnect,
-        MsgHdcDisconnect,
-        MsgHdcState,
-        MsgHdrIdle,
-        MsgHdrRead,
-        MsgHdrStep,
-        MsgHdrWrite,
+        MsgViewport,
         MsgMemLayout,
-        MsgMuteOff,
-        MsgMuteOn,
-        MsgNone,
-        MsgOverclocking,
-        MsgPause,
-        MsgPowerLedDim,
-        MsgPowerLedOff,
-        MsgPowerLedOn,
-        MsgPowerOff,
-        MsgPowerOn,
-        MsgRecordingAborted,
-        MsgRecordingStarted,
-        MsgRecordingStopped,
-        MsgRegister,
-        MsgReset,
-        MsgRun,
-        MsgScriptAbort,
-        MsgScriptDone,
-        MsgScriptPause,
-        MsgScriptWakeup,
+        MsgDriveConnect,
+        MsgDriveSelect,
+        MsgDriveRead,
+        MsgDriveWrite,
+        MsgDriveLed,
+        MsgDriveMotor,
+        MsgDriveStep,
+        MsgDrivePoll,
+        MsgDiskInsert,
+        MsgDiskEject,
+        MsgDiskProtected,
+        MsgHdcConnect,
+        MsgHdcState,
+        MsgHdrStep,
+        MsgHdrRead,
+        MsgHdrWrite,
+        MsgHdrIdle,
+        MsgCtrlAmigaAmiga,
+        MsgShaking,
         MsgSerIn,
         MsgSerOut,
-        MsgShaking,
-        MsgShutdown,
+        MsgAutoSnapshotTaken,
+        MsgUserSnapshotTaken,
         MsgSnapshotRestored,
+        MsgRecordingStarted,
+        MsgRecordingStopped,
+        MsgRecordingAborted,
+        MsgDmaDebug,
+        MsgSrvState,
         MsgSrvReceive,
         MsgSrvSend,
-        MsgSrvState,
-        MsgStep,
-        MsgSwTrapReached,
-        MsgUpdateConsole,
-        MsgUserSnapshotTaken,
-        MsgVideoFormat,
-        MsgViewport,
-        MsgWarpOff,
-        MsgWarpOn,
-        MsgWatchpointReached,
-        MsgWatchpointUpdated,
+        MsgAlarm,
         muted,
         paula,
         poweredOn,
@@ -396,21 +385,12 @@
                 $MsgNone++;
                 break;
 
-            case $proxy.MSG_REGISTER:
-                $MsgRegister++;
-                break;
-
             case $proxy.MSG_CONFIG:
                 $MsgConfig++;
                 break;
 
-            case $proxy.MSG_POWER_ON:
-                $MsgPowerOn++;
-                updateStateVariables();
-                break;
-
-            case $proxy.MSG_POWER_OFF:
-                $MsgPowerOff++;
+            case $proxy.MSG_POWER:
+                $MsgPower++;
                 updateStateVariables();
                 break;
 
@@ -441,33 +421,18 @@
                 $MsgAbort++;
                 break;
 
-            case $proxy.MSG_WARP_ON:
-                $MsgWarpOn++;
+            case $proxy.MSG_WARP:
+                $MsgWarp++;
                 updateStateVariables();
                 break;
 
-            case $proxy.MSG_WARP_OFF:
-                $MsgWarpOff++;
+            case $proxy.MSG_TRACK:
+                $MsgTrack++;
                 updateStateVariables();
                 break;
 
-            case $proxy.MSG_DEBUG_ON:
-                $MsgDebugOn++;
-                updateStateVariables();
-                break;
-
-            case $proxy.MSG_DEBUG_OFF:
-                $MsgDebugOff++;
-                updateStateVariables();
-                break;
-
-            case $proxy.MSG_MUTE_ON:
-                $MsgMuteOn++;
-                updateStateVariables();
-                break;
-
-            case $proxy.MSG_MUTE_OFF:
-                $MsgMuteOff++;
+            case $proxy.MSG_MUTE:
+                $MsgMute++;
                 updateStateVariables();
                 break;
 
@@ -483,12 +448,16 @@
                 $MsgPowerLedOff++;
                 break;
 
-            case $proxy.MSG_CLOSE_CONSOLE:
-                $MsgCloseConsole++;
+            case $proxy.MSG_CONSOLE_CLOSE:
+                $MsgConsoleClose++;
                 break;
 
-            case $proxy.MSG_UPDATE_CONSOLE:
-                $MsgUpdateConsole++;
+            case $proxy.MSG_CONSOLE_UPDATE:
+                $MsgConsoleUpdate++;
+                break;
+
+            case $proxy.MSG_CONSOLE_DEBUGGER:
+                $MsgConsoleDebugger++;
                 break;
 
             case $proxy.MSG_SCRIPT_DONE:
@@ -577,11 +546,6 @@
                 updateStateVariables();
                 break;
 
-            case $proxy.MSG_DRIVE_DISCONNECT:
-                $MsgDriveDisconnect++;
-                updateStateVariables();
-                break;
-
             case $proxy.MSG_DRIVE_SELECT:
                 $MsgDriveSelect++;
                 break;
@@ -595,21 +559,12 @@
                 updateStateVariables();
                 break;
 
-            case $proxy.MSG_DRIVE_LED_ON:
-                $MsgDriveLedOn++;
+            case $proxy.MSG_DRIVE_LED:
+                $MsgDriveLed++;
                 break;
 
-            case $proxy.MSG_DRIVE_LED_OFF:
-                $MsgDriveLedOff++;
-                break;
-
-            case $proxy.MSG_DRIVE_MOTOR_ON:
-                $MsgDriveMotorOn++;
-                updateStateVariables();
-                break;
-
-            case $proxy.MSG_DRIVE_MOTOR_OFF:
-                $MsgDriveMotorOff++;
+            case $proxy.MSG_DRIVE_MOTOR:
+                $MsgDriveMotor++;
                 updateStateVariables();
                 break;
 
@@ -637,32 +592,13 @@
                 $audio.playEjectSound(msg.drive.volume, msg.drive.pan);
                 break;
 
-            case $proxy.MSG_DISK_SAVED:
-                $MsgDiskSaved++;
-                updateStateVariables();
-                break;
-
-            case $proxy.MSG_DISK_UNSAVED:
-                $MsgDiskUnsaved++;
-                updateStateVariables();
-                break;
-
-            case $proxy.MSG_DISK_PROTECT:
-                $MsgDiskProtect++;
-                updateStateVariables();
-                break;
-
-            case $proxy.MSG_DISK_UNPROTECT:
-                $MsgDiskUnprotect++;
+            case $proxy.MSG_DISK_PROTECTED:
+                $MsgDiskProtected++;
                 updateStateVariables();
                 break;
 
             case $proxy.MSG_HDC_CONNECT:
                 $MsgHdcConnect++;
-                break;
-
-            case $proxy.MSG_HDC_DISCONNECT:
-                $MsgHdcDisconnect++;
                 break;
 
             case $proxy.MSG_HDC_STATE:
@@ -728,14 +664,10 @@
                 $MsgRecordingAborted++;
                 break;
 
-            case $proxy.MSG_DMA_DEBUG_ON:
-                $MsgDmaDebugOn++;
-                $debugDma = true;
-                break;
-
-            case $proxy.MSG_DMA_DEBUG_OFF:
-                $MsgDmaDebugOff++;
-                $debugDma = false;
+            case $proxy.MSG_DMA_DEBUG:
+                $MsgDmaDebug++;
+                console.log("DMA_DEBUG: value = ", msg.value, typeof(msg.value));
+                $debugDma = msg.value;
                 break;
 
             case $proxy.MSG_SRV_STATE:
@@ -750,7 +682,8 @@
                 $MsgSrvSend++;
                 break;
 
-            case $proxy.MSG_GUI_EVENT:
+            case $proxy.MSG_ALARM:
+                $MsgAlarm++;
                 console.log("MSG_GUI_EVENT received: ", d1, d2);
                 if (d2 == 1) {
                     console.log("Inserting disk 2...");

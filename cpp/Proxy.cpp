@@ -14,7 +14,7 @@ EMSCRIPTEN_BINDINGS(Structures)
 {
     value_object<DriveMsg>("DriveMsg")
         .field("nr", &DriveMsg::nr)
-        .field("cylinder", &DriveMsg::cylinder)
+        .field("value", &DriveMsg::value)
         .field("volume", &DriveMsg::volume)
         .field("pan", &DriveMsg::pan);
 
@@ -548,27 +548,23 @@ EMSCRIPTEN_BINDINGS(Keys)
 
     // MsgType
     constant("MSG_NONE", (int)MSG_NONE);
-    constant("MSG_REGISTER", (int)MSG_REGISTER);
     constant("MSG_CONFIG", (int)MSG_CONFIG);
-    constant("MSG_POWER_ON", (int)MSG_POWER_ON);
-    constant("MSG_POWER_OFF", (int)MSG_POWER_OFF);
+    constant("MSG_POWER", (int)MSG_POWER);
     constant("MSG_RUN", (int)MSG_RUN);
     constant("MSG_PAUSE", (int)MSG_PAUSE);
     constant("MSG_STEP", (int)MSG_STEP);
     constant("MSG_RESET", (int)MSG_RESET);
     constant("MSG_SHUTDOWN", (int)MSG_SHUTDOWN);
     constant("MSG_ABORT", (int)MSG_ABORT);
-    constant("MSG_WARP_ON", (int)MSG_WARP_ON);
-    constant("MSG_WARP_OFF", (int)MSG_WARP_OFF);
-    constant("MSG_DEBUG_ON", (int)MSG_DEBUG_ON);
-    constant("MSG_DEBUG_OFF", (int)MSG_DEBUG_OFF);
-    constant("MSG_MUTE_ON", (int)MSG_MUTE_ON);
-    constant("MSG_MUTE_OFF", (int)MSG_MUTE_OFF);
+    constant("MSG_WARP", (int)MSG_WARP);
+    constant("MSG_TRACK", (int)MSG_TRACK);
+    constant("MSG_MUTE", (int)MSG_MUTE);
     constant("MSG_POWER_LED_ON", (int)MSG_POWER_LED_ON);
     constant("MSG_POWER_LED_DIM", (int)MSG_POWER_LED_DIM);
     constant("MSG_POWER_LED_OFF", (int)MSG_POWER_LED_OFF);
-    constant("MSG_CLOSE_CONSOLE", (int)MSG_CLOSE_CONSOLE);
-    constant("MSG_UPDATE_CONSOLE", (int)MSG_UPDATE_CONSOLE);
+    constant("MSG_CONSOLE_CLOSE", (int)MSG_CONSOLE_CLOSE);
+    constant("MSG_CONSOLE_UPDATE", (int)MSG_CONSOLE_UPDATE);
+    constant("MSG_CONSOLE_DEBUGGER", (int)MSG_CONSOLE_DEBUGGER);
     constant("MSG_SCRIPT_DONE", (int)MSG_SCRIPT_DONE);
     constant("MSG_SCRIPT_PAUSE", (int)MSG_SCRIPT_PAUSE);
     constant("MSG_SCRIPT_ABORT", (int)MSG_SCRIPT_ABORT);
@@ -590,24 +586,17 @@ EMSCRIPTEN_BINDINGS(Keys)
     constant("MSG_VIEWPORT", (int)MSG_VIEWPORT);
     constant("MSG_MEM_LAYOUT", (int)MSG_MEM_LAYOUT);
     constant("MSG_DRIVE_CONNECT", (int)MSG_DRIVE_CONNECT);
-    constant("MSG_DRIVE_DISCONNECT", (int)MSG_DRIVE_DISCONNECT);
     constant("MSG_DRIVE_SELECT", (int)MSG_DRIVE_SELECT);
     constant("MSG_DRIVE_READ", (int)MSG_DRIVE_READ);
     constant("MSG_DRIVE_WRITE", (int)MSG_DRIVE_WRITE);
-    constant("MSG_DRIVE_LED_ON", (int)MSG_DRIVE_LED_ON);
-    constant("MSG_DRIVE_LED_OFF", (int)MSG_DRIVE_LED_OFF);
-    constant("MSG_DRIVE_MOTOR_ON", (int)MSG_DRIVE_MOTOR_ON);
-    constant("MSG_DRIVE_MOTOR_OFF", (int)MSG_DRIVE_MOTOR_OFF);
+    constant("MSG_DRIVE_LED", (int)MSG_DRIVE_LED);
+    constant("MSG_DRIVE_MOTOR", (int)MSG_DRIVE_MOTOR);
     constant("MSG_DRIVE_STEP", (int)MSG_DRIVE_STEP);
     constant("MSG_DRIVE_POLL", (int)MSG_DRIVE_POLL);
     constant("MSG_DISK_INSERT", (int)MSG_DISK_INSERT);
     constant("MSG_DISK_EJECT", (int)MSG_DISK_EJECT);
-    constant("MSG_DISK_SAVED", (int)MSG_DISK_SAVED);
-    constant("MSG_DISK_UNSAVED", (int)MSG_DISK_UNSAVED);
-    constant("MSG_DISK_PROTECT", (int)MSG_DISK_PROTECT);
-    constant("MSG_DISK_UNPROTECT", (int)MSG_DISK_UNPROTECT);
+    constant("MSG_DISK_PROTECTED", (int)MSG_DISK_PROTECTED);
     constant("MSG_HDC_CONNECT", (int)MSG_HDC_CONNECT);
-    constant("MSG_HDC_DISCONNECT", (int)MSG_HDC_DISCONNECT);
     constant("MSG_HDC_STATE", (int)MSG_HDC_STATE);
     constant("MSG_HDR_STEP", (int)MSG_HDR_STEP);
     constant("MSG_HDR_READ", (int)MSG_HDR_READ);
@@ -623,12 +612,11 @@ EMSCRIPTEN_BINDINGS(Keys)
     constant("MSG_RECORDING_STARTED", (int)MSG_RECORDING_STARTED);
     constant("MSG_RECORDING_STOPPED", (int)MSG_RECORDING_STOPPED);
     constant("MSG_RECORDING_ABORTED", (int)MSG_RECORDING_ABORTED);
-    constant("MSG_DMA_DEBUG_ON", (int)MSG_DMA_DEBUG_ON);
-    constant("MSG_DMA_DEBUG_OFF", (int)MSG_DMA_DEBUG_OFF);
+    constant("MSG_DMA_DEBUG", (int)MSG_DMA_DEBUG);
     constant("MSG_SRV_STATE", (int)MSG_SRV_STATE);
     constant("MSG_SRV_RECEIVE", (int)MSG_SRV_RECEIVE);
     constant("MSG_SRV_SEND", (int)MSG_SRV_SEND);
-    constant("MSG_GUI_EVENT", (int)MSG_GUI_EVENT);
+    constant("MSG_ALARM", (int)MSG_ALARM);
 
     // Option
     constant("OPT_VIDEO_FORMAT", (int)OPT_VIDEO_FORMAT);

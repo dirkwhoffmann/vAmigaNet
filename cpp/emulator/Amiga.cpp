@@ -1096,7 +1096,7 @@ Amiga::_powerOn()
     // Update the recorded debug information
     inspect();
 
-    msgQueue.put(MSG_POWER_ON);
+    msgQueue.put(MSG_POWER, 1);
 }
 
 void
@@ -1107,7 +1107,7 @@ Amiga::_powerOff()
     // Update the recorded debug information
     inspect();
     
-    msgQueue.put(MSG_POWER_OFF);
+    msgQueue.put(MSG_POWER, 0);
 }
 
 void
@@ -1147,7 +1147,7 @@ Amiga::_warpOn()
 {
     debug(RUN_DEBUG, "_warpOn\n");
 
-    msgQueue.put(MSG_WARP_ON);
+    msgQueue.put(MSG_WARP, 1);
 }
 
 void
@@ -1155,7 +1155,7 @@ Amiga::_warpOff()
 {
     debug(RUN_DEBUG, "_warpOff\n");
 
-    msgQueue.put(MSG_WARP_OFF);
+    msgQueue.put(MSG_WARP, 0);
 }
 
 void
@@ -1163,7 +1163,7 @@ Amiga::_trackOn()
 {
     debug(RUN_DEBUG, "_trackOn\n");
 
-    msgQueue.put(MSG_DEBUG_ON);
+    msgQueue.put(MSG_TRACK, 1);
 }
 
 void
@@ -1171,7 +1171,7 @@ Amiga::_trackOff()
 {
     debug(RUN_DEBUG, "_trackOff\n");
 
-    msgQueue.put(MSG_DEBUG_OFF);
+    msgQueue.put(MSG_TRACK, 0);
 }
 
 isize
@@ -1508,7 +1508,7 @@ Amiga::serviceAlarmEvent()
     for (auto it = alarms.begin(); it != alarms.end(); ) {
 
         if (it->trigger <= agnus.clock) {
-            msgQueue.put(MSG_GUI_EVENT, it->payload);
+            msgQueue.put(MSG_ALARM, it->payload);
             it = alarms.erase(it);
         } else {
             it++;
