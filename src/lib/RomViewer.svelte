@@ -174,13 +174,6 @@
         {#if activeTab == 0}
             <table in:fade class="table table-compact table-zebra w-full">
                 <tbody class={debug}>
-				<!--
-                <tr class="h-8 {debug} text-center text-base-content border-purple-400 font-josefin">
-                    Use drag-and-drop or
-                    <button class="btn btn-primary btn-outline btn-sm" on:click={fdialog.open}>file dialog</button>
-                    to add additional ROM images.
-                </tr>
-                -->
                 {#if roms}
                     {#each roms as rom}
                         <tr class="h-8 {debug} border-0 border-purple-400">
