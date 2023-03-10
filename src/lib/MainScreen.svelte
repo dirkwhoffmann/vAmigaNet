@@ -61,6 +61,9 @@
 	}
 
 	async function handleDraggedRom(blob: Uint8Array) {
+
+		$proxy.addRom(blob);
+		/*
 		let info = $memory.analyzeRom(blob, blob.byteLength);
 		console.log('ROM analyzed: ', info);
 
@@ -92,6 +95,7 @@
 			console.log("Opening Kickstart viewer");
 			$layer = Layer.kickstart;
 		}
+		*/
 	}
 </script>
 

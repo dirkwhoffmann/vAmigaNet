@@ -3,6 +3,7 @@
 <script lang="ts">
     import { CRC32 } from "$lib/constants";
     import type { DataBaseItem } from '$lib/types';
+    import { Layer } from '$lib/types';
     import { onMount } from 'svelte';
     import {
         agnus,
@@ -32,6 +33,7 @@
         keyboard,
         keyset1,
         keyset2,
+        layer,
         memory,
         mouse1,
         mouse2,
@@ -243,6 +245,40 @@
             if (success) return true;
         }
         return false;
+    }
+
+    export async function addRom(blob: Uint8Array) {
+        let info = $memory.analyzeRom(blob, blob.byteLength);
+        console.log('ROM analyzed: ', info);
+
+        if (info.crc32) {
+            try {
+                const t = info.title;
+
+                const id = await db.roms.add({
+                    crc32: info.crc32,
+                    title: info.title,
+                    version: info.version,
+                    released: info.released,
+                    model: info.model,
+                    isAros: info.isAros,
+                    isDiag: info.isDiag,
+                    isCommodore: info.isCommodore,
+                    isHyperion: info.isHyperion,
+                    isPatched: info.isPatched,
+                    isUnknown: info.isUnknown,
+                    rom: blob,
+                    ext: null,
+                    extStart: 0
+                });
+
+                console.log(`${t} successfully added with id ${id}`);
+            } catch (error) {
+                console.log(`Failed to add Kickstart`);
+            }
+            console.log("Opening Kickstart viewer");
+            $layer = Layer.kickstart;
+        }
     }
 
     export async function installAros()
