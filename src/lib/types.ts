@@ -34,6 +34,10 @@ export enum Opt
 	DF1 = 'DF1',
 	DF2 = 'DF2',
 	DF3 = 'DF3',
+	HD0 = 'HD0',
+	HD1 = 'HD1',
+	HD2 = 'HD2',
+	HD3 = 'HD3',
 
 	//
 	// Compatibility settings

@@ -206,4 +206,49 @@
 			locked={$poweredOn || !$config.getBool(Opt.DF2) }
 		/>
 	</ConfigSection>
+	<ConfigSection name="Hard Drives">
+		<ConfigItem
+				name="HD0"
+				items={[
+				new MenuItem('None', 0),
+				new MenuItem('Zorro Board', 1)
+			]}
+				tag={0}
+				selectedTag={$config.getNum(Opt.HD0)}
+				on:select={(e) => $config.setNum(Opt.HD0, e.detail.value)}
+		/>
+		<ConfigItem
+				name="HD1"
+				items={[
+				new MenuItem('None', 0),
+				new MenuItem('Zorro Board', 1)
+			]}
+				tag={1}
+				selectedTag={$config.getNum(Opt.HD1)}
+				on:select={(e) => $config.setNum(Opt.HD1, e.detail.value)}
+				locked={$poweredOn}
+		/>
+		<ConfigItem
+				name="HD2"
+				items={[
+				new MenuItem('None', 0),
+				new MenuItem('Zorro Board', 1)
+			]}
+				tag={2}
+				selectedTag={$config.getNum(Opt.HD2)}
+				on:select={(e) => $config.setNum(Opt.HD2, e.detail.value)}
+				locked={$poweredOn}
+		/>
+		<ConfigItem
+				name="HD3"
+				items={[
+				new MenuItem('None', 0),
+				new MenuItem('Zorro Board', 1)
+			]}
+				tag={3}
+				selectedTag={$config.getNum(Opt.HD3)}
+				on:select={(e) => $config.setNum(Opt.HD3, e.detail.value)}
+				locked={$poweredOn}
+		/>
+	</ConfigSection>
 </div>

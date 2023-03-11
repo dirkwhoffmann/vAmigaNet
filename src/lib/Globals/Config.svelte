@@ -32,7 +32,11 @@
         {opt: Opt.DF0, default: '1'},
         {opt: Opt.DF1, default: '1'},
         {opt: Opt.DF2, default: '0'},
-        {opt: Opt.DF3, default: '0'}
+        {opt: Opt.DF3, default: '0'},
+        {opt: Opt.HD0, default: '1'},
+        {opt: Opt.HD1, default: '0'},
+        {opt: Opt.HD2, default: '0'},
+        {opt: Opt.HD3, default: '0'}
     ];
 
     let compatibilityOpts: { opt: Opt, default: string }[] = [
@@ -413,6 +417,14 @@
                 return $amiga.getDriveConfig($proxy.OPT_DRIVE_CONNECT, 2).toString();
             case Opt.DF3:
                 return $amiga.getDriveConfig($proxy.OPT_DRIVE_CONNECT, 3).toString();
+            case Opt.HD0:
+                return $amiga.getDriveConfig($proxy.OPT_HDC_CONNECT, 0).toString();
+            case Opt.HD1:
+                return $amiga.getDriveConfig($proxy.OPT_HDC_CONNECT, 1).toString();
+            case Opt.HD2:
+                return $amiga.getDriveConfig($proxy.OPT_HDC_CONNECT, 2).toString();
+            case Opt.HD3:
+                return $amiga.getDriveConfig($proxy.OPT_HDC_CONNECT, 3).toString();
 
                 //
                 // Compatibility settings
@@ -589,6 +601,18 @@
                 if (val == 1) $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 1, 1);
                 if (val == 1) $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 2, 1);
                 $amiga.configureDrive($proxy.OPT_DRIVE_CONNECT, 3, val);
+                break;
+            case Opt.HD0:
+                $amiga.configureDrive($proxy.OPT_HDC_CONNECT, 0, val);
+                break;
+            case Opt.HD1:
+                $amiga.configureDrive($proxy.OPT_HDC_CONNECT, 1, val);
+                break;
+            case Opt.HD2:
+                $amiga.configureDrive($proxy.OPT_HDC_CONNECT, 2, val);
+                break;
+            case Opt.HD3:
+                $amiga.configureDrive($proxy.OPT_HDC_CONNECT, 3, val);
                 break;
 
             //
