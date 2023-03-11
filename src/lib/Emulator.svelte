@@ -10,6 +10,7 @@
         canvasHeight,
         canvasWidth,
         config,
+        gamepadManager,
         layout,
         poweredOn,
         proxy
@@ -87,7 +88,6 @@
 
     export function doAnimationFrame(animationFrame: number, now: DOMHighResTimeStamp)
     {
-
         /*
         if (animationFrame % 50 == 0) {
             console.log("Frame " + animationFrame);
@@ -112,11 +112,14 @@
 
     function update(now: DOMHighResTimeStamp)
     {
-
         let textureAnimates = textureRect.animates();
         let canvasAnimates = recw.animates() || rech.animates();
         animating = textureAnimates || canvasAnimates;
 
+        // Poll gamepads
+        $gamepadManager.poll();
+
+        // Perform animations
         if (textureAnimates) {
             textureRect.move();
             /*

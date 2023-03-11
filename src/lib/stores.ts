@@ -30,6 +30,7 @@ export const retroShell: any = writable();
 // Global components
 export const audio: any = writable();
 export const config: any = writable();
+export const gamepadManager: any = writable();
 
 // Theming
 export const darkTheme = writable(true);

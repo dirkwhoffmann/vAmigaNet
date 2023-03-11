@@ -85,7 +85,9 @@ export enum InputDevice {
 	none,
 	mouse,
 	keyset1,
-	keyset2
+	keyset2,
+	gamepad1,
+	gamepad2
 }
 export enum Layer {
 	none,

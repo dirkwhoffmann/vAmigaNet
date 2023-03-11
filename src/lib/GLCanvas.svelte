@@ -635,22 +635,19 @@
         }
     }
 
+    function mousePort() {
+        return $port1 == InputDevice.mouse ? $mouse1 : $port2 == InputDevice.mouse ? $mouse2 : null;
+    }
+
     function mouseMove(event: MouseEvent)
     {
-        // console.log('mouseMove:', $port1, $port2, event.movementX, event.movementY);
-
         const x = event.movementX / 2;
         const y = event.movementY / 2;
 
         // Check for a shaking mouse
         $mouse1.detectShakeRel(x, y);
 
-        if ($port1 == InputDevice.mouse) {
-            $mouse1.setDxDy(x, y);
-        }
-        if ($port2 == InputDevice.mouse) {
-            $mouse2.setDxDy(x, y);
-        }
+        mousePort()?.setDxDy(x, y);
     }
 
     async function mouseDown(e: MouseEvent)
@@ -663,13 +660,13 @@
         } else {
             switch (e.button) {
                 case 0:
-                    $mouse1.trigger($proxy.PRESS_LEFT);
+                    mousePort()?.trigger($proxy.PRESS_LEFT);
                     break;
                 case 1:
-                    $mouse1.trigger($proxy.PRESS_MIDDLE);
+                    mousePort()?.trigger($proxy.PRESS_MIDDLE);
                     break;
                 case 2:
-                    $mouse1.trigger($proxy.PRESS_RIGHT);
+                    mousePort()?.trigger($proxy.PRESS_RIGHT);
                     break;
             }
         }
@@ -680,13 +677,13 @@
         console.log('mouseUp: ', e.button);
         switch (e.button) {
             case 0:
-                $mouse1.trigger($proxy.RELEASE_LEFT);
+                mousePort()?.trigger($proxy.RELEASE_LEFT);
                 break;
             case 1:
-                $mouse1.trigger($proxy.RELEASE_MIDDLE);
+                mousePort()?.trigger($proxy.RELEASE_MIDDLE);
                 break;
             case 2:
-                $mouse1.trigger($proxy.RELEASE_RIGHT);
+                mousePort()?.trigger($proxy.RELEASE_RIGHT);
                 break;
         }
     }

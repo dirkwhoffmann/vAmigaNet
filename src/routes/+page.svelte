@@ -187,6 +187,10 @@
                 $port1 = 3;
                 if ($port2 == 3) $port2 = 0;
                 break;
+            case 'gamepad11':
+                $port1 = 4;
+                if ($port2 == 4) $port2 = 0;
+                break;
             case 'empty2':
                 $port2 = 0;
                 break;
@@ -201,6 +205,10 @@
             case 'keyset22':
                 $port2 = 3;
                 if ($port1 == 3) $port1 = 0;
+                break;
+            case 'gamepad21':
+                $port2 = 4;
+                if ($port1 == 4) $port1 = 0;
                 break;
             default:
                 console.log('Unhandled sender: ' + sender);

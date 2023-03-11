@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { audio, config, proxy } from '$lib/stores';
+	import { audio, config, gamepadManager, proxy } from '$lib/stores';
 	import Audio from '$lib/Globals/Audio.svelte';
 	import Config from '$lib/Globals/Config.svelte';
+	import GamepadManager from '$lib/Globals/GamepadManager.svelte';
 	import Guru from '$lib/Guru.svelte';
 	import Proxy from '$lib/Proxy.svelte';
 
@@ -20,9 +21,10 @@
 </script>
 
 <svelte:head>
-	<Proxy bind:this={$proxy} />
 	<Audio bind:this={$audio} />
 	<Config bind:this={$config} />
+	<GamepadManager bind:this={$gamepadManager} />
+	<Proxy bind:this={$proxy} />
 
 	{#if loadWasm}
 		<script>

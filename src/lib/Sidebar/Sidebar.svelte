@@ -23,6 +23,15 @@
         dispatch('select', {sender: sender, state: state});
     }
 
+    const portIcons = [
+        'icons/device-none.png',
+        'icons/device-mouse.png',
+        'icons/device-keyset-1.png',
+        'icons/device-keyset-2.png',
+        'icons/device-usb-1.png',
+        'icons/device-usb-2.png'
+    ]
+
     const power = {id: 'power', icon: 'icons/powerIcon.png'};
     const pause = {id: 'pause', icon: 'icons/pauseIcon.png'};
     const reset = {id: 'reset', icon: 'icons/resetIcon.png'};
@@ -30,16 +39,18 @@
     const port1Button = {id: 'port1', icon: 'icons/device-none.png'};
     const port2Button = {id: 'port2', icon: 'icons/device-none.png'};
     const port1Items = [
-        {id: 'empty1', icon: 'icons/device-none.png'},
-        {id: 'mouse1', icon: 'icons/device-mouse.png'},
-        {id: 'keyset11', icon: 'icons/device-keyset-1.png'},
-        {id: 'keyset12', icon: 'icons/device-keyset-2.png'}
+        {id: 'empty1', icon: portIcons[0]},
+        {id: 'mouse1', icon: portIcons[1]},
+        {id: 'keyset11', icon: portIcons[2]},
+        {id: 'keyset12', icon: portIcons[3]},
+        {id: 'gamepad11', icon: portIcons[4]}
     ];
     const port2Items = [
-        {id: 'empty2', icon: 'icons/device-none.png'},
-        {id: 'mouse2', icon: 'icons/device-mouse.png'},
-        {id: 'keyset21', icon: 'icons/device-keyset-1.png'},
-        {id: 'keyset22', icon: 'icons/device-keyset-2.png'}
+        {id: 'empty2', icon: portIcons[0]},
+        {id: 'mouse2', icon: portIcons[1]},
+        {id: 'keyset21', icon: portIcons[2]},
+        {id: 'keyset22', icon: portIcons[3]},
+        {id: 'gamepad21', icon: portIcons[4]}
     ];
     const shell = {id: 'shell', icon: 'icons/retroShellIcon.png'};
     const monitor = {id: 'monitor', icon: 'icons/monitorIcon.png'};
@@ -50,40 +61,8 @@
         {id: 'full', icon: 'icons/layoutFullIcon.png'}
     ];
 
-    $: {
-        switch ($port1) {
-            case 1:
-                port1Button.icon = 'icons/device-mouse.png';
-                break;
-            case 2:
-                port1Button.icon = 'icons/device-keyset-1.png';
-                break;
-            case 3:
-                port1Button.icon = 'icons/device-keyset-2.png';
-                break;
-            default:
-                port1Button.icon = 'icons/device-none.png';
-                break;
-        }
-    }
-
-    $: {
-        switch ($port2) {
-            case 1:
-                port2Button.icon = 'icons/device-mouse.png';
-                break;
-            case 2:
-                port2Button.icon = 'icons/device-keyset-1.png';
-                break;
-            case 3:
-                port2Button.icon = 'icons/device-keyset-2.png';
-                break;
-            default:
-                port2Button.icon = 'icons/device-none.png';
-                break;
-        }
-    }
-
+    $: port1Button.icon = portIcons[$port1];
+    $: port2Button.icon = portIcons[$port2];
     $: layoutButton.icon =
         $layout == 'full'
             ? 'icons/layoutFullIcon.png'
@@ -125,7 +104,7 @@
 
                 <SidebarButton on:select={select} item={settings} active={$layer == Layer.settings}/>
                 <SidebarButton on:select={select} item={shell} active={$layer == Layer.shell}/>
-                <SidebarPad />
+                <SidebarPad/>
                 {#if $poweredOn}
                     <SidebarSection
                             on:select={select}
