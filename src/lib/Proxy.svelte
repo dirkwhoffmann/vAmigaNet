@@ -26,7 +26,15 @@
         dfWriting,
         diskController,
         enums,
+        hdConnected,
+        hdReading,
+        hdWriting,
+        hdCylinder,
         halted,
+        hd0,
+        hd1,
+        hd2,
+        hd3,
         initialized,
         joystick1,
         joystick2,
@@ -156,17 +164,14 @@
             // Set GUI timer to manage disk changes
             if (showcase.title == 'Absolute Inebriation') {
                 console.log("Scheduling disk change (inebriation)");
-                // Change disk after 60 seconds (3000 frames)
+                // Change disk after 3000 frames
                 $amiga.setAlarmAbs(3000, 1);
             }
             if (showcase.title == 'Eon') {
                 console.log("Scheduling disk change (eon)");
+                // Change disk after 7600 frames
                 $amiga.setAlarmAbs(7600, 2);
             }
-
-            // REMOVE ASAP
-            console.log("Scheduling test alarm... Remove ASAP");
-            $amiga.setAlarmRel(50, 3);
 
             console.log('Done');
 
@@ -296,6 +301,10 @@
         $df3 = new $proxy.DriveProxy(3);
         $diskController = new $proxy.DiskControllerProxy();
         $enums = new $proxy.EnumProxy();
+        $hd0 = new $proxy.HardDriveProxy(0);
+        $hd1 = new $proxy.HardDriveProxy(1);
+        $hd2 = new $proxy.HardDriveProxy(2);
+        $hd3 = new $proxy.HardDriveProxy(3);
         $joystick1 = new $proxy.JoystickProxy(1);
         $joystick2 = new $proxy.JoystickProxy(2);
         $keyboard = new $proxy.KeyboardProxy();
@@ -368,6 +377,7 @@
         $track = $amiga.isTracking();
         $muted = $paula.isMuted() || $warp;
         $halted = $amiga.isHalted();
+
         $dfConnected = [$df0.isConnected(), $df1.isConnected(), $df2.isConnected(), $df3.isConnected()];
         $dfHasDisk = [$df0.hasDisk(), $df1.hasDisk(), $df2.hasDisk(), $df3.hasDisk()];
         $dfMotor = [$df0.motor(), $df1.motor(), $df2.motor(), $df3.motor()];
@@ -375,6 +385,12 @@
         $dfUnsaved = [$df0.hasModifiedDisk(), $df1.hasModifiedDisk(), $df2.hasModifiedDisk(), $df3.hasModifiedDisk()];
         $dfProtected = [$df0.hasProtectedDisk(), $df1.hasProtectedDisk(), $df2.hasProtectedDisk(), $df3.hasProtectedDisk()];
         $dfCylinder = [$df0.currentCyl(), $df1.currentCyl(), $df2.currentCyl(), $df3.currentCyl()];
+        $dfConnected = [$hd0.isConnected(), $hd0.isConnected(), $hd1.isConnected(), $hd2.isConnected()];
+
+        $hdConnected = [$hd0.isConnected(), $hd1.isConnected(), $hd2.isConnected(), $hd3.isConnected()];
+        $hdCylinder = [$hd0.currentCyl(), $hd1.currentCyl(), $hd2.currentCyl(), $hd3.currentCyl()];
+        $hdReading = [$hd0.isReading(), $hd1.isReading(), $hd2.isReading(), $hd3.isReading()];
+        $hdWriting = [$hd0.isWriting(), $hd1.isWriting(), $hd2.isWriting(), $hd3.isWriting()];
     }
 
     function processMsg(msg)
@@ -603,26 +619,32 @@
 
             case $proxy.MSG_HDC_CONNECT:
                 $MsgHdcConnect++;
+                updateStateVariables();
                 break;
 
             case $proxy.MSG_HDC_STATE:
                 $MsgHdcState++;
+                updateStateVariables();
                 break;
 
             case $proxy.MSG_HDR_STEP:
                 $MsgHdrStep++;
+                $audio.playClickSound(msg.drive.volume, msg.drive.pan);
                 break;
 
             case $proxy.MSG_HDR_READ:
                 $MsgHdrRead++;
+                updateStateVariables();
                 break;
 
             case $proxy.MSG_HDR_WRITE:
                 $MsgHdrWrite++;
+                updateStateVariables();
                 break;
 
             case $proxy.MSG_HDR_IDLE:
                 $MsgHdrIdle++;
+                updateStateVariables();
                 break;
 
             case $proxy.MSG_CTRL_AMIGA_AMIGA:

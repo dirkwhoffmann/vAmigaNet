@@ -32,9 +32,6 @@
 
 		items[1].isEnabled = hasDisk;
 		items[1]=items[1];
-
-		console.log('disk', disk);
-		console.log('items[0].isEnabled', items[0].isEnabled);
 	}
 </script>
 

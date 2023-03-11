@@ -18,6 +18,10 @@ export const df2: any = writable();
 export const df3: any = writable();
 export const diskController: any = writable();
 export const enums: any = writable();
+export const hd0: any = writable();
+export const hd1: any = writable();
+export const hd2: any = writable();
+export const hd3: any = writable();
 export const joystick1: any = writable();
 export const joystick2: any = writable();
 export const keyboard: any = writable();
@@ -78,6 +82,11 @@ export const dfWriting = writable([false,false,false,false]);
 export const dfUnsaved = writable([false,false,false,false]);
 export const dfProtected = writable([false,false,false,false]);
 export const dfCylinder = writable([0,0,0,0]);
+export const hdConnected = writable([false,false,false,false]);
+export const hdReading = writable([false,false,false,false]);
+export const hdWriting = writable([false,false,false,false]);
+export const hdUnsaved = writable([false,false,false,false]);
+export const hdCylinder = writable([0,0,0,0]);
 
 // Kickstarts
 export const kickstarts: Writable<RomEntry[]> = writable([]); 

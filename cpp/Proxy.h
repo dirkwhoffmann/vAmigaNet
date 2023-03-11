@@ -200,6 +200,19 @@ struct EnumProxy
     string RetroShellKey(int value) { return RetroShellKeyEnum::key(value); }
 };
 
+struct HardDriveProxy
+{
+    int nr;
+
+    HardDriveProxy(int nr) : nr(nr) { assert(nr >= 0 && nr <= 3); }
+
+    bool isConnected() const { TRY return amiga->hd[nr]->isConnected(); CATCH }
+    bool isReading() const { TRY return amiga->hd[nr]->getState() == HDR_STATE_READING; CATCH }
+    bool isWriting() const { TRY return amiga->hd[nr]->getState() == HDR_STATE_WRITING; CATCH }
+    int currentCyl() const { TRY return amiga->hd[nr]->currentCyl(); CATCH }
+    int state() const { TRY return (int)amiga->hd[nr]->getState(); CATCH }
+};
+
 struct JoystickProxy
 {
     int joystick;

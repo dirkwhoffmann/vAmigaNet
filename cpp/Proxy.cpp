@@ -321,6 +321,22 @@ EMSCRIPTEN_BINDINGS(DriveProxy)
 }
 
 //
+// HardDrive Proxy
+//
+
+EMSCRIPTEN_BINDINGS(HardDriveProxy)
+{
+    class_<HardDriveProxy>("HardDriveProxy")
+        .constructor<int>()
+        .function("isConnected", &HardDriveProxy::isConnected)
+        .function("currentCyl", &HardDriveProxy::currentCyl)
+        .function("isReading", &HardDriveProxy::isReading)
+        .function("isWriting", &HardDriveProxy::isWriting)
+        .function("state", &HardDriveProxy::state)
+        .function("state", &HardDriveProxy::state);
+}
+
+//
 // Joystick proxy
 //
 
