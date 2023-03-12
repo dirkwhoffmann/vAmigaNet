@@ -101,7 +101,7 @@ export const games: DataBaseItem[] = [
 		description:
 			'Trap Runner is a classic platform game with few twists. Mind traps, obstacles and monsters. Collect items to increase your score, gain extra lives or fulfil one of the special missions. Two of four levels a world have a mission to accomplish. The game runs on any OCS/ECS Amiga, with 1MB RAM from Kickstart 1.2 onwards.',
 		adf: ['TrapRunner.adf'],
-		memory: [512, 512, 0],
+		memory: [512, 512, 8192],
 		roms: [CRC32.Aros],
 		warp: WarpMode.never
 	},
@@ -112,7 +112,7 @@ export const games: DataBaseItem[] = [
 		description:
 			'This game was written in the beginning of 2019, largely based on the Trap Runner engine. It has a medieval setting, where you are playing the celtic knight Eric on his task to save the kingdom from an evil force.',
 		adf: ['CelticHeart.adf'],
-		memory: [512, 512, 0],
+		memory: [512, 512, 8192],
 		roms: [CRC32.Aros],
 		warp: WarpMode.never
 	},
