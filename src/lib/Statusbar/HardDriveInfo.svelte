@@ -1,9 +1,8 @@
 <script lang="ts">
-    import { darkTheme, invert } from '$lib/stores';
+    import { MenuItem } from '$lib/types';
+    import { darkTheme, invert, poweredOn } from '$lib/stores';
     import BarBox from './BarBox.svelte';
     import Menu from '$lib/Widgets/Menu.svelte';
-    import { MenuItem } from '$lib/types';
-    import { poweredOn } from "../stores";
 
     export let cyl = 0;
     export let reading = false;

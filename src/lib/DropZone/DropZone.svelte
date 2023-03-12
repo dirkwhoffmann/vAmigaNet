@@ -9,7 +9,7 @@
         if ($dragItem) {
 
             // Insert disk
-            $amiga.insertDisk($dragItem, $dragItem.length, drive);
+            $amiga.insertDisk($dragItem, drive);
 
             // Start emulation if necessary
             if (!$amiga.running) $amiga.run();

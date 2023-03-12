@@ -134,7 +134,7 @@ struct AmigaProxy
     int getFileType(const string &blob);
     
     // Juggling disks
-    bool insertDisk(const string &blob, u32 len, u8 drive);
+    bool insertDisk(const string &blob, u8 drive);
     void ejectDisk(u8 drive) { TRY amiga->df[drive]->ejectDisk(); CATCH }
 
     // Juggling hard drives

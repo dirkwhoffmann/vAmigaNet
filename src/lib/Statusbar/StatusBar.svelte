@@ -28,7 +28,9 @@
     import WarpControl from './WarpControl.svelte';
     import FileDialog from '$lib/Utils/FileDialog.svelte';
 
+    // Bindings
     let speedometer: Speedometer;
+    let fdialog: FileDialog;
 
     $: muteIcon = $muted || $warp;
     $: debugIcon = $track;
@@ -51,34 +53,51 @@
         dispatch('push', {sender: (e.target as HTMLElement).id});
     }
 
-    function ejectAction(nr: number)
+    function dfMenuAction(df: number, tag: number)
     {
-        console.log("eject ", nr);
-        $amiga.ejectDisk(nr);
+        switch (tag) {
+            case 0:
+                fdialog.open().then(
+                    function (value) {
+                        console.log('Inserting disk', value);
+                        $amiga.insertDisk(value, df);
+                    },
+                    function (error) {
+                        console.log('error', error);
+                    }
+                );
+                break;
+            case 1:
+                $amiga.ejectDisk(df);
+                break;
+            default:
+                console.warn("Invalid menu item", tag);
+        }
     }
 
-    let fdialog: FileDialog;
-    let insertInDriveNr = 0;
-
-    function insertFile(nr: number)
+    function hdMenuAction(df: number, tag: number)
     {
-        insertInDriveNr = nr;
-        fdialog.open();
-    }
-
-	function hdMenuAction(item: number)
-	{
-		console.log('hdMenuAction', item);
-	}
-
-    function onInsert(e: CustomEvent<{ file: Uint8Array }>)
-    {
-        let filebuffer = e.detail.file;
-        $amiga.insertDisk(filebuffer, filebuffer.length, insertInDriveNr);
+        switch (tag) {
+            case 0:
+                fdialog.open().then(
+                    function (value) {
+                        console.log('Attaching hard drive', value);
+                        $amiga.attachHardDrive(value, df);
+                    },
+                    function (error) {
+                        console.log('error', error);
+                    }
+                );
+                break;
+            default:
+                console.warn("Invalid menu item", tag);
+        }
     }
 
 </script>
-<FileDialog bind:this={fdialog} on:loaded={onInsert}></FileDialog>
+
+<FileDialog bind:this={fdialog}></FileDialog>
+
 <div class="z-50 relative flex h-8 mb-1 {bg}">
     <BarBox>
         <button
@@ -100,7 +119,7 @@
                         writing={$dfWriting[i]}
                         unsaved={$dfUnsaved[i]}
                         wp={$dfProtected[i]}
-                        on:select={(e) => {if(e.detail.value==1) ejectAction(i); else insertFile(i);}}
+                        on:select={(e) => { dfMenuAction(i, e.detail.value) }}
                 />
             {/if}
         {/each}
@@ -111,7 +130,7 @@
                         reading={$hdReading[i]}
                         writing={$hdWriting[i]}
                         unsaved={$hdUnsaved[i]}
-                        on:select={(e) => { hdMenuAction(e.detail.value) }}
+                        on:select={(e) => { hdMenuAction(i, e.detail.value) }}
                 />
             {/if}
         {/each}

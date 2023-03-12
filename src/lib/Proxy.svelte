@@ -195,7 +195,7 @@
             let blob = await response.arrayBuffer();
             let uint8View = new Uint8Array(blob);
             console.log('Calling $amiga.insertDisk', uint8View, drive);
-            $amiga.insertDisk(uint8View, blob.byteLength, drive);
+            $amiga.insertDisk(uint8View, drive);
             console.log('Disk inserted');
         } catch (exc) {
             reportException();

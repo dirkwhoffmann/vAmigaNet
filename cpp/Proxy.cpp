@@ -159,30 +159,30 @@ int AmigaProxy::getFileType(const string &blob)
     CATCH
 }
 
-bool AmigaProxy::insertDisk(const string &blob, u32 len, u8 drive)
+bool AmigaProxy::insertDisk(const string &blob, u8 drive)
 {
     TRY
 
     std::stringstream stream;
-    stream.write((const char *)blob.data(), len);
+    stream.write((const char *)blob.data(), blob.length());
 
     if (ADFFile::isCompatible(stream))
     {
-        ADFFile adf{(u8 *)blob.data(), (isize)len};
+        ADFFile adf{(u8 *)blob.data(), (isize)blob.length()};
         amiga->df[drive]->swapDisk(std::make_unique<FloppyDisk>(adf));
         return true;
     }
 
     if (EXEFile::isCompatible(stream))
     {
-        EXEFile exe{(u8 *)blob.data(), (isize)len};
+        EXEFile exe{(u8 *)blob.data(), (isize)blob.length()};
         amiga->df[drive]->swapDisk(std::make_unique<FloppyDisk>(exe));
         return true;
     }
 
     if (DMSFile::isCompatible(stream))
     {
-        DMSFile dms{(u8 *)blob.data(), (isize)len};
+        DMSFile dms{(u8 *)blob.data(), (isize)blob.length()};
         amiga->df[drive]->swapDisk(std::make_unique<FloppyDisk>(dms));
         return true;
     }
