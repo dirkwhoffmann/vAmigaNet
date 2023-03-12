@@ -65,6 +65,7 @@ export const activeSlider = writable(0);
 
 // Drag and Drop
 export const dragItem: Writable<Uint8Array | null> = writable(null);
+export const dragType = writable('');
 
 // Emulator state
 export const poweredOn = writable(false);

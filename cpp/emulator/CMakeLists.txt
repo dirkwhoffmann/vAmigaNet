@@ -25,7 +25,7 @@ target_compile_options(vAmigaCore PRIVATE -Wno-unused-parameter -Wno-unused-but-
 target_compile_options(vAmigaCore PRIVATE -O3 -mnontrapping-fptoint -fwasm-exceptions)
 target_compile_options(vAmigaCore PRIVATE -Wfatal-errors)
 target_compile_options(vAmigaCore PRIVATE -sWASM_WORKERS)
-set_target_properties(vAmigaCore PROPERTIES LINK_FLAGS "-O3 -mnontrapping-fptoint -fwasm-exceptions" )
+set_target_properties(vAmigaCore PROPERTIES LINK_FLAGS "-O1 -mnontrapping-fptoint -fwasm-exceptions" )
 
 # Add include paths
 target_include_directories(vAmigaCore PUBLIC

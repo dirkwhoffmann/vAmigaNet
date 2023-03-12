@@ -1,112 +1,99 @@
 <script lang="ts">
-	import { Layer } from '$lib/types';
-	import { proxy, amiga, memory, initialized, dragItem, layer } from '$lib/stores';
-	import { db } from '$lib/Db/db';
+    import { Layer } from '$lib/types';
+    import { amiga, dragItem, dragType, initialized, layer, proxy } from '$lib/stores';
 
-	function handleDragEnter(event: DragEvent) {
-		event.preventDefault();
-		if (!event.dataTransfer) {
-			console.log('DragEnter: dataTransfer == null');
-			return;
-		}
-		console.log('DragEnter: ' + event.dataTransfer.items[0]);
-	}
+    function handleDragEnter(event: DragEvent)
+    {
+        event.preventDefault();
+        if (!event.dataTransfer) {
+            console.log('DragEnter: dataTransfer == null');
+            return;
+        }
+        console.log('DragEnter: ' + event.dataTransfer.items[0]);
+    }
 
-	function handleDragOver(event: DragEvent) {
-		event.preventDefault();
-	}
+    function handleDragOver(event: DragEvent)
+    {
+        event.preventDefault();
+    }
 
-	function handleDragLeave(event: DragEvent) {
-		console.log('DragLeave');
-	}
+    function handleDragLeave(event: DragEvent)
+    {
+        console.log('DragLeave');
+    }
 
-	async function handleDragDrop(event: DragEvent) {
-		event.preventDefault();
+    async function handleDragDrop(event: DragEvent)
+    {
+        event.preventDefault();
 
-		console.log('handleDragDrop');
-		if (event.dataTransfer && event.dataTransfer.items) {
-			if (event.dataTransfer.items.length == 1) {
-				let item = event.dataTransfer.items[0];
-				if (item.kind === 'file') {
-					const file = item.getAsFile();
-					if (file) {
-						console.log(`name = ${file.name}`);
+        console.log('handleDragDrop');
 
-						let blob = await file.arrayBuffer();
-						let uint8View = new Uint8Array(blob);
+        // Only proceed if we've received any data
+        if (!event.dataTransfer || !event.dataTransfer.items) return;
 
-						switch ($amiga.getFileType(blob)) {
-							case $proxy.FILETYPE_ADF:
-							case $proxy.FILETYPE_DMS:
-							case $proxy.FILETYPE_EXE:
-								handleDraggedDisk(uint8View);
-								return;
-							case $proxy.FILETYPE_ROM:
-								await handleDraggedRom(uint8View);
-								return;
-							default:
-								console.warn('Unsupported file format');
-								return;
-						}
-					}
-				}
-			}
-		}
-	}
+        // Only proceed if the user has dragged in a single item
+        if (event.dataTransfer.items.length !== 1) return;
+        let item = event.dataTransfer.items[0];
 
-	function handleDraggedDisk(blob: Uint8Array) {
-		console.log('Got disk');
-		$dragItem = blob;
-		$layer = Layer.dropzone;
-	}
+        // Only proceed if the user has dragged in a file
+        if (item.kind !== 'file') return;
+        const file = item.getAsFile();
+        if (!file) return;
 
-	async function handleDraggedRom(blob: Uint8Array) {
+        console.log(`name = ${file.name}`);
 
-		$proxy.addRom(blob);
-		/*
-		let info = $memory.analyzeRom(blob, blob.byteLength);
-		console.log('ROM analyzed: ', info);
+        // Get the file data
+        let blob = await file.arrayBuffer();
+        let uint8View = new Uint8Array(blob);
 
-		if (info.crc32) {
-			try {
-				const t = info.title;
+        // Check the file type
+        switch ($amiga.getFileType(blob)) {
+            case $proxy.FILETYPE_ROM:
+                await handleDraggedRom(uint8View);
+                return;
+            case $proxy.FILETYPE_ADF:
+            case $proxy.FILETYPE_DMS:
+            case $proxy.FILETYPE_EXE:
+                handleDraggedDisk(uint8View);
+                return;
+            case $proxy.FILETYPE_HDF:
+                handleDraggedHardDrive(uint8View);
+                return;
+            default:
+                console.warn('Unsupported file format');
+                return;
+        }
+    }
 
-				const id = await db.roms.add({
-					crc32: info.crc32,
-					title: info.title,
-					version: info.version,
-					released: info.released,
-					model: info.model,
-					isAros: info.isAros,
-					isDiag: info.isDiag,
-					isCommodore: info.isCommodore,
-					isHyperion: info.isHyperion,
-					isPatched: info.isPatched,
-					isUnknown: info.isUnknown,
-					rom: blob,
-					ext: null,
-					extStart: 0
-				});
+    async function handleDraggedRom(blob: Uint8Array)
+    {
+        $proxy.addRom(blob);
+    }
 
-				console.log(`${t} successfully added with id ${id}`);
-			} catch (error) {
-				console.log(`Failed to add Kickstart`);
-			}
-			console.log("Opening Kickstart viewer");
-			$layer = Layer.kickstart;
-		}
-		*/
-	}
+    function handleDraggedDisk(blob: Uint8Array)
+    {
+        $dragItem = blob;
+        $dragType = 'floppy';
+        $layer = Layer.dropzone;
+    }
+
+    function handleDraggedHardDrive(blob: Uint8Array)
+    {
+        $dragItem = blob;
+        $dragType = 'harddrive';
+        $layer = Layer.dropzone;
+    }
+
 </script>
 
 <div
-	class="h-screen w-screen flex flex-col flex-grow overflow-clip"
-	on:dragenter={handleDragEnter}
-	on:dragleave={handleDragLeave}
-	on:dragover={handleDragOver}
-	on:drop={handleDragDrop}
+        class="h-screen w-screen flex flex-col flex-grow overflow-clip"
+        on:dragenter={handleDragEnter}
+        on:dragleave={handleDragLeave}
+        on:dragover={handleDragOver}
+        on:drop={handleDragDrop}
 >
-	{#if $initialized}
-		<slot />
-	{/if}
+    {#if $initialized}
+        <slot/>
+    {/if}
 </div>

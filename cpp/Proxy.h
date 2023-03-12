@@ -137,6 +137,10 @@ struct AmigaProxy
     bool insertDisk(const string &blob, u32 len, u8 drive);
     void ejectDisk(u8 drive) { TRY amiga->df[drive]->ejectDisk(); CATCH }
 
+    // Juggling hard drives
+    bool attachHardDrive(const string &blob, u8 drive);
+    void detachHardDrive(u8 drive) { TRY /* TODO */ CATCH }
+
     // Managing alarms
     void setAlarmAbs(int frames, int payload);
     void setAlarmRel(int frames, int payload);

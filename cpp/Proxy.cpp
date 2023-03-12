@@ -192,6 +192,25 @@ bool AmigaProxy::insertDisk(const string &blob, u32 len, u8 drive)
     CATCH
 }
 
+bool AmigaProxy::attachHardDrive(const string &blob, u8 drive)
+{
+   TRY
+
+    std::stringstream stream;
+    stream.write((const char *)blob.data(), blob.length());
+
+    if (HDFFile::isCompatible(stream))
+    {
+        HDFFile hdf{(u8 *)blob.data(), (isize)blob.length()};
+        amiga->hd[drive]->init(hdf);
+        return true;
+    }
+
+    return false;
+
+    CATCH
+}
+
 void AmigaProxy::setAlarmAbs(int frames, int payload)
 {
     TRY
@@ -250,6 +269,8 @@ EMSCRIPTEN_BINDINGS(AmigaProxy)
         .function("getFileType", &AmigaProxy::getFileType)
         .function("insertDisk", &AmigaProxy::insertDisk)
         .function("ejectDisk", &AmigaProxy::ejectDisk)
+        .function("attachHardDrive", &AmigaProxy::attachHardDrive)
+        .function("detachHardDrive", &AmigaProxy::detachHardDrive)
 
         .function("setSampleRate", &AmigaProxy::setSampleRate)
         .function("updateAudio", &AmigaProxy::updateAudio)
