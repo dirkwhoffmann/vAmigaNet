@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { onMount } from 'svelte';
     import { fade } from 'svelte/transition';
     import { goto } from '$app/navigation';
     import DiGrails from 'svelte-icons/di/DiGrails.svelte';
@@ -22,6 +23,28 @@
     $: if (($layer == Layer.kickstart)) {
         showRomViewer = true;
     }
+
+    onMount(() => {
+
+        // Prefetch some images
+        new Image().src = "footage/3ddemo-small.jpg"
+        new Image().src = "footage/batmanrises-small.jpg"
+        new Image().src = "footage/celtic-small.jpg"
+        new Image().src = "footage/china-small.jpg"
+        new Image().src = "footage/defender-small.jpg"
+        new Image().src = "footage/desertdreams-small.jpg"
+        new Image().src = "footage/diagrom-small.jpg"
+        new Image().src = "footage/eon-small.jpg"
+        new Image().src = "footage/inebriation-small.jpg"
+        new Image().src = "footage/kyrios-small.jpg"
+        new Image().src = "footage/paccer-small.jpg"
+        new Image().src = "footage/rinkadink-small.jpg"
+        new Image().src = "footage/sdi-small.jpg"
+        new Image().src = "footage/stateart-small.jpg"
+        new Image().src = "footage/sysinfo-small.jpg"
+        new Image().src = "footage/testkit-small.jpg"
+        new Image().src = "footage/traprunner-small.jpg"
+    });
 
     async function switchOn()
     {

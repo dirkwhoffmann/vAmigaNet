@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
     import { fade } from 'svelte/transition';
     import { Layer } from "$lib/types";
     import { layer } from "$lib/stores";
