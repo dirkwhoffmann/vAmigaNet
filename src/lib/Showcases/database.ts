@@ -15,6 +15,17 @@ export const demos: DataBaseItem[] = [
 		warp: WarpMode.never
 	},
 	{
+		url: 'stateart',
+		title: 'State of the Art',
+		subtitle: 'Spaceballs',
+		description:
+			'This demo has been released in December 1992. It ranked 1st in the Party 1992 Amiga Demo Competiton.',
+		adf: ['StateArt.adf'],
+		memory: [512, 512, 0],
+		roms: [CRC32.Aros],
+		warp: WarpMode.never
+	},
+	{
 		url: 'rinkadink',
 		title: 'Rink a Dink - Redux',
 		subtitle: 'Lemon',
@@ -59,23 +70,23 @@ export const demos: DataBaseItem[] = [
 		warp: WarpMode.never
 	},
 	{
-		url: 'kyrios',
-		title: 'Mental Scrollover',
-		subtitle: 'Kyrios',
-		description:
-			'This demo was relased in August 1990. I like this demo personally and used it many time for testing vAmiga.',
-		adf: ['Kyrios.adf'],
-		memory: [1024, 512, 0],
-		roms: [CRC32.Kick12, CRC32.Kick13],
-		warp: WarpMode.never
-	},
-	{
 		url: '3ddemo',
 		title: '3D Demo II',
 		subtitle: 'Anarchy',
 		description:
 			'This demo was relased in December 1992. It ranked 2nd in the party 1992 Amiga demo competition.',
 		adf: ['3Ddemo2.adf'],
+		memory: [1024, 512, 0],
+		roms: [CRC32.Kick12, CRC32.Kick13],
+		warp: WarpMode.never
+	},
+	{
+		url: 'kyrios',
+		title: 'Mental Scrollover',
+		subtitle: 'Kyrios',
+		description:
+			'This demo was relased in August 1990. I have used it many times for testing vAmiga and have grown to love it over time.',
+		adf: ['Kyrios.adf'],
 		memory: [1024, 512, 0],
 		roms: [CRC32.Kick12, CRC32.Kick13],
 		warp: WarpMode.never
@@ -112,6 +123,17 @@ export const games: DataBaseItem[] = [
 		description:
 			'This game is a Pac-Man clone that was originally released on Fish Disk 223. I implemented this game myself many years ago on my Amiga 500 with the Aztec C compiler and DPaint. Unfortunately, I lost the source code when my parents cleaned up their attic. Luckily, the game survived on the Internet.',
 		adf: ['Paccer.adf'],
+		memory: [512, 512, 0],
+		roms: [CRC32.Kick12, CRC32.Kick13],
+		warp: WarpMode.never
+	},
+	{
+		url: 'china',
+		title: 'China Challenge II',
+		subtitle: 'Dirk W. Hoffmann',
+		description:
+			'This game is a Mahjong clone which I implemented myself many years ago. The original version was released on Fish Disk 312. This version is a slightly improved sequel that was published on Fish Disk 444.',
+		adf: ['ChinaChallengeII.adf'],
 		memory: [512, 512, 0],
 		roms: [CRC32.Kick12, CRC32.Kick13],
 		warp: WarpMode.never

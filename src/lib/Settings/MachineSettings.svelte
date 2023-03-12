@@ -122,6 +122,7 @@
 			]}
 			selectedTag={$config.getNum(Opt.BANK_MAP)}
 			on:select={(e) => $config.setNum(Opt.BANK_MAP, e.detail.value)}
+			locked={$poweredOn}
 		/>
 		<ConfigItem
 			name="Memory Startup Pattern"
@@ -132,6 +133,7 @@
 			]}
 			selectedTag={$config.getNum(Opt.INIT_PATTERN)}
 			on:select={(e) => $config.setNum(Opt.INIT_PATTERN, e.detail.value)}
+			locked={$poweredOn}
 		/>
 		<ConfigItem
 			name="Unmapped Memory Area"
@@ -142,6 +144,7 @@
 			]}
 			selectedTag={$config.getNum(Opt.UNMAPPED)}
 			on:select={(e) => $config.setNum(Opt.UNMAPPED, e.detail.value)}
+			locked={$poweredOn}
 		/>
 		<ConfigItem
 			name="Emulate Slow RAM Mirror"
@@ -171,6 +174,7 @@
 			tag={0}
 			selectedTag={$config.getNum(Opt.DF0)}
 			on:select={(e) => $config.setNum(Opt.DF0, e.detail.value)}
+			locked={$poweredOn}
 		/>
 		<ConfigItem
 			name="DF1"
@@ -216,6 +220,7 @@
 				tag={0}
 				selectedTag={$config.getNum(Opt.HD0)}
 				on:select={(e) => $config.setNum(Opt.HD0, e.detail.value)}
+				locked={$poweredOn}
 		/>
 		<ConfigItem
 				name="HD1"

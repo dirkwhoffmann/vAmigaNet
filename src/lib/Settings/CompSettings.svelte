@@ -35,7 +35,6 @@
                     new MenuItem('Yes', 1),
                     new MenuItem('No', 0)
                     ]}
-                locked={$poweredOn}
                 on:select={(e) => $config.setNum(Opt.PTR_DROPS, e.detail.value)}
                 selectedTag={$config.getNum(Opt.PTR_DROPS)}
         />
@@ -47,7 +46,6 @@
                     new MenuItem('Yes', 1),
                     new MenuItem('No', 0)
                     ]}
-                locked={$poweredOn}
                 on:select={(e) => $config.setNum(Opt.ECLOCK_SYNCING, e.detail.value)}
                 selectedTag={$config.getNum(Opt.ECLOCK_SYNCING)}
         />
@@ -62,7 +60,6 @@
 				    new MenuItem('Accelerated (8 x)', 8),
 				    new MenuItem('Infinite', -1),
 			    ]}
-                locked={$poweredOn}
                 on:select={(e) => $config.setNum(Opt.DRIVE_SPEED, e.detail.value)}
                 selectedTag={$config.getNum(Opt.DRIVE_SPEED)}
         />
@@ -74,7 +71,6 @@
                     new MenuItem('Yes', 1),
                     new MenuItem('No', 0)
                     ]}
-                locked={$poweredOn}
                 on:select={(e) => $config.setNum(Opt.CLX_SPR_SPR, e.detail.value)}
                 selectedTag={$config.getNum(Opt.CLX_SPR_SPR)}
         />
@@ -84,7 +80,6 @@
                     new MenuItem('Yes', 1),
                     new MenuItem('No', 0)
                     ]}
-                locked={$poweredOn}
                 on:select={(e) => $config.setNum(Opt.CLX_SPR_PLF, e.detail.value)}
                 selectedTag={$config.getNum(Opt.CLX_SPR_PLF)}
         />
@@ -94,7 +89,6 @@
                     new MenuItem('Yes', 1),
                     new MenuItem('No', 0)
                     ]}
-                locked={$poweredOn}
                 on:select={(e) => $config.setNum(Opt.CLX_PLF_PLF, e.detail.value)}
                 selectedTag={$config.getNum(Opt.CLX_PLF_PLF)}
         />
@@ -106,7 +100,6 @@
                     new MenuItem('Yes', 1),
                     new MenuItem('No', 0)
                     ]}
-                locked={$poweredOn}
                 on:select={(e) => $config.setNum(Opt.ACCURATE_KEYBOARD, e.detail.value)}
                 selectedTag={$config.getNum(Opt.ACCURATE_KEYBOARD)}
                 tag={1}
