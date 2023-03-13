@@ -57,12 +57,12 @@
     }
 </script>
 
-{#if $layer == Layer.settings}
+{#if $layer === Layer.settings}
     <div
             class="absolute top-0 left-0 w-full h-full flex overflow-auto text-base-content"
             transition:fade
     >
-        <div class="w-16 mr-1"/>
+        <div class="w-16 mr-1"></div>
         <div class="bg-base-100 opacity-100 bg-opacity-80 mt-0 p-4 grow h-full overflow-auto">
             <div class="font-sofia-extra">
                 <div class="flex border-0 border-red-500 justify-between">
@@ -84,15 +84,15 @@
                     </div>
                 </div>
             </div>
-            {#if active == 'GENERAL'}
+            {#if active === 'GENERAL'}
                 <GeneralSettings/>
-            {:else if active == 'MACHINE'}
+            {:else if active === 'MACHINE'}
                 <MachineSettings/>
-            {:else if active == 'COMPATIBILITY'}
+            {:else if active === 'COMPATIBILITY'}
                 <CompSettings/>
-            {:else if active == 'VIDEO'}
+            {:else if active === 'VIDEO'}
                 <VideoSettings/>
-            {:else if active == 'AUDIO'}
+            {:else if active === 'AUDIO'}
                 <AudioSettings/>
             {/if}
         </div>

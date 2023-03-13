@@ -1,16 +1,22 @@
 <script lang="ts">
     import { fade } from 'svelte/transition';
     import { Layer } from "$lib/types";
-    import { layer } from "$lib/stores";
-    import { retroShell } from '$lib/stores';
-    import { MsgConsoleClose, MsgConsoleUpdate } from '$lib/stores';
-    import { MsgScriptDone, MsgScriptPause, MsgScriptAbort, MsgScriptWakeup } from '$lib/stores';
+    import {
+        layer,
+        MsgConsoleClose,
+        MsgConsoleUpdate,
+        MsgScriptAbort,
+        MsgScriptDone,
+        MsgScriptPause,
+        MsgScriptWakeup,
+        retroShell
+    } from "$lib/stores";
 
     // Textual contents of the console window
     let value = '';
 
     // Bindings
-    let textarea: HTMLTextAreaElement | null = null;
+    let textarea: HTMLTextAreaElement | null;
 
     // Message handlers
     $: if ($MsgConsoleClose) {
@@ -18,7 +24,7 @@
     }
     $: if ($MsgConsoleUpdate) {
         let rel = $retroShell.getCursorRel();
-        if (textarea != null) {
+        if (textarea) {
             textarea.value = $retroShell.getText();
             textarea.focus();
             textarea.setSelectionRange(textarea.value.length + rel - 1, textarea.value.length + rel);
@@ -97,7 +103,7 @@
     }
 </script>
 
-{#if $layer == Layer.shell}
+{#if $layer === Layer.shell}
     <div class="absolute top-0 left-0 w-full h-full flex overflow-auto" transition:fade>
         <div class="w-16 mr-1"></div>
         <div class="bg-gray-500/75 grow h-full overflow-auto">
@@ -107,7 +113,7 @@
                 style="resize: none; font-variant-ligatures: none"
                 class="font-azeret text-base focus:border-transparent focus:outline-none focus:ring-0 text-white bg-transparent w-full h-full p-2"
                 on:keydown={onKeyDown}
-        />
+        ></textarea>
         </div>
     </div>
 {/if}

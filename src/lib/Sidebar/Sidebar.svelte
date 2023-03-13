@@ -102,8 +102,8 @@
                 />
                 <SidebarPad/>
 
-                <SidebarButton on:select={select} item={settings} active={$layer == Layer.settings}/>
-                <SidebarButton on:select={select} item={shell} active={$layer == Layer.shell}/>
+                <SidebarButton on:select={select} item={settings} active={$layer === Layer.settings}/>
+                <SidebarButton on:select={select} item={shell} active={$layer === Layer.shell}/>
                 <SidebarPad/>
                 {#if $poweredOn}
                     <SidebarSection

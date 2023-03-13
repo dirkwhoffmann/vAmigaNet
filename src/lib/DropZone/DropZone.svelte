@@ -34,7 +34,7 @@
 
 </script>
 
-{#if $layer == Layer.dropzone}
+{#if $layer === Layer.dropzone}
     <div class="absolute top-10 left-0 w-screen flex justify-center" transition:fade>
         <div class="relative flex justify-center space-x-4 p-4 rounded-xl items-center">
 

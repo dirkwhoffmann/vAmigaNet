@@ -80,7 +80,7 @@
             </button>
         </div>
         <div class="border-0 bg-primary h-12">
-            {#if min == max}
+            {#if min === max}
                 <Menu isEnabled={!locked} {items} listStyle="w-[18rem] bg-accent text-accent-content"
                       on:select={selectAction}>
                     {#if locked}

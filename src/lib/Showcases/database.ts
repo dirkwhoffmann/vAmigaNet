@@ -81,6 +81,17 @@ export const demos: DataBaseItem[] = [
 		warp: WarpMode.never
 	},
 	{
+		url: 'sushiboyz',
+		title: 'Sushi Boyz',
+		subtitle: 'Ghostown',
+		description:
+			'This demo was relased in April 2015. It ranked 1st in the revision 2015 Amiga demo competition.',
+		adf: ['Sushiboyz.adf'],
+		memory: [1024, 512, 0],
+		roms: [CRC32.Kick12, CRC32.Kick13],
+		warp: WarpMode.never
+	},
+	{
 		url: 'kyrios',
 		title: 'Mental Scrollover',
 		subtitle: 'Kyrios',

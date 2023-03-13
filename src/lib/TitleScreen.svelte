@@ -20,7 +20,7 @@
     let showRomViewer = false;
     let showImpressum = false;
 
-    $: if (($layer == Layer.kickstart)) {
+    $: if (($layer === Layer.kickstart)) {
         showRomViewer = true;
     }
 
@@ -66,7 +66,7 @@
     async function openShowcases()
     {
         await $audio.setup();
-        $layer = $layer == Layer.showcases ? Layer.none : Layer.showcases;
+        $layer = $layer === Layer.showcases ? Layer.none : Layer.showcases;
         $showSidebar = false;
     }
 
@@ -106,14 +106,14 @@
                 <img class="h-full w-screen object-fill opacity-60" src="matrix.jpg" alt="Background"/>
             </div>
         </div>
-        {#if $layer == Layer.showcases}
+        {#if $layer === Layer.showcases}
             <Showcases/>
         {:else}
             <div
                     in:fade
                     class="relative bg-transparent grow flex flex-col items-center justify-center {debug}"
             >
-                {#if $layer == Layer.none}
+                {#if $layer === Layer.none}
                     <div class={debug}>
                         <div class="rounded flex justify-center">
                             <img class="h-24 p-2 mt-3" src="va-icon.png" alt="vAmiga Icon"/>

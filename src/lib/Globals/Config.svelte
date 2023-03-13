@@ -2,7 +2,7 @@
     import { browser } from "$app/environment";
     import { liveQuery } from 'dexie';
     import { Opt, RenderMode, Theme, WarpMode } from "$lib/types";
-    import { amiga, config, darkTheme, diskController, initialized, invert, proxy } from '$lib/stores';
+    import { amiga, config, darkTheme, initialized, invert, proxy } from '$lib/stores';
     import { db, type OptEntry } from '$lib/Db/db';
 
     //
@@ -87,7 +87,7 @@
     let opts: OptEntry[];
     let myQuery = liveQuery(() => (browser ? db.opts.toArray() : []));
     myQuery.subscribe(value => {
-        opts = value
+        opts = value as OptEntry[]
     })
 
     $: console.log("CONFIG DB: ", opts);
@@ -164,11 +164,11 @@
     {
         console.log("restoreDefaults");
 
-        restoreGeneralDefaults();
-        restoreMachineDefaults();
-        restoreCompatibilityDefaults();
-        restoreAudioDefaults();
-        restoreVideoDefaults();
+        await restoreGeneralDefaults();
+        await restoreMachineDefaults();
+        await restoreCompatibilityDefaults();
+        await restoreAudioDefaults();
+        await restoreVideoDefaults();
     }
 
     export async function restoreGeneralDefaults()
@@ -227,7 +227,7 @@
             // Try to add new database entry
             const id = await db.opts.delete(opt);
         } catch (error) {
-            console.log("FAILED TO REMOVE entry ", opt);
+            console.log("Failed to remove entry", opt);
         }
     }
 
@@ -239,11 +239,11 @@
     {
         console.log("loadSettings");
 
-        loadGeneralSettings();
-        loadMachineSettings();
-        loadCompatibilitySettings();
-        loadAudioSettings();
-        loadVideoSettings();
+        await loadGeneralSettings();
+        await loadMachineSettings();
+        await loadCompatibilitySettings();
+        await loadAudioSettings();
+        await loadVideoSettings();
     }
 
     export async function loadGeneralSettings()
@@ -303,11 +303,11 @@
     {
         console.log('saveSettings');
 
-        saveGeneralSettings();
-        saveMachineSettings();
-        saveCompatibilitySettings();
-        saveAudioSettings();
-        saveVideoSettings();
+        await saveGeneralSettings();
+        await saveMachineSettings();
+        await saveCompatibilitySettings();
+        await saveAudioSettings();
+        await saveVideoSettings();
     }
 
     export async function saveGeneralSettings()
@@ -533,10 +533,10 @@
                 setTheme(Number(val));
                 break;
             case Opt.CANVAS_BORDER:
-                canvasBorder = val;
+                canvasBorder = Number(val);
                 break;
             case Opt.SHAKING:
-                shaking = val;
+                shaking = Number(val);
                 break;
 
             //
