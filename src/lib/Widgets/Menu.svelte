@@ -8,7 +8,7 @@
 	export let tag = 0;
 
 	// Menu items
-	export let items: MenuItem[];
+	export let items: MenuItem[] = [];
 	$: selectedItems = items.filter((item) => item.isSelected);
 
 	// State
@@ -46,7 +46,7 @@
 		{#key items}
 			{#each items as item, i}
 				{#if item instanceof MenuSeparator}
-					<li class="divider" />
+					<li class="divider"></li>
 				{:else if !item.isHidden}
 					<li id={tag.toString()}>
 						<button
@@ -54,7 +54,7 @@
 							class={item.isEnabled ? '' : 'hover:bg-base-100 opacity-40'}
 							on:click={(e) => action(e, item.tag)}
 						>
-							<Checkmark enabled={selectedItems.length != 0} visible={item.isSelected} />
+							<Checkmark enabled={selectedItems.length !== 0} visible={item.isSelected} />
 							{item.title}</button
 						>
 					</li>

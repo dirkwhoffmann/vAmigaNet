@@ -95,7 +95,7 @@
                     {/if}
                 </Menu>
             {:else}
-                <Slider {min} {max} {locked} {tag} value={selectedTag} listStyle="w-[18rem] bg-accent text-accent-content" on:select>
+                <Slider {min} {max} {locked} {tag} value={selectedTag} on:select>
                     <button class="btn btn-primary {opac} w-[18rem] border-0 rounded-none text-xl font-normal"
                     >{selectedTag}</button>
                 </Slider>
