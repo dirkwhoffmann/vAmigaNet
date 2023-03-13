@@ -25,7 +25,7 @@
     $: update($poweredOn);
     function update(power: boolean) {
 
-        items[0].isEnabled = !$poweredOn;
+        items[0].isEnabled = !power;
         items[0] = items[0];
     }
 </script>

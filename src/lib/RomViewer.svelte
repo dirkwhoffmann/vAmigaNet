@@ -155,11 +155,11 @@
 <div class="{debug} border-green-500 h-full flex flex-col">
     <div class="flex items-center space-x-2 mx-2">
         <div class="{debug} tabs tabs-boxed flex grow">
-            <button class="tab" class:tab-active={activeTab == 0} on:click={() => (activeTab = 0)}
+            <button class="tab" class:tab-active={activeTab === 0} on:click={() => (activeTab = 0)}
             >Installed Roms
             </button
             >
-            <button class="tab" class:tab-active={activeTab == 1} on:click={() => (activeTab = 1)}
+            <button class="tab" class:tab-active={activeTab === 1} on:click={() => (activeTab = 1)}
             >Legal Information
             </button
             >
@@ -171,7 +171,7 @@
         </div>
     </div>
     <div class="h-96 mt-4 overflow-auto {debug} p-1 text-base-content">
-        {#if activeTab == 0}
+        {#if activeTab === 0}
             <table in:fade class="table table-compact table-zebra w-full">
                 <tbody class={debug}>
                 {#if roms}

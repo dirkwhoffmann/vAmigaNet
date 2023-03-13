@@ -33,7 +33,7 @@
         return null;
     }
 
-    export function poll()
+    export function pollState()
     {
         const gps = navigator.getGamepads();
         if (gps.length == 0) return;

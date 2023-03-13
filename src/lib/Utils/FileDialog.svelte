@@ -15,7 +15,7 @@
         });
     }
 
-    async function okAction(e: Event)
+    async function okAction()
     {
         if (fileDialog.files?.length > 0) {
             let file = fileDialog.files![0];
@@ -32,7 +32,7 @@
     {
         return new Promise(async (resolve, reject) => {
             try {
-                var fileReader = new FileReader();
+                let fileReader = new FileReader();
                 fileReader.onload = function (e: Event) {
                     resolve(new Uint8Array(this.result as ArrayBuffer));
                 }

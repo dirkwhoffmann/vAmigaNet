@@ -2,28 +2,21 @@
 	import type { DataBaseItem } from '$lib/types';
 	import { fade } from 'svelte/transition';
 	import IoMdClose from 'svelte-icons/io/IoMdClose.svelte';
-	import { proxy, audio, amiga, romcrc, kickstarts } from '$lib/stores';
-	import type { RomEntry } from '$lib/Db/db';
+	import { proxy, kickstarts } from '$lib/stores';
 
 	export let selected: DataBaseItem | null;
 	export let show = true;
 
-	$: console.log('romcrc = ', $romcrc);
-	$: console.log('selected title ', selected);
 	$: src = 'footage/' + (selected?.url ?? '') + '-large.jpg';
 
 	$: enabled = $kickstarts.map(kick => kick.crc32).some(crc => selected?.roms.includes(crc));
 	$: disabled = !enabled; 
 
-	$: console.log("Showcase enabled", enabled); 
-
 	function close() {
-		console.log('close');
 		show = false;
 	}
 
 	async function runTitle() {
-		console.log('runTitle');
 		$proxy.runShowcase(selected);
 	}
 </script>

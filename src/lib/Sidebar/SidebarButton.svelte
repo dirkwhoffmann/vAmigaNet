@@ -20,7 +20,6 @@
 <button
 	type="button"
 	class="btn btn-primary btn-square p-1.5 {active ? 'btn-active' : ''}"
-	id={item.id}
 	on:click={click}
 >
 	<img class="{$darkTheme ? 'invert' : ''}" id={item.id} src={item.icon} {alt} />

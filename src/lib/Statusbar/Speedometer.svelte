@@ -4,7 +4,7 @@
 	import { proxy, amiga, cpu, agnus } from '$lib/stores';
 	import { darkTheme } from '$lib/stores';
 	import Menu from '$lib/Widgets/Menu.svelte';
-	import { MenuItem, MenuSeparator } from '$lib/types';
+	import { MenuItem } from '$lib/types';
 
 	export let acceleration = 1.0;
 	export let mhz = 0.0;
@@ -103,7 +103,7 @@
 	function selectAction(event: CustomEvent<ActionEvent>) {
 		event.preventDefault();
 		mode = event.detail.value;
-		items.forEach(function (item, i) {
+		items.forEach(function (item) {
 			item.isSelected = item.tag == mode;
 		});
 

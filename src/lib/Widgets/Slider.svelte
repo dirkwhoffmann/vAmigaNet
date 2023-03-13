@@ -33,7 +33,7 @@
             <input
                     type="range"
                     on:input={(e) => sliderAction(e)}
-                    on:mouseup={(e) => open = false}
+                    on:mouseup={() => open = false}
                     {min}
                     {max}
                     {value}

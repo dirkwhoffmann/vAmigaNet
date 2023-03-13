@@ -117,19 +117,11 @@
         animating = textureAnimates || canvasAnimates;
 
         // Poll gamepads
-        $gamepadManager.poll();
+        $gamepadManager.pollState();
 
         // Perform animations
         if (textureAnimates) {
             textureRect.move();
-            /*
-            glCanvas.updateTextureRect(
-                textureRect.x1.current,
-                textureRect.y1.current,
-                textureRect.x2.current,
-                textureRect.y2.current
-            );
-            */
             tx1 = textureRect.x1.current;
             ty1 = textureRect.y1.current;
             tx2 = textureRect.x2.current;

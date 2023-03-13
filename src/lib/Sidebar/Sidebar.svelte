@@ -90,13 +90,13 @@
 
                 <SidebarSection
                         on:select={select}
-                        expanded={sel == 'port1'}
+                        expanded={sel === 'port1'}
                         item={port1Button}
                         subitems={port1Items}
                 />
                 <SidebarSection
                         on:select={select}
-                        expanded={sel == 'port2'}
+                        expanded={sel === 'port2'}
                         item={port2Button}
                         subitems={port2Items}
                 />
@@ -108,7 +108,7 @@
                 {#if $poweredOn}
                     <SidebarSection
                             on:select={select}
-                            expanded={sel == 'layout'}
+                            expanded={sel === 'layout'}
                             item={layoutButton}
                             subitems={layoutItems}
                     />

@@ -1,18 +1,16 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
 	import type { DataBaseItem } from '$lib/types';
-	import { MsgAlarm } from "$lib/stores";
 	import Carousel from '$lib/Showcases/Carousel.svelte';
 	import { demos, games, tools } from './database';
 	import Sedcard from './Sedcard.svelte';
 
-	var selected: DataBaseItem | null = null;
+	let selected: DataBaseItem | null = null;
+	let showSedcard = false;
 
 	let demoCarousel: Carousel;
 	let gamesCarousel: Carousel;
 	let toolsCarousel: Carousel;
-
-    let showSedcard = false;
 
 	function update(item: DataBaseItem) {
 		if (activeTab == 0) demoCarousel.setActive(item.title);

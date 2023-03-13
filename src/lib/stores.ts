@@ -1,5 +1,5 @@
 import { writable, type Writable } from 'svelte/store';
-import { Layer, WarpMode, Theme, RenderMode } from '$lib/types'
+import { Layer } from '$lib/types'
 import type { KeySet } from '$lib/types';
 import type { RomEntry } from './Db/db';
 
