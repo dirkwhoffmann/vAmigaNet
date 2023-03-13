@@ -40,7 +40,11 @@ MsgQueue::put(const Message &msg)
         if (listener) { callback(listener, msg); return; }
 
         // Otherwise, store it in the ring buffer
-        queue.write(msg);
+        if (queue.isFull()) {
+            printf("MESSAGE LOST\n");
+        } else {
+            queue.write(msg);
+        }
     }
 }
 
