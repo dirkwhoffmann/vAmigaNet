@@ -56,16 +56,6 @@
     $: updateRect($layout);
 
     $: console.log('POWERED ON: ', $poweredOn);
-    $: if ($poweredOn) {
-        /*
-        glCanvas.updateTextureRect(
-                textureRect.x1.current,
-                textureRect.y1.current,
-                textureRect.x2.current,
-                textureRect.y2.current
-            );
-        */
-    }
 
     export function updateRect(layout: string)
     {
