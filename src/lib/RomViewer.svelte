@@ -237,7 +237,7 @@
                 <p>
                     To run the emulator, a Kickstart ROM is required. The original Amiga ROMs are the
                     intellectual property of Cloanto™ and cannot be freely distributed. If you own a legal
-                    Kickstart ROM, you can add the ROM image to vAmiga Online by drag & drop. When a supported
+                    Kickstart ROM, you can add the ROM image to vAmiga.net by drag & drop. When a supported
                     image is detected, it becomes accessible in the ROM database. The ROMs are kept in the
                     browser's memory and will be available during the next browser session.
                 </p>
@@ -246,14 +246,14 @@
                     If you have purchased an older version of Amiga Forever™, you may be in possession of
                     encrypted ROM files. These files come with a .key file that is needed to decrypt the ROM.
                     Encrypted ROMs are not yet supported by the emulator. They must be decrypted manually
-                    before they can be used within vAmiga Online.
+                    before they can be used within vAmiga.net.
                 </p>
                 <h3>AROS</h3>
                 <p>
                     If you don't have an original Kickstart at hand, you may install the Amiga Research
                     Operating System ROM (AROS). AROS is an open source Kickstart variant, which can be freely
                     redistributed. Unfortunately not all Amiga programs are compatible with AROS, which is why
-                    we strongly recommend to run vAmiga Online with original ROMs.
+                    we strongly recommend to run vAmiga.net with original ROMs.
                 </p>
             </article>
         {/if}

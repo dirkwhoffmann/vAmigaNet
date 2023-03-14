@@ -98,7 +98,6 @@
 
     <div class="h-full flex flex-col {debug}" transition:fade>
         <div in:fade={{ duration: 2000 }}>
-            <!--<div class="absolute w-full h-full bg-base-100" />-->
             <div class="absolute h-full blur-sm">
                 <div class="h-full w-screen bg-gradient-to-t from-primary to-secondary"/>
             </div>
@@ -119,8 +118,9 @@
                             <img class="h-24 p-2 mt-3" src="va-icon.png" alt="vAmiga Icon"/>
                             <div class="p-6 text-white">
                                 <div class="flex">
-                                    <div class="font-sofia-extra text-7xl mr-2">vAmiga</div>
-                                    <div class="font-sofia-extra text-7xl opacity-75">Online</div>
+                                    <div class="font-sofia-extra text-7xl mr-2">
+                                        vAmiga<span class="opacity-75">.net</span>
+                                    </div>
                                 </div>
                                 <div class="font-sofia-semi text-xl pl-2 pb-10">Version 0.7.1</div>
                                 <div class="flex space-x-5">

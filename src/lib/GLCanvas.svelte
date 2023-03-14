@@ -172,7 +172,7 @@
 
         // Only proceed if WebGL2 is supported
         if (!(canvas.getContext('webgl2', options) instanceof WebGL2RenderingContext)) {
-            throw new Error('vAmiga Online needs WebGL2 to run.');
+            throw new Error('vAmiga.net needs WebGL2 to run.');
         }
 
         // Store the context for further use

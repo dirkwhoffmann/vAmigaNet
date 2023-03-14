@@ -230,7 +230,7 @@
 
 <body>
 <div class="h-screen bg-black text-white scroll-smooth overflow-y-auto">
-    <title>vAmiga Online</title>
+    <title>vAmiga.net</title>
     {#if $initialized}
         <MainScreen>
             <StatusBar bind:this={statusBar} on:push={push}/>
