@@ -21,7 +21,6 @@
 		<div class="absolute top-0 left-0 h-full w-full flex justify-center items-center">
 			<div class="w-12 h-12 text-gray-200 opacity-70"><FaLock /></div>	
 		</div>
-		<!--<div class="absolute bottom-4 right-3 w-10 h-10 text-gray-200 opacity-75"><FaLock /></div>-->
 		{/if}
 	</div>
 	<div class="p-1">
