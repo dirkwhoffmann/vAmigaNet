@@ -105,8 +105,6 @@
 
         if ($poweredOn) {
             if (update(now)) render();
-        } else {
-            // console.log('Skipping draw: Store not yet initialized');
         }
     }
 
