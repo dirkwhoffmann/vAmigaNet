@@ -25,7 +25,6 @@ target_link_libraries(vAmiga vAmigaCore)
 # Emscripten linker settings
 set(LF_MEM "-sINITIAL_MEMORY=512MB -sTOTAL_STACK=32MB -sALLOW_MEMORY_GROWTH=0")
 set(LF_ENV "-sENVIRONMENT='web,worker'")
-# set(LF_ENV "-sENVIRONMENT='web,worker' -sMODULARIZE -sEXPORT_NAME='importWasm'")
 set(LF_OPT "-O3 -mnontrapping-fptoint -fwasm-exceptions")
 set(LF_EXPORT "-lembind -sEXPORT_EXCEPTION_HANDLING_HELPERS")
 set(LF_THREAD "-pthread -sPTHREAD_POOL_SIZE=1 -sWASM_WORKERS")
