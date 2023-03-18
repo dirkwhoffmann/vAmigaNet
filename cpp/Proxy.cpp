@@ -39,8 +39,7 @@ EMSCRIPTEN_BINDINGS(Structures)
         .field("isDiag", &RomInfo::isDiag)
         .field("isCommodore", &RomInfo::isCommodore)
         .field("isHyperion", &RomInfo::isHyperion)
-        .field("isPatched", &RomInfo::isPatched)
-        .field("isUnknown", &RomInfo::isUnknown);
+        .field("isPatched", &RomInfo::isPatched);
 }
 
 //
@@ -398,19 +397,17 @@ MemoryProxy::analyzeRom(const string &blob, u32 len)
     {
         RomFile rom{(u8 *)blob.data(), (isize)len};
         u32 crc32 = util::crc32(rom.data.ptr, rom.data.size);
-        RomIdentifier id = RomFile::identifier(crc32);
 
         info.crc32 = crc32;
-        info.title = RomFile::title(id);
-        info.version = RomFile::version(id);
-        info.released = RomFile::released(id);
-        info.model = RomFile::model(id);
-        info.isAros = RomFile::isArosRom(id);
-        info.isDiag = RomFile::isDiagRom(id);
-        info.isCommodore = RomFile::isCommodoreRom(id);
-        info.isHyperion = RomFile::isHyperionRom(id);
-        info.isPatched = RomFile::isPatchedRom(id);
-        info.isUnknown = ROM_UNKNOWN == id;
+        info.title = RomFile::title(crc32);
+        info.version = RomFile::version(crc32);
+        info.released = RomFile::released(crc32);
+        info.model = RomFile::model(crc32);
+        info.isAros = RomFile::isArosRom(crc32);
+        info.isDiag = RomFile::isDiagRom(crc32);
+        info.isCommodore = RomFile::isCommodoreRom(crc32);
+        info.isHyperion = RomFile::isHyperionRom(crc32);
+        info.isPatched = RomFile::isPatchedRom(crc32);
     }
     return info;
 

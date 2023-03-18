@@ -10,4 +10,5 @@
 #pragma once
 
 #include "config.h"
-#include "Amiga/Amiga.h"
+#include "Components/Amiga.h"
+#include "Media/Media.h"

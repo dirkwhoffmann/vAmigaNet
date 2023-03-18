@@ -32,7 +32,6 @@ typedef struct
     bool isCommodore;
     bool isHyperion;
     bool isPatched;
-    bool isUnknown;
 } RomInfo;
 
 typedef struct

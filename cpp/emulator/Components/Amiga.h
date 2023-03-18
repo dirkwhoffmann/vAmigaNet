@@ -153,7 +153,7 @@ private:
     typedef struct { Cycle trigger; i64 payload; } Alarm;
     std::vector<Alarm> alarms;
 
-    
+
     //
     // Static methods
     //
@@ -232,7 +232,7 @@ private:
     template <class T>
     void applyToResetItems(T& worker, bool hard = true)
     {
-        
+
     }
 
 public:
@@ -260,6 +260,8 @@ private:
 public:
 
     double refreshRate() const override;
+    isize missingFrames(util::Time base) const override;
+
     i64 masterClockFrequency() const; // TODO: MOVE TO ANOTHER SECTION (NOT A THREAD METHOD)
 
 
@@ -340,6 +342,19 @@ public:
      */
     void stepOver();
 
+
+    //
+    // Managing warp mode
+    //
+
+public:
+
+    // Updates the current warp state according to the selected warp mode
+    void updateWarpState();
+
+    // Services a warp boot event
+    void serviceWbtEvent();
+
     
     //
     // Handling snapshots
@@ -399,7 +414,7 @@ private:
     //
     
 public:
-    
+
     // Returns a path to a temporary folder
     static fs::path tmp() throws;
     

@@ -211,6 +211,8 @@ Amiga::_reset(bool hard)
 
     // Clear all runloop flags
     flags = 0;
+
+    updateWarpState();
 }
 
 void
@@ -221,6 +223,7 @@ Amiga::resetConfig()
     std::vector <Option> options = {
 
         OPT_VIDEO_FORMAT,
+        OPT_WARP_BOOT,
         OPT_WARP_MODE,
         OPT_SYNC_MODE,
         OPT_PROPOSED_FPS
@@ -239,6 +242,10 @@ Amiga::getConfigItem(Option option) const
         case OPT_VIDEO_FORMAT:
 
             return config.type;
+
+        case OPT_WARP_BOOT:
+
+            return config.warpBoot;
 
         case OPT_WARP_MODE:
 
@@ -437,6 +444,12 @@ Amiga::setConfigItem(Option option, i64 value)
             }
             return;
 
+        case OPT_WARP_BOOT:
+
+            config.warpBoot = isize(value);
+            updateWarpState();
+            return;
+
         case OPT_WARP_MODE:
 
             if (!WarpModeEnum::isValid(value)) {
@@ -444,16 +457,7 @@ Amiga::setConfigItem(Option option, i64 value)
             }
 
             config.warpMode = WarpMode(value);
-
-            switch (config.warpMode) {
-
-                case WARP_AUTO:     paula.diskController.spinning() ? warpOn() : warpOff(); break;
-                case WARP_NEVER:    warpOff(); break;
-                case WARP_ALWAYS:   warpOn(); break;
-
-                default:
-                    fatalError;
-            }
+            updateWarpState();
             return;
 
         case OPT_SYNC_MODE:
@@ -471,7 +475,7 @@ Amiga::setConfigItem(Option option, i64 value)
                 throw VAError(ERROR_OPT_INVARG, "25...120");
             }
 
-            config.proposedFps = value;
+            config.proposedFps = isize(value);
             return;
 
         default:
@@ -510,6 +514,7 @@ Amiga::configure(Option option, i64 value)
     switch (option) {
 
         case OPT_VIDEO_FORMAT:
+        case OPT_WARP_BOOT:
         case OPT_WARP_MODE:
         case OPT_SYNC_MODE:
         case OPT_PROPOSED_FPS:
@@ -968,8 +973,10 @@ Amiga::_dump(Category category, std::ostream& os) const
 
         os << tab("Machine type");
         os << VideoFormatEnum::key(config.type) << std::endl;
+        os << tab("Warp boot");
+        os << dec(config.warpBoot) << " seconds" << std::endl;
         os << tab("Warp mode");
-        os << WarpModeEnum::key(config.warpMode);
+        os << WarpModeEnum::key(config.warpMode) << std::endl;
         os << tab("Sync mode");
         os << SyncModeEnum::key(config.syncMode);
         if (config.syncMode == SYNC_FIXED_FPS) os << " (" << config.proposedFps << " fps)";
@@ -1016,7 +1023,7 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << tab("Thread state");
         os << ExecutionStateEnum::key(state) << std::endl;
         os << tab("Thread mode");
-        os << (getThreadMode() == ThreadMode::Periodic ? "PERIODIC" : "PULSED") << std::endl;
+        os << ThreadModeEnum::key(getThreadMode()) << std::endl;
         os << tab("Master clock frequency");
         os << flt(masterClockFrequency() / float(1000000.0)) << " MHz" << std::endl;
     }
@@ -1204,10 +1211,10 @@ Amiga::save(u8 *buffer)
     return result;
 }
 
-Amiga::ThreadMode
+ThreadMode
 Amiga::getThreadMode() const
 {
-    return config.syncMode == SYNC_VSYNC ? ThreadMode::Pulsed : ThreadMode::Periodic;
+    return config.syncMode == SYNC_VSYNC ? THREAD_PULSED : THREAD_PERIODIC; // THREAD_ADAPTIVE;
 }
 
 void
@@ -1329,6 +1336,19 @@ Amiga::refreshRate() const
     }
 }
 
+isize
+Amiga::missingFrames(util::Time base) const
+{
+    // Compute the elapsed time
+    auto elapsed = util::Time::now() - base;
+
+    // Compute which frame should have been reached by now
+    auto targetFrame = elapsed.asNanoseconds() * i64(refreshRate()) / 1000000000;
+
+    // Compute the number of missing frames
+    return isize(targetFrame - agnus.pos.frame);
+}
+
 i64
 Amiga::masterClockFrequency() const
 {
@@ -1386,6 +1406,35 @@ Amiga::stepOver()
     
     // Inform the GUI
     msgQueue.put(MSG_STEP);
+}
+
+void
+Amiga::updateWarpState()
+{
+    if (agnus.clock < SEC(config.warpBoot)) {
+
+        switchWarp(true);
+        return;
+    }
+
+    switch (config.warpMode) {
+
+        case WARP_AUTO:     switchWarp(paula.diskController.spinning()); break;
+        case WARP_NEVER:    switchWarp(false); break;
+        case WARP_ALWAYS:   switchWarp(true); break;
+
+        default:
+            fatalError;
+    }
+}
+
+void
+Amiga::serviceWbtEvent()
+{
+    assert(agnus.id[SLOT_WBT] == WBT_DISABLE);
+
+    updateWarpState();
+    agnus.cancel <SLOT_WBT> ();
 }
 
 void
