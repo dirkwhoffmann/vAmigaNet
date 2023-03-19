@@ -94,7 +94,9 @@
         }
 
         if ($poweredOn) {
-            if (update(now)) render();
+
+            update(now);
+            glCanvas?.render();
         }
     }
 
@@ -124,23 +126,17 @@
                 w = recw.current = recw.target = x2 - x1 + 2;
                 h = rech.current = rech.target = 2 * (y2 - y1 + 2);
             }
+            if (glCanvas) glCanvas.needsDisplay = true;
         }
         if (canvasAnimates) {
             recw.move();
             rech.move();
             w = recw.current;
             h = rech.current;
+            if (glCanvas) glCanvas.needsDisplay = true;
         }
 
-        let textureChange = glCanvas ? glCanvas.update() : false;
-
-        // true signals when rendering is necessary
-        return textureChange || textureAnimates || canvasAnimates;
-    }
-
-    function render()
-    {
-        if (glCanvas) glCanvas.render();
+        glCanvas?.update();
     }
 </script>
 

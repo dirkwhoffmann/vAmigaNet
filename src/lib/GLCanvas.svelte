@@ -39,6 +39,9 @@
     export let ty1 = 0;
     export let ty2 = 0;
 
+    // Indicates if a new frame has to be rendered
+    export let needsDisplay = false;
+
     // Indicates whether the recently drawn frames were long or short frames
     let currLOF = true;
     let prevLOF = true;
@@ -329,16 +332,10 @@
         resizeCanvasToDisplaySize();
 
         // Get the latest half-picture from the emulator
-        return updateTexture();
-    }
+        updateTexture();
 
-    export function render()
-    {
-        // Merge half-pictures
-        createMergeTexture();
-
-        // Render to final texture to the canvas
-        renderFinalTexture();
+        // Ask the emulator to compute the next frame
+        $amiga.wakeUp();
     }
 
     function updateTexture()
@@ -378,7 +375,7 @@
                 // console.log('Frame sync mismatch: ' + frameNr + ' -> ' + frame.frameNr);
 
                 // Return immediately if we alredy have this texture
-                if (frame.frameNr == frameNr) return false;
+                if (frame.frameNr == frameNr) return;
             }
             frameNr = frame.frameNr;
 
@@ -394,7 +391,23 @@
                 gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, tex);
             }
         }
-        return true;
+
+        needsDisplay = true;
+        return;
+    }
+
+    export function render()
+    {
+        if (needsDisplay) {
+
+            // Merge half-pictures
+            createMergeTexture();
+
+            // Render to final texture to the canvas
+            renderFinalTexture();
+
+            needsDisplay = false;
+        }
     }
 
     function createMergeTexture()

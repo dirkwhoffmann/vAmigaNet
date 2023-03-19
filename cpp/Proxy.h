@@ -89,6 +89,7 @@ struct AmigaProxy
 
     // Operating
     void launch() { TRY amiga->launch(); CATCH }
+    void wakeUp() { TRY amiga->wakeUp(); CATCH }
 
     // Configuring
     void configure(int option, int value) { TRY amiga->configure((Option)option, (i64)value); CATCH }

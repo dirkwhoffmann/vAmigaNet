@@ -1214,7 +1214,7 @@ Amiga::save(u8 *buffer)
 ThreadMode
 Amiga::getThreadMode() const
 {
-    return config.syncMode == SYNC_VSYNC ? THREAD_PULSED : THREAD_PERIODIC; // THREAD_ADAPTIVE;
+    return config.syncMode == SYNC_VSYNC ? THREAD_PULSED : THREAD_ADAPTIVE;
 }
 
 void

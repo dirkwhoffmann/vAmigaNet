@@ -234,6 +234,7 @@ EMSCRIPTEN_BINDINGS(AmigaProxy)
         .function("readMessage", &AmigaProxy::readMessage)
 
         .function("launch", &AmigaProxy::launch)
+        .function("wakeUp", &AmigaProxy::wakeUp)
         .function("errorCode", &AmigaProxy::errorCode)
 
         .function("what", &AmigaProxy::what)
