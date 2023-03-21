@@ -27,14 +27,10 @@ AudioFilter::_dump(Category category, std::ostream& os) const
         os << FilterActivationEnum::key(config.filterActivation) << std::endl;
     }
 
-    if (category == Category::Inspection) {
+    if (category == Category::State) {
 
         os << tab("Active");
         os << bol(isEnabled()) << std::endl;
-    }
-    
-    if (category == Category::Debug) {
-
         os << tab("Coefficient a1");
         os << flt(a1) << std::endl;
         os << tab("Coefficient a2");

@@ -214,10 +214,12 @@ private:
     
 public:
     
+    void dump(CoreObject &component, std::vector <Category> categories);
     void dump(CoreObject &component, Category category);
-    void dumpConfig(CoreObject &component);
-    void dumpInspection(CoreObject &component);
-    void dumpDebug(CoreObject &component);
+
+private:
+
+    void _dump(CoreObject &component, Category category);
 
     
     //

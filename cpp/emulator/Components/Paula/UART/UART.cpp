@@ -44,7 +44,7 @@ UART::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category == Category::Inspection) {
+    if (category == Category::State) {
         
         os << tab("Serper");
         os << hex(serper) << std::endl;
@@ -160,9 +160,6 @@ UART::copyToTransmitShiftRegister()
 
     // Send the byte to the null modem cable
     remoteManager.serServer << char(byte);
-    
-    // Inform the GUI about the outgoing data
-    msgQueue.put(MSG_SER_OUT, transmitBuffer);
 
     // Move the contents of the transmit buffer into the shift register
     transmitShiftReg = transmitBuffer;
@@ -187,9 +184,6 @@ UART::copyFromReceiveShiftRegister()
     // Record the incoming byte
     auto byte = u8(receiveBuffer & 0xFF);
     recordIncomingByte(byte);
-
-    // Inform the GUI about the incoming data
-    msgQueue.put(MSG_SER_IN, receiveBuffer);
 
     // Update the overrun bit
     ovrun = GET_BIT(paula.intreq, 11);

@@ -561,40 +561,47 @@ RetroShell::help(const string &command)
 void
 RetroShell::dump(CoreObject &component, Category category)
 {
-    std::stringstream ss;
-    
     {   SUSPENDED
 
-        switch (category) {
+        *this << '\n';
+        _dump(component, category);
+    }
+}
 
-            case Category::Config: ss << "Current configuration:\n\n"; break;
+void
+RetroShell::dump(CoreObject &component, std::vector <Category> categories)
+{
+    {   SUSPENDED
 
-            default:
-                break;
+        *this << '\n';
+
+        for(auto &category : categories) {
+            _dump(component, category);
         }
+    }
+}
 
-        component.dump(category, ss);
+void
+RetroShell::_dump(CoreObject &component, Category category)
+{
+    std::stringstream ss;
+
+    switch (category) {
+
+        case Category::Slots:       ss << "Slots:\n\n"; break;
+        case Category::Config:      ss << "Configuration:\n\n"; break;
+        case Category::Properties:  ss << "Properties:\n\n"; break;
+        case Category::Registers:   ss << "Registers:\n\n"; break;
+        case Category::State:       ss << "State:\n\n"; break;
+        case Category::Stats:       ss << "Statistics:\n\n"; break;
+
+        default:
+            break;
     }
 
-    *this << '\n' << ss << '\n';
-}
+    component.dump(category, ss);
 
-void
-RetroShell::dumpConfig(CoreObject &component)
-{
-    dump(component, Category::Config);
-}
-
-void
-RetroShell::dumpInspection(CoreObject &component)
-{
-    dump(component, Category::Inspection);
-}
-
-void
-RetroShell::dumpDebug(CoreObject &component)
-{
-    dump(component, Category::Debug);
+    *this << ss << '\n';
 }
 
 void
