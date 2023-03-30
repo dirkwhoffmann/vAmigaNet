@@ -1,7 +1,7 @@
 #include "Proxy.h"
-#include "RomFile.h"
-#include "ExtendedRomFile.h"
-#include "EXTFile.h"
+// #include "RomFile.h"
+// #include "ExtendedRomFile.h"
+// #include "EXTFile.h"
 #include <cstdlib>
 #include <stdio.h>
 #include <exception>
@@ -144,8 +144,8 @@ int AmigaProxy::getFileType(const string &blob)
         return (int)FILETYPE_EXTENDED_ROM;
     if (ADFFile::isCompatible(stream))
         return (int)FILETYPE_ADF;
-    if (EXTFile::isCompatible(stream))
-        return (int)FILETYPE_EXT;
+    if (EADFFile::isCompatible(stream))
+        return (int)FILETYPE_EADF;
     if (DMSFile::isCompatible(stream))
         return (int)FILETYPE_DMS;
     if (EXEFile::isCompatible(stream))
@@ -565,7 +565,7 @@ EMSCRIPTEN_BINDINGS(Keys)
     constant("FILETYPE_SCRIPT", (int)FILETYPE_SCRIPT);
     constant("FILETYPE_ADF", (int)FILETYPE_ADF);
     constant("FILETYPE_HDF", (int)FILETYPE_HDF);
-    constant("FILETYPE_EXT", (int)FILETYPE_EXT);
+    constant("FILETYPE_EADF", (int)FILETYPE_EADF);
     constant("FILETYPE_IMG", (int)FILETYPE_IMG);
     constant("FILETYPE_DMS", (int)FILETYPE_DMS);
     constant("FILETYPE_EXE", (int)FILETYPE_EXE);
@@ -744,7 +744,6 @@ EMSCRIPTEN_BINDINGS(Keys)
     constant("OPT_AUTOFIRE_DELAY", (int)OPT_AUTOFIRE_DELAY);
     constant("OPT_SAMPLING_METHOD", (int)OPT_SAMPLING_METHOD);
     constant("OPT_FILTER_TYPE", (int)OPT_FILTER_TYPE);
-    constant("OPT_FILTER_ACTIVATION", (int)OPT_FILTER_ACTIVATION);
     constant("OPT_AUDPAN", (int)OPT_AUDPAN);
     constant("OPT_AUDVOL", (int)OPT_AUDVOL);
     constant("OPT_AUDVOLL", (int)OPT_AUDVOLL);

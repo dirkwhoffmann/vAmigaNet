@@ -751,13 +751,7 @@ Interpreter::initCommandShell(Command &root)
              "Displays the current filter configuration",
              [this](Arguments& argv, long value) {
 
-        retroShell << '\n';
-
-        retroShell << "Left channel:" << '\n';
-        retroShell.dump(paula.muxer.filterL, Category::Config);
-
-        retroShell << "Right channel:" << '\n';
-        retroShell.dump(paula.muxer.filterR, Category::Config);
+        retroShell.dump(paula.muxer.filter, Category::Config);
     });
 
     root.add({"paula", "audio", "filter", "set"},
@@ -768,13 +762,6 @@ Interpreter::initCommandShell(Command &root)
              [this](Arguments& argv, long value) {
 
         amiga.configure(OPT_FILTER_TYPE, parseEnum <FilterTypeEnum> (argv));
-    });
-
-    root.add({"paula", "audio", "filter", "set", "activation"}, { FilterActivationEnum::argList() },
-             "Selects the filter activation condition",
-             [this](Arguments& argv, long value) {
-
-        amiga.configure(OPT_FILTER_ACTIVATION, parseEnum <FilterActivationEnum> (argv));
     });
 
     root.add({"paula", "audio", "set"},
@@ -1549,13 +1536,6 @@ Interpreter::initCommandShell(Command &root)
         remoteManager.rshServer.setConfigItem(OPT_SRV_VERBOSE, parseBool(argv));
     });
 
-    root.add({"server", "serial", "inspect"},
-             "Displays the internal state",
-             [this](Arguments& argv, long value) {
-
-        retroShell.dump(remoteManager.rshServer, Category::Config);
-    });
-
     root.add({"server", "rshell"},
              "Retro shell server");
 
@@ -1604,13 +1584,6 @@ Interpreter::initCommandShell(Command &root)
         remoteManager.rshServer.setConfigItem(OPT_SRV_PORT, parseBool(argv));
     });
 
-    root.add({"server", "rshell", "inspect"},
-             "Displays the internal state",
-             [this](Arguments& argv, long value) {
-
-        retroShell.dump(remoteManager.rshServer, Category::State);
-    });
-
     root.add({"server", "gdb"},
              "GDB server");
 
@@ -1650,13 +1623,6 @@ Interpreter::initCommandShell(Command &root)
              [this](Arguments& argv, long value) {
 
         remoteManager.gdbServer.setConfigItem(OPT_SRV_VERBOSE, parseBool(argv));
-    });
-
-    root.add({"server", "gdb", "inspect"},
-             "Displays the internal state",
-             [this](Arguments& argv, long value) {
-
-        retroShell.dump(remoteManager.gdbServer, Category::State);
     });
 }
 

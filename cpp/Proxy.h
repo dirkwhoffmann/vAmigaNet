@@ -2,10 +2,7 @@
 #include <emscripten/wasm_worker.h>
 #include <emscripten/bind.h>
 
-#include "config.h"
-#include "Amiga.h"
-#include "DMSFile.h"
-#include "EXEFile.h"
+#include "vamiga.h"
 
 using namespace emscripten;
 using namespace vamiga;

@@ -144,6 +144,7 @@ Amiga::launch()
         msg("       PixelEngine : %zu bytes\n", sizeof(PixelEngine));
         msg("     RemoteManager : %zu bytes\n", sizeof(RemoteManager));
         msg("               RTC : %zu bytes\n", sizeof(RTC));
+        msg("        RetroShell : %zu bytes\n", sizeof(RetroShell));
         msg("           Sampler : %zu bytes\n", sizeof(Sampler));
         msg("        SerialPort : %zu bytes\n", sizeof(SerialPort));
         msg("            Volume : %zu bytes\n", sizeof(Volume));
@@ -317,7 +318,8 @@ Amiga::getConfigItem(Option option) const
         case OPT_SAMPLING_METHOD:
         case OPT_AUDVOLL:
         case OPT_AUDVOLR:
-            
+        case OPT_FILTER_TYPE:
+
             return paula.muxer.getConfigItem(option);
 
         case OPT_BLITTER_ACCURACY:
@@ -366,8 +368,6 @@ Amiga::getConfigItem(Option option, long id) const
 
         case OPT_AUDPAN:
         case OPT_AUDVOL:
-        case OPT_FILTER_TYPE:
-        case OPT_FILTER_ACTIVATION:
 
             return paula.muxer.getConfigItem(option, id);
 
@@ -620,7 +620,6 @@ Amiga::configure(Option option, i64 value)
 
         case OPT_SAMPLING_METHOD:
         case OPT_FILTER_TYPE:
-        case OPT_FILTER_ACTIVATION:
         case OPT_AUDVOLL:
         case OPT_AUDVOLR:
             
