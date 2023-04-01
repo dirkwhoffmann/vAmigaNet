@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
-	import { Opt } from '$lib/types';
+	import { MenuItem, Opt } from '$lib/types';
 	import { config, proxy } from '$lib/stores';
 	import ConfigSection from './ConfigSection.svelte';
 	import ConfigItem from './ConfigItem.svelte';
@@ -8,6 +8,33 @@
 </script>
 
 <div in:fade>
+	<ConfigSection name="Sound Synthesis">
+		<ConfigItem
+				name="Interpolation Method"
+				items={[
+                    new MenuItem('None', 0),
+                    new MenuItem('Nearest', 1),
+                    new MenuItem('Linear', 2),
+                    ]}
+				on:select={(e) => $config.setNum(Opt.SAMPLING_METHOD, e.detail.value)}
+				selectedTag={$config.getNum(Opt.SAMPLING_METHOD)}
+		/>
+		<ConfigItem
+				name="Audio Filter"
+				items={[
+                    new MenuItem('None', 0),
+                    new MenuItem('A500', 1),
+                    new MenuItem('A1000', 2),
+                    new MenuItem('A1200', 3),
+                    new MenuItem('Legacy Filter', 4),
+                    new MenuItem('Low-pass only', 5),
+                    new MenuItem('LED filter only', 6),
+                    new MenuItem('High-pass only', 7),
+                    ]}
+				on:select={(e) => $config.set(Opt.FILTER_TYPE, e.detail.value)}
+				selectedTag={$config.get(Opt.FILTER_TYPE)}
+		/>
+	</ConfigSection>
 	<ConfigSection name="Speakers">
 		<ConfigItem
 			name="Left Speaker Volume"

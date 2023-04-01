@@ -459,6 +459,10 @@
             // Audio settings
             //
 
+            case Opt.SAMPLING_METHOD:
+                return $amiga.getConfig($proxy.OPT_SAMPLING_METHOD).toString();
+            case Opt.FILTER_TYPE:
+                return $amiga.getConfig($proxy.OPT_FILTER_TYPE).toString();
             case Opt.AUDVOL0:
                 return $amiga.getDriveConfig($proxy.OPT_AUDVOL, 0).toString();
             case Opt.AUDVOL1:
@@ -674,6 +678,12 @@
             // Audio settings
             //
 
+            case Opt.SAMPLING_METHOD:
+                $amiga.configure($proxy.OPT_SAMPLING_METHOD, Number(val));
+                break;
+            case Opt.FILTER_TYPE:
+                $amiga.configure($proxy.OPT_FILTER_TYPE, Number(val));
+                break;
             case Opt.AUDVOL0:
                 $amiga.configureDrive($proxy.OPT_AUDVOL, 0, Number(val));
                 break;
