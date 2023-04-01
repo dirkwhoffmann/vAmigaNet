@@ -62,12 +62,12 @@ export class TextureRect {
 		/*
             switch renderer.config.zoom {
     
-            case 1: hZoom = 1.0; vZoom = 0.27       // Narrow
-            case 2: hZoom = 0.747; vZoom = 0.032    // Wide
-            case 3: hZoom = 0; vZoom = 0            // Extreme
+            case 1: hZoom = 1.0; vZoom = 0.27; break;       // Narrow
+            case 2: hZoom = 0.747; vZoom = 0.032; break;    // Wide
+            case 3: hZoom = 0; vZoom = 0; break;            // Extreme
             default: break
             }
-            */
+         */
 
 		/*
 		 *       aw <--------- maxWidth --------> dw

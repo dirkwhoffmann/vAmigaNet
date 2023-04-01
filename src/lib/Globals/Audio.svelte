@@ -18,7 +18,7 @@
         audioContext = new AudioContext();
         audioContext.onstatechange = () => console.log('Audio Context: state = ' + audioContext.state);
         let gainNode = audioContext.createGain();
-        gainNode.gain.value = 0.15;
+        gainNode.gain.value = 1.0;
         gainNode.connect(audioContext.destination);
 
         $amiga.setSampleRate(audioContext.sampleRate);
@@ -34,7 +34,8 @@
         audioNode.port.onmessage = (e) => {
             $amiga.updateAudio(e.data);
         };
-        audioNode.connect(audioContext.destination);
+        // audioNode.connect(audioContext.destination);
+        audioNode.connect(gainNode);
         if (audioContext.state === 'suspended') {
             await audioContext.resume();
         }
