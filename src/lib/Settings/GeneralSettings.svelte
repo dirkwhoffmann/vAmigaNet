@@ -7,13 +7,11 @@
 
     function saveAction()
     {
-        console.log("saveAction");
         $config.saveGeneralSettings();
     }
 
     function resetAction()
     {
-        console.log("resetAction");
         $config.restoreGeneralDefaults();
     }
 

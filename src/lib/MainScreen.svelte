@@ -6,10 +6,8 @@
     {
         event.preventDefault();
         if (!event.dataTransfer) {
-            console.log('DragEnter: dataTransfer == null');
             return;
         }
-        console.log('DragEnter: ' + event.dataTransfer.items[0]);
     }
 
     function handleDragOver(event: DragEvent)
@@ -19,14 +17,12 @@
 
     function handleDragLeave(event: DragEvent)
     {
-        console.log('DragLeave');
+
     }
 
     async function handleDragDrop(event: DragEvent)
     {
         event.preventDefault();
-
-        console.log('handleDragDrop');
 
         // Only proceed if we've received any data
         if (!event.dataTransfer || !event.dataTransfer.items) return;
@@ -39,8 +35,6 @@
         if (item.kind !== 'file') return;
         const file = item.getAsFile();
         if (!file) return;
-
-        console.log(`name = ${file.name}`);
 
         // Get the file data
         let blob = await file.arrayBuffer();

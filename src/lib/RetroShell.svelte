@@ -31,6 +31,7 @@
             textarea.scrollTop = textarea.scrollHeight;
         }
     }
+    /*
     $: if ($MsgScriptDone) {
         console.log('MsgScriptDone');
     }
@@ -43,6 +44,7 @@
     $: if ($MsgScriptWakeup) {
         console.log('MsgScriptWakeup');
     }
+    */
 
     function onKeyDown(e: KeyboardEvent)
     {

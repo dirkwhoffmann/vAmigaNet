@@ -692,7 +692,6 @@
 
             case $proxy.MSG_DMA_DEBUG:
                 $MsgDmaDebug++;
-                console.log("DMA_DEBUG: value = ", msg.value, typeof(msg.value));
                 $debugDma = msg.value;
                 break;
 

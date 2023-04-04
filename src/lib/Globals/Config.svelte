@@ -40,7 +40,7 @@
     ];
 
     let compatibilityOpts: { opt: Opt, default: string }[] = [
-        {opt: Opt.BLIITTER_ACCURACY, default: '2'},
+        {opt: Opt.BLITTER_ACCURACY, default: '2'},
         {opt: Opt.TODBUG, default: '1'},
         {opt: Opt.PTR_DROPS, default: '1'},
         {opt: Opt.ECLOCK_SYNCING, default: '1'},
@@ -90,7 +90,7 @@
         opts = value as OptEntry[]
     })
 
-    $: console.log("CONFIG DB: ", opts);
+    // $: console.log("CONFIG DB: ", opts);
 
     $: if ($initialized) {
         registerDefaults();
@@ -103,8 +103,6 @@
 
     async function registerDefaults()
     {
-        console.log("registerDefaults");
-
         await registerGeneralDefaults();
         await registerMachineDefaults();
         await registerCompatibilityDefaults();
@@ -162,8 +160,6 @@
 
     export async function restoreDefaults()
     {
-        console.log("restoreDefaults");
-
         await restoreGeneralDefaults();
         await restoreMachineDefaults();
         await restoreCompatibilityDefaults();
@@ -197,8 +193,8 @@
             await deleteDefault(it.opt);
         }
 
-        await registerMachineDefaults();
-        await loadMachineSettings();
+        await registerCompatibilityDefaults();
+        await loadCompatibilitySettings();
     }
 
     export async function restoreAudioDefaults()
@@ -237,8 +233,6 @@
 
     export async function loadSettings()
     {
-        console.log("loadSettings");
-
         await loadGeneralSettings();
         await loadMachineSettings();
         await loadCompatibilitySettings();
@@ -301,8 +295,6 @@
 
     export async function saveSettings()
     {
-        console.log('saveSettings');
-
         await saveGeneralSettings();
         await saveMachineSettings();
         await saveCompatibilitySettings();
@@ -430,8 +422,8 @@
                 // Compatibility settings
                 //
 
-            case Opt.BLIITTER_ACCURACY:
-                return $amiga.getConfig($proxy.OPT_BLIITTER_ACCURACY).toString();
+            case Opt.BLITTER_ACCURACY:
+                return $amiga.getConfig($proxy.OPT_BLITTER_ACCURACY).toString();
             case Opt.TODBUG:
                 return $amiga.getConfig($proxy.OPT_TODBUG).toString();
             case Opt.PTR_DROPS:
@@ -623,8 +615,8 @@
             // Compatibility Settings
             //
 
-            case Opt.BLIITTER_ACCURACY:
-                $amiga.configure($proxy.OPT_BLIITTER_ACCURACY, Number(val));
+            case Opt.BLITTER_ACCURACY:
+                $amiga.configure($proxy.OPT_BLITTER_ACCURACY, Number(val));
                 break;
 
             case Opt.TODBUG:
@@ -748,7 +740,6 @@
 
     export function setNum(option: Opt, val: number)
     {
-        console.log("setNum: ", val, val.toString());
         set(option, val.toString());
     }
 
@@ -763,7 +754,6 @@
 
     function setTheme(val: Theme)
     {
-        console.log('setTheme', val);
         theme = val;
         let newTheme = '';
         switch (theme) {
@@ -813,7 +803,7 @@
                 $invert = '';
                 break;
             default:
-                console.log("Invalid theme");
+                console.warn("Invalid theme");
         }
 
         // Apply new scheme

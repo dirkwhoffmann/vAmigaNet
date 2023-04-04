@@ -7,8 +7,6 @@
 
     onMount(() => {
 
-        console.log("GamepadManager: onMount");
-
         window.addEventListener(
             "gamepadconnected",
             (e) => { gamepads[e.gamepad.index] = e.gamepad; },
@@ -65,6 +63,6 @@
         }
     }
 
-    $: console.log("Gamepads: ", gamepads);
+    // $: console.log("Gamepads: ", gamepads);
 
 </script>

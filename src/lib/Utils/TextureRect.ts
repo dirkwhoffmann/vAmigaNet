@@ -128,7 +128,6 @@ export class TextureRect {
 	}
 
 	zoomIn(): void {
-		console.log('zoomIn');
 		/*
         const x1 = HBLANK_CNT;
         const y1 = VBLANK_CNT + 4;
@@ -151,20 +150,9 @@ export class TextureRect {
         this.x2.set(1.0);
         this.y2.set(1.0);
         */
-		console.log(
-			'New rect: ' +
-				this.x1.target +
-				', ' +
-				this.y1.target +
-				', ' +
-				this.x2.target +
-				', ' +
-				this.y2.target
-		);
 	}
 
 	zoomOut(): void {
-		console.log('zoomOut');
 		this.x1.set(0.0);
 		this.y1.set(0.0);
 		this.x2.set(1.0);

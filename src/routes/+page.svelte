@@ -85,8 +85,8 @@
             }
 
             emulator.updateRect($layout);
-            console.log('dimensions: ', $canvasWidth, ', ', $canvasHeight);
-            console.log('aspect dimensions: ', $aspectWidth, ', ', $aspectHeight);
+            // console.log('dimensions: ', $canvasWidth, ', ', $canvasHeight);
+            // console.log('aspect dimensions: ', $aspectWidth, ', ', $aspectHeight);
         }
     }
 

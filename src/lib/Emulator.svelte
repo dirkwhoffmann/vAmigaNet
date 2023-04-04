@@ -55,11 +55,8 @@
 
     $: updateRect($layout);
 
-    $: console.log('POWERED ON: ', $poweredOn);
-
     export function updateRect(layout: string)
     {
-        console.log('updateRect(', layout, ')');
         if (layout == 'full') {
             recw.set($canvasWidth);
             rech.set($canvasHeight);

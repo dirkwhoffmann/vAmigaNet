@@ -23,7 +23,7 @@
                 $config.saveMachineSettings();
                 break;
             case 'COMPATIBILITY':
-                $config.saveCompSettings();
+                $config.saveCompatibilitySettings();
                 break;
             case 'AUDIO':
                 $config.saveAudioSettings();
@@ -45,7 +45,7 @@
                 $config.restoreMachineDefaults();
                 break;
             case 'COMPATIBILITY':
-                $config.restoreCompDefaults();
+                $config.restoreCompatibilityDefaults();
                 break;
             case 'AUDIO':
                 $config.restoreAudioDefaults();

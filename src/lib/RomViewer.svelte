@@ -52,8 +52,6 @@
 
     async function installDefaultRoms()
     {
-        console.log('installDefaultRoms');
-
         try {
             // Add AROS
             let response = await fetch('roms/aros-svn55696-rom.bin');

@@ -29,7 +29,6 @@
 	items[0].isSelected = true;
 
 	onMount(() => {
-		console.log('Speedometer: onMount()');
 		latchedTimestamp = Date.now();
 	});
 

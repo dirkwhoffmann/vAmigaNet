@@ -13,10 +13,10 @@
                 items={[
                     new MenuItem('Low', 0),
 				    new MenuItem('Medium', 1),
-				    new MenuItem('High', 1)
+				    new MenuItem('High', 2)
 				    ]}
-                on:select={(e) => $config.setNum(Opt.BLIITTER_ACCURACY, e.detail.value)}
-                selectedTag={$config.getNum(Opt.BLIITTER_ACCURACY)}
+                on:select={(e) => $config.setNum(Opt.BLITTER_ACCURACY, e.detail.value)}
+                selectedTag={$config.getNum(Opt.BLITTER_ACCURACY)}
         />
     </ConfigSection>
     <ConfigSection name="Chipset Features">

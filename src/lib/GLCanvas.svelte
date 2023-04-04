@@ -162,8 +162,6 @@
 
     function initWebGL()
     {
-        console.log('initWebGL()');
-
         // General WebGL options
         const options = {
             alpha: false,
