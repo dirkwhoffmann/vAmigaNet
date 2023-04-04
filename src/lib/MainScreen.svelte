@@ -52,6 +52,7 @@
                 await handleDraggedRom(uint8View);
                 return;
             case $proxy.FILETYPE_ADF:
+            case $proxy.FILETYPE_EADF:
             case $proxy.FILETYPE_DMS:
             case $proxy.FILETYPE_EXE:
                 handleDraggedDisk(uint8View);

@@ -172,6 +172,15 @@ bool AmigaProxy::insertDisk(const string &blob, u8 drive)
         return true;
     }
 
+printf("Checking for EADF...\n");
+    if (EADFFile::isCompatible(stream))
+    {
+printf("IS COMPATIBLE...\n");
+        EADFFile eadf{(u8 *)blob.data(), (isize)blob.length()};
+        amiga->df[drive]->swapDisk(std::make_unique<FloppyDisk>(eadf));
+        return true;
+    }
+
     if (EXEFile::isCompatible(stream))
     {
         EXEFile exe{(u8 *)blob.data(), (isize)blob.length()};
