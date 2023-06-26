@@ -104,6 +104,11 @@
             <div class="absolute h-full blur-sm">
                 <img class="h-full w-screen object-fill opacity-60" src="matrix.jpg" alt="Background"/>
             </div>
+        <!--
+        <div class="absolute h-full">
+            <img class="h-full w-screen object-fill" src="splash-bg.jpg" alt="Background"/>
+        </div>
+        -->
         </div>
         {#if $layer === Layer.showcases}
             <Showcases/>
@@ -122,7 +127,7 @@
                                         vAmiga<span class="opacity-75">.net</span>
                                     </div>
                                 </div>
-                                <div class="font-sofia-semi text-xl pl-2 pb-10">Version 0.9.3</div>
+                                <div class="font-sofia-semi text-xl pl-2 pb-10">Version 1.0</div>
                                 <div class="flex space-x-5">
                                     <div class="tooltip tooltip-primary" data-tip="Power On">
                                         <button class="btn btn-outline btn-square p-1.5" on:click={switchOn}>
